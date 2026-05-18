@@ -580,7 +580,7 @@ export default function DashboardGuruZenith() {
             {/* VIEW: MAIN DASHBOARD */}
             {/* ================================================================================= */}
             {view === 'dashboard' && (
-              <motion.div key="analytics" {...portalTransition} className="max-w-[1400px] w-full mx-auto space-y-10 pb-20 pt-4">
+              <motion.div key="analytics" {...(portalTransition as any)} className="max-w-[1400px] w-full mx-auto space-y-10 pb-20 pt-4">
                 
                 {/* 1. HEADER TITLE */}
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
