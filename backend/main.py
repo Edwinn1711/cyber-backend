@@ -50,15 +50,18 @@ class QuestionSubmit(BaseModel):
 # KONEKSI DATABASE KE AIVEN CLOUD
 # ==========================================
 def get_db_connection():
-    return mysql.connector.connect(
-        host="mysql-28e76345-devinedwinsiahaan171105-5a56.e.aivencloud.com", # Host Aiven Pinci
-        port=26035,             # Port Aiven Pinci
-        user="avnadmin",        # User Aiven Pinci
-        password="devin1711edwin", # <<< PENTING: GANTI INI DENGAN PASSWORD ASLI DARI WEB AIVEN!
-        database="defaultdb",
-        ssl_ca="ca.pem"         # File keamanan yang didownload tadi
-    )
+    # 1. Tambahkan 2 baris ini agar Vercel otomatis melacak lokasi file ca.pem
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    ca_path = os.path.join(current_dir, "ca.pem")
 
+    return mysql.connector.connect(
+        host="mysql-28e76345-devinedwinsiahaan171105-5a56.e.aivencloud.com",
+        port=26035,             
+        user="avnadmin",        
+        password="devin1711edwin", 
+        database="defaultdb",
+        ssl_ca=ca_path         # 2. Pastikan ini sekarang memanggil ca_path
+    )
 # --- AUTO UPDATE DATABASE ---
 # Fungsi cerdas agar tabel MySQL otomatis punya kolom "asal" dan "tanggal_lahir"
 @app.on_event("startup")
