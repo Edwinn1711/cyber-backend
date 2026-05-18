@@ -198,7 +198,7 @@ export default function StudentGodTierDashboard() {
 
   const fetchScores = useCallback(async (username: string) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/siswa/scores/${username}`);
+      const res = await fetch(`http://https://cyber-backend-delta.vercel.app:8000/siswa/scores/${username}`);
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
         const total = data.reduce((acc, curr) => acc + curr.score, 0);
@@ -222,7 +222,7 @@ export default function StudentGodTierDashboard() {
 
   useEffect(() => {
     if (isAuthorized) {
-      fetch('http://127.0.0.1:8000/questions').then(r => r.json()).then(d => {
+      fetch('http://https://cyber-backend-delta.vercel.app:8000/questions').then(r => r.json()).then(d => {
         const parsedData = d.map((q: any) => ({ ...q, options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options }));
         setAllQs(parsedData);
       });
@@ -252,7 +252,7 @@ export default function StudentGodTierDashboard() {
     setLoading(true); setSubmitStatus('SINKRONISASI...');
     const formattedAnswers = Object.keys(ans).map(id => ({ id: parseInt(id), value: ans[parseInt(id)].score.toString(), text: ans[parseInt(id)].text }));
     try {
-      await fetch('http://127.0.0.1:8000/siswa/submit', {
+      await fetch('http://https://cyber-backend-delta.vercel.app:8000/siswa/submit', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: user.username, class_name: user.class_name, domain_id: selectedDomain, answers: formattedAnswers })
       });

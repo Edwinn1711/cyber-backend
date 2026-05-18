@@ -98,7 +98,7 @@ export default function CyberLoginGateway() {
       const cls = AVAILABLE_CLASSES[i % AVAILABLE_CLASSES.length];
 
       try {
-        const res = await fetch('http://127.0.0.1:8000/register', {
+        const res = await fetch('http://https://cyber-backend-delta.vercel.app:8000/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -148,7 +148,7 @@ export default function CyberLoginGateway() {
     const uname = username.trim(); // Dibiarkan apa adanya (tidak dipaksa uppercase) agar case-sensitive aman
 
     try {
-      const endpoint = activeTab === 'LOGIN' ? 'http://127.0.0.1:8000/login' : 'http://127.0.0.1:8000/register';
+      const endpoint = activeTab === 'LOGIN' ? 'http://https://cyber-backend-delta.vercel.app:8000/login' : 'http://https://cyber-backend-delta.vercel.app:8000/register';
       const bodyData = activeTab === 'LOGIN' 
         ? { username: uname, password } 
         : { username: uname, password, role: 'siswa', class_name: className, asal: asal, tanggal_lahir: tanggalLahir };
@@ -216,7 +216,7 @@ export default function CyberLoginGateway() {
 
       {/* Ornamen Teks Kanan Bawah */}
       <div className="absolute bottom-8 right-8 text-right z-0 hidden md:block">
-        <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase">CLIENT IP: 127.0.0.1</p>
+        <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase">CLIENT IP: https://cyber-backend-delta.vercel.app</p>
         <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CONNECTION: SECURE (AES 256)</p>
       </div>
 

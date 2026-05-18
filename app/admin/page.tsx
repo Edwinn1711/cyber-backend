@@ -36,7 +36,7 @@ export default function AdminPage() {
             </div>
           </div>
           <button onClick={async () => {
-             await fetch('http://127.0.0.1:8000/admin/questions', {
+             await fetch('http://https://cyber-backend-delta.vercel.app:8000/admin/questions', {
                method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(newQ)
              });
              alert("DEPLOAYED!"); loadData();

@@ -165,7 +165,7 @@ export default function DashboardGuruZenith() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://127.0.0.1:8000/guru/reports');
+      const res = await fetch('http://https://cyber-backend-delta.vercel.app:8000/guru/reports');
       const rawData = await res.json();
       const dataArray = Array.isArray(rawData) ? rawData : (rawData.data || rawData.reports || []);
 
@@ -244,7 +244,7 @@ export default function DashboardGuruZenith() {
     if (!window.confirm("SYSTEM WARNING: Are you sure you want to permanently delete this audit record?")) return;
     try {
       // Menghapus data asli jika ada koneksi
-      const res = await fetch(`http://127.0.0.1:8000/guru/delete-log/${logId}`, { method: 'DELETE' });
+      const res = await fetch(`http://https://cyber-backend-delta.vercel.app:8000/guru/delete-log/${logId}`, { method: 'DELETE' });
       if (res.ok) { alert("Audit log successfully deleted."); setFeedbackModal(null); fetchData(); } 
       else { 
         // Logika hapus untuk data simulasi lokal jika gagal konek ke backend
