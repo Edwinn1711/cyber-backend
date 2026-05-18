@@ -61,7 +61,7 @@ def get_db_connection():
         host="mysql-28e76345-devinedwinsiahaan171105-5a56.e.aivencloud.com",
         port=26035,
         user="avnadmin",
-        password=db_password, # <-- Pastikan ini memanggil variabel db_password
+        password=db_password # <-- Pastikan ini memanggil variabel db_password
         database="defaultdb",
         ssl_ca=ca_path
     )
