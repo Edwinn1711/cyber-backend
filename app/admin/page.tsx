@@ -8,8 +8,8 @@ export default function AdminPage() {
   const [newQ, setNewQ] = useState({ text: '', jawaban_ideal: '', bobot: 0 });
   const router = useRouter();
 
-  const loadData = () => fetch('http://127.0.0.1:8000/questions').then(r => r.json()).then(d => setQs(d));
-  useEffect(() => loadData(), []);
+  const loadData = () => fetch('https://cyber-backend-delta.vercel.app/questions').then(r => r.json()).then(d => setQs(d));
+  useEffect(() => { loadData(); }, []);
 
   return (
     <div className="min-h-screen bg-[#020202] text-white p-10 lg:p-20 font-sans">
