@@ -54,13 +54,16 @@ def get_db_connection():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     ca_path = os.path.join(current_dir, "ca.pem")
 
+    # Ambil password dari "kunci rahasia" Vercel
+    db_password = os.environ.get("DB_PASSWORD") 
+
     return mysql.connector.connect(
         host="mysql-28e76345-devinedwinsiahaan171105-5a56.e.aivencloud.com",
-        port=26035,             
-        user="avnadmin",        
-        password="devin1711edwin", 
+        port=26035,
+        user="avnadmin",
+        password=db_password, # <-- Pastikan ini memanggil variabel db_password
         database="defaultdb",
-        ssl_ca=ca_path         # 2. Pastikan ini sekarang memanggil ca_path
+        ssl_ca=ca_path
     )
 # --- AUTO UPDATE DATABASE ---
 # Fungsi cerdas agar tabel MySQL otomatis punya kolom "asal" dan "tanggal_lahir"
