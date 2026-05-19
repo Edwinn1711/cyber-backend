@@ -101,13 +101,14 @@ export default function DashboardGuruZenith() {
   const [appFeedbackForm, setAppFeedbackForm] = useState({ category: 'AI ENHANCEMENT', message: '' });
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
-  // Fetch Data Asli (Dummy Dibuang)
+  // Fetch Data (Database Asli)
   const fetchData = async () => {
     setLoading(true);
     try {
       const res = await fetch('https://cyber-backend-delta.vercel.app/guru/reports');
-      const dataArray = await res.json();
-      if (Array.isArray(dataArray) && dataArray.length > 0) {
+      const rawData = await res.json();
+      const dataArray = Array.isArray(rawData) ? rawData : (rawData.data || rawData.reports || []);
+      if (dataArray.length > 0) {
         const studentMap: Record<string, any> = {};
         dataArray.forEach((item: any, i: number) => {
           const uname = item.username || `STUDENT_${i}`;
@@ -124,7 +125,8 @@ export default function DashboardGuruZenith() {
              if (pD === "SOCIAL ENGINEERING") { studentMap[uname].scores.social = score; studentMap[uname].attempts.social += 1; }
              else if (pD === "MALWARE ANALYSIS") { studentMap[uname].scores.malware = score; studentMap[uname].attempts.malware += 1; }
              else if (pD === "PHISHING DEFENSE") { studentMap[uname].scores.phish = score; studentMap[uname].attempts.phish += 1; }
-             studentMap[uname].totalScore += score; studentMap[uname].testCount += 1;
+             studentMap[uname].totalScore += score;
+             studentMap[uname].testCount += 1;
           }
         });
         setReports(Object.values(studentMap).map((s: any) => ({ ...s, avgScore: s.testCount > 0 ? Math.round(s.totalScore / s.testCount) : 0 })));
@@ -141,6 +143,22 @@ export default function DashboardGuruZenith() {
     return () => clearInterval(interval);
   }, []);
 
+  // --- FUNGSI HAPUS LOG (SUDAH DIKEMBALIKAN) ---
+  const handleDeleteLog = async (logId: any) => {
+    if (!logId) return;
+    if (!window.confirm("Delete record permanently?")) return;
+    try {
+      const res = await fetch(`https://cyber-backend-delta.vercel.app/guru/delete-log/${logId}`, { method: 'DELETE' });
+      if (res.ok) { setFeedbackModal(null); fetchData(); } 
+    } catch (e) { alert("API Error."); }
+  };
+
+  const submitStudentFeedback = () => {
+    if(!feedbackText) return;
+    alert(`Transmission successful to: ${feedbackModal.username}`);
+    setFeedbackModal(null); setFeedbackText("");
+  };
+
   const submitAppFeedback = async () => {
     if(!appFeedbackForm.message.trim()) return;
     setIsSendingFeedback(true);
@@ -154,11 +172,12 @@ export default function DashboardGuruZenith() {
     finally { setIsSendingFeedback(false); }
   };
 
+  // Logic
   const filteredReports = useMemo(() => {
-    let result = reports;
-    if (activeClass !== "ALL CLASSES") result = result.filter(r => r.class_name === activeClass);
-    if (searchQuery) result = result.filter(r => String(r.username || "").toLowerCase().includes(searchQuery.toLowerCase()));
-    return result;
+    let res = reports;
+    if (activeClass !== "ALL CLASSES") res = res.filter(r => r.class_name === activeClass);
+    if (searchQuery) res = res.filter(r => String(r.username || "").toLowerCase().includes(searchQuery.toLowerCase()));
+    return res;
   }, [reports, activeClass, searchQuery]);
 
   const participationStats = useMemo(() => ({ total: filteredReports.length, active: filteredReports.filter(r => r.testCount > 0).length, percentage: filteredReports.length === 0 ? 0 : Math.round((filteredReports.filter(r => r.testCount > 0).length / filteredReports.length) * 100) }), [filteredReports]);
@@ -166,7 +185,7 @@ export default function DashboardGuruZenith() {
   const readinessDistribution = useMemo(() => {
     let r=0, c=0, d=0;
     filteredReports.forEach(x => { if(x.testCount === 0) return; if(x.avgScore >= 80) r++; else if(x.avgScore >= 50) c++; else d++; });
-    if(r===0 && c===0 && d===0) return[{ name: 'NO DATA', value: 1, color: '#1e293b' }];
+    if(r===0 && c===0 && d===0) return[{ name: 'VOID', value: 1, color: '#1e293b' }];
     return[{ name: 'READY', value: r, color: '#10b981' }, { name: 'CAUTION', value: c, color: '#eab308' }, { name: 'DANGER', value: d, color: '#ef4444' }].filter(x => x.value > 0);
   }, [filteredReports]);
 
@@ -187,29 +206,28 @@ export default function DashboardGuruZenith() {
       <motion.aside animate={{ width: isSidebarCollapsed ? 80 : 260 }} className="h-screen bg-[#05050A]/90 backdrop-blur-3xl border-r border-white/5 flex flex-col z-[100] shadow-2xl transition-all duration-500">
         <div className="h-20 px-6 flex items-center justify-between border-b border-white/5">
           {!isSidebarCollapsed && <div className="flex items-center gap-3"><div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center"><LayoutDashboard size={18} className="text-white" /></div><span className="font-black text-white uppercase text-[10px] tracking-widest">INSTRUCTOR</span></div>}
-          <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-2.5 bg-white/5 hover:bg-fuchsia-500/20 text-slate-400 hover:text-white rounded-xl mx-auto transition-all border border-white/5">
+          <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-2.5 bg-white/5 hover:bg-fuchsia-500/20 text-slate-400 hover:text-white rounded-xl mx-auto border border-white/5">
              {isSidebarCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
           </button>
         </div>
         <nav className="flex-1 px-4 py-8 space-y-3">
-          <button onClick={() => setView('dashboard')} className={`w-full flex items-center p-3.5 rounded-xl transition-all gap-4 ${view === 'dashboard' ? 'bg-fuchsia-600/10 text-fuchsia-400 border border-fuchsia-500/20' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}><Activity size={20} />{!isSidebarCollapsed && <span className="font-black text-[10px] tracking-widest">DASHBOARD</span>}</button>
+          <button onClick={() => setView('dashboard')} className={`w-full flex items-center p-3.5 rounded-xl transition-all gap-4 ${view === 'dashboard' ? 'bg-fuchsia-600/10 text-fuchsia-400 border border-fuchsia-500/20 shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}><Activity size={20} />{!isSidebarCollapsed && <span className="font-black text-[10px] tracking-widest uppercase">DASHBOARD</span>}</button>
           <button onClick={() => setAppFeedbackModal(true)} className="w-full flex items-center p-3.5 rounded-xl text-slate-500 hover:text-fuchsia-400 hover:bg-fuchsia-600/10 transition-all gap-4"><Lightbulb size={20} />{!isSidebarCollapsed && <span className="font-black text-[10px] tracking-widest uppercase">FEEDBACK</span>}</button>
         </nav>
-        <div className="p-6 border-t border-white/5"><button onClick={() => { localStorage.removeItem('user'); router.push('/'); }} className="w-full flex items-center justify-center p-3 bg-red-500/10 text-red-400 rounded-xl gap-3 font-bold text-[10px] tracking-widest uppercase hover:bg-red-500 hover:text-white transition-all"><LogOut size={16} /> {!isSidebarCollapsed && "SHUTDOWN"}</button></div>
+        <div className="p-6 border-t border-white/5"><button onClick={() => { localStorage.removeItem('user'); router.push('/'); }} className="w-full flex items-center justify-center p-3 bg-red-500/10 text-red-400 rounded-xl gap-3 font-black text-[10px] tracking-widest uppercase hover:bg-red-500 hover:text-white transition-all"><LogOut size={16} /> {!isSidebarCollapsed && "LOGOUT"}</button></div>
       </motion.aside>
 
-      {/* --- MAIN CONTENT --- */}
+      {/* --- CONTENT AREA --- */}
       <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
         <header className="h-20 flex items-center justify-between px-8 border-b border-white/5 bg-black/20 backdrop-blur-md">
-            <div className="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full shadow-inner"><div className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_15px_#34d399]" /><span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">SECURE LINK</span></div>
-            <div className="flex items-center gap-5"><div className="text-right hidden sm:block"><p className="text-[10px] font-black text-white uppercase tracking-widest">{user.username}</p><p className="text-[8px] font-bold text-fuchsia-400 uppercase mt-1">MASTER ACCESS</p></div><div className="w-10 h-10 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-full flex items-center justify-center border border-white/20"><User size={18} /></div></div>
+            <div className="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full shadow-inner"><div className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#34d399]" /><span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">SECURE LINK</span></div>
+            <div className="flex items-center gap-5"><div className="text-right hidden sm:block"><p className="text-[10px] font-black text-white tracking-widest uppercase">{user.username}</p><p className="text-[8px] font-bold text-fuchsia-400 uppercase tracking-widest mt-1">MASTER ACCESS</p></div><div className="w-10 h-10 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-full flex items-center justify-center border border-white/20"><User size={18} /></div></div>
         </header>
 
         <main className="flex-1 overflow-y-auto no-scrollbar px-10 lg:px-12 py-10" ref={scrollRef}>
           <AnimatePresence mode="wait">
             {view === 'dashboard' && (
               <motion.div key="analytics" {...(portalTransition as any)} className="max-w-[1300px] w-full mx-auto space-y-10 pb-20">
-                
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10">
                   <div className="space-y-4"><div className="text-fuchsia-400 font-black text-[11px] tracking-[0.4em] uppercase flex items-center gap-3"><Globe size={16} /> PLANETARY MONITORING</div><h1 className="text-4xl lg:text-5xl font-black text-white tracking-tighter uppercase leading-tight">GREETINGS, <span className="text-fuchsia-400">{user.username}</span>.</h1><p className="text-slate-500 font-medium text-xs tracking-wide">Real-time operative dossier metrics from the secure cloud network.</p></div>
                   <button onClick={fetchData} className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-black text-[10px] tracking-[0.3em] hover:bg-white hover:text-black transition-all flex items-center gap-4 uppercase shadow-2xl"><RefreshCcw size={16} className={loading ? "animate-spin text-fuchsia-400" : ""}/> REFRESH DATASET</button>
@@ -218,41 +236,41 @@ export default function DashboardGuruZenith() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 auto-rows-[minmax(180px,auto)]">
                    <motion.div whileHover={{ y: -4 }} className="lg:col-span-4 lg:row-span-2 bg-[#0a0a0f]/60 border border-white/10 rounded-[2.5rem] p-8 shadow-xl flex flex-col justify-between backdrop-blur-2xl relative overflow-hidden group"><p className="text-[10px] font-black text-slate-500 tracking-[0.3em] uppercase mb-6 flex items-center gap-2"><Target size={14}/> PARTICIPATION</p><div className="space-y-2"><p className="text-6xl font-black text-white tracking-tighter">{participationStats.percentage}%</p><p className="text-[10px] font-black text-fuchsia-400 tracking-[0.2em] uppercase">SYSTEM UPTIME</p></div><div className="w-full h-3 bg-black/50 rounded-full overflow-hidden border border-white/5 mt-10"><motion.div initial={{ width: 0 }} animate={{ width: `${participationStats.percentage}%` }} transition={{ duration: 1.8 }} className="h-full bg-gradient-to-r from-violet-600 to-fuchsia-600 shadow-[0_0_15px_#d946ef]" /></div></motion.div>
                    <motion.div whileHover={{ y: -4 }} className="lg:col-span-4 lg:row-span-2 bg-[#0a0a0f]/60 border border-white/10 rounded-[2.5rem] p-8 flex flex-col items-center shadow-xl backdrop-blur-2xl relative overflow-hidden group"><p className="text-[11px] font-black text-slate-500 tracking-[0.3em] uppercase mb-6 w-full text-left flex items-center gap-2"><ShieldAlert size={14}/> FLEET STATUS</p><div className="relative w-full h-[180px]"><ResponsiveContainer><PieChart><Pie data={readinessDistribution} innerRadius={65} outerRadius={85} dataKey="value" stroke="none" paddingAngle={8}>{readinessDistribution.map((e, i) => (<Cell key={i} fill={e.color} />))}</Pie></PieChart></ResponsiveContainer><div className="absolute inset-0 flex items-center justify-center text-3xl font-black text-white">{participationStats.active}</div></div><div className="flex gap-6 mt-6">{readinessDistribution.map((item, idx) => (<div key={idx} className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} /><span className="text-[10px] font-black text-slate-300 uppercase">{item.name}</span></div>))}</div></motion.div>
-                   <motion.div whileHover={{ y: -4 }} className="lg:col-span-4 lg:row-span-2 bg-[#0a0a0f]/60 border border-white/10 rounded-[3rem] p-8 shadow-2xl h-[320px] backdrop-blur-2xl relative overflow-hidden group"><p className="text-[11px] font-black text-slate-500 tracking-[0.3em] uppercase mb-8 flex items-center gap-2"><Cpu size={14}/> DOMAIN MASTERY</p><ResponsiveContainer><BarChart data={domainAverages} margin={{ left: -35 }}><CartesianGrid strokeDasharray="4 4" vertical={false} stroke="rgba(255,255,255,0.03)" /><XAxis dataKey="domain" tick={{ fontSize: 10, fontWeight: '900', fill: '#94a3b8' }} axisLine={false} tickLine={false}/><YAxis tick={{ fontSize: 10, fill: '#475569' }} domain={[0, 100]} axisLine={false} tickLine={false}/><Bar dataKey="score" radius={[8, 8, 0, 0]} barSize={50}>{domainAverages.map((e, i) => (<Cell key={i} fill={`url(#barGradient-${i})`} />))}<defs>{domainAverages.map((e, i) => (<linearGradient id={`barGradient-${i}`} key={i} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={e.color} /><stop offset="100%" stopColor={e.color} stopOpacity={0.1} /></linearGradient>))}</defs></Bar></BarChart></ResponsiveContainer></motion.div>
+                   <motion.div whileHover={{ y: -4 }} className="lg:col-span-4 lg:row-span-2 bg-[#0a0a0f]/60 border border-white/10 rounded-[3rem] p-10 shadow-2xl h-[320px] backdrop-blur-2xl relative overflow-hidden group"><p className="text-[11px] font-black text-slate-500 tracking-[0.3em] uppercase mb-8 flex items-center gap-2"><Cpu size={14}/> DOMAIN MASTERY</p><ResponsiveContainer><BarChart data={domainAverages} margin={{ left: -35 }}><CartesianGrid strokeDasharray="4 4" vertical={false} stroke="rgba(255,255,255,0.03)" /><XAxis dataKey="domain" tick={{ fontSize: 10, fontWeight: '900', fill: '#94a3b8' }} axisLine={false} tickLine={false}/><YAxis tick={{ fontSize: 10, fill: '#475569' }} domain={[0, 100]} axisLine={false} tickLine={false}/><Bar dataKey="score" radius={[8, 8, 0, 0]} barSize={50}>{domainAverages.map((e, i) => (<Cell key={i} fill={`url(#barGradient-${i})`} />))}<defs>{domainAverages.map((e, i) => (<linearGradient id={`barGradient-${i}`} key={i} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={e.color} /><stop offset="100%" stopColor={e.color} stopOpacity={0.1} /></linearGradient>))}</defs></Bar></BarChart></ResponsiveContainer></motion.div>
                 </div>
 
-                <div className="mt-20 space-y-10 pb-32">
-                   <div className="flex flex-col xl:flex-row justify-between items-end gap-10">
-                      <div className="space-y-3"><h2 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center gap-5">OPERATIVE DOSSIERS <Database className="text-fuchsia-500" size={28} /></h2><p className="text-slate-600 font-black text-[11px] tracking-[0.4em] uppercase">ACCESSING PERSONNEL RECORD LOGS</p></div>
-                      <div className="flex gap-6 w-full xl:w-auto">
-                         <div className="relative flex-1 xl:w-[350px] group"><Search size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-fuchsia-500" /><input type="text" placeholder="IDENTITY HASH..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-black/80 border border-white/10 rounded-[2rem] py-5 pl-16 pr-8 text-[11px] font-black text-white outline-none focus:border-fuchsia-500 transition-all placeholder:text-slate-800" /></div>
-                         <select value={activeClass} onChange={(e) => setActiveClass(e.target.value)} className="bg-black/80 border border-white/10 rounded-[2rem] px-10 text-[11px] font-black text-white outline-none cursor-pointer uppercase hover:border-fuchsia-500 transition-all">{dynamicClasses.map(c => <option key={c} value={c} className="bg-black">{c}</option>)}</select>
+                <div className="mt-16 space-y-8 pb-32">
+                   <div className="flex flex-col xl:flex-row justify-between items-end gap-10 mb-8">
+                      <div><h2 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center gap-5">OPERATIVE DOSSIERS <Database className="text-fuchsia-500" size={24} /></h2><p className="text-slate-600 font-black text-[10px] tracking-[0.2em] uppercase mt-2">Authenticated personnel records logs.</p></div>
+                      <div className="flex gap-4 w-full xl:w-auto">
+                         <div className="relative flex-1 xl:w-80 group"><Search size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-fuchsia-400" /><input type="text" placeholder="SEARCH IDENTITY..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-black/90 border border-white/10 rounded-full py-4 pl-12 pr-6 text-[10px] font-bold text-white outline-none focus:border-fuchsia-500 transition-all placeholder:text-slate-700" /></div>
+                         <select value={activeClass} onChange={(e) => setActiveClass(e.target.value)} className="bg-black/90 border border-white/10 rounded-full px-8 text-[10px] font-bold text-white outline-none cursor-pointer uppercase">{dynamicClasses.map(c => <option key={c} value={c}>{c}</option>)}</select>
                       </div>
                    </div>
 
-                   <div className="flex flex-col gap-6">
+                   <div className="flex flex-col gap-5">
                       <AnimatePresence>
                          {filteredReports.map((r, idx) => {
                             const status = getScoreData(r.avgScore);
                             return (
-                               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.04 }} key={idx} className="flex items-center justify-between bg-[#07070B]/60 backdrop-blur-[50px] p-8 rounded-[3rem] border border-white/5 hover:border-fuchsia-500/20 transition-all group shadow-2xl relative overflow-hidden">
+                               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.03 }} key={idx} className="flex items-center justify-between bg-[#07070B]/70 backdrop-blur-3xl p-6 rounded-[2.5rem] border border-white/5 hover:border-fuchsia-500/20 transition-all group shadow-2xl relative overflow-hidden">
                                   <div className="absolute left-0 top-0 w-1.5 h-full opacity-30" style={{ backgroundColor: status.color }} />
-                                  <div className="flex items-center gap-10 relative z-10"><div className="w-16 h-16 rounded-2xl bg-black border border-white/10 flex items-center justify-center relative shadow-2xl group-hover:rotate-3 transition-all"><User size={26} className="text-slate-600 group-hover:text-white transition-all" /><div className={`absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full border-[3px] border-[#07070B] ${status.bg}`} style={{ color: status.color }} /></div><div><p className="font-black text-2xl text-white tracking-tighter uppercase group-hover:text-fuchsia-400 transition-all">{r.username}</p><p className="text-[11px] text-slate-500 font-black tracking-[0.3em] uppercase mt-1">{r.class_name}</p></div></div>
-                                  <div className="flex items-center gap-14 relative z-10">
-                                     <div className="hidden lg:grid grid-cols-3 gap-10">
-                                        <div className="text-center group/score"><p className="text-[10px] font-black text-slate-600 uppercase mb-2">SOC</p><p className="text-2xl font-black text-fuchsia-400">{r.scores.social ?? '--'}</p></div>
-                                        <div className="text-center group/score"><p className="text-[10px] font-black text-slate-600 uppercase mb-2">MAL</p><p className="text-2xl font-black text-red-500">{r.scores.malware ?? '--'}</p></div>
-                                        <div className="text-center group/score"><p className="text-[10px] font-black text-slate-600 uppercase mb-2">PHI</p><p className="text-2xl font-black text-blue-500">{r.scores.phish ?? '--'}</p></div>
+                                  <div className="flex items-center gap-6"><div className="w-16 h-16 rounded-full bg-black border border-white/10 flex items-center justify-center relative shadow-inner"><User size={24} className="text-slate-500 group-hover:text-white" /><div className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-black ${status.bg} shadow-[0_0_10px_currentColor]`} style={{ color: status.color }} /></div><div><p className="font-black text-xl text-white tracking-tight uppercase group-hover:text-fuchsia-400 transition-colors">{r.username}</p><p className="text-[10px] text-slate-500 font-black tracking-widest uppercase mt-1">{r.class_name}</p></div></div>
+                                  <div className="flex items-center gap-8">
+                                     <div className="hidden lg:grid grid-cols-3 gap-6">
+                                        <div className="text-center group/score"><p className="text-[8px] font-bold text-slate-500 uppercase mb-1">SOC</p><p className="text-lg font-black text-fuchsia-400">{r.scores.social ?? '--'}</p></div>
+                                        <div className="text-center group/score"><p className="text-[8px] font-bold text-slate-500 uppercase mb-1">MAL</p><p className="text-lg font-black text-red-500">{r.scores.malware ?? '--'}</p></div>
+                                        <div className="text-center group/score"><p className="text-[8px] font-bold text-slate-500 uppercase mb-1">PHI</p><p className="text-lg font-black text-blue-500">{r.scores.phish ?? '--'}</p></div>
                                      </div>
-                                     <div className="flex items-center justify-center w-20 h-20 rounded-full border-[3px] border-white/5 relative ml-4 transform group-hover:scale-110 transition-all"><svg className="w-full h-full absolute -rotate-90"><circle cx="50%" cy="50%" r="44%" stroke={status.color} strokeWidth="5" fill="transparent" strokeDasharray={`${r.avgScore * 2.8} 1000`} className="opacity-80" style={{transition:'stroke-dasharray 1s ease-out'}}/></svg><span className={`text-2xl font-black ${status.text}`}>{r.avgScore}</span></div>
-                                     <button onClick={() => setFeedbackModal(r)} className="px-10 py-5 bg-white/5 border border-white/10 rounded-[1.8rem] hover:bg-white text-slate-300 hover:text-black font-black text-[11px] tracking-[0.3em] uppercase transition-all flex items-center gap-4 group/btn shadow-xl"><Eye size={18} /> VIEW DOSSIER</button>
+                                     <div className="flex items-center justify-center w-20 h-20 rounded-full border-2 border-white/5 relative ml-4 transform group-hover:scale-110 transition-all"><svg className="w-full h-full absolute -rotate-90"><circle cx="50%" cy="50%" r="45%" stroke={status.color} strokeWidth="3" fill="transparent" strokeDasharray={`${r.avgScore * 2.8} 1000`} className="opacity-80" style={{transition:'stroke-dasharray 1s ease-out'}}/></svg><span className={`text-2xl font-black ${status.text}`}>{r.avgScore}</span></div>
+                                     <button onClick={() => setFeedbackModal(r)} className="px-8 py-4 bg-white/5 border border-white/10 rounded-full hover:bg-white text-slate-400 hover:text-black font-black text-[10px] tracking-widest uppercase transition-all flex items-center gap-3"><Eye size={16} /> VIEW DOSSIER</button>
                                   </div>
                                </motion.div>
                             )
                          })}
                       </AnimatePresence>
                       {filteredReports.length === 0 && (
-                         <div className="p-32 text-center border-2 border-dashed border-white/5 rounded-[4rem] bg-black/40 backdrop-blur-3xl"><Info size={60} className="mx-auto text-slate-800 mb-8 animate-pulse" /><h3 className="text-2xl font-black text-white uppercase tracking-tighter">DATABASE STATUS: VOID</h3><p className="text-slate-700 font-black uppercase text-[10px] tracking-widest mt-4">NO COMPATIBLE OPERATIVE DATA DETECTED.</p></div>
+                         <div className="p-32 text-center border-2 border-dashed border-white/5 rounded-[3rem] bg-black/40"><Info size={48} className="mx-auto text-slate-600 mb-6" /><h3 className="text-2xl font-black text-white uppercase tracking-widest">DATABASE EMPTY</h3><p className="text-slate-500 font-bold uppercase text-xs tracking-widest mt-2">NO TESTED OPERATIVES DETECTED IN THE SECURE NETWORK.</p></div>
                       )}
                    </div>
                 </div>
@@ -262,16 +280,17 @@ export default function DashboardGuruZenith() {
         </main>
       </div>
 
+      {/* --- FEEDBACK MODAL (ULTRA LUXURY) --- */}
       <AnimatePresence>
         {appFeedbackModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-[#020108]/95 backdrop-blur-[40px]">
              <div className="absolute w-[500px] h-[500px] bg-fuchsia-600/10 rounded-full blur-[120px] -z-10 animate-pulse" />
-             <motion.div initial={{ scale: 0.9, y: 30, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.9, y: 20, opacity: 0 }} className="w-full max-w-2xl bg-[#0a0a0f]/80 border border-white/10 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden backdrop-blur-3xl">
+             <motion.div initial={{ scale: 0.9, y: 30, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.9, y: 20, opacity: 0 }} transition={{ type: 'spring', damping: 20 }} className="w-full max-w-2xl bg-[#0a0a0f]/80 border border-white/10 rounded-[3rem] p-10 shadow-[0_0_60px_rgba(217,70,239,0.15)] relative overflow-hidden backdrop-blur-3xl">
                 <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-indigo-600" />
                 <div className="flex justify-between items-start mb-10 relative z-10">
                    <div className="flex items-center gap-5">
                       <div className="w-14 h-14 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-2xl flex items-center justify-center text-white shadow-lg"><Zap size={24} className="fill-current" /></div>
-                      <div><h2 className="text-3xl font-black text-white uppercase tracking-tighter">PREMIUM FEEDBACK</h2><p className="text-slate-500 text-[9px] font-black uppercase tracking-[0.4em] mt-1">TRANSMITTING TO CORE DEVELOPER: devinedwinsiahaan171105@gmail.com</p></div>
+                      <div><h2 className="text-3xl font-black text-white uppercase tracking-tighter">PREMIUM FEEDBACK</h2><p className="text-slate-500 text-[9px] font-black uppercase tracking-[0.4em] mt-1">TRANSMITTING TO: devinedwinsiahaan171105@gmail.com</p></div>
                    </div>
                    <button onClick={() => setAppFeedbackModal(false)} className="p-3 bg-white/5 rounded-full text-slate-500 border border-white/5"><X size={18}/></button>
                 </div>
@@ -287,7 +306,7 @@ export default function DashboardGuruZenith() {
         )}
       </AnimatePresence>
 
-      {/* --- EVALUATION MODAL (DUMMY CONTENT) --- */}
+      {/* --- DOSSIER MODAL --- */}
       <AnimatePresence>
         {feedbackModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl">
@@ -296,9 +315,9 @@ export default function DashboardGuruZenith() {
                <div className="flex justify-between items-start mb-6 shrink-0 relative z-10">
                   <div className="flex items-center gap-6">
                      <div className="w-16 h-16 bg-gradient-to-br from-fuchsia-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg"><User size={32} /></div>
-                     <div><p className="text-[10px] font-bold text-fuchsia-400 tracking-widest uppercase mb-1">DOSSIER ACCESS</p><h2 className="text-3xl font-black text-white uppercase">{feedbackModal.username}</h2><p className="text-xs font-semibold text-slate-400 mt-1 uppercase">{feedbackModal.class_name}</p></div>
+                     <div><p className="text-[10px] font-bold text-fuchsia-400 tracking-widest uppercase mb-1">PERSONNEL DOSSIER</p><h2 className="text-3xl font-black text-white uppercase">{feedbackModal.username}</h2><p className="text-xs font-semibold text-slate-400 mt-1 uppercase">{feedbackModal.class_name} • {feedbackModal.testCount} SESSIONS</p></div>
                   </div>
-                  <button onClick={() => setFeedbackModal(null)} className="p-2 bg-white/5 rounded-full hover:bg-red-500/20 text-slate-400"><X size={20} /></button>
+                  <button onClick={() => setFeedbackModal(null)} className="p-2 bg-white/5 rounded-full hover:bg-red-500/20 text-slate-400 transition-all"><X size={20} /></button>
                </div>
                <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar relative z-10 space-y-6">
                   <div className="grid grid-cols-3 gap-4">
@@ -310,7 +329,7 @@ export default function DashboardGuruZenith() {
                     ))}
                   </div>
                   <div className="space-y-3">
-                    <h3 className="text-xs font-bold text-slate-300 flex items-center gap-2 uppercase tracking-widest"><Database size={16} /> LOGS HISTORY</h3>
+                    <h3 className="text-xs font-bold text-slate-300 flex items-center gap-2 uppercase tracking-widest"><Database size={16} /> AUDIT LOGS</h3>
                     {feedbackModal.history.map((log: any, i: number) => (
                         <div key={i} className="flex items-center justify-between p-4 bg-black/40 border border-white/5 rounded-xl group hover:border-white/20 transition-all">
                           <div className="flex flex-col"><p className="text-xs font-bold text-white uppercase">AUDIT {i+1}</p><p className="text-[10px] text-slate-500 uppercase mt-1">{log.parsedDomain} | SCORE: <span className={getScoreData(log.parsedScore).text}>{log.parsedScore}</span></p></div>
@@ -330,7 +349,7 @@ export default function DashboardGuruZenith() {
         ::-webkit-scrollbar { width: 0px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(217, 70, 239, 0.4); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(217, 70, 239, 0.3); border-radius: 10px; }
         ::selection { background: #d946ef; color: white; }
         input, select, textarea { caret-color: #d946ef; }
         option { background-color: #020108; color: white; }
