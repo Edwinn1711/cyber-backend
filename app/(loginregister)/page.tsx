@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, Calendar, CheckCircle2, XCircle, Database, Server } from 'lucide-react'
+import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, Calendar, CheckCircle2, Database, Server } from 'lucide-react'
 
 // --- ASSET GALAXY HD ---
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- BACKGROUND BERSIH ELEGAN & STABIL (TANPA GOYANG/ZOOM) ---
+// --- BACKGROUND BERSIH ELEGAN & STABIL ---
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-black">
@@ -45,10 +45,9 @@ export default function CyberLoginGateway() {
   
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isInjecting, setIsInjecting] = useState(false);
 
   // ====================================================================
-  // LOGIKA 3D PARALLAX TILT (KARTU BERGOYANG MENGIKUTI KURSOR/TOUCH)
+  // LOGIKA 3D PARALLAX TILT (KARTU BERGOYANG MENGIKUTI KURSOR)
   // ====================================================================
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -85,47 +84,7 @@ export default function CyberLoginGateway() {
   }, []);
 
   // ====================================================================
-  // FUNGSI RAHASIA: INJECT 50 AKUN KE DATABASE MYSQL SUNGGUHAN
-  // ====================================================================
-  const handleInjectDatabase = async () => {
-    if (!window.confirm("DEVELOPER MODE: Apakah Anda yakin ingin meng-inject 50 akun (ce325001-050) ke database MySQL?")) return;
-    
-    setIsInjecting(true);
-    let successCount = 0;
-
-    for (let i = 1; i <= 50; i++) {
-      const uname = `ce325${i.toString().padStart(3, '0')}`;
-      const cls = AVAILABLE_CLASSES[i % AVAILABLE_CLASSES.length];
-
-      try {
-        const res = await fetch('https://cyber-backend-delta.vercel.app/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            username: uname,
-            password: "123",
-            role: "siswa",
-            class_name: cls,
-            asal: "SISTEM INJEKSI",
-            tanggal_lahir: "2005-01-01"
-          })
-        });
-        
-        if (res.ok) {
-          successCount++;
-          console.log(`Akun ${uname} berhasil disimpan ke MySQL.`);
-        }
-      } catch (error) {
-        console.error(`Gagal menyimpan akun ${uname}. Server mati?`);
-      }
-    }
-
-    setIsInjecting(false);
-    alert(`INJEKSI SELESAI! Berhasil menyimpan ${successCount} dari 50 akun ke Database MySQL. Silakan cek phpMyAdmin Anda.`);
-  };
-
-  // ====================================================================
-  // FUNGSI LOGIN / REGISTER NORMAL
+  // FUNGSI LOGIN / REGISTER KE BACKEND VERCEL
   // ====================================================================
   const handleAuthenticate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -145,7 +104,7 @@ export default function CyberLoginGateway() {
     }
 
     setStatus('loading');
-    const uname = username.trim(); // Dibiarkan apa adanya (tidak dipaksa uppercase) agar case-sensitive aman
+    const uname = username.trim();
 
     try {
       const endpoint = activeTab === 'LOGIN' ? 'https://cyber-backend-delta.vercel.app/login' : 'https://cyber-backend-delta.vercel.app/register';
@@ -161,15 +120,15 @@ export default function CyberLoginGateway() {
       
       const data = await res.json();
       
-      if (res.ok && (data.success || data.username)) {
-        const role = data.role || data.user?.role || 'siswa';
-        const userObj = { username: uname, class_name: className, role: role };
-        localStorage.setItem('user', JSON.stringify(userObj));
+      if (res.ok) {
+        // Simpan data user ke localstorage
+        localStorage.setItem('user', JSON.stringify(data));
         
         setStatus('success');
-        setTimeout(() => router.push(role === 'guru' ? '/guru' : '/siswa'), 1500);
+        const role = data.role || 'siswa';
+        setTimeout(() => router.push(role === 'guru' || role === 'admin' ? '/guru' : '/siswa'), 1500);
       } else {
-        setErrorMessage(data.message || data.detail || "Autentikasi gagal. Akses ditolak.");
+        setErrorMessage(data.detail || "Autentikasi gagal.");
         setStatus('error');
         setTimeout(() => setStatus('idle'), 3000);
       }
@@ -184,27 +143,8 @@ export default function CyberLoginGateway() {
     <div className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]">
       <PersistentUniverse bgIdx={bgIdx} />
 
-      {/* --- TOMBOL RAHASIA DEVELOPER UNTUK INJECT DATABASE --- */}
-      <div className="absolute top-8 right-8 z-50">
-        <button 
-          onClick={handleInjectDatabase}
-          disabled={isInjecting}
-          className="flex items-center gap-3 px-4 py-2 bg-black/80 border border-fuchsia-500/30 rounded-full hover:bg-fuchsia-500/20 hover:border-fuchsia-500 transition-all backdrop-blur-md group"
-          title="Klik untuk membuat 50 akun otomatis ke database MySQL"
-        >
-          {isInjecting ? (
-            <Server size={16} className="text-fuchsia-400 animate-pulse" />
-          ) : (
-            <Database size={16} className="text-slate-400 group-hover:text-fuchsia-400" />
-          )}
-          <span className="text-[9px] font-black tracking-widest text-slate-400 group-hover:text-white uppercase hidden md:block">
-            {isInjecting ? "MENYUNTIKKAN KE MYSQL..." : "INJECT 50 AKUN KE DB"}
-          </span>
-        </button>
-      </div>
-
       {/* Ornamen Teks Kiri Bawah */}
-      <div className="absolute bottom-8 left-8 z-0 hidden md:flex items-center gap-4">
+      <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4">
         <div className="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center bg-black/80 backdrop-blur-md">
            <span className="font-bold text-white text-xs">N</span>
         </div>
@@ -215,8 +155,8 @@ export default function CyberLoginGateway() {
       </div>
 
       {/* Ornamen Teks Kanan Bawah */}
-      <div className="absolute bottom-8 right-8 text-right z-0 hidden md:block">
-        <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase">CLIENT IP: https://cyber-backend-delta.vercel.app</p>
+      <div className="absolute bottom-8 right-8 text-right z-10 hidden md:block">
+        <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase">CLIENT IP: DETECTED</p>
         <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CONNECTION: SECURE (AES 256)</p>
       </div>
 
@@ -272,7 +212,7 @@ export default function CyberLoginGateway() {
               placeholder="NAMA PENGGUNA" 
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              disabled={status === 'loading' || status === 'success' || isInjecting}
+              disabled={status === 'loading' || status === 'success'}
               className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner" 
             />
           </div>
@@ -286,7 +226,7 @@ export default function CyberLoginGateway() {
               placeholder="KATA SANDI" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              disabled={status === 'loading' || status === 'success' || isInjecting}
+              disabled={status === 'loading' || status === 'success'}
               className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner" 
             />
           </div>
@@ -308,7 +248,7 @@ export default function CyberLoginGateway() {
                     placeholder="ASAL / KOTA" 
                     value={asal}
                     onChange={(e) => setAsal(e.target.value)}
-                    disabled={status === 'loading' || status === 'success' || isInjecting}
+                    disabled={status === 'loading' || status === 'success'}
                     className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
                   />
                 </div>
@@ -321,7 +261,7 @@ export default function CyberLoginGateway() {
                     type="date" 
                     value={tanggalLahir}
                     onChange={(e) => setTanggalLahir(e.target.value)}
-                    disabled={status === 'loading' || status === 'success' || isInjecting}
+                    disabled={status === 'loading' || status === 'success'}
                     style={{ colorScheme: 'dark' }}
                     className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
                   />
@@ -334,7 +274,7 @@ export default function CyberLoginGateway() {
                   <select 
                     value={className}
                     onChange={(e) => setClassName(e.target.value)}
-                    disabled={status === 'loading' || status === 'success' || isInjecting}
+                    disabled={status === 'loading' || status === 'success'}
                     className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-slate-300 tracking-widest focus:border-fuchsia-500 outline-none transition-all appearance-none disabled:opacity-50 cursor-pointer uppercase shadow-inner"
                   >
                     {AVAILABLE_CLASSES.map(cls => (
@@ -356,7 +296,7 @@ export default function CyberLoginGateway() {
 
           <button 
             type="submit" 
-            disabled={status === 'loading' || status === 'success' || isInjecting}
+            disabled={status === 'loading' || status === 'success'}
             className={`w-full mt-4 py-4 rounded-[1.2rem] font-black text-[10px] tracking-[0.4em] text-white transition-all flex items-center justify-center gap-3 uppercase overflow-hidden relative ${status === 'success' ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.5)]' : 'bg-fuchsia-600 hover:bg-fuchsia-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.5)] disabled:opacity-50 disabled:cursor-not-allowed'}`}
           >
              {status === 'loading' && <span className="animate-pulse">MEMVERIFIKASI...</span>}
