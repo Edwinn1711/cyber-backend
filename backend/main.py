@@ -49,40 +49,57 @@ class QuestionSubmit(BaseModel):
 # ==========================================
 # KONEKSI DATABASE KE AIVEN CLOUD
 # ==========================================
+# 1. Perbaiki tanda koma yang kurang di baris password
 def get_db_connection():
-    # 1. Tambahkan 2 baris ini agar Vercel otomatis melacak lokasi file ca.pem
     current_dir = os.path.dirname(os.path.abspath(__file__))
     ca_path = os.path.join(current_dir, "ca.pem")
-
-    # Ambil password dari "kunci rahasia" Vercel
     db_password = os.environ.get("DB_PASSWORD") 
 
     return mysql.connector.connect(
         host="mysql-28e76345-devinedwinsiahaan171105-5a56.e.aivencloud.com",
         port=26035,
         user="avnadmin",
-        password=db_password # <-- Pastikan ini memanggil variabel db_password
+        password=db_password, # <--- Pastikan ada koma di sini!
         database="defaultdb",
         ssl_ca=ca_path
     )
-# --- AUTO UPDATE DATABASE ---
-# Fungsi cerdas agar tabel MySQL otomatis punya kolom "asal" dan "tanggal_lahir"
+
+# 2. Ganti startup_event agar membuat tabel jika belum ada
 @app.on_event("startup")
 def startup_event():
     try:
         db = get_db_connection()
         cursor = db.cursor()
-        # Cek apakah kolom 'asal' sudah ada
-        cursor.execute("SHOW COLUMNS FROM users LIKE 'asal'")
-        if not cursor.fetchone():
-            cursor.execute("ALTER TABLE users ADD COLUMN asal VARCHAR(255)")
-            cursor.execute("ALTER TABLE users ADD COLUMN tanggal_lahir VARCHAR(50)")
-            db.commit()
-            print("SISTEM: Kolom Asal & Tanggal Lahir otomatis ditambahkan ke database!")
+        
+        # Membuat tabel users jika belum ada
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(255) UNIQUE NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                role VARCHAR(50) DEFAULT 'siswa',
+                class_name VARCHAR(100) DEFAULT 'UNASSIGNED',
+                asal VARCHAR(255),
+                tanggal_lahir VARCHAR(50)
+            )
+        """)
+        # Membuat tabel reports
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS reports (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(255),
+                class_name VARCHAR(100),
+                domain_id VARCHAR(255),
+                score INT,
+                status VARCHAR(50),
+                details JSON
+            )
+        """)
+        db.commit()
+        print("SISTEM: Database siap!")
         db.close()
     except Exception as e:
         print("Peringatan saat update struktur DB:", e)
-
 
 # ==========================================
 # ENDPOINT AUTHENTICATION (LOGIN & REGISTER)
