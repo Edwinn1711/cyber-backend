@@ -351,7 +351,7 @@ export default function DashboardGuruZenith() {
         <main className="flex-1 overflow-y-auto no-scrollbar px-8 lg:px-12 py-10" ref={scrollRef}>
           <AnimatePresence mode="wait">
             {view === 'dashboard' && (
-              <motion.div key="analytics" {...(portalTransition as any)} className="max-w-[1400px] w-full mx-auto space-y-10 pb-20">
+              <motion.div key="analytics" {...portalTransition} className="max-w-[1400px] w-full mx-auto space-y-10 pb-20">
                 
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
                   <div><div className="text-fuchsia-400 font-bold text-[11px] tracking-widest mb-2 uppercase flex items-center gap-2"><Hexagon size={14} className="animate-spin-slow" /> FLEET MONITORING</div><h1 className="text-4xl lg:text-5xl font-black text-white tracking-tight uppercase">{getGreeting()}, <span className="text-fuchsia-500">{user.username}</span>.</h1><p className="text-slate-400 mt-2 font-medium text-sm">Comprehensive real-time overview from the secure Aiven Cloud databanks.</p></div>
