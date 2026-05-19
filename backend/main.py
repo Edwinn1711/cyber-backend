@@ -65,42 +65,37 @@ def get_db_connection():
     )
 
 # 2. Ganti startup_event agar membuat tabel jika belum ada
+# JURUS PEMBUAT TABEL OTOMATIS
 @app.on_event("startup")
-def startup_event():
-    try:
-        db = get_db_connection()
-        cursor = db.cursor()
-        
-        # Membuat tabel users jika belum ada
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                username VARCHAR(255) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                role VARCHAR(50) DEFAULT 'siswa',
-                class_name VARCHAR(100) DEFAULT 'UNASSIGNED',
-                asal VARCHAR(255),
-                tanggal_lahir VARCHAR(50)
-            )
-        """)
-        # Membuat tabel reports
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS reports (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                username VARCHAR(255),
-                class_name VARCHAR(100),
-                domain_id VARCHAR(255),
-                score INT,
-                status VARCHAR(50),
-                details JSON
-            )
-        """)
-        db.commit()
-        print("SISTEM: Database siap!")
-        db.close()
-    except Exception as e:
-        print("Peringatan saat update struktur DB:", e)
-
+def create_tables():
+    db = get_db_connection()
+    cursor = db.cursor()
+    # SQL untuk membuat tabel jika belum ada
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(255) UNIQUE NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            role VARCHAR(50) DEFAULT 'siswa',
+            class_name VARCHAR(100) DEFAULT 'UNASSIGNED',
+            asal VARCHAR(255),
+            tanggal_lahir VARCHAR(50)
+        )
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS reports (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(255),
+            class_name VARCHAR(100),
+            domain_id VARCHAR(255),
+            score INT,
+            status VARCHAR(50),
+            details JSON
+        )
+    """)
+    db.commit()
+    db.close()
+    print("SISTEM: Tabel berhasil dibuat di Aiven!")
 # ==========================================
 # ENDPOINT AUTHENTICATION (LOGIN & REGISTER)
 # ==========================================
