@@ -93,6 +93,8 @@ export default function DashboardGuruZenith() {
   const [bgIdx, setBgIdx] = useState(0);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [user, setUser] = useState({ username: 'INSTRUCTOR' });
+  
+  // Interaction States
   const [activeClass, setActiveClass] = useState("ALL CLASSES"); 
   const [searchQuery, setSearchQuery] = useState("");
   const [feedbackModal, setFeedbackModal] = useState<any>(null); 
@@ -101,7 +103,7 @@ export default function DashboardGuruZenith() {
   const [appFeedbackForm, setAppFeedbackForm] = useState({ category: 'AI ENHANCEMENT', message: '' });
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
-  // Logic: Dynamic Greeting
+  // LOGIKA GREETING DINAMIS
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "GOOD MORNING";
@@ -109,53 +111,82 @@ export default function DashboardGuruZenith() {
     return "GOOD EVENING";
   };
 
-  // Fetch Data (Asli Database)
+  // =========================================================================
+  // DATA ENGINE - MENGEMBALIKAN LOGIKA ASLI KAMU YANG LENGKAP
+  // =========================================================================
   const fetchData = async () => {
     setLoading(true);
     try {
       const res = await fetch('https://cyber-backend-delta.vercel.app/guru/reports');
-      const dataArray = await res.json();
-      if (Array.isArray(dataArray) && dataArray.length > 0) {
+      const rawData = await res.json();
+      
+      // Menggunakan logika deteksi array asli kamu agar data tidak hilang
+      const dataArray = Array.isArray(rawData) ? rawData : (rawData.data || rawData.reports || []);
+
+      if (dataArray.length > 0) {
         const studentMap: Record<string, any> = {};
         dataArray.forEach((item: any, i: number) => {
-          const uname = item.username || `STUDENT_${i}`;
-          const className = item.class_name ? String(item.class_name).toUpperCase() : "UNASSIGNED";
-          const score = Number(item.score) || 0;
-          const dom = String(item.domain_id || '').toLowerCase();
-          if (!studentMap[uname]) { studentMap[uname] = { username: uname, class_name: className, scores: { social: null, malware: null, phish: null }, attempts: { social: 0, malware: 0, phish: 0 }, totalScore: 0, testCount: 0, history:[] }; }
-          let pD = "UNKNOWN";
-          if (dom.includes('soc')) pD = "SOCIAL ENGINEERING";
-          else if (dom.includes('mal')) pD = "MALWARE ANALYSIS";
-          else if (dom.includes('phis')) pD = "PHISHING DEFENSE";
-          studentMap[uname].history.push({ ...item, dbId: item.id, parsedDomain: pD, parsedScore: score });
+          // Deteksi Key Dinamis sesuai database asli kamu
+          const keys = Object.keys(item);
+          const idKey = keys.find(k => /^(id|_id|id_report|id_log|log_id|id_nilai)$/i.test(k));
+          const unameKey = keys.find(k => /name|user|siswa|id_siswa/i.test(k));
+          const classKey = keys.find(k => /class|kelas|rombel/i.test(k));
+          const scoreKey = keys.find(k => /score|nilai|poin/i.test(k));
+          const domainKey = keys.find(k => /domain|kategori|tipe/i.test(k));
+
+          const actualId = idKey ? item[idKey] : null;
+          const uname = unameKey ? String(item[unameKey]) : `STUDENT_${i}`;
+          const className = (classKey && item[classKey]) ? String(item[classKey]).toUpperCase() : "UNASSIGNED";
+          const score = scoreKey ? Number(item[scoreKey]) : 0;
+          const dom = domainKey ? String(item[domainKey]).toLowerCase() : 'social engineering';
+
+          if (!studentMap[uname]) {
+             studentMap[uname] = { username: uname, class_name: className, scores: { social: null, malware: null, phish: null }, attempts: { social: 0, malware: 0, phish: 0 }, totalScore: 0, testCount: 0, history:[] };
+          }
+
+          let parsedDomain = "UNKNOWN DOMAIN";
+          if (dom.includes('soc') || dom.includes('eng')) parsedDomain = "SOCIAL ENGINEERING";
+          else if (dom.includes('mal')) parsedDomain = "MALWARE ANALYSIS";
+          else if (dom.includes('phis')) parsedDomain = "PHISHING DEFENSE";
+
+          studentMap[uname].history.push({ ...item, dbId: actualId, parsedDomain, parsedScore: isNaN(score) ? 0 : score });
+          
           if (!isNaN(score)) {
-             if (pD === "SOCIAL ENGINEERING") { studentMap[uname].scores.social = score; studentMap[uname].attempts.social += 1; }
-             else if (pD === "MALWARE ANALYSIS") { studentMap[uname].scores.malware = score; studentMap[uname].attempts.malware += 1; }
-             else if (pD === "PHISHING DEFENSE") { studentMap[uname].scores.phish = score; studentMap[uname].attempts.phish += 1; }
+             if (parsedDomain === "SOCIAL ENGINEERING") { studentMap[uname].scores.social = score; studentMap[uname].attempts.social += 1; }
+             else if (parsedDomain === "MALWARE ANALYSIS") { studentMap[uname].scores.malware = score; studentMap[uname].attempts.malware += 1; }
+             else if (parsedDomain === "PHISHING DEFENSE") { studentMap[uname].scores.phish = score; studentMap[uname].attempts.phish += 1; }
+             
              studentMap[uname].totalScore += score;
              studentMap[uname].testCount += 1;
           }
         });
-        setReports(Object.values(studentMap).map((s: any) => ({ ...s, avgScore: s.testCount > 0 ? Math.round(s.totalScore / s.testCount) : 0 })));
-      } else { setReports([]); }
-    } catch (e) { setReports([]); } 
+        const formattedReports = Object.values(studentMap).map((s: any) => ({ ...s, avgScore: s.testCount > 0 ? Math.round(s.totalScore / s.testCount) : 0 }));
+        setReports(formattedReports);
+      } else {
+        setReports([]); 
+      }
+    } catch (e) { 
+      console.error("Gagal mengambil data:", e);
+      setReports([]); 
+    } 
     finally { setLoading(false); }
   };
 
   useEffect(() => {
     const saved = localStorage.getItem('user');
-    if (saved) setUser(JSON.parse(saved));
+    if (saved) { setUser(JSON.parse(saved)); }
     fetchData();
     const interval = setInterval(() => setBgIdx(p => (p + 1) % CYBER_ASSETS.length), 10000);
     return () => clearInterval(interval);
   }, []);
 
-  const handleDeleteLog = async (logId: any) => {
-    if (!logId || !window.confirm("Delete record?")) return;
+  const handleDeleteLog = async (logId: string | number) => {
+    if (!logId) return;
+    if (!window.confirm("Delete record permanently?")) return;
     try {
       const res = await fetch(`https://cyber-backend-delta.vercel.app/guru/delete-log/${logId}`, { method: 'DELETE' });
       if (res.ok) { setFeedbackModal(null); fetchData(); } 
-    } catch (e) { console.error(e); }
+    } catch (error) { console.error(error); }
   };
 
   const submitAppFeedback = async () => {
@@ -171,6 +202,9 @@ export default function DashboardGuruZenith() {
     finally { setIsSendingFeedback(false); }
   };
 
+  // =========================================================================
+  // ANALYTICS CALCULATIONS
+  // =========================================================================
   const filteredReports = useMemo(() => {
     let result = reports;
     if (activeClass !== "ALL CLASSES") result = result.filter(r => r.class_name === activeClass);
@@ -178,25 +212,37 @@ export default function DashboardGuruZenith() {
     return result;
   }, [reports, activeClass, searchQuery]);
 
-  const participationStats = useMemo(() => ({ total: filteredReports.length, active: filteredReports.filter(r => r.testCount > 0).length, percentage: filteredReports.length === 0 ? 0 : Math.round((filteredReports.filter(r => r.testCount > 0).length / filteredReports.length) * 100) }), [filteredReports]);
+  const participationStats = useMemo(() => {
+    const total = filteredReports.length;
+    const active = filteredReports.filter(r => r.testCount > 0).length;
+    return { total, active, percentage: total === 0 ? 0 : Math.round((active / total) * 100) };
+  }, [filteredReports]);
 
   const readinessDistribution = useMemo(() => {
-    let r=0, c=0, d=0;
-    filteredReports.forEach(x => { if(x.testCount === 0) return; if(x.avgScore >= 80) r++; else if(x.avgScore >= 50) c++; else d++; });
-    if(r===0 && c===0 && d===0) return[{ name: 'NO DATA', value: 1, color: '#1e293b' }];
-    return[{ name: 'READY', value: r, color: '#10b981' }, { name: 'CAUTION', value: c, color: '#eab308' }, { name: 'DANGER', value: d, color: '#ef4444' }].filter(x => x.value > 0);
+    let r_ok = 0, c_ok = 0, d_ok = 0;
+    filteredReports.forEach(r => {
+      if(r.testCount === 0) return;
+      if (r.avgScore >= 80) r_ok++; else if (r.avgScore >= 50) c_ok++; else d_ok++;
+    });
+    if(r_ok === 0 && c_ok === 0 && d_ok === 0) return[{ name: 'NO DATA', value: 1, color: '#1e293b' }];
+    return[{ name: 'READY', value: r_ok, color: '#10b981' }, { name: 'CAUTION', value: c_ok, color: '#eab308' }, { name: 'DANGER', value: d_ok, color: '#ef4444' }].filter(d => d.value > 0);
   }, [filteredReports]);
 
   const domainAverages = useMemo(() => {
+    if (filteredReports.length === 0) return[{ domain: 'SOC', score: 0, color: '#d946ef' }, { domain: 'MAL', score: 0, color: '#ef4444' }, { domain: 'PHI', score: 0, color: '#3b82f6' }];
     let s=0, m=0, p=0, sc=0, mc=0, pc=0;
-    filteredReports.forEach(r => { if(r.scores.social) {s+=r.scores.social; sc++} if(r.scores.malware) {m+=r.scores.malware; mc++} if(r.scores.phish) {p+=r.scores.phish; pc++} });
-    return [{ domain: 'SOC', score: sc?Math.round(s/sc):0, color: '#d946ef' }, { domain: 'MAL', score: mc?Math.round(m/mc):0, color: '#ef4444' }, { domain: 'PHI', score: pc?Math.round(p/pc):0, color: '#3b82f6' }];
+    filteredReports.forEach(r => {
+      if (r.scores.social !== null) { s += r.scores.social; sc++; }
+      if (r.scores.malware !== null) { m += r.scores.malware; mc++; }
+      if (r.scores.phish !== null) { p += r.scores.phish; pc++; }
+    });
+    return[{ domain: 'SOC', score: sc?Math.round(s/sc):0, color: '#d946ef' }, { domain: 'MAL', score: mc?Math.round(m/mc):0, color: '#ef4444' }, { domain: 'PHI', score: pc?Math.round(p/pc):0, color: '#3b82f6' }];
   }, [filteredReports]);
 
   const dynamicClasses = useMemo(() => ["ALL CLASSES", ...Array.from(new Set(reports.map(r => r.class_name))).sort()], [reports]);
 
   return (
-    <div className="flex h-screen w-full bg-[#020108] text-slate-200 overflow-hidden font-sans text-sm selection:bg-fuchsia-500/30">
+    <div className="flex h-screen w-full bg-[#020108] text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 text-sm">
       <CosmicEngine bgIdx={bgIdx} />
       <ParticleBurstClickEffect />
 
@@ -218,7 +264,7 @@ export default function DashboardGuruZenith() {
       {/* --- MAIN CONTENT --- */}
       <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
         <header className="h-20 flex items-center justify-between px-8 border-b border-white/5 bg-black/20 backdrop-blur-md">
-            <div className="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full shadow-inner"><div className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#34d399]" /><span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">SECURE LINK</span></div>
+            <div className="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full shadow-inner"><div className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_15px_#34d399]" /><span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">SECURE LINK</span></div>
             <div className="flex items-center gap-5"><div className="text-right hidden sm:block"><p className="text-[10px] font-black text-white tracking-widest">{user.username}</p><p className="text-[8px] font-bold text-fuchsia-400 uppercase mt-1 tracking-widest">MASTER OPERATIVE</p></div><div className="w-10 h-10 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-full flex items-center justify-center border border-white/20"><User size={18} /></div></div>
         </header>
 
@@ -226,8 +272,9 @@ export default function DashboardGuruZenith() {
           <AnimatePresence mode="wait">
             {view === 'dashboard' && (
               <motion.div key="analytics" {...(portalTransition as any)} className="max-w-[1300px] w-full mx-auto space-y-10 pb-20">
+                
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10">
-                  <div className="space-y-4"><div className="text-fuchsia-400 font-black text-[11px] tracking-[0.4em] uppercase flex items-center gap-3"><Globe size={16} /> PLANETARY MONITORING</div><h1 className="text-4xl lg:text-5xl font-black text-white tracking-tighter uppercase leading-tight">{getGreeting()}, <span className="text-fuchsia-400">{user.username}</span>.</h1><p className="text-slate-500 font-medium text-xs tracking-wide">Real-time dossier metrics from the secure cloud network.</p></div>
+                  <div className="space-y-4"><div className="text-fuchsia-400 font-black text-[11px] tracking-[0.4em] uppercase flex items-center gap-3"><Globe size={16} /> PLANETARY MONITORING</div><h1 className="text-4xl lg:text-5xl font-black text-white tracking-tighter uppercase leading-tight">{getGreeting()}, <span className="text-fuchsia-400">{user.username}</span>.</h1><p className="text-slate-500 font-medium text-xs tracking-wide">Real-time operative dossier metrics from the secure cloud network.</p></div>
                   <button onClick={fetchData} className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-black text-[10px] tracking-[0.3em] hover:bg-white hover:text-black transition-all flex items-center gap-4 uppercase shadow-2xl"><RefreshCcw size={16} className={loading ? "animate-spin text-fuchsia-400" : ""}/> REFRESH DATASET</button>
                 </div>
 
@@ -238,11 +285,11 @@ export default function DashboardGuruZenith() {
                 </div>
 
                 <div className="mt-20 space-y-10 pb-32">
-                   <div className="flex flex-col xl:flex-row justify-between items-end gap-10 mb-8">
-                      <div><h2 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center gap-5">OPERATIVE DOSSIERS <Database className="text-fuchsia-500" size={28} /></h2><p className="text-slate-600 font-black text-[11px] tracking-[0.4em] uppercase">ACCESSING PERSONNEL RECORD LOGS</p></div>
+                   <div className="flex flex-col xl:flex-row justify-between items-end gap-10">
+                      <div className="space-y-3"><h2 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center gap-5">OPERATIVE DOSSIERS <Database className="text-fuchsia-500" size={28} /></h2><p className="text-slate-600 font-black text-[11px] tracking-[0.4em] uppercase">ACCESSING PERSONNEL RECORD LOGS</p></div>
                       <div className="flex gap-4 w-full xl:w-auto">
-                         <div className="relative flex-1 xl:w-80 group"><Search size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-fuchsia-400" /><input type="text" placeholder="IDENTITY HASH..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-black/90 border border-white/10 rounded-full py-4 pl-12 pr-6 text-[10px] font-bold text-white outline-none focus:border-fuchsia-500 transition-all placeholder:text-slate-700" /></div>
-                         <select value={activeClass} onChange={(e) => setActiveClass(e.target.value)} className="bg-black/90 border border-white/10 rounded-full px-8 text-[10px] font-bold text-white outline-none cursor-pointer uppercase">{dynamicClasses.map(c => <option key={c} value={c} className="bg-black">{c}</option>)}</select>
+                         <div className="relative flex-1 xl:w-[350px] group"><Search size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-fuchsia-500" /><input type="text" placeholder="IDENTITY HASH..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-black/80 border border-white/10 rounded-[2rem] py-5 pl-16 pr-8 text-[11px] font-black text-white outline-none focus:border-fuchsia-500 transition-all placeholder:text-slate-800" /></div>
+                         <select value={activeClass} onChange={(e) => setActiveClass(e.target.value)} className="bg-black/80 border border-white/10 rounded-[2rem] px-10 text-[11px] font-black text-white outline-none cursor-pointer uppercase hover:border-fuchsia-500 transition-all">{dynamicClasses.map(c => <option key={c} value={c} className="bg-black">{c}</option>)}</select>
                       </div>
                    </div>
 
@@ -261,7 +308,7 @@ export default function DashboardGuruZenith() {
                                         <div className="text-center group/score"><p className="text-[10px] font-black text-slate-600 uppercase mb-2">PHI</p><p className="text-2xl font-black text-blue-500">{r.scores.phish ?? '--'}</p></div>
                                      </div>
                                      <div className="flex items-center justify-center w-20 h-20 rounded-full border-[3px] border-white/5 relative ml-4 transform group-hover:scale-110 transition-all"><svg className="w-full h-full absolute -rotate-90"><circle cx="50%" cy="50%" r="44%" stroke={status.color} strokeWidth="5" fill="transparent" strokeDasharray={`${r.avgScore * 2.8} 1000`} className="opacity-80" style={{transition:'stroke-dasharray 1s ease-out'}}/></svg><span className={`text-2xl font-black ${status.text}`}>{r.avgScore}</span></div>
-                                     <button onClick={() => setFeedbackModal(r)} className="px-10 py-5 bg-white/5 border border-white/10 rounded-[1.8rem] hover:bg-white text-slate-300 hover:text-black font-black text-[11px] tracking-[0.3em] uppercase transition-all flex items-center gap-4 group/btn shadow-xl"><Eye size={18} /> VIEW DOSSIER</button>
+                                     <button onClick={() => setFeedbackModal(r)} className="px-10 py-5 bg-white/5 border border-white/10 rounded-[1.8rem] hover:bg-white text-slate-300 hover:text-black font-black text-[11px] tracking-[0.3em] uppercase transition-all flex items-center gap-4 shadow-xl"><Eye size={18} /> VIEW DOSSIER</button>
                                   </div>
                                </motion.div>
                             )
