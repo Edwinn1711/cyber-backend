@@ -30,6 +30,7 @@ const ParticleBurstClickEffect = () => {
     window.addEventListener('touchstart', handleInteraction);
     return () => { window.removeEventListener('mousedown', handleInteraction); window.removeEventListener('touchstart', handleInteraction); };
   }, []);
+
   return (
     <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
       <AnimatePresence>
@@ -105,6 +106,8 @@ const portalTransition = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1
 export default function StudentGodTierDashboard() {
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // States Utama
   const [view, setView] = useState('dashboard'); 
   const [currentStep, setCurrentStep] = useState(1); 
   const [selectedDomain, setSelectedDomain] = useState("SOCIAL ENGINEERING");
@@ -118,6 +121,8 @@ export default function StudentGodTierDashboard() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [submitStatus, setSubmitStatus] = useState('KIRIM JAWABAN');
+
+  // State Modals
   const [detailModal, setDetailModal] = useState<any>(null);
   const [showRetakeWarning, setShowRetakeWarning] = useState(false);
   const [pendingDomain, setPendingDomain] = useState("");
@@ -140,7 +145,8 @@ export default function StudentGodTierDashboard() {
       const res = await fetch(`https://cyber-backend-delta.vercel.app/siswa/scores/${username}`);
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        setScore(Math.round(data.reduce((acc, curr) => acc + curr.score, 0) / data.length));
+        const total = data.reduce((acc, curr) => acc + curr.score, 0);
+        setScore(Math.round(total / data.length));
         setHistory(data);
       }
     } catch (e) { console.error("OFFLINE"); }
@@ -162,6 +168,16 @@ export default function StudentGodTierDashboard() {
       });
     }
   }, [isAuthorized]);
+
+  // --- KEMBALIKAN FUNGSI YANG HILANG ---
+  const handleStartMissionClick = () => {
+    if (!user.class_name || user.class_name === "UNASSIGNED") {
+      setShowClassSelector(true);
+    } else {
+      setView('mission');
+      setCurrentStep(1);
+    }
+  };
 
   const assignClassAndStartMission = (className: string) => {
     const updatedUser = { ...user, class_name: className };
@@ -189,6 +205,11 @@ export default function StudentGodTierDashboard() {
     if (targetView === 'logout') { localStorage.removeItem('user'); router.push('/'); } else { setView(targetView); }
   };
 
+  const confirmNavigation = () => {
+    const target = navWarning.target; setNavWarning({ active: false, target: null });
+    if (target) setView(target);
+  };
+
   const currentStepQs = useMemo(() => allQs.filter(q => q.main_domain.toLowerCase().trim() === selectedDomain.toLowerCase().trim() && q.type === `step${currentStep}`), [allQs, currentStep, selectedDomain]);
   const maxStep = useMemo(() => {
     const domainQs = allQs.filter(q => q.main_domain.toLowerCase().trim() === selectedDomain.toLowerCase().trim());
@@ -211,7 +232,7 @@ export default function StudentGodTierDashboard() {
         </div>
         <nav className="flex-1 px-4 py-8 space-y-2">
           {[ { id: 'dashboard', label: 'BERANDA', icon: LayoutGrid }, { id: 'assessment', label: 'UJIAN SIBER', icon: Target }, { id: 'reports', label: 'KESIMPULAN', icon: BarChart3 } ].map((item) => (
-            <button key={item.id} onClick={() => handleSafeViewChange(item.id)} className={`w-full flex items-center p-4 rounded-xl transition-all gap-4 ${view === item.id ? 'bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}>
+            <button key={item.id} onClick={() => handleSafeViewChange(item.id)} className={`w-full flex items-center p-4 rounded-xl transition-all gap-4 ${view === item.id ? 'bg-fuchsia-600/10 text-fuchsia-400 border border-fuchsia-500/20 shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}>
               <item.icon size={20} /> {!isSidebarCollapsed && <span className="font-bold text-[10px] tracking-[0.2em] uppercase">{item.label}</span>}
             </button>
           ))}
@@ -269,8 +290,6 @@ export default function StudentGodTierDashboard() {
                  </div>
 
                  <div className="bg-[#09090b]/90 backdrop-blur-2xl border border-white/5 rounded-[3rem] p-12 shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.02] text-9xl font-black tracking-[1em] pointer-events-none uppercase">ARSIP</div>
-                    
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 relative z-10">
                         <div className="bg-[#050505]/60 rounded-3xl p-8 border border-white/5 flex flex-col items-center text-center group hover:border-fuchsia-500/20 transition-all">
                            <p className="text-[10px] text-slate-500 font-black tracking-[0.4em] mb-4 uppercase">TOTAL UJIAN</p>
@@ -292,7 +311,6 @@ export default function StudentGodTierDashboard() {
                       <div className="p-8 border-b border-white/5 bg-white/[0.01] text-center">
                          <p className="text-[12px] font-black text-white tracking-[0.5em] uppercase">TABEL RIWAYAT DOMAIN</p>
                       </div>
-                      
                       <div className="overflow-x-auto">
                         <table className="w-full text-center border-collapse">
                           <thead>
@@ -312,22 +330,11 @@ export default function StudentGodTierDashboard() {
                                    const rd = getReadinessData(h.score);
                                    return (
                                      <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
-                                       <td className="py-7">
-                                          <div className="flex items-center justify-center gap-3">
-                                            <div className="w-2 h-2 rounded-full bg-fuchsia-500 animate-pulse shadow-[0_0_8px_#d946ef]" />
-                                            <span className="text-[11px] font-black text-white font-mono">0{history.length - i}</span>
-                                          </div>
-                                       </td>
+                                       <td className="py-7"><span className="text-[11px] font-black text-white font-mono">0{history.length - i}</span></td>
                                        <td className="py-7 text-[11px] font-bold text-slate-300 uppercase tracking-widest">{h.domain_id}</td>
                                        <td className="py-7 font-black text-white font-mono text-lg tracking-tighter">{h.score}%</td>
-                                       <td className="py-7">
-                                          <span className="px-4 py-1.5 rounded-full text-[9px] font-black border border-white/10" style={{ color: rd.color, backgroundColor: `${rd.color}10` }}>{rd.label}</span>
-                                       </td>
-                                       <td className="py-7">
-                                          <button onClick={() => setDetailModal(h.details || [])} className="mx-auto flex items-center gap-2 px-6 py-2.5 bg-[#0a0a0f] border border-white/10 hover:border-fuchsia-500/50 text-slate-400 hover:text-white rounded-xl text-[9px] font-black tracking-[0.3em] transition-all uppercase">
-                                             <ScanLine size={14} /> Buka
-                                          </button>
-                                       </td>
+                                       <td className="py-7"><span className="px-4 py-1.5 rounded-full text-[9px] font-black border border-white/10" style={{ color: rd.color, backgroundColor: `${rd.color}10` }}>{rd.label}</span></td>
+                                       <td className="py-7"><button onClick={() => setDetailModal(h.details || [])} className="mx-auto flex items-center gap-2 px-6 py-2.5 bg-[#0a0a0f] border border-white/10 hover:border-fuchsia-500/50 text-slate-400 hover:text-white rounded-xl text-[9px] font-black tracking-[0.3em] transition-all uppercase"><ScanLine size={14} /> Buka</button></td>
                                      </tr>
                                    )
                                 })
@@ -340,13 +347,23 @@ export default function StudentGodTierDashboard() {
               </motion.div>
             )}
 
-            {/* VIEW ASSESSMENT & MISSION (UTUH SEPERTI SEBELUMNYA) */}
+            {/* VIEW BRIEFING */}
+            {view === 'briefing' && (
+              <motion.div key="briefing" {...portalTransition} className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[75vh]">
+                 <div className="mb-14 cursor-pointer"><RobotFace size={28} ringSize="w-44 h-44" coreSize="w-28 h-28" /></div>
+                 <motion.div className="flex flex-col items-center text-center space-y-6"><h2 className="text-4xl md:text-5xl font-black text-white tracking-[0.2em] uppercase">TRANSMISI DITERIMA</h2><p className="text-[11px] font-bold text-slate-300 leading-relaxed tracking-[0.2em] uppercase">HALO <span className="text-fuchsia-400">{user.username}</span>, APAKAH ANDA SIAP UNTUK<br/>MENGERJAKAN KUIS PADA TOPIK <span className="text-fuchsia-400">{selectedDomain}</span>?</p></motion.div>
+                 <div className="flex gap-6 mt-12">
+                   <button onClick={() => setView('assessment')} className="px-10 py-4 border border-white/20 text-slate-300 rounded-full font-black text-[10px] tracking-widest uppercase">BATAL</button>
+                   {/* FIX: handleStartMissionClick dikembalikan ke tombol di bawah ini */}
+                   <button onClick={handleStartMissionClick} className="px-10 py-4 bg-fuchsia-600 text-white rounded-full font-black text-[10px] tracking-widest shadow-xl hover:scale-105 transition-all uppercase flex items-center gap-3">MULAI KUIS <Zap size={14} /></button>
+                 </div>
+              </motion.div>
+            )}
+
+            {/* VIEW ASSESSMENT */}
             {view === 'assessment' && (
               <motion.div key="assess-hub" {...portalTransition} className="max-w-6xl mx-auto space-y-12">
-                <div className="space-y-4 text-center">
-                   <h2 className="text-4xl font-black text-white tracking-widest uppercase">Materi Ujian.</h2>
-                   <p className="text-[9px] font-bold text-slate-500 tracking-[0.5em] uppercase">Pilih sektor keamanan siber untuk dievaluasi</p>
-                </div>
+                <div className="space-y-4 text-center"><h2 className="text-4xl font-black text-white tracking-widest uppercase">Materi Ujian.</h2><p className="text-[9px] font-bold text-slate-500 tracking-[0.5em] uppercase">Pilih sektor keamanan siber untuk dievaluasi</p></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {TACTICAL_DOMAINS.map((domain, i) => {
                     const done = history.some(h => String(h.domain_id).toLowerCase().includes(domain.id.split(' ')[0].toLowerCase()));
@@ -364,14 +381,14 @@ export default function StudentGodTierDashboard() {
 
             {/* VIEW MISSION */}
             {view === 'mission' && (
-              <motion.div key="mission" {...portalTransition} className="max-w-4xl mx-auto space-y-10 pb-40">
+              <motion.div key="mission" {...portalTransition} className="max-w-4xl mx-auto space-y-10 pb-40 text-center lg:text-left">
                 <header className="flex justify-between items-end border-b border-white/5 pb-8">
-                   <div className="space-y-4"><button onClick={() => handleSafeViewChange('assessment')} className="text-[9px] font-black text-slate-500 hover:text-fuchsia-400 flex items-center gap-3 tracking-[0.3em] uppercase"><ArrowLeft size={12} /> BATAL</button><h2 className="text-4xl font-black text-white tracking-widest uppercase">FASE 0{currentStep}</h2><p className="text-fuchsia-500 font-black tracking-[0.5em] text-[9px] uppercase">EVALUASI {selectedDomain}</p></div>
+                   <div className="space-y-4"><button onClick={() => handleSafeViewChange('assessment')} className="text-[9px] font-black text-slate-500 hover:text-fuchsia-400 flex items-center gap-3 tracking-[0.3em] uppercase"><ArrowLeft size={12} /> BATAL</button><h2 className="text-4xl font-black text-white tracking-widest uppercase">FASE 0{currentStep}</h2><p className="text-fuchsia-500 font-black tracking-[0.5em] text-[9px] uppercase text-center w-full">EVALUASI {selectedDomain}</p></div>
                    <div className="text-[100px] font-black text-white/5 font-mono leading-none tracking-tighter">0{currentStep}</div>
                 </header>
                 <div className="space-y-6">
                    {currentStepQs.length > 0 ? currentStepQs.map((q) => (
-                     <div key={q.id} className="p-10 rounded-[2rem] bg-[#09090b]/90 border border-white/5 space-y-8 shadow-2xl relative overflow-hidden"><div className="absolute top-0 left-0 w-1 h-full bg-fuchsia-500" /><h4 className="text-lg font-medium text-slate-200 leading-relaxed tracking-wide">"{q.text}"</h4>
+                     <div key={q.id} className="p-10 rounded-[2rem] bg-[#09090b]/90 border border-white/5 space-y-8 shadow-2xl relative overflow-hidden text-center"><h4 className="text-lg font-medium text-slate-200 leading-relaxed tracking-wide">"{q.text}"</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                            {q.options.slice(0, 4).map((opt: any, i: number) => (
                              <button key={i} onClick={() => setAns({...ans, [q.id]: {score: opt.score, text: opt.text}})} className={`p-6 rounded-2xl text-left transition-all border text-[10px] font-bold tracking-widest uppercase flex items-center gap-5 ${ans[q.id]?.text === opt.text ? 'bg-fuchsia-600/10 border-fuchsia-500 text-white shadow-xl' : 'bg-[#050505] border-white/5 text-slate-400 hover:border-white/20'}`}><div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0 ${ans[q.id]?.text === opt.text ? 'border-fuchsia-400' : 'border-slate-700'}`}>{ans[q.id]?.text === opt.text && <div className="w-1.5 h-1.5 bg-fuchsia-400 rounded-full shadow-[0_0_5px_#d946ef]" />}</div><span>{opt.text}</span></button>
@@ -384,14 +401,6 @@ export default function StudentGodTierDashboard() {
               </motion.div>
             )}
 
-            {/* BRIEFING VIEW */}
-            {view === 'briefing' && (
-              <motion.div key="briefing" {...portalTransition} className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[75vh]">
-                 <div className="mb-14 cursor-pointer"><RobotFace size={28} ringSize="w-44 h-44" coreSize="w-28 h-28" /></div>
-                 <motion.div className="flex flex-col items-center text-center space-y-6"><h2 className="text-4xl md:text-5xl font-black text-white tracking-[0.2em] uppercase">TRANSMISI DITERIMA</h2><p className="text-[11px] font-bold text-slate-300 leading-relaxed tracking-[0.2em] uppercase">HALO <span className="text-fuchsia-400">{user.username}</span>, APAKAH ANDA SIAP UNTUK<br/>MENGERJAKAN KUIS PADA TOPIK <span className="text-fuchsia-400">{selectedDomain}</span>?</p></motion.div>
-                 <div className="flex gap-6 mt-12"><button onClick={() => setView('assessment')} className="px-10 py-4 border border-white/20 text-slate-300 rounded-full font-black text-[10px] tracking-widest uppercase">BATAL</button><button onClick={handleStartMissionClick} className="px-10 py-4 bg-fuchsia-600 text-white rounded-full font-black text-[10px] tracking-widest shadow-xl hover:scale-105 transition-all uppercase flex items-center gap-3">MULAI KUIS <Zap size={14} /></button></div>
-              </motion.div>
-            )}
           </AnimatePresence>
         </main>
       </div>
@@ -400,19 +409,33 @@ export default function StudentGodTierDashboard() {
       <AnimatePresence>
         {detailModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[3000] flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
-            <motion.div initial={{ scale: 0.95, y: 15 }} animate={{ scale: 1, y: 0 }} className="relative w-full max-w-4xl max-h-[85vh] bg-[#09090b] border border-white/10 rounded-[3rem] p-12 shadow-2xl flex flex-col overflow-hidden">
+            <motion.div initial={{ scale: 0.95, y: 15 }} animate={{ scale: 1, y: 0 }} className="relative w-full max-w-4xl max-h-[85vh] bg-[#09090b] border border-white/10 rounded-[3rem] p-12 shadow-2xl flex flex-col overflow-hidden text-center">
                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-purple-500 to-fuchsia-500" />
                <div className="flex justify-between items-center mb-8"><h2 className="text-lg font-black text-white tracking-widest uppercase">DETAIL ANALISIS JAWABAN</h2><button onClick={() => setDetailModal(null)} className="p-2 bg-[#050505] rounded-xl text-slate-500 hover:text-red-500 transition-all"><X size={18} /></button></div>
-               <div className="flex-1 overflow-y-auto pr-4 space-y-4 custom-scrollbar text-center lg:text-left">
+               <div className="flex-1 overflow-y-auto pr-4 space-y-4 custom-scrollbar">
                  {detailModal.map((d: any, i: number) => (
-                    <div key={i} className={`p-8 rounded-[2rem] border bg-[#050505]/40 ${d.is_correct ? 'border-emerald-500/20' : 'border-red-500/20'}`}>
-                       <div className="flex flex-col lg:flex-row gap-6 items-center lg:items-start text-center lg:text-left">
-                          <div className={`p-3 rounded-2xl ${d.is_correct ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>{d.is_correct ? <CheckCircle2 size={24} /> : <XCircle size={24} />}</div>
-                          <div className="flex-1 w-full"><p className="text-slate-200 font-medium text-[14px] mb-6 leading-relaxed">"{d.question}"</p>
+                    <div key={i} className={`p-8 rounded-[2rem] border bg-[#050505]/40 flex flex-col items-center ${d.is_correct ? 'border-emerald-500/20' : 'border-red-500/20'}`}>
+                          <div className={`p-3 rounded-2xl mb-6 ${d.is_correct ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>{d.is_correct ? <CheckCircle2 size={24} /> : <XCircle size={24} />}</div>
+                          <div className="w-full text-center"><p className="text-slate-200 font-medium text-[14px] mb-6 leading-relaxed">"{d.question}"</p>
                              <div className="bg-[#09090b] p-5 rounded-2xl border border-white/5"><p className="text-[9px] font-black text-slate-600 tracking-[0.3em] mb-2 uppercase">JAWABAN SISWA</p><p className={`font-bold text-[12px] tracking-widest ${d.is_correct ? 'text-emerald-500' : 'text-red-500'}`}>{d.answer || "TIDAK TERDETEKSI"}</p></div>
                           </div>
-                       </div>
                     </div>
+                 ))}
+               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* --- MODAL PEMILIHAN KELAS --- */}
+      <AnimatePresence>
+        {showClassSelector && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
+            <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="relative w-full max-w-3xl bg-[#09090b] border border-white/10 rounded-[3rem] p-12 shadow-2xl text-center overflow-hidden">
+               <h2 className="text-2xl font-black mb-2 text-white tracking-widest uppercase">PILIH <span className="text-fuchsia-500">KELAS.</span></h2>
+               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
+                 {AVAILABLE_CLASSES.map(cls => (
+                    <button key={cls} onClick={() => assignClassAndStartMission(cls)} className="p-5 bg-[#050505] border border-white/5 rounded-xl font-black text-[11px] tracking-widest text-slate-400 hover:text-white hover:border-fuchsia-500/50 transition-all uppercase">{cls}</button>
                  ))}
                </div>
             </motion.div>
