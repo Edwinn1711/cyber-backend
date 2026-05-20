@@ -2,34 +2,30 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
-// --- IMPORT IKON AUDITED ---
-import { 
-  ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, 
-  MapPin, Calendar, CheckCircle2, Zap, ShieldAlert, Globe 
-} from 'lucide-react'
+import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, Calendar, CheckCircle2, Database, Server } from 'lucide-react'
 
 // --- ASSET GALAXY HD ---
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- BACKGROUND ENGINE (DEEP OBSIDIAN) ---
+// --- BACKGROUND BERSIH ELEGAN & STABIL ---
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-[#020205]">
+    <div className="fixed inset-0 z-0 overflow-hidden bg-black">
       <AnimatePresence mode="wait">
         <motion.img 
           key={bgIdx} 
           src={CYBER_ASSETS[bgIdx]} 
-          initial={{ opacity: 0, scale: 1.1 }} 
-          animate={{ opacity: 0.18, scale: 1 }} 
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 0.4 }} 
           exit={{ opacity: 0 }} 
-          transition={{ duration: 4 }} 
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-screen" 
+          transition={{ duration: 2, ease: "easeInOut" }} 
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
         />
       </AnimatePresence>
-      {/* Overlay Netral Mewah */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-black via-transparent to-black opacity-80" />
-      <div className="absolute inset-0 bg-grid-static opacity-[0.03]" />
+      <div className="absolute inset-0 bg-black/60 pointer-events-none" />
+      <div className="absolute inset-0 bg-grid-static opacity-[0.03] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#000000_100%)] pointer-events-none" />
     </div>
   );
 });
@@ -51,37 +47,70 @@ export default function CyberLoginGateway() {
   const [errorMessage, setErrorMessage] = useState('');
 
   // ====================================================================
-  // LOGIKA 3D PARALLAX (HALUS & PREMIUM)
+  // LOGIKA 3D PARALLAX TILT (KARTU BERGOYANG MENGIKUTI KURSOR)
   // ====================================================================
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [7, -7]), { stiffness: 120, damping: 25 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-7, 7]), { stiffness: 120, damping: 25 });
+
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [12, -12]), { stiffness: 150, damping: 20 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), { stiffness: 150, damping: 20 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX / window.innerWidth - 0.5);
-      mouseY.set(e.clientY / window.innerHeight - 0.5);
+      const x = e.clientX / window.innerWidth - 0.5;
+      const y = e.clientY / window.innerHeight - 0.5;
+      mouseX.set(x);
+      mouseY.set(y);
     };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const x = e.touches[0].clientX / window.innerWidth - 0.5;
+      const y = e.touches[0].clientY / window.innerHeight - 0.5;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
   }, [mouseX, mouseY]);
 
   useEffect(() => {
-    const interval = setInterval(() => setBgIdx(p => (p + 1) % CYBER_ASSETS.length), 10000);
+    const interval = setInterval(() => setBgIdx(p => (p + 1) % CYBER_ASSETS.length), 5000);
     return () => clearInterval(interval);
   }, []);
 
+  // ====================================================================
+  // FUNGSI LOGIN / REGISTER KE BACKEND VERCEL
+  // ====================================================================
   const handleAuthenticate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username || !password) { setErrorMessage("Mandatory identity required."); setStatus('error'); return; }
     
+    if (!username || !password) {
+      setErrorMessage("Nama pengguna dan kata sandi wajib diisi.");
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 3000);
+      return;
+    }
+
+    if (activeTab === 'REGISTER' && (!asal || !tanggalLahir)) {
+      setErrorMessage("Data Asal dan Tanggal Lahir wajib diisi.");
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 3000);
+      return;
+    }
+
     setStatus('loading');
+    const uname = username.trim();
+
     try {
       const endpoint = activeTab === 'LOGIN' ? 'https://cyber-backend-delta.vercel.app/login' : 'https://cyber-backend-delta.vercel.app/register';
       const bodyData = activeTab === 'LOGIN' 
-        ? { username, password } 
-        : { username, password, role: 'siswa', class_name: className, asal, tanggal_lahir: tanggalLahir };
+        ? { username: uname, password } 
+        : { username: uname, password, role: 'siswa', class_name: className, asal: asal, tanggal_lahir: tanggalLahir };
 
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -90,132 +119,225 @@ export default function CyberLoginGateway() {
       });
       
       const data = await res.json();
+      
       if (res.ok) {
+        // Simpan data user ke localstorage
         localStorage.setItem('user', JSON.stringify(data));
+        
         setStatus('success');
-        setTimeout(() => router.push(data.role === 'guru' || data.role === 'admin' ? '/guru' : '/siswa'), 1500);
+        const role = data.role || 'siswa';
+        setTimeout(() => router.push(role === 'guru' || role === 'admin' ? '/guru' : '/siswa'), 1500);
       } else {
-        setErrorMessage(data.detail || "Authentication Failed.");
+        setErrorMessage(data.detail || "Autentikasi gagal.");
         setStatus('error');
+        setTimeout(() => setStatus('idle'), 3000);
       }
-    } catch (e) {
-      setErrorMessage("Gateway Connection Failed.");
+    } catch (error) {
+      setErrorMessage("Koneksi ke peladen (Backend) terputus.");
       setStatus('error');
+      setTimeout(() => setStatus('idle'), 3000);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full bg-[#020205] text-slate-100 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1500px]">
+    <div className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]">
       <PersistentUniverse bgIdx={bgIdx} />
 
-      {/* FOOTER KIRI (CLEAN & PRO) */}
-      <div className="absolute bottom-12 left-12 z-10 hidden md:block">
-        <div className="flex items-center gap-4">
-           <div className="w-1 h-8 bg-fuchsia-600 rounded-full" />
-           <div>
-             <p className="text-[10px] font-black text-fuchsia-500 tracking-[0.6em] uppercase leading-none">SECURE ACCESS</p>
-             <p className="text-[11px] font-bold text-slate-500 tracking-[0.2em] uppercase mt-2">ENCRYPTED PROTOCOL ACTIVE</p>
-           </div>
+      {/* Ornamen Teks Kiri Bawah */}
+      <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4">
+        <div className="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center bg-black/80 backdrop-blur-md">
+           <span className="font-bold text-white text-xs">N</span>
+        </div>
+        <div>
+          <p className="text-[9px] font-black text-fuchsia-500 tracking-[0.4em] uppercase">KONEKSI AMAN AKTIF</p>
+          <p className="text-[10px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CYBER EDU V2.1</p>
         </div>
       </div>
 
-      {/* FOOTER KANAN */}
-      <div className="absolute bottom-12 right-12 text-right z-10 hidden md:block">
-        <p className="text-[10px] font-black text-slate-500 tracking-[0.4em] uppercase flex items-center justify-end gap-3">
-          <Globe size={12} className="text-fuchsia-500 animate-pulse" /> NETWORK STATUS: OPTIMAL
-        </p>
+      {/* Ornamen Teks Kanan Bawah */}
+      <div className="absolute bottom-8 right-8 text-right z-10 hidden md:block">
+        <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase">CLIENT IP: DETECTED</p>
+        <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CONNECTION: SECURE (AES 256)</p>
       </div>
 
-      {/* KARTU UTAMA - KOTAK PERSEGI MEWAH DI TENGAH */}
+      {/* KARTU LOGIN UTAMA - 3D PARALLAX EFFECT */}
       <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }} 
-        animate={{ opacity: 1, scale: 1 }} 
-        transition={{ duration: 1 }}
+        initial={{ opacity: 0, y: 30 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.8, ease: "easeOut" }}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative z-10 w-full max-w-[420px] mx-4 bg-[#0a0a0f]/60 backdrop-blur-[40px] border border-white/10 rounded-[2.5rem] p-12 shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden group"
+        className="relative z-10 w-full max-w-sm mx-4 bg-[#050505]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] my-8"
       >
-        {/* Glow di bawah kartu agar terlihat melayang */}
-        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-48 h-2 bg-fuchsia-500/20 blur-2xl rounded-full" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
 
-        <div className="mx-auto w-14 h-14 bg-black border border-white/10 rounded-2xl flex items-center justify-center mb-10 shadow-[0_0_30px_rgba(217,70,239,0.2)]">
-          <ShieldCheck className="text-fuchsia-400" size={28} />
+        <div className="mx-auto w-12 h-12 bg-transparent border border-fuchsia-500/50 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(217,70,239,0.15)]" style={{ transform: "translateZ(30px)" }}>
+          <ShieldCheck className="text-fuchsia-400" size={24} />
         </div>
 
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-black text-white tracking-tighter uppercase leading-none">
-            CYBER <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-indigo-400">READINESS</span>
+        <div style={{ transform: "translateZ(40px)" }}>
+          <h1 className="text-3xl font-black text-center text-white tracking-widest uppercase mb-2">
+            CYBER<span className="text-fuchsia-500">EDU</span>
           </h1>
-          <p className="text-[11px] font-black text-slate-500 tracking-[0.6em] uppercase mt-4">PLATFORM</p>
+          <p className="text-[8px] font-bold text-slate-500 tracking-[0.4em] uppercase text-center mb-10">
+            Sistem Evaluasi & Pembelajaran Siber
+          </p>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex border-b border-white/5 mb-10 relative">
-          <button onClick={() => setActiveTab('LOGIN')} className={`flex-1 pb-4 text-[11px] font-black tracking-[0.3em] transition-all uppercase ${activeTab === 'LOGIN' ? 'text-white' : 'text-slate-600 hover:text-slate-400'}`}>Login</button>
-          <button onClick={() => setActiveTab('REGISTER')} className={`flex-1 pb-4 text-[11px] font-black tracking-[0.3em] transition-all uppercase ${activeTab === 'REGISTER' ? 'text-white' : 'text-slate-600 hover:text-slate-400'}`}>Register</button>
-          <motion.div 
-            animate={{ x: activeTab === 'LOGIN' ? '0%' : '100%' }}
-            className="absolute bottom-[-1px] h-[2px] w-1/2 bg-gradient-to-r from-fuchsia-600 to-indigo-500 shadow-[0_0_15px_rgba(217,70,239,0.8)]" 
-          />
+        <div className="flex border-b border-white/10 mb-8 relative" style={{ transform: "translateZ(20px)" }}>
+          <button 
+            type="button"
+            onClick={() => { setActiveTab('LOGIN'); setErrorMessage(''); }} 
+            className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-all duration-300 ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+          >
+            MASUK
+          </button>
+          <button 
+            type="button"
+            onClick={() => { setActiveTab('REGISTER'); setErrorMessage(''); }} 
+            className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-all duration-300 ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+          >
+            DAFTAR BARU
+          </button>
+          <div className={`absolute bottom-0 h-[2px] w-1/2 bg-fuchsia-500 transition-transform duration-300 shadow-[0_0_10px_#d946ef] ${activeTab === 'LOGIN' ? 'translate-x-0' : 'translate-x-full'}`} />
         </div>
 
-        <form onSubmit={handleAuthenticate} className="space-y-6">
+        <form onSubmit={handleAuthenticate} className="space-y-4" style={{ transform: "translateZ(30px)" }}>
           
           <div className="relative group">
-            <User size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-fuchsia-500 transition-colors" />
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors">
+               <User size={16} />
+            </div>
             <input 
               type="text" 
-              placeholder="IDENTIFIER" 
-              value={username} 
-              onChange={(e) => setUsername(e.target.value)} 
-              className="w-full bg-black/40 border border-white/5 rounded-2xl py-5 pl-16 pr-6 text-[12px] font-black text-white outline-none focus:border-fuchsia-500/50 transition-all placeholder:text-slate-800" 
+              placeholder="NAMA PENGGUNA" 
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              disabled={status === 'loading' || status === 'success'}
+              className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner" 
             />
           </div>
 
           <div className="relative group">
-            <Lock size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-fuchsia-500 transition-colors" />
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors">
+               <Lock size={16} />
+            </div>
             <input 
               type="password" 
-              placeholder="PASSKEY" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              className="w-full bg-black/40 border border-white/5 rounded-2xl py-5 pl-16 pr-6 text-[12px] font-black text-white outline-none focus:border-fuchsia-500/50 transition-all placeholder:text-slate-800" 
+              placeholder="KATA SANDI" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={status === 'loading' || status === 'success'}
+              className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner" 
             />
           </div>
 
           <AnimatePresence>
             {activeTab === 'REGISTER' && (
-              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="space-y-5 pt-2 overflow-hidden">
-                <input type="text" placeholder="ORIGIN CITY" value={asal} onChange={(e) => setAsal(e.target.value)} className="w-full bg-black/40 border border-white/5 rounded-2xl py-5 px-8 text-[11px] font-black text-white outline-none focus:border-fuchsia-500/50 uppercase placeholder:text-slate-800" />
-                <input type="date" value={tanggalLahir} onChange={(e) => setTanggalLahir(e.target.value)} style={{ colorScheme: 'dark' }} className="w-full bg-black/40 border border-white/5 rounded-2xl py-5 px-8 text-[11px] font-black text-white outline-none focus:border-fuchsia-500" />
-                <select value={className} onChange={(e) => setClassName(e.target.value)} className="w-full bg-black/40 border border-white/5 rounded-2xl py-5 px-8 text-[11px] font-black text-slate-400 outline-none focus:border-fuchsia-500 appearance-none uppercase cursor-pointer">
-                  {AVAILABLE_CLASSES.map(cls => <option key={cls} value={cls}>{cls}</option>)}
-                </select>
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }} 
+                animate={{ height: 'auto', opacity: 1 }} 
+                exit={{ height: 0, opacity: 0 }} 
+                className="space-y-4 overflow-hidden"
+              >
+                <div className="relative group mt-4">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
+                     <MapPin size={16} />
+                  </div>
+                  <input 
+                    type="text" 
+                    placeholder="ASAL / KOTA" 
+                    value={asal}
+                    onChange={(e) => setAsal(e.target.value)}
+                    disabled={status === 'loading' || status === 'success'}
+                    className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
+                  />
+                </div>
+
+                <div className="relative group">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
+                     <Calendar size={16} />
+                  </div>
+                  <input 
+                    type="date" 
+                    value={tanggalLahir}
+                    onChange={(e) => setTanggalLahir(e.target.value)}
+                    disabled={status === 'loading' || status === 'success'}
+                    style={{ colorScheme: 'dark' }}
+                    className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
+                  />
+                </div>
+
+                <div className="relative group">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
+                     <Fingerprint size={16} />
+                  </div>
+                  <select 
+                    value={className}
+                    onChange={(e) => setClassName(e.target.value)}
+                    disabled={status === 'loading' || status === 'success'}
+                    className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-slate-300 tracking-widest focus:border-fuchsia-500 outline-none transition-all appearance-none disabled:opacity-50 cursor-pointer uppercase shadow-inner"
+                  >
+                    {AVAILABLE_CLASSES.map(cls => (
+                      <option key={cls} value={cls} className="bg-black text-white">{cls}</option>
+                    ))}
+                  </select>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {status === 'error' && (
-            <div className="flex items-center justify-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-black tracking-widest uppercase">
-              <AlertTriangle size={14} /> {errorMessage}
-            </div>
-          )}
+          <AnimatePresence>
+            {status === 'error' && (
+              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase">
+                 <AlertTriangle size={14} className="shrink-0" /> {errorMessage}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          <button type="submit" disabled={status === 'loading'} className="w-full mt-10 py-6 bg-gradient-to-r from-fuchsia-600 to-indigo-600 hover:from-fuchsia-500 hover:to-indigo-500 text-white rounded-3xl font-black text-[11px] tracking-[0.6em] shadow-[0_15px_40px_rgba(217,70,239,0.3)] hover:shadow-[0_20px_50px_rgba(217,70,239,0.5)] transition-all uppercase flex items-center justify-center gap-4 disabled:opacity-50 group">
-             {status === 'loading' ? 'VERIFYING...' : 'AUTHENTICATE'} <ScanLine size={18} className="group-hover:rotate-90 transition-transform duration-500" />
+          <button 
+            type="submit" 
+            disabled={status === 'loading' || status === 'success'}
+            className={`w-full mt-4 py-4 rounded-[1.2rem] font-black text-[10px] tracking-[0.4em] text-white transition-all flex items-center justify-center gap-3 uppercase overflow-hidden relative ${status === 'success' ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.5)]' : 'bg-fuchsia-600 hover:bg-fuchsia-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.5)] disabled:opacity-50 disabled:cursor-not-allowed'}`}
+          >
+             {status === 'loading' && <span className="animate-pulse">MEMVERIFIKASI...</span>}
+             {status === 'success' && <><CheckCircle2 size={14} /> AKSES DIBERIKAN</>}
+             {status !== 'loading' && status !== 'success' && (
+               <>OTENTIKASI <ScanLine size={14} /></>
+             )}
           </button>
         </form>
       </motion.div>
 
       <style dangerouslySetInnerHTML={{ __html: `
         .bg-grid-static {
-          background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), 
-                            linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
+                            linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
           background-size: 60px 60px;
         }
+        input, select { caret-color: #d946ef; }
         ::selection { background: #d946ef; color: white; }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; cursor: pointer; }
-        input:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #0a0a0f inset !important; -webkit-text-fill-color: white !important; }
+        .perspective-\\[1200px\\] {
+          perspective: 1200px;
+        }
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #050505 inset !important;
+            -webkit-text-fill-color: white !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.5;
+            cursor: pointer;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 0.8;
+        }
       `}} />
     </div>
   );
 }
+
+// update terakhir seminar
