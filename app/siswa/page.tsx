@@ -2,21 +2,21 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-// --- IMPORT SEMUA IKON (AUDITED) ---
+// --- IMPORT SEMUA IKON (SUDAH DIBERSIHKAN & LENGKAP) ---
 import { 
   ShieldCheck, Brain, Target, ChevronRight, ChevronLeft, Zap, ArrowLeft, ArrowRight,
   Fingerprint, Power, BarChart3, Activity, ShieldAlert, Cpu, Globe, Lock, 
   Radar as RadarIcon, Terminal, Database, Server, Search, Radio, Bug, MailWarning, 
   Sparkles, AlertTriangle, Eye, CheckCircle2, XCircle, X, User, Info, 
   ShieldQuestion, LayoutGrid, Check, BellRing, Bot, ScanLine, Laptop, Workflow, 
-  FileText, TrendingUp, Lightbulb, Hexagon 
+  FileText, TrendingUp, Lightbulb, Hexagon, Send // <-- FIX: SEND SUDAH DITAMBAHKAN
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid,
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts'
 
-// --- CONFIG & ASSETS ---
+// --- ASSET & CONFIG ---
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
@@ -29,22 +29,22 @@ const TACTICAL_DOMAINS = [
   { id: "Threat", title: "THREAT HUNTING", icon: RadarIcon, color: "#FB923C", desc: "Proactive Breach Search" },
 ];
 
-// --- 0. HELPER: STATUS COLORS (FIXED NAME) ---
+// --- 0. HELPER: STATUS COLORS ---
 const getScoreData = (score: number) => {
   if (score >= 80) return { label: "EXCELLENT", color: "#d946ef", bg: "bg-fuchsia-600", text: "text-fuchsia-400" };
   if (score >= 50) return { label: "AVERAGE", color: "#eab308", bg: "bg-yellow-600", text: "text-yellow-400" };
   return { label: "POOR", color: "#ef4444", bg: "bg-red-600", text: "text-red-400" };
 };
 
-// --- 1. CLICK EFFECT ---
+// --- 1. EFEK KLIK (PARTICLE BURST) ---
 const ParticleBurstClickEffect = () => {
   const [particles, setParticles] = useState<any[]>([]);
   useEffect(() => {
     const handleInteraction = (e: MouseEvent | TouchEvent) => {
       const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
       const clientY = 'touches' in e ? e.touches[0].clientY : (e as MouseEvent).clientY;
-      const newParticles = Array.from({ length: 8 }).map((_, i) => ({
-        id: Math.random(), x: clientX, y: clientY, angle: (Math.PI * 2 / 8) * i, velocity: Math.random() * 60 + 20
+      const newParticles = Array.from({ length: 12 }).map((_, i) => ({
+        id: Math.random(), x: clientX, y: clientY, angle: (Math.PI * 2 / 12) * i, velocity: Math.random() * 70 + 40
       }));
       setParticles(prev => [...prev, ...newParticles]);
       setTimeout(() => setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id))), 800);
@@ -56,14 +56,14 @@ const ParticleBurstClickEffect = () => {
     <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
       <AnimatePresence>
         {particles.map((p) => (
-          <motion.div key={p.id} initial={{ scale: 0, opacity: 1, x: p.x, y: p.y }} animate={{ scale: [0, 1.2, 0], opacity: [1, 0.5, 0], x: p.x + Math.cos(p.angle) * p.velocity, y: p.y + Math.sin(p.angle) * p.velocity }} transition={{ duration: 0.8 }} className="absolute rounded-full bg-fuchsia-400 shadow-[0_0_10px_#d946ef]" style={{ width: '4px', height: '4px' }} />
+          <motion.div key={p.id} initial={{ scale: 0, opacity: 1, x: p.x, y: p.y }} animate={{ scale: [0, 1.5, 0], opacity: [1, 0.8, 0], x: p.x + Math.cos(p.angle) * p.velocity, y: p.y + Math.sin(p.angle) * p.velocity }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }} className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-fuchsia-400 shadow-[0_0_20px_#d946ef]" style={{ width: '4px', height: '4px' }} />
         ))}
       </AnimatePresence>
     </div>
   );
 };
 
-// --- 2. BACKGROUND COMPONENT (DEEP CONTRAST) ---
+// --- 2. BACKGROUND COMPONENT ---
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-[#020106]">
@@ -108,10 +108,10 @@ const RobotFace = ({ size = 24, ringSize = "w-40 h-40", coreSize = "w-24 h-24" }
   );
 };
 
-// --- ANIMATION VARIANTS ---
-const containerVariants = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } } as any;
-const itemVariants = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } } } as any;
-const portalTransition = { initial: { opacity: 0, scale: 0.98, y: 15 }, animate: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4 } }, exit: { opacity: 0, scale: 1.02 } } as any;
+// --- ANIMATION VARIANTS (FIX TYPE ERROR) ---
+const containerVariants = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } } as any;
+const itemVariants = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } } } as any;
+const portalTransition = { initial: { opacity: 0, scale: 0.98, y: 15 }, animate: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, type: "spring" } }, exit: { opacity: 0, scale: 1.02 } } as any;
 
 export default function StudentPortal() {
   const router = useRouter();
@@ -205,14 +205,23 @@ export default function StudentPortal() {
     try {
       const response = await fetch("https://formsubmit.co/ajax/devinedwinsiahaan171105@gmail.com", {
         method: "POST", headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ _subject: `MEGAH FEEDBACK: ${appFeedbackForm.category}`, Operative: user.username, Message: appFeedbackForm.message })
+        body: JSON.stringify({
+           _subject: `MEGAH FEEDBACK: ${appFeedbackForm.category}`,
+           _captcha: "false",
+           Operative: user.username,
+           Category: appFeedbackForm.category,
+           Message: appFeedbackForm.message
+        })
       });
       if (response.ok) { alert(`Sent! Check Gmail.`); setAppFeedbackModal(false); setAppFeedbackForm({ category: 'AI ENHANCEMENT', message: '' }); } 
     } catch (e) { alert("Error."); } 
     finally { setIsSendingFeedback(false); }
   };
 
-  const currentStepQs = useMemo(() => allQs.filter(q => q.main_domain.toLowerCase().trim() === selectedDomain.toLowerCase().trim() && q.type === `step${currentStep}`), [allQs, currentStep, selectedDomain]);
+  const currentStepQs = useMemo(() => {
+    return allQs.filter(q => q.main_domain.toLowerCase().trim() === selectedDomain.toLowerCase().trim() && q.type === `step${currentStep}`);
+  }, [allQs, currentStep, selectedDomain]);
+
   const maxStep = useMemo(() => {
     const domainQs = allQs.filter(q => q.main_domain.toLowerCase().trim() === selectedDomain.toLowerCase().trim());
     return domainQs.length === 0 ? 0 : Math.max(...domainQs.map(q => parseInt(q.type.replace('step', ''))));
@@ -251,6 +260,7 @@ export default function StudentPortal() {
         <div className="p-6 border-t border-white/5"><button onClick={() => router.push('/')} className="w-full flex items-center p-3 text-red-500 hover:bg-red-500/10 rounded-xl gap-4 font-bold text-[9px] tracking-widest uppercase hover:bg-red-600 hover:text-white transition-all"><Power size={16} /> {!isSidebarCollapsed && "SHUTDOWN"}</button></div>
       </motion.aside>
 
+      {/* --- CONTENT --- */}
       <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
         <header className="h-20 flex items-center justify-between px-10 border-b border-white/5 bg-black/20 backdrop-blur-md">
             <div className="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full shadow-inner"><div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#34d399]" /><span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">GATEWAY SECURED</span></div>
@@ -262,12 +272,12 @@ export default function StudentPortal() {
             {view === 'dashboard' && (
               <motion.div key="dash" variants={containerVariants} initial="hidden" animate="show" className="max-w-[1300px] mx-auto space-y-12">
                 <motion.div variants={itemVariants} className="text-center space-y-4 pt-4">
-                  <div className="text-fuchsia-400 font-black text-[11px] tracking-[0.6em] uppercase flex items-center justify-center gap-3">{getGreeting()} OPERATIVE</div>
-                  <h1 className="text-4xl lg:text-5xl font-black text-white tracking-tighter leading-none uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{getGreeting()}, <span className="text-fuchsia-500">{user.username}.</span></h1>
+                  <div className="text-fuchsia-400 font-black text-[11px] tracking-[0.6em] uppercase mb-2 flex items-center justify-center gap-3">{getGreeting()} OPERATIVE</div>
+                  <h1 className="text-4xl lg:text-6xl font-black text-white tracking-tighter leading-none uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{getGreeting()}, <span className="text-fuchsia-500">{user.username}.</span></h1>
                   <p className="text-slate-400 text-[11px] lg:text-[12px] font-bold tracking-[0.3em] uppercase max-w-xl mx-auto opacity-100">Cyber Readiness Index Protocol Gateway v2.1</p>
                 </motion.div>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-4">
-                   <motion.div variants={itemVariants} className="bg-[#0a0a0f]/90 border border-white/5 p-8 lg:p-10 rounded-[2.5rem] flex flex-col items-center justify-center text-center hover:border-fuchsia-500/40 transition-all shadow-2xl relative overflow-hidden group"><div className="absolute top-0 left-0 w-full h-1 bg-fuchsia-500 shadow-[0_0_15px_#d946ef] animate-scan opacity-0 group-hover:opacity-100" /><div className="w-16 h-16 bg-gradient-to-b from-fuchsia-600 to-indigo-900 rounded-3xl flex items-center justify-center text-white border border-white/10 mb-8 shadow-2xl transform group-hover:scale-110 transition-all duration-500"><Fingerprint size={32} /></div><h4 className="text-2xl font-black text-white tracking-widest uppercase leading-none">{user.username}</h4><p className="text-[10px] text-fuchsia-400 font-black tracking-[0.4em] uppercase mt-4">{user.class_name || "NOT ASSIGNED"}</p></motion.div>
+                   <motion.div variants={itemVariants} className="bg-[#0a0a0f]/90 border border-white/5 p-8 lg:p-10 rounded-[2.5rem] flex flex-col items-center justify-center text-center hover:border-fuchsia-500/40 transition-all shadow-2xl relative overflow-hidden group"><div className="absolute top-0 left-0 w-full h-1 bg-fuchsia-500 shadow-[0_0_15px_#d946ef] animate-scan opacity-0 group-hover:opacity-100" /><div className="w-16 h-16 bg-gradient-to-b from-fuchsia-600 to-indigo-900 rounded-3xl flex items-center justify-center text-white border border-white/10 mb-8 transform group-hover:scale-110 transition-all duration-500"><Fingerprint size={32} /></div><h4 className="text-2xl font-black text-white tracking-widest uppercase leading-none">{user.username}</h4><p className="text-[10px] text-fuchsia-400 font-black tracking-[0.4em] uppercase mt-4">{user.class_name || "NOT ASSIGNED"}</p></motion.div>
                    <motion.div variants={itemVariants} className="bg-[#0a0a0f]/90 border border-white/5 p-8 lg:p-10 rounded-[2.5rem] flex flex-col items-center justify-center hover:border-fuchsia-500/40 transition-all shadow-2xl group text-center">
                       <div className="relative mb-6 flex justify-center w-full transform group-hover:scale-105 transition-all">
                         <svg className="w-36 h-36 transform -rotate-90">
@@ -278,7 +288,7 @@ export default function StudentPortal() {
                       </div>
                       <div className={`px-8 py-1.5 rounded-full border border-fuchsia-500/30 text-[9px] font-black tracking-widest uppercase bg-black/40 ${getScoreData(score).text}`}>{getScoreData(score).label}</div>
                    </motion.div>
-                   <motion.div variants={itemVariants} className="bg-[#0a0a0f]/90 border border-white/5 p-8 lg:p-10 rounded-[2.5rem] hover:border-fuchsia-500/40 transition-all shadow-2xl flex flex-col justify-between group text-center"><p className="text-[10px] font-black text-slate-500 tracking-[0.4em] mb-10 uppercase flex items-center justify-center gap-3"><Activity size={16} className="text-fuchsia-500 animate-pulse"/> SYSTEM ANALYTICS</p>
+                   <motion.div variants={itemVariants} className="bg-[#0a0a0f]/90 border border-white/5 p-8 lg:p-10 rounded-[2.5rem] hover:border-fuchsia-500/40 transition-all shadow-2xl flex flex-col justify-between group text-center"><p className="text-[10px] font-black text-slate-500 tracking-[0.5em] mb-10 uppercase flex items-center justify-center gap-3"><Activity size={16} className="text-fuchsia-500 animate-pulse"/> SYSTEM ANALYTICS</p>
                       <div className="space-y-6 font-mono text-[9px] lg:text-[10px] tracking-[0.2em] text-slate-300 w-full px-4">
                         <div className="flex justify-between border-b border-white/5 pb-3"><span>SERVER</span><span className="text-fuchsia-400 font-bold uppercase">READY</span></div>
                         <div className="flex justify-between border-b border-white/5 pb-3"><span>SECURITY</span><span className="text-emerald-500 font-bold uppercase">AES-256</span></div>
@@ -339,7 +349,7 @@ export default function StudentPortal() {
               <motion.div key="briefing" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[75vh]">
                  <div className="mb-24"><RobotFace size={40} ringSize="w-64 h-64" coreSize="w-40 h-40" /></div>
                  <motion.div className="flex flex-col items-center text-center space-y-10"><div className="px-8 py-3 rounded-full bg-emerald-500/20 border-2 border-emerald-400 text-emerald-400 text-[12px] font-black tracking-[0.7em] uppercase shadow-[0_0_30px_rgba(52,211,153,0.2)] animate-pulse">Uplink Confirmed</div><h2 className="text-6xl lg:text-7xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-2xl text-center">Transmission Received.</h2><p className="text-[16px] font-black text-white leading-relaxed tracking-[0.3em] uppercase max-w-2xl opacity-100 mx-auto">Halo <span className="text-fuchsia-400">{user.username}</span>, inisiasi kuis untuk topik <span className="text-fuchsia-400">{selectedDomain}</span> sekarang?</p></motion.div>
-                 <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 mt-20 lg:mt-24 w-full lg:w-auto px-10 lg:px-0"><button onClick={() => setView('assessment')} className="w-full lg:w-auto px-16 py-6 border-4 border-white/10 text-slate-400 rounded-[2.5rem] font-black text-[12px] tracking-[0.5em] uppercase hover:border-white/30 hover:text-white transition-all">Cancel</button><button onClick={handleStartMissionClick} className="w-full lg:w-auto px-16 py-6 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-[2.5rem] font-black text-[12px] tracking-[0.5em] shadow-[0_20px_60px_rgba(217,70,239,0.5)] hover:scale-105 transition-all uppercase flex items-center justify-center gap-6">Execute Protocol <Zap size={24} /></button></div>
+                 <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 mt-20 lg:mt-24 w-full lg:w-auto px-10 lg:px-0"><button onClick={() => setView('assessment')} className="w-full lg:w-auto px-16 py-6 border-4 border-white/10 text-slate-400 rounded-[2.5rem] font-black text-[12px] tracking-[0.5em] uppercase hover:border-white/30 hover:text-white transition-all">Cancel</button><button onClick={handleStartMissionClick} className="w-full lg:w-auto px-16 py-6 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-[2.5rem] font-black text-[13px] tracking-[0.5em] shadow-[0_20px_60px_rgba(217,70,239,0.5)] hover:scale-105 transition-all uppercase flex items-center justify-center gap-6">Execute Protocol <Zap size={24} /></button></div>
               </motion.div>
             )}
 
@@ -347,6 +357,7 @@ export default function StudentPortal() {
         </main>
       </div>
 
+      {/* --- MODAL SYSTEM FEEDBACK (ULTRA-LUXURY VIOLET) --- */}
       <AnimatePresence>
         {appFeedbackModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-[#020108]/96 backdrop-blur-[50px]">
@@ -387,7 +398,7 @@ export default function StudentPortal() {
                  {detailModal.map((d: any, i: number) => (
                     <div key={i} className={`p-10 rounded-[3rem] border bg-black/60 flex flex-col items-center ${d.is_correct ? 'border-emerald-500/20' : 'border-red-500/20'}`}>
                           <div className={`p-4 rounded-2xl mb-8 ${d.is_correct ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>{d.is_correct ? <CheckCircle2 size={32} /> : <XCircle size={32} />}</div>
-                          <div className="w-full text-center space-y-8"><p className="text-slate-100 font-medium text-[16px] leading-relaxed tracking-tight">"{d.question}"</p><div className="bg-[#0a0a0f] p-8 rounded-[2rem] border border-white/5"><p className="text-[10px] font-black text-slate-600 tracking-[0.5em] mb-4 uppercase text-center">Personnel Response</p><p className={`font-black text-[14px] tracking-widest ${d.is_correct ? 'text-emerald-500' : 'text-red-500'}`}>{d.answer || "N/A"}</p></div></div>
+                          <div className="w-full text-center space-y-8"><p className="text-slate-100 font-medium text-[16px] leading-relaxed tracking-tight">"{d.question}"</p><div className="bg-[#0a0a0f] p-8 rounded-[2rem] border border-white/5"><p className="text-[10px] font-black text-slate-600 tracking-[0.5em] mb-4 uppercase">Personnel Response</p><p className={`font-black text-[14px] tracking-widest ${d.is_correct ? 'text-emerald-500' : 'text-red-500'}`}>{d.answer || "N/A"}</p></div></div>
                     </div>
                  ))}
                </div>
