@@ -32,8 +32,8 @@ const ParticleBurstClickEffect = () => {
   const [particles, setParticles] = useState<any[]>([]);
   useEffect(() => {
     const handleInteraction = (e: MouseEvent | TouchEvent) => {
-      const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : (e as MouseEvent).clientY;
+      const clientX = 'touches' in e ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
+      const clientY = 'touches' in e ? (e as TouchEvent).touches[0].clientY : (e as MouseEvent).clientY;
       const newParticles = Array.from({ length: 8 }).map((_, i) => ({
         id: Math.random(), x: clientX, y: clientY, angle: (Math.PI * 2 / 8) * i, velocity: Math.random() * 60 + 20
       }));
@@ -173,6 +173,16 @@ export default function StudentPortal() {
     else { setView('mission'); setCurrentStep(1); }
   };
 
+  // --- FUNGSI YANG HILANG SUDAH DIKEMBALIKAN ---
+  const assignClassAndStartMission = (className: string) => {
+    const updatedUser = { ...user, class_name: className };
+    setUser(updatedUser); 
+    localStorage.setItem('user', JSON.stringify(updatedUser)); 
+    setShowClassSelector(false); 
+    setView('mission'); 
+    setCurrentStep(1);
+  };
+
   const executeUplink = async () => {
     setLoading(true); setSubmitStatus('SYNCING...');
     const formattedAnswers = Object.keys(ans).map(id => ({ id: parseInt(id), value: ans[parseInt(id) as any].score.toString(), text: ans[parseInt(id) as any].text }));
@@ -188,7 +198,6 @@ export default function StudentPortal() {
     }
   };
 
-  // --- LOGIKA DERIVASI UNTUK PERTANYAAN (FIX: currentStepQs) ---
   const currentStepQs = useMemo(() => {
     return allQs.filter(q => q.main_domain.toLowerCase().trim() === selectedDomain.toLowerCase().trim() && q.type === `step${currentStep}`);
   }, [allQs, currentStep, selectedDomain]);
@@ -200,7 +209,6 @@ export default function StudentPortal() {
 
   const isStepComplete = useMemo(() => currentStepQs.length > 0 && currentStepQs.every(q => ans[q.id] !== undefined), [currentStepQs, ans]);
 
-  // DATA UNTUK RADAR CHART
   const radarData = useMemo(() => {
     const domains = ["Social", "Malware", "Phishing", "Network", "Threat", "Access"];
     return domains.map(d => {
@@ -227,17 +235,17 @@ export default function StudentPortal() {
         <nav className="flex-1 px-4 py-8 space-y-3">
           {[ { id: 'dashboard', label: 'BERANDA', icon: LayoutGrid }, { id: 'assessment', label: 'ASSESSMENT', icon: Target }, { id: 'reports', label: 'REPORT', icon: FileText } ].map((item) => (
             <button key={item.id} onClick={() => setView(item.id)} className={`w-full flex items-center p-3.5 rounded-xl transition-all gap-4 ${view === item.id ? 'bg-fuchsia-600/20 text-white border border-fuchsia-500/40 shadow-lg' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
-              <item.icon size={18} /> {!isSidebarCollapsed && <span className="font-bold text-[9px] tracking-widest uppercase">{item.label}</span>}
+              <item.icon size={18} /> {!isSidebarCollapsed && <span className="font-bold text-[10px] tracking-widest uppercase">{item.label}</span>}
             </button>
           ))}
         </nav>
-        <div className="p-6 border-t border-white/10"><button onClick={() => router.push('/')} className="w-full flex items-center p-3 text-red-500 hover:bg-red-500/10 rounded-xl gap-4 font-bold text-[9px] tracking-widest uppercase hover:bg-red-600 hover:text-white transition-all"><Power size={18} /> {!isSidebarCollapsed && "SHUTDOWN"}</button></div>
+        <div className="p-6 border-t border-white/10"><button onClick={() => router.push('/')} className="w-full flex items-center p-3 text-red-500 hover:bg-red-500/10 rounded-xl gap-4 font-bold text-[10px] tracking-widest uppercase hover:bg-red-600 hover:text-white transition-all"><Power size={18} /> {!isSidebarCollapsed && "SHUTDOWN"}</button></div>
       </motion.aside>
 
       <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
         <header className="h-20 flex items-center justify-between px-10 border-b border-white/10 bg-black/40 backdrop-blur-xl">
             <div className="flex items-center gap-3 px-5 py-2 bg-white/5 border border-white/20 rounded-full shadow-inner"><div className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_15px_#34d399]" /><span className="text-[9px] font-black text-slate-200 uppercase tracking-widest">GATEWAY ACTIVE</span></div>
-            <div className="flex items-center gap-6 text-right"><div className="hidden sm:block"><p className="text-[12px] font-black text-white tracking-widest uppercase">{user.username}</p><p className="text-[10px] font-bold text-fuchsia-400 uppercase tracking-[0.2em] mt-1">OPERATIVE MODE</p></div><div className="w-11 h-11 bg-gradient-to-br from-indigo-500 to-fuchsia-600 rounded-full flex items-center justify-center border border-white/20 shadow-lg shadow-fuchsia-500/20"><User size={20} /></div></div>
+            <div className="flex items-center gap-6 text-right"><div className="hidden sm:block"><p className="text-[12px] font-black text-white tracking-widest uppercase">{user.username}</p><p className="text-[10px] font-bold text-fuchsia-400 uppercase tracking-[0.2em] mt-1">OPERATIVE MODE</p></div><div className="w-11 h-11 bg-gradient-to-br from-indigo-500 to-fuchsia-600 rounded-full flex items-center justify-center border border-white/20 shadow-lg"><User size={20} /></div></div>
         </header>
 
         <main className="flex-1 overflow-y-auto no-scrollbar px-10 lg:px-14 py-10" ref={scrollRef}>
@@ -247,21 +255,21 @@ export default function StudentPortal() {
             {view === 'dashboard' && (
               <motion.div key="dash" variants={containerVariants} initial="hidden" animate="show" className="max-w-[1300px] mx-auto space-y-12">
                 <motion.div variants={itemVariants} className="text-center space-y-4 pt-4">
-                  <div className="text-fuchsia-400 font-black text-[11px] tracking-[0.6em] uppercase mb-2 flex items-center justify-center gap-3"><Zap size={14} className="fill-current"/> {getGreeting()} OPERATIVE</div>
-                  <h1 className="text-5xl lg:text-6xl font-black text-white tracking-tighter leading-none uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{getGreeting()}, <span className="text-fuchsia-500">{user.username}.</span></h1>
+                  <div className="text-fuchsia-400 font-black text-[11px] tracking-[0.6em] uppercase mb-2 flex items-center justify-center gap-3">{getGreeting()} OPERATIVE</div>
+                  <h1 className="text-5xl lg:text-6xl font-black text-white tracking-tighter leading-none uppercase drop-shadow-2xl">{getGreeting()}, <span className="text-fuchsia-500">{user.username}.</span></h1>
                   <p className="text-slate-400 text-[12px] font-bold tracking-[0.3em] uppercase max-w-xl mx-auto opacity-100">Cyber Readiness Index Protocol Gateway v2.1</p>
                 </motion.div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                   <motion.div variants={itemVariants} className="bg-[#0a0a0f]/90 border border-white/5 p-10 rounded-[3rem] flex flex-col items-center justify-center text-center hover:border-fuchsia-500/40 transition-all shadow-2xl relative overflow-hidden group"><div className="absolute top-0 left-0 w-full h-1 bg-fuchsia-500 shadow-[0_0_15px_#d946ef] animate-scan opacity-0 group-hover:opacity-100" /><div className="w-20 h-20 bg-gradient-to-b from-fuchsia-600 to-indigo-900 rounded-[1.8rem] flex items-center justify-center text-white border border-white/10 mb-8 shadow-2xl transform group-hover:scale-110 transition-all duration-500"><Fingerprint size={36} /></div><h4 className="text-2xl font-black text-white tracking-widest uppercase">{user.username}</h4><p className="text-[10px] text-fuchsia-400 font-black tracking-[0.4em] uppercase mt-4">{user.class_name || "NOT ASSIGNED"}</p></motion.div>
-                   <motion.div variants={itemVariants} className="bg-[#0a0a0f]/90 border border-white/5 p-10 rounded-[3rem] flex flex-col items-center justify-center hover:border-fuchsia-500/40 transition-all shadow-2xl group"><div className="relative mb-6 flex justify-center w-full transform group-hover:scale-105 transition-all"><svg className="w-40 h-40 transform -rotate-90"><circle cx="80" cy="80" r="72" stroke="rgba(255,255,255,0.03)" strokeWidth="8" fill="transparent" /><motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score / 100) * 452} 1000` }} transition={{ duration: 2.5, ease: "circOut" }} cx="80" cy="80" r="72" stroke="#d946ef" strokeWidth="8" strokeLinecap="round" fill="transparent" style={{ filter: 'drop-shadow(0 0 15px rgba(217,70,239,0.8))' }} /></svg><div className="absolute inset-0 flex flex-col items-center justify-center"><span className="text-6xl font-black text-white tracking-tighter">{score}</span><span className="text-[8px] font-black text-slate-500 uppercase mt-1">AVG SCORE</span></div></div><div className={`px-8 py-2 rounded-full border border-white/10 text-[10px] font-black tracking-widest uppercase bg-black/40 ${readiness.text} shadow-lg shadow-black/50`}>{readiness.label}</div></motion.div>
-                   <motion.div variants={itemVariants} className="bg-[#0a0a0f]/90 border border-white/5 p-10 rounded-[3rem] hover:border-fuchsia-500/40 transition-all shadow-2xl flex flex-col justify-between group text-center"><p className="text-[10px] font-black text-slate-500 tracking-[0.5em] mb-12 uppercase flex items-center justify-center gap-3"><Activity size={16} className="text-fuchsia-500 animate-pulse"/> SYSTEM ANALYTICS</p><div className="space-y-6 font-mono text-[10px] tracking-[0.2em] text-slate-300 w-full px-4"><div className="flex justify-between border-b border-white/5 pb-3"><span>HOST</span><span className="text-fuchsia-400 font-bold uppercase">VERCEL</span></div><div className="flex justify-between border-b border-white/5 pb-3"><span>SECURITY</span><span className="text-emerald-500 font-bold uppercase">AES-256</span></div><div className="flex justify-between"><span>DATABASE</span><span className="text-white font-bold uppercase opacity-80">SINKRON</span></div></div></motion.div>
+                   <motion.div variants={itemVariants} className="bg-[#0a0a0f]/90 border border-white/5 p-10 rounded-[3rem] flex flex-col items-center justify-center text-center hover:border-fuchsia-500/40 transition-all shadow-2xl relative overflow-hidden group"><div className="absolute top-0 left-0 w-full h-1 bg-fuchsia-500 shadow-[0_0_15px_#d946ef] animate-scan opacity-0 group-hover:opacity-100" /><div className="w-20 h-20 bg-gradient-to-b from-fuchsia-600 to-indigo-900 rounded-[1.8rem] flex items-center justify-center text-white border border-white/10 mb-8 shadow-2xl transform group-hover:scale-110 transition-all duration-500"><Fingerprint size={36} /></div><h4 className="text-2xl font-black text-white tracking-widest uppercase leading-none">{user.username}</h4><p className="text-[10px] text-fuchsia-400 font-black tracking-[0.4em] uppercase mt-4">{user.class_name || "NOT ASSIGNED"}</p></motion.div>
+                   <motion.div variants={itemVariants} className="bg-[#0a0a0f]/90 border border-white/5 p-10 rounded-[3rem] flex flex-col items-center justify-center hover:border-fuchsia-500/40 transition-all shadow-2xl group"><div className="relative mb-6 flex justify-center w-full transform group-hover:scale-105 transition-all"><svg className="w-40 h-40 transform -rotate-90"><circle cx="80" cy="80" r="72" stroke="rgba(255,255,255,0.03)" strokeWidth="8" fill="transparent" /><motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score / 100) * 452} 1000` }} transition={{ duration: 2.5, ease: "circOut" }} cx="80" cy="80" r="72" stroke="#d946ef" strokeWidth="8" strokeLinecap="round" fill="transparent" style={{ filter: 'drop-shadow(0 0 15px rgba(217,70,239,0.8))' }} /></svg><div className="absolute inset-0 flex flex-col items-center justify-center"><span className="text-6xl font-black text-white tracking-tighter">{score}</span><span className="text-[8px] font-black text-slate-500 uppercase mt-1 tracking-widest">AVG SCORE</span></div></div><div className={`px-8 py-2 rounded-full border border-white/10 text-[10px] font-black tracking-widest uppercase bg-black/40 ${readiness.text} shadow-lg shadow-black/50`}>{readiness.label}</div></motion.div>
+                   <motion.div variants={itemVariants} className="bg-[#0a0a0f]/90 border border-white/5 p-10 rounded-[3rem] hover:border-fuchsia-500/40 transition-all shadow-2xl flex flex-col justify-between group text-center"><p className="text-[10px] font-black text-slate-500 tracking-[0.5em] mb-10 uppercase flex items-center justify-center gap-3"><Activity size={16} className="text-fuchsia-500 animate-pulse"/> SYSTEM ANALYTICS</p><div className="space-y-6 font-mono text-[10px] tracking-[0.2em] text-slate-300 w-full px-4"><div className="flex justify-between border-b border-white/5 pb-3"><span>SERVER</span><span className="text-fuchsia-400 font-bold uppercase">Online</span></div><div className="flex justify-between border-b border-white/5 pb-3"><span>SECURITY</span><span className="text-emerald-500 font-bold uppercase">AES-256</span></div><div className="flex justify-between"><span>DATABASE</span><span className="text-white font-bold uppercase opacity-80">SINKRON</span></div></div></motion.div>
                    <motion.div variants={itemVariants} className="lg:col-span-3 bg-gradient-to-br from-[#0a0a14] to-[#020202] border border-white/10 p-10 rounded-[4rem] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] group hover:border-fuchsia-500/40 transition-all duration-700"><div className="flex items-center gap-10 z-10 text-center lg:text-left"><div className="w-20 h-20 bg-black/80 rounded-3xl flex items-center justify-center shrink-0 border border-white/10 shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"><BellRing size={36} className="text-fuchsia-500 animate-bounce" /></div><div className="space-y-3"><div className="flex items-center justify-center lg:justify-start gap-4"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981] animate-ping" /><span className="text-[10px] font-black tracking-[0.6em] text-emerald-400 uppercase">Mission Status: Active</span></div><h3 className="text-3xl font-black text-white uppercase tracking-tighter leading-tight">Assessment Gateway Online.</h3><p className="text-[11px] font-bold text-slate-400 tracking-widest max-w-2xl uppercase opacity-90 leading-relaxed">Initiate your cyber defense validation protocols now to validate personnel security.</p></div></div><button onClick={handleStartMissionClick} className="px-14 py-7 bg-white text-black rounded-3xl font-black text-[12px] tracking-[0.5em] hover:bg-fuchsia-600 hover:text-white transition-all shadow-2xl flex items-center gap-6 uppercase z-10">START PROTOCOL <Zap size={20} /></button></motion.div>
                 </div>
               </motion.div>
             )}
 
-            {/* VIEW REPORTS - RESULTS (TACTICAL DEWA VERSION) */}
+            {/* VIEW REPORTS - RESULTS */}
             {view === 'reports' && (
               <motion.div key="reports" variants={containerVariants} initial="hidden" animate="show" className="max-w-[1400px] mx-auto space-y-10">
                  <motion.div variants={itemVariants} className="text-center space-y-4 pt-4">
@@ -281,7 +289,7 @@ export default function StudentPortal() {
               </motion.div>
             )}
 
-            {/* VIEW ASSESSMENT */}
+            {/* Assessment View */}
             {view === 'assessment' && (
               <motion.div key="assess-hub" variants={containerVariants} initial="hidden" animate="show" className="max-w-6xl mx-auto space-y-16">
                 <motion.div variants={itemVariants} className="text-center space-y-4 pt-6"><h2 className="text-6xl font-black text-white tracking-widest uppercase leading-none drop-shadow-2xl">Target Modules.</h2><p className="text-fuchsia-400 text-[12px] font-black tracking-[0.6em] uppercase">Select strategic sector for diagnostic protocol</p></motion.div>
@@ -294,7 +302,7 @@ export default function StudentPortal() {
               </motion.div>
             )}
 
-            {/* VIEW MISSION (THE TARGET BOX ERROR FIXED) */}
+            {/* VIEW MISSION */}
             {view === 'mission' && (
               <motion.div key="mission" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto space-y-12 pb-44 text-center lg:text-left">
                 <header className="flex justify-between items-end border-b-2 border-white/10 pb-10 pt-6"><div className="space-y-4"><button onClick={() => setView('assessment')} className="text-[11px] font-black text-slate-400 hover:text-red-400 flex items-center gap-4 tracking-widest uppercase transition-all"><ArrowLeft size={20} /> ABORT SESSION</button><h2 className="text-6xl font-black text-white tracking-tighter uppercase leading-none">PHASE 0{currentStep}</h2><p className="text-fuchsia-500 font-black tracking-[0.6em] text-[12px] uppercase">PROTOCOL: {selectedDomain}</p></div><div className="text-[140px] font-black text-white/5 font-mono leading-none tracking-tighter">0{currentStep}</div></header>
@@ -307,11 +315,10 @@ export default function StudentPortal() {
               </motion.div>
             )}
 
-            {/* BRIEFING VIEW */}
             {view === 'briefing' && (
               <motion.div key="briefing" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[75vh]">
                  <div className="mb-24"><RobotFace size={40} ringSize="w-64 h-64" coreSize="w-40 h-40" /></div>
-                 <motion.div className="flex flex-col items-center text-center space-y-10"><div className="px-8 py-3 rounded-full bg-emerald-500/20 border-2 border-emerald-400/50 text-emerald-400 text-[12px] font-black tracking-[0.7em] uppercase shadow-[0_0_30px_rgba(52,211,153,0.2)] animate-pulse">Uplink Confirmed</div><h2 className="text-6xl lg:text-7xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-2xl">Transmission Received.</h2><p className="text-[16px] font-black text-white leading-relaxed tracking-[0.3em] uppercase max-w-2xl opacity-100">Halo <span className="text-fuchsia-400">{user.username}</span>, inisiasi kuis untuk topik <span className="text-fuchsia-400">{selectedDomain}</span> sekarang?</p></motion.div>
+                 <motion.div className="flex flex-col items-center text-center space-y-10"><div className="px-8 py-3 rounded-full bg-emerald-500/20 border-2 border-emerald-400 text-emerald-400 text-[12px] font-black tracking-[0.7em] uppercase shadow-[0_0_30px_rgba(52,211,153,0.2)] animate-pulse">Uplink Confirmed</div><h2 className="text-6xl lg:text-7xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-2xl">Transmission Received.</h2><p className="text-[16px] font-black text-white leading-relaxed tracking-[0.3em] uppercase max-w-2xl opacity-100">Halo <span className="text-fuchsia-400">{user.username}</span>, inisiasi kuis untuk topik <span className="text-fuchsia-400">{selectedDomain}</span> sekarang?</p></motion.div>
                  <div className="flex gap-10 mt-24"><button onClick={() => setView('assessment')} className="px-16 py-6 border-4 border-white/10 text-slate-400 rounded-[2.5rem] font-black text-[13px] tracking-[0.5em] uppercase hover:border-white/30 hover:text-white transition-all">Cancel</button><button onClick={handleStartMissionClick} className="px-16 py-6 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-[2.5rem] font-black text-[13px] tracking-[0.5em] shadow-[0_20px_60px_rgba(217,70,239,0.5)] hover:scale-105 transition-all uppercase flex items-center gap-6">Execute Protocol <Zap size={24} /></button></div>
               </motion.div>
             )}
@@ -320,7 +327,7 @@ export default function StudentPortal() {
         </main>
       </div>
 
-      {/* --- MODAL DETAIL (DOSSIDER DEWA VERSION) --- */}
+      {/* --- MODAL DETAIL --- */}
       <AnimatePresence>
         {detailModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[3000] flex items-center justify-center p-6 bg-black/98 backdrop-blur-3xl">
@@ -332,7 +339,7 @@ export default function StudentPortal() {
                </div>
                <div className="flex-1 overflow-y-auto pr-6 space-y-6 custom-scrollbar">
                  {detailModal.map((d: any, i: number) => (
-                    <div key={i} className={`p-10 rounded-[3rem] border bg-black/60 flex flex-col items-center ${d.is_correct ? 'border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.1)]' : 'border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.1)]'}`}>
+                    <div key={i} className={`p-10 rounded-[3rem] border bg-black/60 flex flex-col items-center ${d.is_correct ? 'border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.05)]' : 'border-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.05)]'}`}>
                           <div className={`p-4 rounded-2xl mb-8 ${d.is_correct ? 'bg-emerald-500/10 text-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-red-500/10 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]'}`}>{d.is_correct ? <CheckCircle2 size={32} /> : <XCircle size={32} />}</div>
                           <div className="w-full text-center space-y-8"><p className="text-slate-100 font-medium text-[16px] leading-relaxed tracking-tight">"{d.question}"</p><div className="bg-[#0a0a0f] p-8 rounded-[2rem] border border-white/5"><p className="text-[10px] font-black text-slate-600 tracking-[0.5em] mb-4 uppercase text-center">Personnel Response</p><p className={`font-black text-[14px] tracking-widest ${d.is_correct ? 'text-emerald-500' : 'text-red-500'}`}>{d.answer || "N/A"}</p></div></div>
                     </div>
@@ -346,7 +353,7 @@ export default function StudentPortal() {
       {/* --- CLASS SELECTOR MODAL --- */}
       <AnimatePresence>
         {showClassSelector && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/98 backdrop-blur-3xl text-center">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-black/98 backdrop-blur-3xl text-center">
             <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} className="relative w-full max-w-3xl bg-[#0a0a14] border border-white/10 rounded-[4rem] p-16 shadow-2xl overflow-hidden">
                <div className="w-20 h-20 bg-indigo-500/10 border-2 border-indigo-400 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-2xl"><Workflow size={40} className="text-indigo-400" /></div>
                <h2 className="text-4xl font-black mb-4 text-white tracking-widest uppercase">CLASSIFICATION <span className="text-fuchsia-500">REQUIRED.</span></h2>
@@ -363,7 +370,7 @@ export default function StudentPortal() {
 
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes scan { 0% { top: 0%; } 50% { top: 100%; } 100% { top: 0%; } }
-        .animate-scan { animation: scan 6s linear infinite; position: absolute; z-index: 10; }
+        .animate-scan { animation: scan 6s linear infinite; }
         .bg-hud-grid { background-image: linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px); background-size: 50px 50px; transform: perspective(800px) rotateX(45deg) scale(2.5); transform-origin: top; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(217, 70, 239, 0.5); border-radius: 20px; }
