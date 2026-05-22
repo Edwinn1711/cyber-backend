@@ -7,13 +7,12 @@ import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, 
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. EFEK KLIK (Sama Persis seperti di Dashboard Siswa) ---
+// --- 1. EFEK KLIK PARTIKEL MURNI ---
 const ParticleBurstClickEffect = () => {
   const [particles, setParticles] = useState<any[]>([]);
   
   useEffect(() => {
     const handleInteraction = (e: MouseEvent | TouchEvent) => {
-      // Mendapatkan posisi kursor PC atau sentuhan Jari HP
       const clientX = 'touches' in e ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
       const clientY = 'touches' in e ? (e as TouchEvent).touches[0].clientY : (e as MouseEvent).clientY;
       
@@ -32,7 +31,6 @@ const ParticleBurstClickEffect = () => {
       }, 800);
     };
 
-    // Deteksi Mouse dan Layar Sentuh (Touchscreen)
     window.addEventListener('mousedown', handleInteraction);
     window.addEventListener('touchstart', handleInteraction, { passive: true });
     
@@ -65,6 +63,7 @@ const ParticleBurstClickEffect = () => {
   );
 };
 
+// --- 2. LATAR BELAKANG ---
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-black">
@@ -102,22 +101,37 @@ export default function CyberLoginGateway() {
   const [errorMessage, setErrorMessage] = useState('');
 
   // ====================================================================
-  // LOGIKA 3D SANGAT RESPONSIF (TIDAK DELAY)
+  // LOGIKA 3D HOVER - INSTAN 0 DELAY
   // ====================================================================
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [20, -20]), { stiffness: 800, damping: 40 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-20, 20]), { stiffness: 800, damping: 40 });
+  // Fisika super responsif agar langsung mengikuti kursor (Stiffness tinggi, damping ideal)
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [20, -20]), { stiffness: 1000, damping: 40 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-20, 20]), { stiffness: 1000, damping: 40 });
 
   useEffect(() => {
-    const handlePointerMove = (e: PointerEvent) => {
+    // Memakai "mousemove" agar mendeteksi saat kursor diarahkan (hover) tanpa perlu diklik
+    const handleMouseMove = (e: MouseEvent) => {
       mouseX.set((e.clientX / window.innerWidth) - 0.5);
       mouseY.set((e.clientY / window.innerHeight) - 0.5);
     };
 
-    window.addEventListener("pointermove", handlePointerMove);
-    return () => window.removeEventListener("pointermove", handlePointerMove);
+    // Deteksi sentuhan tangan di HP
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouseX.set((e.touches[0].clientX / window.innerWidth) - 0.5);
+        mouseY.set((e.touches[0].clientY / window.innerHeight) - 0.5);
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
   }, [mouseX, mouseY]);
 
   useEffect(() => {
@@ -178,7 +192,7 @@ export default function CyberLoginGateway() {
     <div className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]">
       <PersistentUniverse bgIdx={bgIdx} />
       
-      {/* 2. PARTIKEL DI PANGGIL DI SINI */}
+      {/* PARTIKEL EFEK KLIK (Dari Dashboard Siswa) */}
       <ParticleBurstClickEffect />
 
       <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4 pointer-events-none">
@@ -196,9 +210,13 @@ export default function CyberLoginGateway() {
         <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CONNECTION: SECURE (AES 256)</p>
       </div>
 
+      {/* 
+        KOTAK LOGIN UTAMA 
+        Perbaikan: "transition-all" dihapus agar CSS tidak menahan (delay) gerakan 3D dari kursor!
+      */}
       <motion.div
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className={`relative z-30 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4 bg-[#050505]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] transition-all duration-300`}
+        className={`relative z-30 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4 bg-[#050505]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)]`}
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
 
