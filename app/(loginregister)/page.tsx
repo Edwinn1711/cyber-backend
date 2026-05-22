@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, Calendar, CheckCircle2 } from 'lucide-react'
@@ -7,100 +7,62 @@ import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, 
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. PARTIKEL RADAR GEOMETRIS (DIJAMIN MUNCUL 100%) ---
-const CyberSparks = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
+// --- 1. EFEK KLIK (Sama Persis seperti di Dashboard Siswa) ---
+const ParticleBurstClickEffect = () => {
+  const [particles, setParticles] = useState<any[]>([]);
+  
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let sparks: any[] = [];
-    let animationFrameId: number;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    window.addEventListener('resize', resize);
-    resize();
-
-    // Fungsi pola Radar persis gambar
-    const createSparks = (x: number, y: number) => {
-      // Titik Pusat
-      sparks.push({ x, y, vx: 0, vy: 0, life: 1, size: 3, type: 'circle' });
-
-      // Cincin Dalam (8 Titik Kotak, menyebar pelan)
-      for (let i = 0; i < 8; i++) {
-        const angle = (Math.PI / 4) * i;
-        sparks.push({
-          x, y,
-          vx: Math.cos(angle) * 1.5,
-          vy: Math.sin(angle) * 1.5,
-          life: 1, size: 2, type: 'square'
-        });
-      }
-
-      // Cincin Luar (8 Titik Bulat, menyebar cepat)
-      for (let i = 0; i < 8; i++) {
-        const angle = ((Math.PI / 4) * i) + (Math.PI / 8);
-        sparks.push({
-          x, y,
-          vx: Math.cos(angle) * 3.5,
-          vy: Math.sin(angle) * 3.5,
-          life: 1, size: 3.5, type: 'circle'
-        });
-      }
+    const handleInteraction = (e: MouseEvent | TouchEvent) => {
+      // Mendapatkan posisi kursor PC atau sentuhan Jari HP
+      const clientX = 'touches' in e ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
+      const clientY = 'touches' in e ? (e as TouchEvent).touches[0].clientY : (e as MouseEvent).clientY;
+      
+      const newParticles = Array.from({ length: 8 }).map((_, i) => ({
+        id: Math.random(), 
+        x: clientX, 
+        y: clientY, 
+        angle: (Math.PI * 2 / 8) * i, 
+        velocity: Math.random() * 50 + 20
+      }));
+      
+      setParticles(prev => [...prev, ...newParticles]);
+      
+      setTimeout(() => {
+        setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)));
+      }, 800);
     };
 
-    // Deteksi sentuhan HP & Mouse PC langsung dari Window (Anti-Gagal)
-    const handlePointerDown = (e: PointerEvent) => {
-      createSparks(e.clientX, e.clientY);
-    };
-
-    window.addEventListener('pointerdown', handlePointerDown);
-
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      for (let i = sparks.length - 1; i >= 0; i--) {
-        const s = sparks[i];
-        s.x += s.vx;
-        s.y += s.vy;
-        s.life -= 0.02; // Durasi pudar
-        
-        ctx.fillStyle = `rgba(217, 70, 239, ${s.life})`; // Warna Fuchsia
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = 'rgba(217, 70, 239, 1)';
-        
-        ctx.beginPath();
-        if (s.type === 'circle') {
-          ctx.arc(s.x, s.y, s.size * s.life, 0, Math.PI * 2);
-          ctx.fill();
-        } else {
-          const currentSize = s.size * s.life;
-          ctx.fillRect(s.x - currentSize/2, s.y - currentSize/2, currentSize, currentSize);
-        }
-
-        if (s.life <= 0) sparks.splice(i, 1);
-      }
-
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
+    // Deteksi Mouse dan Layar Sentuh (Touchscreen)
+    window.addEventListener('mousedown', handleInteraction);
+    window.addEventListener('touchstart', handleInteraction, { passive: true });
+    
     return () => {
-      window.removeEventListener('resize', resize);
-      window.removeEventListener('pointerdown', handlePointerDown);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('mousedown', handleInteraction);
+      window.removeEventListener('touchstart', handleInteraction);
     };
   }, []);
 
-  // z-[9999] agar partikel menimpa segalanya, pointer-events-none agar tidak menghalangi tombol
-  return <canvas ref={canvasRef} className="fixed inset-0 z-[9999] pointer-events-none" />;
+  return (
+    <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
+      <AnimatePresence>
+        {particles.map((p) => (
+          <motion.div 
+            key={p.id} 
+            initial={{ scale: 0, opacity: 1, x: p.x, y: p.y }} 
+            animate={{ 
+              scale: [0, 1.2, 0], 
+              opacity: [1, 0.5, 0], 
+              x: p.x + Math.cos(p.angle) * p.velocity, 
+              y: p.y + Math.sin(p.angle) * p.velocity 
+            }} 
+            transition={{ duration: 0.8 }} 
+            className="absolute rounded-full bg-fuchsia-400 shadow-[0_0_15px_#d946ef]" 
+            style={{ width: '4px', height: '4px', top: '-2px', left: '-2px' }} 
+          />
+        ))}
+      </AnimatePresence>
+    </div>
+  );
 };
 
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
@@ -140,17 +102,15 @@ export default function CyberLoginGateway() {
   const [errorMessage, setErrorMessage] = useState('');
 
   // ====================================================================
-  // LOGIKA 3D (INSTAN, TIDAK HILANG, TIDAK DELAY)
+  // LOGIKA 3D SANGAT RESPONSIF (TIDAK DELAY)
   // ====================================================================
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Menggunakan stiffness sangat tinggi (800) agar sangat responsif / instan tapi tidak error
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [20, -20]), { stiffness: 800, damping: 40 });
   const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-20, 20]), { stiffness: 800, damping: 40 });
 
   useEffect(() => {
-    // Membaca kursor/sentuhan hp dan otomatis menggerakkan kartu
     const handlePointerMove = (e: PointerEvent) => {
       mouseX.set((e.clientX / window.innerWidth) - 0.5);
       mouseY.set((e.clientY / window.innerHeight) - 0.5);
@@ -218,8 +178,8 @@ export default function CyberLoginGateway() {
     <div className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]">
       <PersistentUniverse bgIdx={bgIdx} />
       
-      {/* PARTIKEL DIPANGGIL DI SINI */}
-      <CyberSparks />
+      {/* 2. PARTIKEL DI PANGGIL DI SINI */}
+      <ParticleBurstClickEffect />
 
       <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4 pointer-events-none">
         <div className="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center bg-black/80 backdrop-blur-md">
@@ -236,7 +196,6 @@ export default function CyberLoginGateway() {
         <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CONNECTION: SECURE (AES 256)</p>
       </div>
 
-      {/* KOTAK 3D (Bebas dari Bug CSS) */}
       <motion.div
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         className={`relative z-30 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4 bg-[#050505]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] transition-all duration-300`}
