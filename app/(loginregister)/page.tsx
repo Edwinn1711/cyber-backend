@@ -7,17 +7,16 @@ import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, 
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. KOMPONEN PERCIKAN (SPARKS) YANG DIPERBAIKI ---
+// --- 1. KOMPONEN PERCIKAN GEOMETRIS (PERSIS SEPERTI GAMBAR) ---
 const CyberSparks = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true });
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let particles: any[] = [];
     let sparks: any[] = [];
     let animationFrameId: number;
 
@@ -28,32 +27,40 @@ const CyberSparks = () => {
     window.addEventListener('resize', resize);
     resize();
 
-    // Partikel ambient (melayang pelan di background)
-    for (let i = 0; i < 30; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        size: Math.random() * 1.5 + 0.5,
-      });
-    }
-
-    // Fungsi ledakan percikan saat diklik
+    // Fungsi ledakan geometris (Pola Radar/Sci-Fi)
     const createSparks = (x: number, y: number) => {
-      for (let i = 0; i < 20; i++) {
+      const outerDots = 8; // Jumlah titik besar di luar
+      const innerDots = 8; // Jumlah titik kecil di dalam
+
+      // Membuat lingkaran luar (Titik bulat besar)
+      for (let i = 0; i < outerDots; i++) {
+        const angle = (Math.PI * 2 / outerDots) * i;
         sparks.push({
           x: x,
           y: y,
-          vx: (Math.random() - 0.5) * 8, // Kecepatan menyebar
-          vy: (Math.random() - 0.5) * 8,
-          life: 1, // Umur partikel
-          size: Math.random() * 3 + 1.5,
+          vx: Math.cos(angle) * 4.5, // Kecepatan menyebar keluar
+          vy: Math.sin(angle) * 4.5,
+          life: 1,
+          size: 3.5,
+          type: 'circle'
+        });
+      }
+
+      // Membuat lingkaran dalam (Titik kotak/diamond kecil)
+      for (let i = 0; i < innerDots; i++) {
+        const angle = ((Math.PI * 2 / innerDots) * i) + (Math.PI / 8); // Sudut sedikit digeser
+        sparks.push({
+          x: x,
+          y: y,
+          vx: Math.cos(angle) * 2, // Lebih lambat karena di dalam
+          vy: Math.sin(angle) * 2,
+          life: 1,
+          size: 1.5,
+          type: 'square'
         });
       }
     };
 
-    // Menggunakan pointerdown agar work di Mouse & Touchscreen
     const handlePointerDown = (e: PointerEvent) => {
       createSparks(e.clientX, e.clientY);
     };
@@ -63,31 +70,26 @@ const CyberSparks = () => {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Render Ambient Particles
-      ctx.fillStyle = 'rgba(217, 70, 239, 0.3)'; // Warna ungu redup
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = '#d946ef';
-      particles.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      // Render Active Sparks (Percikan saat klik)
       for (let i = sparks.length - 1; i >= 0; i--) {
         const s = sparks[i];
         s.x += s.vx;
         s.y += s.vy;
-        s.life -= 0.015; // Kecepatan memudar
+        s.life -= 0.025; // Kecepatan menghilang
         
-        ctx.fillStyle = `rgba(217, 70, 239, ${s.life})`;
+        ctx.fillStyle = `rgba(217, 70, 239, ${s.life})`; // Warna fuchsia/ungu
+        ctx.shadowBlur = s.type === 'circle' ? 10 : 2;
+        ctx.shadowColor = '#d946ef';
+        
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.size * s.life, 0, Math.PI * 2);
-        ctx.fill();
+        if (s.type === 'circle') {
+          // Gambar Bulat
+          ctx.arc(s.x, s.y, s.size * s.life, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // Gambar Kotak Kecil
+          const currentSize = s.size * s.life;
+          ctx.fillRect(s.x - currentSize/2, s.y - currentSize/2, currentSize, currentSize);
+        }
 
         if (s.life <= 0) sparks.splice(i, 1);
       }
@@ -104,7 +106,7 @@ const CyberSparks = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-20 pointer-events-none" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 z-50 pointer-events-none" />;
 };
 
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
@@ -144,16 +146,17 @@ export default function CyberLoginGateway() {
   const [errorMessage, setErrorMessage] = useState('');
 
   // ====================================================================
-  // LOGIKA 3D DIPERBAIKI: RESPON CEPAT, TIDAK LAG
+  // LOGIKA 3D DIPERBAIKI (TIDAK ADA DELAY SAMA SEKALI)
   // ====================================================================
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Stiffness dinaikkan dari 100 ke 400 agar super responsif (tidak lemot)
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { stiffness: 400, damping: 30 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 400, damping: 30 });
+  // Menggunakan transform langsung ke derajat tanpa spring yang lambat
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], [18, -18]);
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-18, 18]);
 
   const handlePointerMove = (e: React.PointerEvent) => {
+    // Membaca posisi kursor secara realtime
     mouseX.set(e.clientX / window.innerWidth - 0.5);
     mouseY.set(e.clientY / window.innerHeight - 0.5);
   };
@@ -213,14 +216,13 @@ export default function CyberLoginGateway() {
   };
 
   return (
-    // Tambahkan onPointerMove di parent paling luar
     <div 
       onPointerMove={handlePointerMove}
-      className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1500px]"
+      className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]"
     >
       <PersistentUniverse bgIdx={bgIdx} />
       
-      {/* Kanvas Partikel diletakkan di sini, z-20 agar di atas background tapi tidak halangi tombol */}
+      {/* Kanvas Partikel diletakkan di Z-Index Tertinggi (Z-50) */}
       <CyberSparks />
 
       <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4 pointer-events-none">
@@ -238,16 +240,16 @@ export default function CyberLoginGateway() {
         <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CONNECTION: SECURE (AES 256)</p>
       </div>
 
-      {/* WRAPPER 1: Untuk Animasi Mengambang (Naik Turun) secara terus menerus */}
+      {/* Wrapper Mengambang Bebas (Float) */}
       <motion.div 
         animate={{ y: [-8, 8, -8] }} 
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         className={`relative z-30 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4`}
       >
-        {/* WRAPPER 2: Khusus untuk 3D Tilt (Goyang Kursor) - Dipisah agar tidak lag */}
+        {/* Wrapper 3D Goyang (Class transition dihapus agar instan!) */}
         <motion.div
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className="w-full bg-[#050505]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] transition-all duration-300"
+          className="w-full bg-[#050505]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)]"
         >
           <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
 
@@ -400,8 +402,8 @@ export default function CyberLoginGateway() {
         }
         input, select { caret-color: #d946ef; }
         ::selection { background: #d946ef; color: white; }
-        .perspective-\\[1500px\\] {
-          perspective: 1500px;
+        .perspective-\\[1200px\\] {
+          perspective: 1200px;
         }
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
