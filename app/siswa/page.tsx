@@ -30,7 +30,7 @@ const TACTICAL_DOMAINS = [
 ];
 
 // --- 0. HELPER: STATUS COLORS ---
-const getScoreData = (score: number) => {
+const getReadinessData = (score: number) => {
   if (score >= 80) return { label: "EXCELLENT", color: "#d946ef", bg: "bg-fuchsia-600", text: "text-fuchsia-400" };
   if (score >= 50) return { label: "AVERAGE", color: "#eab308", bg: "bg-yellow-600", text: "text-yellow-400" };
   return { label: "POOR", color: "#ef4444", bg: "bg-red-600", text: "text-red-400" };
