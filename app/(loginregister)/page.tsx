@@ -1,13 +1,13 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion'
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, Calendar, CheckCircle2 } from 'lucide-react'
 
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. PARTIKEL RADAR GEOMETRIS (DIJAMIN MUNCUL!) ---
+// --- 1. PARTIKEL RADAR GEOMETRIS (DIJAMIN MUNCUL 100%) ---
 const CyberSparks = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -27,16 +27,12 @@ const CyberSparks = () => {
     window.addEventListener('resize', resize);
     resize();
 
-    // Pola formasi Radar persis seperti gambar
-    const createSparks = (e: Event) => {
-      const customEvent = e as CustomEvent;
-      const x = customEvent.detail.x;
-      const y = customEvent.detail.y;
-
-      // Titik Tengah (Pusat)
+    // Fungsi pola Radar persis gambar
+    const createSparks = (x: number, y: number) => {
+      // Titik Pusat
       sparks.push({ x, y, vx: 0, vy: 0, life: 1, size: 3, type: 'circle' });
 
-      // Cincin Dalam (8 Titik Kotak)
+      // Cincin Dalam (8 Titik Kotak, menyebar pelan)
       for (let i = 0; i < 8; i++) {
         const angle = (Math.PI / 4) * i;
         sparks.push({
@@ -47,7 +43,7 @@ const CyberSparks = () => {
         });
       }
 
-      // Cincin Luar (8 Titik Bulat)
+      // Cincin Luar (8 Titik Bulat, menyebar cepat)
       for (let i = 0; i < 8; i++) {
         const angle = ((Math.PI / 4) * i) + (Math.PI / 8);
         sparks.push({
@@ -59,8 +55,12 @@ const CyberSparks = () => {
       }
     };
 
-    // Dengarkan event kustom dari luar agar tidak ada halangan z-index
-    window.addEventListener('force-cyber-spark', createSparks);
+    // Deteksi sentuhan HP & Mouse PC langsung dari Window (Anti-Gagal)
+    const handlePointerDown = (e: PointerEvent) => {
+      createSparks(e.clientX, e.clientY);
+    };
+
+    window.addEventListener('pointerdown', handlePointerDown);
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -69,9 +69,9 @@ const CyberSparks = () => {
         const s = sparks[i];
         s.x += s.vx;
         s.y += s.vy;
-        s.life -= 0.02; // Durasi partikel
+        s.life -= 0.02; // Durasi pudar
         
-        ctx.fillStyle = `rgba(217, 70, 239, ${s.life})`; // Fuchsia solid
+        ctx.fillStyle = `rgba(217, 70, 239, ${s.life})`; // Warna Fuchsia
         ctx.shadowBlur = 15;
         ctx.shadowColor = 'rgba(217, 70, 239, 1)';
         
@@ -94,11 +94,12 @@ const CyberSparks = () => {
 
     return () => {
       window.removeEventListener('resize', resize);
-      window.removeEventListener('force-cyber-spark', createSparks);
+      window.removeEventListener('pointerdown', handlePointerDown);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
+  // z-[9999] agar partikel menimpa segalanya, pointer-events-none agar tidak menghalangi tombol
   return <canvas ref={canvasRef} className="fixed inset-0 z-[9999] pointer-events-none" />;
 };
 
@@ -139,34 +140,24 @@ export default function CyberLoginGateway() {
   const [errorMessage, setErrorMessage] = useState('');
 
   // ====================================================================
-  // LOGIKA 3D RAW SYSTEM KURSOR (0 DELAY, INSTAN & SANGAT RESPONSIF)
+  // LOGIKA 3D (INSTAN, TIDAK HILANG, TIDAK DELAY)
   // ====================================================================
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Derajat goyangan (25 derajat). Tidak memakai spring sama sekali agar mentah & instan
-  const rotateX = useTransform(mouseY, [-0.5, 0.5], [25, -25]);
-  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-25, 25]);
+  // Menggunakan stiffness sangat tinggi (800) agar sangat responsif / instan tapi tidak error
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [20, -20]), { stiffness: 800, damping: 40 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-20, 20]), { stiffness: 800, damping: 40 });
 
   useEffect(() => {
-    // Membaca kursor langsung dari WINDOW (Bypass React untuk respon instan)
-    const handleRawMouseMove = (e: MouseEvent) => {
+    // Membaca kursor/sentuhan hp dan otomatis menggerakkan kartu
+    const handlePointerMove = (e: PointerEvent) => {
       mouseX.set((e.clientX / window.innerWidth) - 0.5);
       mouseY.set((e.clientY / window.innerHeight) - 0.5);
     };
-    
-    const handleRawTouchMove = (e: TouchEvent) => {
-      mouseX.set((e.touches[0].clientX / window.innerWidth) - 0.5);
-      mouseY.set((e.touches[0].clientY / window.innerHeight) - 0.5);
-    };
 
-    window.addEventListener("mousemove", handleRawMouseMove, { passive: true });
-    window.addEventListener("touchmove", handleRawTouchMove, { passive: true });
-    
-    return () => {
-      window.removeEventListener("mousemove", handleRawMouseMove);
-      window.removeEventListener("touchmove", handleRawTouchMove);
-    };
+    window.addEventListener("pointermove", handlePointerMove);
+    return () => window.removeEventListener("pointermove", handlePointerMove);
   }, [mouseX, mouseY]);
 
   useEffect(() => {
@@ -223,20 +214,11 @@ export default function CyberLoginGateway() {
     }
   };
 
-  // Pemicu Percikan Layar (Terdeteksi di mana pun)
-  const triggerSparks = (e: React.PointerEvent) => {
-    const event = new CustomEvent('force-cyber-spark', { 
-      detail: { x: e.clientX, y: e.clientY } 
-    });
-    window.dispatchEvent(event);
-  };
-
   return (
-    <div 
-      onPointerDown={triggerSparks} // Memastikan semua klik ditangkap
-      className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px] touch-none"
-    >
+    <div className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]">
       <PersistentUniverse bgIdx={bgIdx} />
+      
+      {/* PARTIKEL DIPANGGIL DI SINI */}
       <CyberSparks />
 
       <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4 pointer-events-none">
@@ -254,10 +236,10 @@ export default function CyberLoginGateway() {
         <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CONNECTION: SECURE (AES 256)</p>
       </div>
 
-      {/* Frame 3D Utama - Bebas dari CSS Delay */}
+      {/* KOTAK 3D (Bebas dari Bug CSS) */}
       <motion.div
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className={`relative z-30 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4 bg-[#050505]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)]`}
+        className={`relative z-30 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4 bg-[#050505]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] transition-all duration-300`}
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
 
@@ -277,14 +259,14 @@ export default function CyberLoginGateway() {
         <div className="flex border-b border-white/10 mb-8 relative" style={{ transform: "translateZ(30px)" }}>
           <button 
             type="button"
-            onClick={(e) => { e.stopPropagation(); setActiveTab('LOGIN'); setErrorMessage(''); }} 
+            onClick={() => { setActiveTab('LOGIN'); setErrorMessage(''); }} 
             className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-colors ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
           >
             MASUK
           </button>
           <button 
             type="button"
-            onClick={(e) => { e.stopPropagation(); setActiveTab('REGISTER'); setErrorMessage(''); }} 
+            onClick={() => { setActiveTab('REGISTER'); setErrorMessage(''); }} 
             className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-colors ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
           >
             DAFTAR BARU
@@ -302,7 +284,6 @@ export default function CyberLoginGateway() {
               type="text" 
               placeholder="NAMA PENGGUNA" 
               value={username}
-              onClick={(e) => e.stopPropagation()}
               onChange={(e) => setUsername(e.target.value)}
               disabled={status === 'loading' || status === 'success'}
               className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner" 
@@ -317,7 +298,6 @@ export default function CyberLoginGateway() {
               type="password" 
               placeholder="KATA SANDI" 
               value={password}
-              onClick={(e) => e.stopPropagation()}
               onChange={(e) => setPassword(e.target.value)}
               disabled={status === 'loading' || status === 'success'}
               className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner" 
@@ -341,7 +321,6 @@ export default function CyberLoginGateway() {
                       type="text" 
                       placeholder="ASAL / KOTA" 
                       value={asal}
-                      onClick={(e) => e.stopPropagation()}
                       onChange={(e) => setAsal(e.target.value)}
                       disabled={status === 'loading' || status === 'success'}
                       className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner uppercase" 
@@ -355,7 +334,6 @@ export default function CyberLoginGateway() {
                     <input 
                       type="date" 
                       value={tanggalLahir}
-                      onClick={(e) => e.stopPropagation()}
                       onChange={(e) => setTanggalLahir(e.target.value)}
                       disabled={status === 'loading' || status === 'success'}
                       style={{ colorScheme: 'dark' }}
@@ -370,7 +348,6 @@ export default function CyberLoginGateway() {
                   </div>
                   <select 
                     value={className}
-                    onClick={(e) => e.stopPropagation()}
                     onChange={(e) => setClassName(e.target.value)}
                     disabled={status === 'loading' || status === 'success'}
                     className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-slate-300 tracking-widest focus:border-fuchsia-500 outline-none transition-colors appearance-none disabled:opacity-50 cursor-pointer uppercase shadow-inner"
@@ -394,7 +371,6 @@ export default function CyberLoginGateway() {
 
           <button 
             type="submit" 
-            onClick={(e) => e.stopPropagation()}
             disabled={status === 'loading' || status === 'success'}
             className={`w-full relative z-20 mt-4 py-4 rounded-[1.2rem] font-black text-[10px] tracking-[0.4em] text-white transition-colors flex items-center justify-center gap-3 uppercase overflow-hidden ${status === 'success' ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.5)]' : 'bg-fuchsia-600 hover:bg-fuchsia-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.5)] disabled:opacity-50 disabled:cursor-not-allowed'}`}
           >
