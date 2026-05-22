@@ -1,13 +1,13 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion'
 import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, Calendar, CheckCircle2 } from 'lucide-react'
 
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. KOMPONEN PERCIKAN GEOMETRIS (PERSIS SEPERTI GAMBAR) ---
+// --- 1. PARTIKEL RADAR GEOMETRIS (DIJAMIN MUNCUL!) ---
 const CyberSparks = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -27,45 +27,40 @@ const CyberSparks = () => {
     window.addEventListener('resize', resize);
     resize();
 
-    // Fungsi ledakan geometris (Pola Radar/Sci-Fi)
-    const createSparks = (x: number, y: number) => {
-      const outerDots = 8; // Jumlah titik besar di luar
-      const innerDots = 8; // Jumlah titik kecil di dalam
+    // Pola formasi Radar persis seperti gambar
+    const createSparks = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const x = customEvent.detail.x;
+      const y = customEvent.detail.y;
 
-      // Membuat lingkaran luar (Titik bulat besar)
-      for (let i = 0; i < outerDots; i++) {
-        const angle = (Math.PI * 2 / outerDots) * i;
+      // Titik Tengah (Pusat)
+      sparks.push({ x, y, vx: 0, vy: 0, life: 1, size: 3, type: 'circle' });
+
+      // Cincin Dalam (8 Titik Kotak)
+      for (let i = 0; i < 8; i++) {
+        const angle = (Math.PI / 4) * i;
         sparks.push({
-          x: x,
-          y: y,
-          vx: Math.cos(angle) * 4.5, // Kecepatan menyebar keluar
-          vy: Math.sin(angle) * 4.5,
-          life: 1,
-          size: 3.5,
-          type: 'circle'
+          x, y,
+          vx: Math.cos(angle) * 1.5,
+          vy: Math.sin(angle) * 1.5,
+          life: 1, size: 2, type: 'square'
         });
       }
 
-      // Membuat lingkaran dalam (Titik kotak/diamond kecil)
-      for (let i = 0; i < innerDots; i++) {
-        const angle = ((Math.PI * 2 / innerDots) * i) + (Math.PI / 8); // Sudut sedikit digeser
+      // Cincin Luar (8 Titik Bulat)
+      for (let i = 0; i < 8; i++) {
+        const angle = ((Math.PI / 4) * i) + (Math.PI / 8);
         sparks.push({
-          x: x,
-          y: y,
-          vx: Math.cos(angle) * 2, // Lebih lambat karena di dalam
-          vy: Math.sin(angle) * 2,
-          life: 1,
-          size: 1.5,
-          type: 'square'
+          x, y,
+          vx: Math.cos(angle) * 3.5,
+          vy: Math.sin(angle) * 3.5,
+          life: 1, size: 3.5, type: 'circle'
         });
       }
     };
 
-    const handlePointerDown = (e: PointerEvent) => {
-      createSparks(e.clientX, e.clientY);
-    };
-
-    window.addEventListener('pointerdown', handlePointerDown);
+    // Dengarkan event kustom dari luar agar tidak ada halangan z-index
+    window.addEventListener('force-cyber-spark', createSparks);
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -74,19 +69,17 @@ const CyberSparks = () => {
         const s = sparks[i];
         s.x += s.vx;
         s.y += s.vy;
-        s.life -= 0.025; // Kecepatan menghilang
+        s.life -= 0.02; // Durasi partikel
         
-        ctx.fillStyle = `rgba(217, 70, 239, ${s.life})`; // Warna fuchsia/ungu
-        ctx.shadowBlur = s.type === 'circle' ? 10 : 2;
-        ctx.shadowColor = '#d946ef';
+        ctx.fillStyle = `rgba(217, 70, 239, ${s.life})`; // Fuchsia solid
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = 'rgba(217, 70, 239, 1)';
         
         ctx.beginPath();
         if (s.type === 'circle') {
-          // Gambar Bulat
           ctx.arc(s.x, s.y, s.size * s.life, 0, Math.PI * 2);
           ctx.fill();
         } else {
-          // Gambar Kotak Kecil
           const currentSize = s.size * s.life;
           ctx.fillRect(s.x - currentSize/2, s.y - currentSize/2, currentSize, currentSize);
         }
@@ -101,12 +94,12 @@ const CyberSparks = () => {
 
     return () => {
       window.removeEventListener('resize', resize);
-      window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('force-cyber-spark', createSparks);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-50 pointer-events-none" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 z-[9999] pointer-events-none" />;
 };
 
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
@@ -146,20 +139,35 @@ export default function CyberLoginGateway() {
   const [errorMessage, setErrorMessage] = useState('');
 
   // ====================================================================
-  // LOGIKA 3D DIPERBAIKI (TIDAK ADA DELAY SAMA SEKALI)
+  // LOGIKA 3D RAW SYSTEM KURSOR (0 DELAY, INSTAN & SANGAT RESPONSIF)
   // ====================================================================
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Menggunakan transform langsung ke derajat tanpa spring yang lambat
-  const rotateX = useTransform(mouseY, [-0.5, 0.5], [18, -18]);
-  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-18, 18]);
+  // Derajat goyangan (25 derajat). Tidak memakai spring sama sekali agar mentah & instan
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], [25, -25]);
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-25, 25]);
 
-  const handlePointerMove = (e: React.PointerEvent) => {
-    // Membaca posisi kursor secara realtime
-    mouseX.set(e.clientX / window.innerWidth - 0.5);
-    mouseY.set(e.clientY / window.innerHeight - 0.5);
-  };
+  useEffect(() => {
+    // Membaca kursor langsung dari WINDOW (Bypass React untuk respon instan)
+    const handleRawMouseMove = (e: MouseEvent) => {
+      mouseX.set((e.clientX / window.innerWidth) - 0.5);
+      mouseY.set((e.clientY / window.innerHeight) - 0.5);
+    };
+    
+    const handleRawTouchMove = (e: TouchEvent) => {
+      mouseX.set((e.touches[0].clientX / window.innerWidth) - 0.5);
+      mouseY.set((e.touches[0].clientY / window.innerHeight) - 0.5);
+    };
+
+    window.addEventListener("mousemove", handleRawMouseMove, { passive: true });
+    window.addEventListener("touchmove", handleRawTouchMove, { passive: true });
+    
+    return () => {
+      window.removeEventListener("mousemove", handleRawMouseMove);
+      window.removeEventListener("touchmove", handleRawTouchMove);
+    };
+  }, [mouseX, mouseY]);
 
   useEffect(() => {
     const interval = setInterval(() => setBgIdx(p => (p + 1) % CYBER_ASSETS.length), 5000);
@@ -215,14 +223,20 @@ export default function CyberLoginGateway() {
     }
   };
 
+  // Pemicu Percikan Layar (Terdeteksi di mana pun)
+  const triggerSparks = (e: React.PointerEvent) => {
+    const event = new CustomEvent('force-cyber-spark', { 
+      detail: { x: e.clientX, y: e.clientY } 
+    });
+    window.dispatchEvent(event);
+  };
+
   return (
     <div 
-      onPointerMove={handlePointerMove}
-      className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]"
+      onPointerDown={triggerSparks} // Memastikan semua klik ditangkap
+      className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px] touch-none"
     >
       <PersistentUniverse bgIdx={bgIdx} />
-      
-      {/* Kanvas Partikel diletakkan di Z-Index Tertinggi (Z-50) */}
       <CyberSparks />
 
       <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4 pointer-events-none">
@@ -240,158 +254,157 @@ export default function CyberLoginGateway() {
         <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CONNECTION: SECURE (AES 256)</p>
       </div>
 
-      {/* Wrapper Mengambang Bebas (Float) */}
-      <motion.div 
-        animate={{ y: [-8, 8, -8] }} 
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className={`relative z-30 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4`}
+      {/* Frame 3D Utama - Bebas dari CSS Delay */}
+      <motion.div
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        className={`relative z-30 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4 bg-[#050505]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)]`}
       >
-        {/* Wrapper 3D Goyang (Class transition dihapus agar instan!) */}
-        <motion.div
-          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className="w-full bg-[#050505]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)]"
-        >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
 
-          <div className="mx-auto w-12 h-12 bg-transparent border border-fuchsia-500/50 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(217,70,239,0.15)]" style={{ transform: "translateZ(40px)" }}>
-            <ShieldCheck className="text-fuchsia-400" size={24} />
-          </div>
+        <div className="mx-auto w-12 h-12 bg-transparent border border-fuchsia-500/50 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(217,70,239,0.15)]" style={{ transform: "translateZ(60px)" }}>
+          <ShieldCheck className="text-fuchsia-400" size={24} />
+        </div>
 
-          <div style={{ transform: "translateZ(50px)" }}>
-            <h1 className="text-3xl font-black text-center text-white tracking-widest uppercase mb-2">
-              CYBER<span className="text-fuchsia-500">READINESS</span>
-            </h1>
-            <p className="text-[8px] font-bold text-slate-500 tracking-[0.4em] uppercase text-center mb-10">
-              INDEX PLATFORM
-            </p>
-          </div>
+        <div style={{ transform: "translateZ(50px)" }}>
+          <h1 className="text-3xl font-black text-center text-white tracking-widest uppercase mb-2">
+            CYBER<span className="text-fuchsia-500">READINESS</span>
+          </h1>
+          <p className="text-[8px] font-bold text-slate-500 tracking-[0.4em] uppercase text-center mb-10">
+            INDEX PLATFORM
+          </p>
+        </div>
 
-          <div className="flex border-b border-white/10 mb-8 relative" style={{ transform: "translateZ(30px)" }}>
-            <button 
-              type="button"
-              onClick={() => { setActiveTab('LOGIN'); setErrorMessage(''); }} 
-              className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-all duration-300 ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
-            >
-              MASUK
-            </button>
-            <button 
-              type="button"
-              onClick={() => { setActiveTab('REGISTER'); setErrorMessage(''); }} 
-              className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-all duration-300 ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
-            >
-              DAFTAR BARU
-            </button>
-            <div className={`absolute bottom-0 h-[2px] w-1/2 bg-fuchsia-500 transition-transform duration-300 shadow-[0_0_10px_#d946ef] ${activeTab === 'LOGIN' ? 'translate-x-0' : 'translate-x-full'}`} />
-          </div>
+        <div className="flex border-b border-white/10 mb-8 relative" style={{ transform: "translateZ(30px)" }}>
+          <button 
+            type="button"
+            onClick={(e) => { e.stopPropagation(); setActiveTab('LOGIN'); setErrorMessage(''); }} 
+            className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-colors ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+          >
+            MASUK
+          </button>
+          <button 
+            type="button"
+            onClick={(e) => { e.stopPropagation(); setActiveTab('REGISTER'); setErrorMessage(''); }} 
+            className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-colors ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+          >
+            DAFTAR BARU
+          </button>
+          <div className={`absolute bottom-0 h-[2px] w-1/2 bg-fuchsia-500 transition-transform shadow-[0_0_10px_#d946ef] ${activeTab === 'LOGIN' ? 'translate-x-0' : 'translate-x-full'}`} />
+        </div>
 
-          <form onSubmit={handleAuthenticate} className="space-y-4" style={{ transform: "translateZ(40px)" }}>
-            
-            <div className="relative group">
-              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
-                 <User size={16} />
-              </div>
-              <input 
-                type="text" 
-                placeholder="NAMA PENGGUNA" 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                disabled={status === 'loading' || status === 'success'}
-                className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner" 
-              />
+        <form onSubmit={handleAuthenticate} className="space-y-4" style={{ transform: "translateZ(40px)" }}>
+          
+          <div className="relative group">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
+               <User size={16} />
             </div>
+            <input 
+              type="text" 
+              placeholder="NAMA PENGGUNA" 
+              value={username}
+              onClick={(e) => e.stopPropagation()}
+              onChange={(e) => setUsername(e.target.value)}
+              disabled={status === 'loading' || status === 'success'}
+              className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner" 
+            />
+          </div>
 
-            <div className="relative group">
-              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
-                 <Lock size={16} />
-              </div>
-              <input 
-                type="password" 
-                placeholder="KATA SANDI" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={status === 'loading' || status === 'success'}
-                className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner" 
-              />
+          <div className="relative group">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
+               <Lock size={16} />
             </div>
+            <input 
+              type="password" 
+              placeholder="KATA SANDI" 
+              value={password}
+              onClick={(e) => e.stopPropagation()}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={status === 'loading' || status === 'success'}
+              className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner" 
+            />
+          </div>
 
-            <AnimatePresence>
-              {activeTab === 'REGISTER' && (
-                <motion.div 
-                  initial={{ height: 0, opacity: 0 }} 
-                  animate={{ height: 'auto', opacity: 1 }} 
-                  exit={{ height: 0, opacity: 0 }} 
-                  className="space-y-4 pt-2 overflow-hidden"
-                >
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="relative group">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
-                         <MapPin size={14} />
-                      </div>
-                      <input 
-                        type="text" 
-                        placeholder="ASAL / KOTA" 
-                        value={asal}
-                        onChange={(e) => setAsal(e.target.value)}
-                        disabled={status === 'loading' || status === 'success'}
-                        className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
-                      />
+          <AnimatePresence>
+            {activeTab === 'REGISTER' && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }} 
+                animate={{ height: 'auto', opacity: 1 }} 
+                exit={{ height: 0, opacity: 0 }} 
+                className="space-y-4 pt-2 overflow-hidden"
+              >
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="relative group">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
+                       <MapPin size={14} />
                     </div>
-
-                    <div className="relative group">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
-                         <Calendar size={14} />
-                      </div>
-                      <input 
-                        type="date" 
-                        value={tanggalLahir}
-                        onChange={(e) => setTanggalLahir(e.target.value)}
-                        disabled={status === 'loading' || status === 'success'}
-                        style={{ colorScheme: 'dark' }}
-                        className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
-                      />
-                    </div>
+                    <input 
+                      type="text" 
+                      placeholder="ASAL / KOTA" 
+                      value={asal}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={(e) => setAsal(e.target.value)}
+                      disabled={status === 'loading' || status === 'success'}
+                      className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner uppercase" 
+                    />
                   </div>
 
                   <div className="relative group">
-                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-                       <Fingerprint size={16} />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
+                       <Calendar size={14} />
                     </div>
-                    <select 
-                      value={className}
-                      onChange={(e) => setClassName(e.target.value)}
+                    <input 
+                      type="date" 
+                      value={tanggalLahir}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={(e) => setTanggalLahir(e.target.value)}
                       disabled={status === 'loading' || status === 'success'}
-                      className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-slate-300 tracking-widest focus:border-fuchsia-500 outline-none transition-all appearance-none disabled:opacity-50 cursor-pointer uppercase shadow-inner"
-                    >
-                      {AVAILABLE_CLASSES.map(cls => (
-                        <option key={cls} value={cls} className="bg-black text-white">{cls}</option>
-                      ))}
-                    </select>
+                      style={{ colorScheme: 'dark' }}
+                      className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner uppercase" 
+                    />
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                </div>
 
-            <AnimatePresence>
-              {status === 'error' && (
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center justify-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase relative z-20">
-                   <AlertTriangle size={14} className="shrink-0" /> {errorMessage}
-                </motion.div>
-              )}
-            </AnimatePresence>
+                <div className="relative group">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
+                     <Fingerprint size={16} />
+                  </div>
+                  <select 
+                    value={className}
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => setClassName(e.target.value)}
+                    disabled={status === 'loading' || status === 'success'}
+                    className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-slate-300 tracking-widest focus:border-fuchsia-500 outline-none transition-colors appearance-none disabled:opacity-50 cursor-pointer uppercase shadow-inner"
+                  >
+                    {AVAILABLE_CLASSES.map(cls => (
+                      <option key={cls} value={cls} className="bg-black text-white">{cls}</option>
+                    ))}
+                  </select>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-            <button 
-              type="submit" 
-              disabled={status === 'loading' || status === 'success'}
-              className={`w-full relative z-20 mt-4 py-4 rounded-[1.2rem] font-black text-[10px] tracking-[0.4em] text-white transition-all flex items-center justify-center gap-3 uppercase overflow-hidden ${status === 'success' ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.5)]' : 'bg-fuchsia-600 hover:bg-fuchsia-500 hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(217,70,239,0.5)] disabled:opacity-50 disabled:cursor-not-allowed'}`}
-            >
-               {status === 'loading' && <span className="animate-pulse">MEMVERIFIKASI...</span>}
-               {status === 'success' && <><CheckCircle2 size={14} /> AKSES DIBERIKAN</>}
-               {status !== 'loading' && status !== 'success' && (
-                 <>OTENTIKASI <ScanLine size={14} /></>
-               )}
-            </button>
-          </form>
-        </motion.div>
+          <AnimatePresence>
+            {status === 'error' && (
+              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center justify-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase relative z-20">
+                 <AlertTriangle size={14} className="shrink-0" /> {errorMessage}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <button 
+            type="submit" 
+            onClick={(e) => e.stopPropagation()}
+            disabled={status === 'loading' || status === 'success'}
+            className={`w-full relative z-20 mt-4 py-4 rounded-[1.2rem] font-black text-[10px] tracking-[0.4em] text-white transition-colors flex items-center justify-center gap-3 uppercase overflow-hidden ${status === 'success' ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.5)]' : 'bg-fuchsia-600 hover:bg-fuchsia-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.5)] disabled:opacity-50 disabled:cursor-not-allowed'}`}
+          >
+             {status === 'loading' && <span className="animate-pulse">MEMVERIFIKASI...</span>}
+             {status === 'success' && <><CheckCircle2 size={14} /> AKSES DIBERIKAN</>}
+             {status !== 'loading' && status !== 'success' && (
+               <>OTENTIKASI <ScanLine size={14} /></>
+             )}
+          </button>
+        </form>
       </motion.div>
 
       <style dangerouslySetInnerHTML={{ __html: `
