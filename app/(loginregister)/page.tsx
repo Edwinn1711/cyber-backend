@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, Calendar, CheckCircle2, Database, Server } from 'lucide-react'
+import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, Calendar, CheckCircle2 } from 'lucide-react'
 
 // --- ASSET GALAXY HD ---
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
@@ -57,17 +57,13 @@ export default function CyberLoginGateway() {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      const x = e.clientX / window.innerWidth - 0.5;
-      const y = e.clientY / window.innerHeight - 0.5;
-      mouseX.set(x);
-      mouseY.set(y);
+      mouseX.set(e.clientX / window.innerWidth - 0.5);
+      mouseY.set(e.clientY / window.innerHeight - 0.5);
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      const x = e.touches[0].clientX / window.innerWidth - 0.5;
-      const y = e.touches[0].clientY / window.innerHeight - 0.5;
-      mouseX.set(x);
-      mouseY.set(y);
+      mouseX.set(e.touches[0].clientX / window.innerWidth - 0.5);
+      mouseY.set(e.touches[0].clientY / window.innerHeight - 0.5);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -121,9 +117,7 @@ export default function CyberLoginGateway() {
       const data = await res.json();
       
       if (res.ok) {
-        // Simpan data user ke localstorage
         localStorage.setItem('user', JSON.stringify(data));
-        
         setStatus('success');
         const role = data.role || 'siswa';
         setTimeout(() => router.push(role === 'guru' || role === 'admin' ? '/guru' : '/siswa'), 1500);
@@ -143,14 +137,14 @@ export default function CyberLoginGateway() {
     <div className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]">
       <PersistentUniverse bgIdx={bgIdx} />
 
-      {/* Ornamen Teks Kiri Bawah */}
+      {/* Ornamen Teks Kiri Bawah (Diperbarui) */}
       <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4">
         <div className="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center bg-black/80 backdrop-blur-md">
            <span className="font-bold text-white text-xs">N</span>
         </div>
         <div>
           <p className="text-[9px] font-black text-fuchsia-500 tracking-[0.4em] uppercase">KONEKSI AMAN AKTIF</p>
-          <p className="text-[10px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CYBER EDU V2.1</p>
+          <p className="text-[10px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CYBER READINESS INDEX</p>
         </div>
       </div>
 
@@ -166,7 +160,7 @@ export default function CyberLoginGateway() {
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.8, ease: "easeOut" }}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative z-10 w-full max-w-sm mx-4 bg-[#050505]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] my-8"
+        className={`relative z-10 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4 bg-[#050505]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] my-8 transition-all duration-500`}
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
 
@@ -176,10 +170,10 @@ export default function CyberLoginGateway() {
 
         <div style={{ transform: "translateZ(40px)" }}>
           <h1 className="text-3xl font-black text-center text-white tracking-widest uppercase mb-2">
-            CYBER<span className="text-fuchsia-500">EDU</span>
+            CYBER<span className="text-fuchsia-500">READINESS</span>
           </h1>
           <p className="text-[8px] font-bold text-slate-500 tracking-[0.4em] uppercase text-center mb-10">
-            Sistem Evaluasi & Pembelajaran Siber
+            INDEX PLATFORM
           </p>
         </div>
 
@@ -237,36 +231,40 @@ export default function CyberLoginGateway() {
                 initial={{ height: 0, opacity: 0 }} 
                 animate={{ height: 'auto', opacity: 1 }} 
                 exit={{ height: 0, opacity: 0 }} 
-                className="space-y-4 overflow-hidden"
+                className="space-y-4 pt-2 overflow-hidden"
               >
-                <div className="relative group mt-4">
-                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
-                     <MapPin size={16} />
+                {/* --- GRID KOLOM (SAMPING-SAMPINGAN) --- */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="relative group">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
+                       <MapPin size={14} />
+                    </div>
+                    <input 
+                      type="text" 
+                      placeholder="ASAL / KOTA" 
+                      value={asal}
+                      onChange={(e) => setAsal(e.target.value)}
+                      disabled={status === 'loading' || status === 'success'}
+                      className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
+                    />
                   </div>
-                  <input 
-                    type="text" 
-                    placeholder="ASAL / KOTA" 
-                    value={asal}
-                    onChange={(e) => setAsal(e.target.value)}
-                    disabled={status === 'loading' || status === 'success'}
-                    className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
-                  />
+
+                  <div className="relative group">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
+                       <Calendar size={14} />
+                    </div>
+                    <input 
+                      type="date" 
+                      value={tanggalLahir}
+                      onChange={(e) => setTanggalLahir(e.target.value)}
+                      disabled={status === 'loading' || status === 'success'}
+                      style={{ colorScheme: 'dark' }}
+                      className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
+                    />
+                  </div>
                 </div>
 
-                <div className="relative group">
-                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
-                     <Calendar size={16} />
-                  </div>
-                  <input 
-                    type="date" 
-                    value={tanggalLahir}
-                    onChange={(e) => setTanggalLahir(e.target.value)}
-                    disabled={status === 'loading' || status === 'success'}
-                    style={{ colorScheme: 'dark' }}
-                    className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
-                  />
-                </div>
-
+                {/* Dropdown Kelas Full Width di bawahnya */}
                 <div className="relative group">
                   <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
                      <Fingerprint size={16} />
@@ -288,7 +286,7 @@ export default function CyberLoginGateway() {
 
           <AnimatePresence>
             {status === 'error' && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase">
+              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center justify-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase">
                  <AlertTriangle size={14} className="shrink-0" /> {errorMessage}
               </motion.div>
             )}
@@ -339,5 +337,3 @@ export default function CyberLoginGateway() {
     </div>
   );
 }
-
-// update terakhir seminar
