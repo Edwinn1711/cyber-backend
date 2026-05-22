@@ -4,18 +4,17 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, Calendar, CheckCircle2 } from 'lucide-react'
 
-// --- ASSET GALAXY HD ---
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. KOMPONEN PERCIKAN (SPARKS) & PARTIKEL UNGU SEPERTI GAMBAR 2 ---
+// --- 1. KOMPONEN PERCIKAN (SPARKS) YANG DIPERBAIKI ---
 const CyberSparks = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     let particles: any[] = [];
@@ -29,46 +28,44 @@ const CyberSparks = () => {
     window.addEventListener('resize', resize);
     resize();
 
-    // Partikel latar belakang (tetap ada / melayang)
-    for (let i = 0; i < 40; i++) {
+    // Partikel ambient (melayang pelan di background)
+    for (let i = 0; i < 30; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        size: Math.random() * 1.5 + 0.5,
       });
     }
 
-    // Fungsi memunculkan percikan saat di klik/sentuh
+    // Fungsi ledakan percikan saat diklik
     const createSparks = (x: number, y: number) => {
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 20; i++) {
         sparks.push({
           x: x,
           y: y,
-          vx: (Math.random() - 0.5) * 5,
-          vy: (Math.random() - 0.5) * 5,
-          life: 1,
-          size: Math.random() * 3 + 1,
+          vx: (Math.random() - 0.5) * 8, // Kecepatan menyebar
+          vy: (Math.random() - 0.5) * 8,
+          life: 1, // Umur partikel
+          size: Math.random() * 3 + 1.5,
         });
       }
     };
 
-    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      createSparks(clientX, clientY);
+    // Menggunakan pointerdown agar work di Mouse & Touchscreen
+    const handlePointerDown = (e: PointerEvent) => {
+      createSparks(e.clientX, e.clientY);
     };
 
-    window.addEventListener('mousedown', handlePointerDown);
-    window.addEventListener('touchstart', handlePointerDown);
+    window.addEventListener('pointerdown', handlePointerDown);
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Gambar Partikel Bawaan (Tetap ada di background)
-      ctx.fillStyle = 'rgba(217, 70, 239, 0.4)'; // Warna fuchsia-500
-      ctx.shadowBlur = 15;
+      // Render Ambient Particles
+      ctx.fillStyle = 'rgba(217, 70, 239, 0.3)'; // Warna ungu redup
+      ctx.shadowBlur = 10;
       ctx.shadowColor = '#d946ef';
       particles.forEach(p => {
         p.x += p.vx;
@@ -80,16 +77,15 @@ const CyberSparks = () => {
         ctx.fill();
       });
 
-      // Gambar Percikan (Sparks) saat diklik
+      // Render Active Sparks (Percikan saat klik)
       for (let i = sparks.length - 1; i >= 0; i--) {
         const s = sparks[i];
         s.x += s.vx;
         s.y += s.vy;
-        s.life -= 0.02; // Kecepatan memudar
+        s.life -= 0.015; // Kecepatan memudar
         
         ctx.fillStyle = `rgba(217, 70, 239, ${s.life})`;
         ctx.beginPath();
-        // Membuat bentuk mirip bintang/diamond kecil
         ctx.arc(s.x, s.y, s.size * s.life, 0, Math.PI * 2);
         ctx.fill();
 
@@ -103,16 +99,14 @@ const CyberSparks = () => {
 
     return () => {
       window.removeEventListener('resize', resize);
-      window.removeEventListener('mousedown', handlePointerDown);
-      window.removeEventListener('touchstart', handlePointerDown);
+      window.removeEventListener('pointerdown', handlePointerDown);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-[5] pointer-events-none mix-blend-screen" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 z-20 pointer-events-none" />;
 };
 
-// --- BACKGROUND BERSIH ELEGAN & STABIL ---
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-black">
@@ -150,33 +144,19 @@ export default function CyberLoginGateway() {
   const [errorMessage, setErrorMessage] = useState('');
 
   // ====================================================================
-  // LOGIKA 3D PARALLAX TILT & GOYANG (KARTU BERGOYANG MENGIKUTI KURSOR/HP)
+  // LOGIKA 3D DIPERBAIKI: RESPON CEPAT, TIDAK LAG
   // ====================================================================
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Menambahkan efek stiffness yang lebih rendah agar lebih "bergoyang" dan luwes
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { stiffness: 100, damping: 15 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 100, damping: 15 });
+  // Stiffness dinaikkan dari 100 ke 400 agar super responsif (tidak lemot)
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { stiffness: 400, damping: 30 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 400, damping: 30 });
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX / window.innerWidth - 0.5);
-      mouseY.set(e.clientY / window.innerHeight - 0.5);
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      mouseX.set(e.touches[0].clientX / window.innerWidth - 0.5);
-      mouseY.set(e.touches[0].clientY / window.innerHeight - 0.5);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("touchmove", handleTouchMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("touchmove", handleTouchMove);
-    };
-  }, [mouseX, mouseY]);
+  const handlePointerMove = (e: React.PointerEvent) => {
+    mouseX.set(e.clientX / window.innerWidth - 0.5);
+    mouseY.set(e.clientY / window.innerHeight - 0.5);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => setBgIdx(p => (p + 1) % CYBER_ASSETS.length), 5000);
@@ -191,7 +171,6 @@ export default function CyberLoginGateway() {
       setTimeout(() => setStatus('idle'), 3000);
       return;
     }
-
     if (activeTab === 'REGISTER' && (!asal || !tanggalLahir)) {
       setErrorMessage("Data Asal dan Tanggal Lahir wajib diisi.");
       setStatus('error');
@@ -227,17 +206,21 @@ export default function CyberLoginGateway() {
         setTimeout(() => setStatus('idle'), 3000);
       }
     } catch (error) {
-      setErrorMessage("Koneksi ke peladen (Backend) terputus.");
+      setErrorMessage("Koneksi ke peladen terputus.");
       setStatus('error');
       setTimeout(() => setStatus('idle'), 3000);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]">
+    // Tambahkan onPointerMove di parent paling luar
+    <div 
+      onPointerMove={handlePointerMove}
+      className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1500px]"
+    >
       <PersistentUniverse bgIdx={bgIdx} />
       
-      {/* 2. MEMANGGIL KOMPONEN PERCIKAN (SPARKS) DI SINI */}
+      {/* Kanvas Partikel diletakkan di sini, z-20 agar di atas background tapi tidak halangi tombol */}
       <CyberSparks />
 
       <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4 pointer-events-none">
@@ -255,159 +238,158 @@ export default function CyberLoginGateway() {
         <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CONNECTION: SECURE (AES 256)</p>
       </div>
 
-      {/* KARTU LOGIN UTAMA - EFEK GOYANG DAN FLOATING DITAMBAHKAN DI SINI */}
+      {/* WRAPPER 1: Untuk Animasi Mengambang (Naik Turun) secara terus menerus */}
       <motion.div 
-        initial={{ opacity: 0, y: 30 }} 
-        animate={{ opacity: 1, y: [-5, 5, -5] }} // Efek melayang perlahan
-        transition={{ 
-          opacity: { duration: 0.8, ease: "easeOut" },
-          y: { duration: 6, repeat: Infinity, ease: "easeInOut" } 
-        }}
-        whileHover={{ scale: 1.02 }} // Membesar sedikit & bergoyang saat kursor masuk
-        whileTap={{ scale: 0.98 }} // Mengecil sedikit & merespons saat disentuh/klik
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className={`relative z-10 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4 bg-[#050505]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] my-8 transition-all duration-500`}
+        animate={{ y: [-8, 8, -8] }} 
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className={`relative z-30 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4`}
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
+        {/* WRAPPER 2: Khusus untuk 3D Tilt (Goyang Kursor) - Dipisah agar tidak lag */}
+        <motion.div
+          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+          className="w-full bg-[#050505]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] transition-all duration-300"
+        >
+          <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
 
-        <div className="mx-auto w-12 h-12 bg-transparent border border-fuchsia-500/50 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(217,70,239,0.15)]" style={{ transform: "translateZ(30px)" }}>
-          <ShieldCheck className="text-fuchsia-400" size={24} />
-        </div>
-
-        <div style={{ transform: "translateZ(40px)" }}>
-          <h1 className="text-3xl font-black text-center text-white tracking-widest uppercase mb-2">
-            CYBER<span className="text-fuchsia-500">READINESS</span>
-          </h1>
-          <p className="text-[8px] font-bold text-slate-500 tracking-[0.4em] uppercase text-center mb-10">
-            INDEX PLATFORM
-          </p>
-        </div>
-
-        <div className="flex border-b border-white/10 mb-8 relative" style={{ transform: "translateZ(20px)" }}>
-          <button 
-            type="button"
-            onClick={() => { setActiveTab('LOGIN'); setErrorMessage(''); }} 
-            className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-all duration-300 ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
-          >
-            MASUK
-          </button>
-          <button 
-            type="button"
-            onClick={() => { setActiveTab('REGISTER'); setErrorMessage(''); }} 
-            className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-all duration-300 ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
-          >
-            DAFTAR BARU
-          </button>
-          <div className={`absolute bottom-0 h-[2px] w-1/2 bg-fuchsia-500 transition-transform duration-300 shadow-[0_0_10px_#d946ef] ${activeTab === 'LOGIN' ? 'translate-x-0' : 'translate-x-full'}`} />
-        </div>
-
-        <form onSubmit={handleAuthenticate} className="space-y-4" style={{ transform: "translateZ(30px)" }}>
-          
-          <div className="relative group">
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors">
-               <User size={16} />
-            </div>
-            <input 
-              type="text" 
-              placeholder="NAMA PENGGUNA" 
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              disabled={status === 'loading' || status === 'success'}
-              className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner" 
-            />
+          <div className="mx-auto w-12 h-12 bg-transparent border border-fuchsia-500/50 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(217,70,239,0.15)]" style={{ transform: "translateZ(40px)" }}>
+            <ShieldCheck className="text-fuchsia-400" size={24} />
           </div>
 
-          <div className="relative group">
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors">
-               <Lock size={16} />
-            </div>
-            <input 
-              type="password" 
-              placeholder="KATA SANDI" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={status === 'loading' || status === 'success'}
-              className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner" 
-            />
+          <div style={{ transform: "translateZ(50px)" }}>
+            <h1 className="text-3xl font-black text-center text-white tracking-widest uppercase mb-2">
+              CYBER<span className="text-fuchsia-500">READINESS</span>
+            </h1>
+            <p className="text-[8px] font-bold text-slate-500 tracking-[0.4em] uppercase text-center mb-10">
+              INDEX PLATFORM
+            </p>
           </div>
 
-          <AnimatePresence>
-            {activeTab === 'REGISTER' && (
-              <motion.div 
-                initial={{ height: 0, opacity: 0 }} 
-                animate={{ height: 'auto', opacity: 1 }} 
-                exit={{ height: 0, opacity: 0 }} 
-                className="space-y-4 pt-2 overflow-hidden"
-              >
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="relative group">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
-                       <MapPin size={14} />
+          <div className="flex border-b border-white/10 mb-8 relative" style={{ transform: "translateZ(30px)" }}>
+            <button 
+              type="button"
+              onClick={() => { setActiveTab('LOGIN'); setErrorMessage(''); }} 
+              className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-all duration-300 ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+            >
+              MASUK
+            </button>
+            <button 
+              type="button"
+              onClick={() => { setActiveTab('REGISTER'); setErrorMessage(''); }} 
+              className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-all duration-300 ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+            >
+              DAFTAR BARU
+            </button>
+            <div className={`absolute bottom-0 h-[2px] w-1/2 bg-fuchsia-500 transition-transform duration-300 shadow-[0_0_10px_#d946ef] ${activeTab === 'LOGIN' ? 'translate-x-0' : 'translate-x-full'}`} />
+          </div>
+
+          <form onSubmit={handleAuthenticate} className="space-y-4" style={{ transform: "translateZ(40px)" }}>
+            
+            <div className="relative group">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
+                 <User size={16} />
+              </div>
+              <input 
+                type="text" 
+                placeholder="NAMA PENGGUNA" 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                disabled={status === 'loading' || status === 'success'}
+                className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner" 
+              />
+            </div>
+
+            <div className="relative group">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
+                 <Lock size={16} />
+              </div>
+              <input 
+                type="password" 
+                placeholder="KATA SANDI" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={status === 'loading' || status === 'success'}
+                className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner" 
+              />
+            </div>
+
+            <AnimatePresence>
+              {activeTab === 'REGISTER' && (
+                <motion.div 
+                  initial={{ height: 0, opacity: 0 }} 
+                  animate={{ height: 'auto', opacity: 1 }} 
+                  exit={{ height: 0, opacity: 0 }} 
+                  className="space-y-4 pt-2 overflow-hidden"
+                >
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="relative group">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
+                         <MapPin size={14} />
+                      </div>
+                      <input 
+                        type="text" 
+                        placeholder="ASAL / KOTA" 
+                        value={asal}
+                        onChange={(e) => setAsal(e.target.value)}
+                        disabled={status === 'loading' || status === 'success'}
+                        className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
+                      />
                     </div>
-                    <input 
-                      type="text" 
-                      placeholder="ASAL / KOTA" 
-                      value={asal}
-                      onChange={(e) => setAsal(e.target.value)}
-                      disabled={status === 'loading' || status === 'success'}
-                      className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
-                    />
+
+                    <div className="relative group">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
+                         <Calendar size={14} />
+                      </div>
+                      <input 
+                        type="date" 
+                        value={tanggalLahir}
+                        onChange={(e) => setTanggalLahir(e.target.value)}
+                        disabled={status === 'loading' || status === 'success'}
+                        style={{ colorScheme: 'dark' }}
+                        className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
+                      />
+                    </div>
                   </div>
 
                   <div className="relative group">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
-                       <Calendar size={14} />
+                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
+                       <Fingerprint size={16} />
                     </div>
-                    <input 
-                      type="date" 
-                      value={tanggalLahir}
-                      onChange={(e) => setTanggalLahir(e.target.value)}
+                    <select 
+                      value={className}
+                      onChange={(e) => setClassName(e.target.value)}
                       disabled={status === 'loading' || status === 'success'}
-                      style={{ colorScheme: 'dark' }}
-                      className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-all disabled:opacity-50 shadow-inner uppercase" 
-                    />
+                      className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-slate-300 tracking-widest focus:border-fuchsia-500 outline-none transition-all appearance-none disabled:opacity-50 cursor-pointer uppercase shadow-inner"
+                    >
+                      {AVAILABLE_CLASSES.map(cls => (
+                        <option key={cls} value={cls} className="bg-black text-white">{cls}</option>
+                      ))}
+                    </select>
                   </div>
-                </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-                <div className="relative group">
-                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-                     <Fingerprint size={16} />
-                  </div>
-                  <select 
-                    value={className}
-                    onChange={(e) => setClassName(e.target.value)}
-                    disabled={status === 'loading' || status === 'success'}
-                    className="w-full bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-slate-300 tracking-widest focus:border-fuchsia-500 outline-none transition-all appearance-none disabled:opacity-50 cursor-pointer uppercase shadow-inner"
-                  >
-                    {AVAILABLE_CLASSES.map(cls => (
-                      <option key={cls} value={cls} className="bg-black text-white">{cls}</option>
-                    ))}
-                  </select>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            <AnimatePresence>
+              {status === 'error' && (
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center justify-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase relative z-20">
+                   <AlertTriangle size={14} className="shrink-0" /> {errorMessage}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-          <AnimatePresence>
-            {status === 'error' && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center justify-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase">
-                 <AlertTriangle size={14} className="shrink-0" /> {errorMessage}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <button 
-            type="submit" 
-            disabled={status === 'loading' || status === 'success'}
-            className={`w-full mt-4 py-4 rounded-[1.2rem] font-black text-[10px] tracking-[0.4em] text-white transition-all flex items-center justify-center gap-3 uppercase overflow-hidden relative ${status === 'success' ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.5)]' : 'bg-fuchsia-600 hover:bg-fuchsia-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.5)] disabled:opacity-50 disabled:cursor-not-allowed'}`}
-          >
-             {status === 'loading' && <span className="animate-pulse">MEMVERIFIKASI...</span>}
-             {status === 'success' && <><CheckCircle2 size={14} /> AKSES DIBERIKAN</>}
-             {status !== 'loading' && status !== 'success' && (
-               <>OTENTIKASI <ScanLine size={14} /></>
-             )}
-          </button>
-        </form>
+            <button 
+              type="submit" 
+              disabled={status === 'loading' || status === 'success'}
+              className={`w-full relative z-20 mt-4 py-4 rounded-[1.2rem] font-black text-[10px] tracking-[0.4em] text-white transition-all flex items-center justify-center gap-3 uppercase overflow-hidden ${status === 'success' ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.5)]' : 'bg-fuchsia-600 hover:bg-fuchsia-500 hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(217,70,239,0.5)] disabled:opacity-50 disabled:cursor-not-allowed'}`}
+            >
+               {status === 'loading' && <span className="animate-pulse">MEMVERIFIKASI...</span>}
+               {status === 'success' && <><CheckCircle2 size={14} /> AKSES DIBERIKAN</>}
+               {status !== 'loading' && status !== 'success' && (
+                 <>OTENTIKASI <ScanLine size={14} /></>
+               )}
+            </button>
+          </form>
+        </motion.div>
       </motion.div>
 
       <style dangerouslySetInnerHTML={{ __html: `
@@ -418,8 +400,8 @@ export default function CyberLoginGateway() {
         }
         input, select { caret-color: #d946ef; }
         ::selection { background: #d946ef; color: white; }
-        .perspective-\\[1200px\\] {
-          perspective: 1200px;
+        .perspective-\\[1500px\\] {
+          perspective: 1500px;
         }
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
