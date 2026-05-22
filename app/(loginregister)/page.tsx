@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, Calendar, CheckCircle2 } from 'lucide-react'
@@ -7,6 +7,110 @@ import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, 
 // --- ASSET GALAXY HD ---
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
+
+// --- 1. KOMPONEN PERCIKAN (SPARKS) & PARTIKEL UNGU SEPERTI GAMBAR 2 ---
+const CyberSparks = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let particles: any[] = [];
+    let sparks: any[] = [];
+    let animationFrameId: number;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Partikel latar belakang (tetap ada / melayang)
+    for (let i = 0; i < 40; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 2 + 1,
+      });
+    }
+
+    // Fungsi memunculkan percikan saat di klik/sentuh
+    const createSparks = (x: number, y: number) => {
+      for (let i = 0; i < 15; i++) {
+        sparks.push({
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 5,
+          vy: (Math.random() - 0.5) * 5,
+          life: 1,
+          size: Math.random() * 3 + 1,
+        });
+      }
+    };
+
+    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      createSparks(clientX, clientY);
+    };
+
+    window.addEventListener('mousedown', handlePointerDown);
+    window.addEventListener('touchstart', handlePointerDown);
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Gambar Partikel Bawaan (Tetap ada di background)
+      ctx.fillStyle = 'rgba(217, 70, 239, 0.4)'; // Warna fuchsia-500
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = '#d946ef';
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Gambar Percikan (Sparks) saat diklik
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const s = sparks[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life -= 0.02; // Kecepatan memudar
+        
+        ctx.fillStyle = `rgba(217, 70, 239, ${s.life})`;
+        ctx.beginPath();
+        // Membuat bentuk mirip bintang/diamond kecil
+        ctx.arc(s.x, s.y, s.size * s.life, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (s.life <= 0) sparks.splice(i, 1);
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('mousedown', handlePointerDown);
+      window.removeEventListener('touchstart', handlePointerDown);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="fixed inset-0 z-[5] pointer-events-none mix-blend-screen" />;
+};
 
 // --- BACKGROUND BERSIH ELEGAN & STABIL ---
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
@@ -36,7 +140,6 @@ export default function CyberLoginGateway() {
   const [bgIdx, setBgIdx] = useState(0);
   const [activeTab, setActiveTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   
-  // State Form
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [asal, setAsal] = useState('');
@@ -47,13 +150,14 @@ export default function CyberLoginGateway() {
   const [errorMessage, setErrorMessage] = useState('');
 
   // ====================================================================
-  // LOGIKA 3D PARALLAX TILT (KARTU BERGOYANG MENGIKUTI KURSOR)
+  // LOGIKA 3D PARALLAX TILT & GOYANG (KARTU BERGOYANG MENGIKUTI KURSOR/HP)
   // ====================================================================
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [12, -12]), { stiffness: 150, damping: 20 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), { stiffness: 150, damping: 20 });
+  // Menambahkan efek stiffness yang lebih rendah agar lebih "bergoyang" dan luwes
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { stiffness: 100, damping: 15 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 100, damping: 15 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -79,12 +183,8 @@ export default function CyberLoginGateway() {
     return () => clearInterval(interval);
   }, []);
 
-  // ====================================================================
-  // FUNGSI LOGIN / REGISTER KE BACKEND VERCEL
-  // ====================================================================
   const handleAuthenticate = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!username || !password) {
       setErrorMessage("Nama pengguna dan kata sandi wajib diisi.");
       setStatus('error');
@@ -136,9 +236,11 @@ export default function CyberLoginGateway() {
   return (
     <div className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]">
       <PersistentUniverse bgIdx={bgIdx} />
+      
+      {/* 2. MEMANGGIL KOMPONEN PERCIKAN (SPARKS) DI SINI */}
+      <CyberSparks />
 
-      {/* Ornamen Teks Kiri Bawah (Diperbarui) */}
-      <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4">
+      <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4 pointer-events-none">
         <div className="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center bg-black/80 backdrop-blur-md">
            <span className="font-bold text-white text-xs">N</span>
         </div>
@@ -148,17 +250,21 @@ export default function CyberLoginGateway() {
         </div>
       </div>
 
-      {/* Ornamen Teks Kanan Bawah */}
-      <div className="absolute bottom-8 right-8 text-right z-10 hidden md:block">
+      <div className="absolute bottom-8 right-8 text-right z-10 hidden md:block pointer-events-none">
         <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase">CLIENT IP: DETECTED</p>
         <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CONNECTION: SECURE (AES 256)</p>
       </div>
 
-      {/* KARTU LOGIN UTAMA - 3D PARALLAX EFFECT */}
+      {/* KARTU LOGIN UTAMA - EFEK GOYANG DAN FLOATING DITAMBAHKAN DI SINI */}
       <motion.div 
         initial={{ opacity: 0, y: 30 }} 
-        animate={{ opacity: 1, y: 0 }} 
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        animate={{ opacity: 1, y: [-5, 5, -5] }} // Efek melayang perlahan
+        transition={{ 
+          opacity: { duration: 0.8, ease: "easeOut" },
+          y: { duration: 6, repeat: Infinity, ease: "easeInOut" } 
+        }}
+        whileHover={{ scale: 1.02 }} // Membesar sedikit & bergoyang saat kursor masuk
+        whileTap={{ scale: 0.98 }} // Mengecil sedikit & merespons saat disentuh/klik
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         className={`relative z-10 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4 bg-[#050505]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] my-8 transition-all duration-500`}
       >
@@ -233,7 +339,6 @@ export default function CyberLoginGateway() {
                 exit={{ height: 0, opacity: 0 }} 
                 className="space-y-4 pt-2 overflow-hidden"
               >
-                {/* --- GRID KOLOM (SAMPING-SAMPINGAN) --- */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="relative group">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10">
@@ -264,7 +369,6 @@ export default function CyberLoginGateway() {
                   </div>
                 </div>
 
-                {/* Dropdown Kelas Full Width di bawahnya */}
                 <div className="relative group">
                   <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
                      <Fingerprint size={16} />
