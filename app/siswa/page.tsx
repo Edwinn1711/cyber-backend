@@ -248,7 +248,7 @@ export default function StudentPortal() {
           <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-2 text-slate-400 hover:text-fuchsia-400 border border-white/5 rounded-lg transition-all">{isSidebarCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}</button>
         </div>
         <nav className="flex-1 px-4 py-8 space-y-3">
-          {[ { id: 'dashboard', label: 'BERANDA', icon: LayoutGrid }, { id: 'assessment', label: 'ASSESSMENT', icon: Target }, { id: 'reports', label: 'REPORT', icon: FileText } ].map((item) => (
+          {[ { id: 'dashboard', label: 'DASHBOARD', icon: LayoutGrid }, { id: 'assessment', label: 'ASSESSMENT', icon: Target }, { id: 'reports', label: 'REPORT', icon: FileText } ].map((item) => (
             <button key={item.id} onClick={() => setView(item.id)} className={`w-full flex items-center p-3.5 rounded-2xl transition-all gap-4 ${view === item.id ? 'bg-fuchsia-600/15 text-fuchsia-400 border border-fuchsia-500/30 shadow-[0_0_15px_rgba(217,70,239,0.1)]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}>
               <item.icon size={18} /> {!isSidebarCollapsed && <span className="font-bold text-[10px] tracking-widest uppercase">{item.label}</span>}
             </button>
