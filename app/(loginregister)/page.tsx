@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, MapPin, Calendar, CheckCircle2 } from 'lucide-react'
+import { 
+  ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, 
+  MapPin, Calendar, CheckCircle2, School, Network, Server 
+} from 'lucide-react'
 
-const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. EFEK KLIK PARTIKEL MURNI ---
+// --- 1. EFEK KLIK PARTIKEL (TEMA BIRU/CYAN) ---
 const ParticleBurstClickEffect = () => {
   const [particles, setParticles] = useState<any[]>([]);
   
@@ -21,11 +23,10 @@ const ParticleBurstClickEffect = () => {
         x: clientX, 
         y: clientY, 
         angle: (Math.PI * 2 / 8) * i, 
-        velocity: Math.random() * 50 + 20
+        velocity: Math.random() * 40 + 20
       }));
       
       setParticles(prev => [...prev, ...newParticles]);
-      
       setTimeout(() => {
         setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)));
       }, 800);
@@ -54,8 +55,8 @@ const ParticleBurstClickEffect = () => {
               y: p.y + Math.sin(p.angle) * p.velocity 
             }} 
             transition={{ duration: 0.8 }} 
-            className="absolute rounded-full bg-fuchsia-400 shadow-[0_0_15px_#d946ef]" 
-            style={{ width: '4px', height: '4px', top: '-2px', left: '-2px' }} 
+            className="absolute rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]" 
+            style={{ width: '6px', height: '6px', top: '-3px', left: '-3px' }} 
           />
         ))}
       </AnimatePresence>
@@ -63,32 +64,34 @@ const ParticleBurstClickEffect = () => {
   );
 };
 
-// --- 2. LATAR BELAKANG ---
-const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
+// --- 2. BACKGROUND SEKOLAH DIGITAL (CERAH & BERSIH) ---
+const AcademicTechBackground = React.memo(() => {
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-black">
-      <AnimatePresence mode="wait">
-        <motion.img 
-          key={bgIdx} 
-          src={CYBER_ASSETS[bgIdx]} 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 0.4 }} 
-          exit={{ opacity: 0 }} 
-          transition={{ duration: 2, ease: "easeInOut" }} 
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
-        />
-      </AnimatePresence>
-      <div className="absolute inset-0 bg-black/60 pointer-events-none" />
-      <div className="absolute inset-0 bg-grid-static opacity-[0.03] pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#000000_100%)] pointer-events-none" />
+    <div className="fixed inset-0 z-0 overflow-hidden bg-slate-50">
+      {/* Efek Cahaya / Blob Biru Terang */}
+      <motion.div 
+        animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }} 
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vh] bg-blue-400/20 blur-[120px] rounded-full pointer-events-none" 
+      />
+      <motion.div 
+        animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }} 
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vh] bg-cyan-400/20 blur-[140px] rounded-full pointer-events-none" 
+      />
+      
+      {/* Grid Infrastruktur Digital (Garis tipis abu-abu) */}
+      <div className="absolute inset-0 bg-grid-light opacity-[0.4] pointer-events-none" />
+      
+      {/* Gradien pemudar bawah agar tidak terlalu ramai */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-50/50 to-slate-100 pointer-events-none" />
     </div>
   );
 });
-PersistentUniverse.displayName = 'PersistentUniverse';
+AcademicTechBackground.displayName = 'AcademicTechBackground';
 
 export default function CyberLoginGateway() {
   const router = useRouter();
-  const [bgIdx, setBgIdx] = useState(0);
   const [activeTab, setActiveTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   
   const [username, setUsername] = useState('');
@@ -101,44 +104,36 @@ export default function CyberLoginGateway() {
   const [errorMessage, setErrorMessage] = useState('');
 
   // ====================================================================
-  // LOGIKA 3D HOVER - INSTAN 0 DELAY
+  // LOGIKA 3D HOVER (TETAP ADA AGAR KEREN)
   // ====================================================================
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Fisika super responsif agar langsung mengikuti kursor (Stiffness tinggi, damping ideal)
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [20, -20]), { stiffness: 1000, damping: 40 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-20, 20]), { stiffness: 1000, damping: 40 });
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { stiffness: 800, damping: 40 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 800, damping: 40 });
 
   useEffect(() => {
-    // Memakai "mousemove" agar mendeteksi saat kursor diarahkan (hover) tanpa perlu diklik
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set((e.clientX / window.innerWidth) - 0.5);
       mouseY.set((e.clientY / window.innerHeight) - 0.5);
     };
-
-    // Deteksi sentuhan tangan di HP
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
         mouseX.set((e.touches[0].clientX / window.innerWidth) - 0.5);
         mouseY.set((e.touches[0].clientY / window.innerHeight) - 0.5);
       }
     };
-
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("touchmove", handleTouchMove, { passive: true });
-    
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouchMove);
     };
   }, [mouseX, mouseY]);
 
-  useEffect(() => {
-    const interval = setInterval(() => setBgIdx(p => (p + 1) % CYBER_ASSETS.length), 5000);
-    return () => clearInterval(interval);
-  }, []);
-
+  // ====================================================================
+  // FUNGSI OTENTIKASI
+  // ====================================================================
   const handleAuthenticate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username || !password) {
@@ -189,95 +184,100 @@ export default function CyberLoginGateway() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]">
-      <PersistentUniverse bgIdx={bgIdx} />
+    <div className="flex items-center justify-center min-h-screen w-full bg-slate-50 text-slate-800 overflow-hidden font-sans selection:bg-blue-500/30 relative perspective-[1200px]">
       
-      {/* PARTIKEL EFEK KLIK (Dari Dashboard Siswa) */}
+      {/* KOMPONEN BACKGROUND TERANG */}
+      <AcademicTechBackground />
+      
+      {/* EFEK KLIK */}
       <ParticleBurstClickEffect />
 
+      {/* ORNAMEN KIRI BAWAH (TEMA AKADEMIK) */}
       <div className="absolute bottom-8 left-8 z-10 hidden md:flex items-center gap-4 pointer-events-none">
-        <div className="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center bg-black/80 backdrop-blur-md">
-           <span className="font-bold text-white text-xs">N</span>
+        <div className="w-12 h-12 bg-white border border-slate-200 rounded-2xl flex items-center justify-center shadow-lg">
+           <School className="text-blue-600" size={24} />
         </div>
         <div>
-          <p className="text-[9px] font-black text-fuchsia-500 tracking-[0.4em] uppercase">KONEKSI AMAN AKTIF</p>
-          <p className="text-[10px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CYBER READINESS INDEX</p>
+          <p className="text-[10px] font-black text-blue-600 tracking-[0.3em] uppercase">INFRASTRUKTUR DIGITAL SEKOLAH</p>
+          <p className="text-[11px] font-bold text-slate-500 tracking-[0.1em] mt-1">Portal Evaluasi Ketahanan Siber</p>
         </div>
       </div>
 
+      {/* ORNAMEN KANAN BAWAH (STATUS KONEKSI) */}
       <div className="absolute bottom-8 right-8 text-right z-10 hidden md:block pointer-events-none">
-        <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase">CLIENT IP: DETECTED</p>
-        <p className="text-[9px] font-bold text-slate-500 tracking-[0.3em] uppercase mt-1">CONNECTION: SECURE (AES 256)</p>
+        <p className="text-[10px] font-bold text-slate-500 tracking-[0.2em] uppercase flex items-center justify-end gap-2"><Network size={14} className="text-emerald-500"/> KONEKSI JARINGAN: AMAN</p>
+        <p className="text-[9px] font-bold text-slate-400 tracking-[0.3em] uppercase mt-1">ENKRIPSI DATA: AES-256 GCM</p>
       </div>
 
-      {/* 
-        KOTAK LOGIN UTAMA 
-        Perbaikan: "transition-all" dihapus agar CSS tidak menahan (delay) gerakan 3D dari kursor!
-      */}
+      {/* KOTAK LOGIN (TEMA PUTIH BERSIH) */}
       <motion.div
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className={`relative z-30 w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} mx-4 bg-[#050505]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)]`}
+        className={`relative z-30 w-full ${activeTab === 'REGISTER' ? 'max-w-[500px]' : 'max-w-md'} mx-4 bg-white/80 backdrop-blur-2xl border border-white rounded-[2.5rem] p-10 lg:p-12 shadow-[0_20px_60px_rgba(59,130,246,0.15)]`}
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/10 blur-[100px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
 
-        <div className="mx-auto w-12 h-12 bg-transparent border border-fuchsia-500/50 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(217,70,239,0.15)]" style={{ transform: "translateZ(60px)" }}>
-          <ShieldCheck className="text-fuchsia-400" size={24} />
+        {/* Logo Icon */}
+        <div className="mx-auto w-16 h-16 bg-blue-50 border border-blue-100 rounded-3xl flex items-center justify-center mb-6 shadow-inner" style={{ transform: "translateZ(60px)" }}>
+          <ShieldCheck className="text-blue-600" size={32} />
         </div>
 
-        <div style={{ transform: "translateZ(50px)" }}>
-          <h1 className="text-3xl font-black text-center text-white tracking-widest uppercase mb-2">
-            CYBER<span className="text-fuchsia-500">READINESS</span>
+        {/* Judul Teks */}
+        <div style={{ transform: "translateZ(50px)" }} className="mb-8">
+          <h1 className="text-2xl lg:text-3xl font-black text-center text-slate-800 tracking-tight leading-tight mb-2">
+            CYBER<span className="text-blue-600">READINESS</span> INDEX
           </h1>
-          <p className="text-[8px] font-bold text-slate-500 tracking-[0.4em] uppercase text-center mb-10">
-            INDEX PLATFORM
+          <p className="text-[11px] font-bold text-slate-500 text-center leading-relaxed px-4">
+            Mengkaji Tingkat Ketahanan Siber Lingkungan Sekolah Melalui Infrastruktur Digital.
           </p>
         </div>
 
-        <div className="flex border-b border-white/10 mb-8 relative" style={{ transform: "translateZ(30px)" }}>
+        {/* Tab Switcher (Masuk / Daftar) */}
+        <div className="flex border-b border-slate-200 mb-8 relative" style={{ transform: "translateZ(30px)" }}>
           <button 
             type="button"
             onClick={() => { setActiveTab('LOGIN'); setErrorMessage(''); }} 
-            className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-colors ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+            className={`flex-1 pb-4 text-[11px] font-black tracking-[0.2em] uppercase transition-colors ${activeTab === 'LOGIN' ? 'text-blue-600' : 'text-slate-400 hover:text-slate-600'}`}
           >
-            MASUK
+            MASUK PORTAL
           </button>
           <button 
             type="button"
             onClick={() => { setActiveTab('REGISTER'); setErrorMessage(''); }} 
-            className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-colors ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+            className={`flex-1 pb-4 text-[11px] font-black tracking-[0.2em] uppercase transition-colors ${activeTab === 'REGISTER' ? 'text-blue-600' : 'text-slate-400 hover:text-slate-600'}`}
           >
             DAFTAR BARU
           </button>
-          <div className={`absolute bottom-0 h-[2px] w-1/2 bg-fuchsia-500 transition-transform shadow-[0_0_10px_#d946ef] ${activeTab === 'LOGIN' ? 'translate-x-0' : 'translate-x-full'}`} />
+          <div className={`absolute bottom-0 h-[3px] w-1/2 bg-blue-600 rounded-t-md transition-transform duration-300 ${activeTab === 'LOGIN' ? 'translate-x-0' : 'translate-x-full'}`} />
         </div>
 
-        <form onSubmit={handleAuthenticate} className="space-y-4" style={{ transform: "translateZ(40px)" }}>
+        {/* Form Inputs */}
+        <form onSubmit={handleAuthenticate} className="space-y-5" style={{ transform: "translateZ(40px)" }}>
           
           <div className="relative group">
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-               <User size={16} />
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors z-10 pointer-events-none">
+               <User size={18} />
             </div>
             <input 
               type="text" 
-              placeholder="NAMA PENGGUNA" 
+              placeholder="Nama Pengguna" 
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={status === 'loading' || status === 'success'}
-              className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner" 
+              className="w-full relative z-20 bg-slate-50 border border-slate-200 rounded-[1.2rem] py-4 pl-14 pr-4 text-[13px] font-bold text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 outline-none transition-all disabled:opacity-50" 
             />
           </div>
 
           <div className="relative group">
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-               <Lock size={16} />
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors z-10 pointer-events-none">
+               <Lock size={18} />
             </div>
             <input 
               type="password" 
-              placeholder="KATA SANDI" 
+              placeholder="Kata Sandi" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={status === 'loading' || status === 'success'}
-              className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner" 
+              className="w-full relative z-20 bg-slate-50 border border-slate-200 rounded-[1.2rem] py-4 pl-14 pr-4 text-[13px] font-bold text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 outline-none transition-all disabled:opacity-50" 
             />
           </div>
 
@@ -287,50 +287,49 @@ export default function CyberLoginGateway() {
                 initial={{ height: 0, opacity: 0 }} 
                 animate={{ height: 'auto', opacity: 1 }} 
                 exit={{ height: 0, opacity: 0 }} 
-                className="space-y-4 pt-2 overflow-hidden"
+                className="space-y-5 pt-2 overflow-hidden"
               >
                 <div className="grid grid-cols-2 gap-4">
                   <div className="relative group">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-                       <MapPin size={14} />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors z-10 pointer-events-none">
+                       <MapPin size={16} />
                     </div>
                     <input 
                       type="text" 
-                      placeholder="ASAL / KOTA" 
+                      placeholder="Asal / Kota" 
                       value={asal}
                       onChange={(e) => setAsal(e.target.value)}
                       disabled={status === 'loading' || status === 'success'}
-                      className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner uppercase" 
+                      className="w-full relative z-20 bg-slate-50 border border-slate-200 rounded-[1.2rem] py-4 pl-11 pr-3 text-[12px] font-bold text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 outline-none transition-all disabled:opacity-50 uppercase" 
                     />
                   </div>
 
                   <div className="relative group">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-                       <Calendar size={14} />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors z-10 pointer-events-none">
+                       <Calendar size={16} />
                     </div>
                     <input 
                       type="date" 
                       value={tanggalLahir}
                       onChange={(e) => setTanggalLahir(e.target.value)}
                       disabled={status === 'loading' || status === 'success'}
-                      style={{ colorScheme: 'dark' }}
-                      className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner uppercase" 
+                      className="w-full relative z-20 bg-slate-50 border border-slate-200 rounded-[1.2rem] py-4 pl-11 pr-3 text-[12px] font-bold text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 outline-none transition-all disabled:opacity-50 uppercase" 
                     />
                   </div>
                 </div>
 
                 <div className="relative group">
-                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-                     <Fingerprint size={16} />
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors z-10 pointer-events-none">
+                     <Server size={18} />
                   </div>
                   <select 
                     value={className}
                     onChange={(e) => setClassName(e.target.value)}
                     disabled={status === 'loading' || status === 'success'}
-                    className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-slate-300 tracking-widest focus:border-fuchsia-500 outline-none transition-colors appearance-none disabled:opacity-50 cursor-pointer uppercase shadow-inner"
+                    className="w-full relative z-20 bg-slate-50 border border-slate-200 rounded-[1.2rem] py-4 pl-14 pr-4 text-[13px] font-bold text-slate-800 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 outline-none transition-all appearance-none cursor-pointer uppercase"
                   >
                     {AVAILABLE_CLASSES.map(cls => (
-                      <option key={cls} value={cls} className="bg-black text-white">{cls}</option>
+                      <option key={cls} value={cls}>{cls}</option>
                     ))}
                   </select>
                 </div>
@@ -340,8 +339,8 @@ export default function CyberLoginGateway() {
 
           <AnimatePresence>
             {status === 'error' && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center justify-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase relative z-20">
-                 <AlertTriangle size={14} className="shrink-0" /> {errorMessage}
+              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center justify-center gap-3 p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 text-[11px] font-bold tracking-widest uppercase relative z-20">
+                 <AlertTriangle size={16} className="shrink-0" /> {errorMessage}
               </motion.div>
             )}
           </AnimatePresence>
@@ -349,40 +348,48 @@ export default function CyberLoginGateway() {
           <button 
             type="submit" 
             disabled={status === 'loading' || status === 'success'}
-            className={`w-full relative z-20 mt-4 py-4 rounded-[1.2rem] font-black text-[10px] tracking-[0.4em] text-white transition-colors flex items-center justify-center gap-3 uppercase overflow-hidden ${status === 'success' ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.5)]' : 'bg-fuchsia-600 hover:bg-fuchsia-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.5)] disabled:opacity-50 disabled:cursor-not-allowed'}`}
+            className={`w-full relative z-20 mt-6 py-5 rounded-[1.2rem] font-black text-[11px] tracking-[0.2em] text-white transition-all flex items-center justify-center gap-3 uppercase overflow-hidden shadow-lg ${status === 'success' ? 'bg-emerald-500 shadow-emerald-500/40' : 'bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none'}`}
           >
-             {status === 'loading' && <span className="animate-pulse">MEMVERIFIKASI...</span>}
-             {status === 'success' && <><CheckCircle2 size={14} /> AKSES DIBERIKAN</>}
+             {status === 'loading' && <span className="animate-pulse">Memverifikasi Data...</span>}
+             {status === 'success' && <><CheckCircle2 size={18} /> Akses Diberikan</>}
              {status !== 'loading' && status !== 'success' && (
-               <>OTENTIKASI <ScanLine size={14} /></>
+               <>Login Ke Sistem <ScanLine size={16} /></>
              )}
           </button>
         </form>
       </motion.div>
 
       <style dangerouslySetInnerHTML={{ __html: `
-        .bg-grid-static {
-          background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
-                            linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-          background-size: 60px 60px;
+        /* CSS Untuk background jaring tipis khas institusi */
+        .bg-grid-light {
+          background-image: 
+            linear-gradient(to right, rgba(148, 163, 184, 0.15) 1px, transparent 1px), 
+            linear-gradient(to bottom, rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+          background-size: 40px 40px;
         }
-        input, select { caret-color: #d946ef; }
-        ::selection { background: #d946ef; color: white; }
+        
+        /* Pewarnaan seleksi teks */
+        ::selection { background: #3b82f6; color: white; }
+        
         .perspective-\\[1200px\\] {
           perspective: 1200px;
         }
+
+        /* Styling spesifik untuk autofill di mode terang */
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
         input:-webkit-autofill:active{
-            -webkit-box-shadow: 0 0 0 30px #050505 inset !important;
-            -webkit-text-fill-color: white !important;
+            -webkit-box-shadow: 0 0 0 30px #f8fafc inset !important;
+            -webkit-text-fill-color: #1e293b !important;
             transition: background-color 5000s ease-in-out 0s;
         }
+
+        /* Kursor kalender agar warna pas */
         input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
             opacity: 0.5;
             cursor: pointer;
+            filter: none;
         }
         input[type="date"]::-webkit-calendar-picker-indicator:hover {
             opacity: 0.8;
