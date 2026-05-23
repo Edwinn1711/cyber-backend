@@ -355,7 +355,7 @@ export default function DashboardGuruZenith() {
         </main>
       </div>
 
-      {/* --- PROFILE MODAL (INSTRUCTOR DOSSIER) --- */}
+      {/* --- PROFILE MODAL (INSTRUCTOR DOSSIER - CLEANED) --- */}
       <AnimatePresence>
         {profileModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/50 backdrop-blur-xl">
@@ -363,14 +363,14 @@ export default function DashboardGuruZenith() {
                {/* Gradient Top Bar */}
                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-400 via-fuchsia-500 to-indigo-500" />
                
-               {/* Header */}
+               {/* Header - Changed to personal data focus */}
                <div className="flex justify-between items-start mb-8 relative z-10">
                   <div className="flex items-center gap-6">
-                     <div className="w-16 h-16 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-[1.2rem] flex items-center justify-center text-white shadow-2xl border border-white/10"><ShieldCheck size={32} /></div>
+                     <div className="w-16 h-16 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-[1.2rem] flex items-center justify-center text-white shadow-2xl border border-white/10"><User size={32} /></div>
                      <div>
                        <p className="text-[9px] font-black text-fuchsia-400 tracking-[0.4em] uppercase mb-1">INSTRUCTOR DOSSIER</p>
                        <h2 className="text-2xl font-black text-white tracking-tighter uppercase">{user.username}</h2>
-                       <p className="text-[9px] font-black text-emerald-400 uppercase mt-1 tracking-[0.2em]">CLEARANCE: LEVEL 5 (ADMIN)</p>
+                       <p className="text-[9px] font-black text-slate-400 uppercase mt-1 tracking-[0.2em]">ROLE: SYSTEM INSTRUCTOR</p>
                      </div>
                   </div>
                   <button onClick={() => setProfileModal(false)} className="p-2 bg-white/5 rounded-full text-slate-500 hover:bg-white/10 transition-all border border-white/5"><X size={16} /></button>
@@ -398,18 +398,6 @@ export default function DashboardGuruZenith() {
                  </div>
                </div>
                
-               {/* Security Details */}
-               <div className="mt-6 p-5 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl relative z-10">
-                 <div className="flex items-center gap-3 mb-2">
-                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
-                   <p className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">SECURE CLOUD CONNECTION ACTIVE</p>
-                 </div>
-                 <p className="text-[8px] font-mono text-slate-400 tracking-widest leading-relaxed mt-2 opacity-80">
-                   NETWORK: CYBER READINESS CLOUD GATEWAY<br/>
-                   ENCRYPTION: MIL-SPEC AES-256 GCM<br/>
-                   SESSION HASH: {Math.random().toString(36).substring(2, 12).toUpperCase()}
-                 </p>
-               </div>
             </motion.div>
           </motion.div>
         )}
