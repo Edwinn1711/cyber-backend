@@ -105,7 +105,7 @@ export default function DashboardGuruZenith() {
   const [appFeedbackModal, setAppFeedbackModal] = useState(false);
   const [appFeedbackForm, setAppFeedbackForm] = useState({ category: 'AI ENHANCEMENT', message: '' });
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
-  const [profileModal, setProfileModal] = useState(false); // NEW STATE FOR PROFILE MODAL
+  const [profileModal, setProfileModal] = useState(false); 
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -358,8 +358,8 @@ export default function DashboardGuruZenith() {
       {/* --- PROFILE MODAL (INSTRUCTOR DOSSIER) --- */}
       <AnimatePresence>
         {profileModal && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/95 backdrop-blur-[60px]">
-            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 10 }} className="relative w-full max-w-2xl bg-[#0a0a0f]/95 border border-white/10 rounded-[3rem] p-10 shadow-2xl flex flex-col overflow-hidden">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/50 backdrop-blur-xl">
+            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 10 }} className="relative w-full max-w-2xl bg-[#0a0a0f]/90 border border-white/10 rounded-[3rem] p-10 shadow-2xl flex flex-col overflow-hidden">
                {/* Gradient Top Bar */}
                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-400 via-fuchsia-500 to-indigo-500" />
                
@@ -418,9 +418,9 @@ export default function DashboardGuruZenith() {
       {/* --- APP FEEDBACK MODAL --- */}
       <AnimatePresence>
         {appFeedbackModal && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-[#020108]/96 backdrop-blur-[50px]">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/50 backdrop-blur-xl">
              <div className="absolute w-[600px] h-[600px] bg-fuchsia-600/10 rounded-full blur-[140px] -z-10 animate-pulse" />
-             <motion.div initial={{ scale: 0.9, y: 40, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.9, y: 20, opacity: 0 }} transition={{ type: 'spring', damping: 25 }} className="w-full max-w-2xl bg-[#0a0a0f]/80 border border-white/10 rounded-[3rem] p-10 shadow-[0_0_80px_rgba(217,70,239,0.2)] relative overflow-hidden backdrop-blur-[100px]">
+             <motion.div initial={{ scale: 0.9, y: 40, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.9, y: 20, opacity: 0 }} transition={{ type: 'spring', damping: 25 }} className="w-full max-w-2xl bg-[#0a0a0f]/90 border border-white/10 rounded-[3rem] p-10 shadow-[0_0_80px_rgba(217,70,239,0.2)] relative overflow-hidden backdrop-blur-[100px]">
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-indigo-600" />
                 <div className="flex justify-between items-start mb-12 relative z-10">
                    <div className="flex items-center gap-6">
@@ -454,11 +454,11 @@ export default function DashboardGuruZenith() {
         )}
       </AnimatePresence>
 
-      {/* --- DOSSIER MODAL (IMPROVED DETAILS) --- */}
+      {/* --- DOSSIER MODAL (STUDENT DOSSIER) --- */}
       <AnimatePresence>
         {feedbackModal && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/95 backdrop-blur-[60px]">
-            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 10 }} className="relative w-full max-w-3xl bg-[#0a0a0f]/95 border border-white/10 rounded-3xl p-8 shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/50 backdrop-blur-xl">
+            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 10 }} className="relative w-full max-w-3xl bg-[#0a0a0f]/90 border border-white/10 rounded-3xl p-8 shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-fuchsia-400 via-violet-500 to-blue-500" />
                <div className="flex justify-between items-start mb-8 shrink-0 relative z-10">
                   <div className="flex items-center gap-6">
