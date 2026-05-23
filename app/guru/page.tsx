@@ -54,7 +54,7 @@ const ParticleBurstClickEffect = () => {
   );
 };
 
-// --- 2. BACKGROUND ENGINE (LEBIH CEPAT & JELAS) ---
+// --- 2. BACKGROUND ENGINE ---
 const CosmicEngine = React.memo(({ bgIdx }: { bgIdx: number }) => {
   const [stars, setStars] = useState<any[]>([]);
   useEffect(() => {
@@ -62,14 +62,9 @@ const CosmicEngine = React.memo(({ bgIdx }: { bgIdx: number }) => {
   }, []);
   return (
     <div className="fixed inset-0 z-[0] pointer-events-none overflow-hidden bg-black">
-      {/* Warna Glow Dasar */}
       <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vh] bg-fuchsia-600/20 blur-[120px] rounded-full animate-pulse" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vh] bg-indigo-600/20 blur-[120px] rounded-full" />
-      
-      {/* Grid Matrix */}
       <div className="absolute inset-0 bg-grid-hologram opacity-[0.08]" />
-      
-      {/* Transisi Gambar (Opacity dinaikkan, durasi dipercepat) */}
       <AnimatePresence mode="wait">
         <motion.img 
           key={bgIdx} 
@@ -81,13 +76,9 @@ const CosmicEngine = React.memo(({ bgIdx }: { bgIdx: number }) => {
           className="absolute inset-0 w-full h-full object-cover mix-blend-screen" 
         />
       </AnimatePresence>
-      
-      {/* Bintang-bintang kecil */}
       {stars.map((s) => (
         <motion.div key={s.id} animate={{ opacity: [0.1, 0.8, 0.1], scale: [1, 1.5, 1] }} transition={{ duration: s.duration, repeat: Infinity }} className="absolute bg-white rounded-full shadow-[0_0_8px_white]" style={{ left: `${s.x}%`, top: `${s.y}%`, width: s.size, height: s.size }} />
       ))}
-      
-      {/* Overlay Gelap di bawah agar teks tetap terbaca */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#020108]/95" />
     </div>
   );
@@ -187,7 +178,6 @@ export default function DashboardGuruZenith() {
     const saved = localStorage.getItem('user');
     if (saved) setUser(JSON.parse(saved));
     fetchData();
-    // Dipercepat menjadi 4000ms (4 detik) agar terasa hidup
     const interval = setInterval(() => setBgIdx(p => (p + 1) % CYBER_ASSETS.length), 4000);
     return () => clearInterval(interval);
   }, []);
@@ -245,35 +235,35 @@ export default function DashboardGuruZenith() {
   const totalAudits = useMemo(() => reports.reduce((acc, curr) => acc + curr.testCount, 0), [reports]);
 
   return (
-    <div className="flex h-screen w-full bg-[#020108] text-slate-200 overflow-hidden font-sans text-sm selection:bg-fuchsia-500/30">
+    <div className="flex h-screen w-full bg-[#020108] text-slate-200 overflow-hidden font-sans text-xs selection:bg-fuchsia-500/30">
       <CosmicEngine bgIdx={bgIdx} />
       <ParticleBurstClickEffect />
 
       {/* --- SIDEBAR --- */}
-      <motion.aside animate={{ width: isSidebarCollapsed ? 80 : 240 }} className="h-screen bg-[#05050A]/80 backdrop-blur-3xl border-r border-white/10 flex flex-col z-[100] shadow-[15px_0_40px_rgba(0,0,0,0.8)] transition-all duration-500">
-        <div className="h-20 px-6 flex items-center justify-between border-b border-white/5">
-          {!isSidebarCollapsed && <div className="flex items-center gap-3"><div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.3)]"><ShieldCheck size={16} className="text-white" /></div><span className="font-black text-white uppercase text-[10px] tracking-widest">CENTRAL COMMS</span></div>}
-          <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-2 bg-white/5 hover:bg-fuchsia-500/20 text-slate-400 hover:text-fuchsia-400 rounded-lg mx-auto transition-all">
-             {isSidebarCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+      <motion.aside animate={{ width: isSidebarCollapsed ? 70 : 220 }} className="h-screen bg-[#05050A]/80 backdrop-blur-3xl border-r border-white/10 flex flex-col z-[100] shadow-[15px_0_40px_rgba(0,0,0,0.8)] transition-all duration-500">
+        <div className="h-16 px-5 flex items-center justify-between border-b border-white/5">
+          {!isSidebarCollapsed && <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-md bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.3)]"><ShieldCheck size={14} className="text-white" /></div><span className="font-black text-white uppercase text-[8px] tracking-widest">CENTRAL COMMS</span></div>}
+          <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-1.5 bg-white/5 hover:bg-fuchsia-500/20 text-slate-400 hover:text-fuchsia-400 rounded-md mx-auto transition-all">
+             {isSidebarCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
           </button>
         </div>
-        <nav className="flex-1 px-4 py-8 space-y-4">
-          <button onClick={() => setView('dashboard')} className={`w-full flex items-center p-3.5 rounded-xl transition-all gap-4 ${view === 'dashboard' ? 'bg-fuchsia-600/10 text-fuchsia-400 border border-fuchsia-500/20 shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}><Activity size={18} />{!isSidebarCollapsed && <span className="font-black text-[10px] tracking-widest uppercase">TACTICAL VIEW</span>}</button>
-          <button onClick={() => setAppFeedbackModal(true)} className="w-full flex items-center p-3.5 rounded-xl text-slate-500 hover:text-fuchsia-400 hover:bg-fuchsia-600/10 transition-all gap-4 group"><Lightbulb size={18} className="group-hover:animate-pulse" />{!isSidebarCollapsed && <span className="font-black text-[10px] tracking-widest uppercase">FEEDBACK</span>}</button>
+        <nav className="flex-1 px-3 py-6 space-y-3">
+          <button onClick={() => setView('dashboard')} className={`w-full flex items-center p-3 rounded-xl transition-all gap-3 ${view === 'dashboard' ? 'bg-fuchsia-600/10 text-fuchsia-400 border border-fuchsia-500/20 shadow-lg' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}><Activity size={16} />{!isSidebarCollapsed && <span className="font-black text-[9px] tracking-widest uppercase">TACTICAL VIEW</span>}</button>
+          <button onClick={() => setAppFeedbackModal(true)} className="w-full flex items-center p-3 rounded-xl text-slate-500 hover:text-fuchsia-400 hover:bg-fuchsia-600/10 transition-all gap-3 group"><Lightbulb size={16} className="group-hover:animate-pulse" />{!isSidebarCollapsed && <span className="font-black text-[9px] tracking-widest uppercase">FEEDBACK</span>}</button>
         </nav>
-        <div className="p-5 border-t border-white/5"><button onClick={() => { localStorage.removeItem('user'); router.push('/'); }} className="w-full flex items-center justify-center p-3 bg-red-950/20 text-red-500 border border-red-500/20 rounded-xl gap-3 font-black text-[10px] tracking-[0.2em] uppercase hover:bg-red-600 hover:text-white transition-all"><LogOut size={16} /> {!isSidebarCollapsed && "SHUTDOWN"}</button></div>
+        <div className="p-4 border-t border-white/5"><button onClick={() => { localStorage.removeItem('user'); router.push('/'); }} className="w-full flex items-center justify-center p-2.5 bg-red-950/20 text-red-500 border border-red-500/20 rounded-xl gap-2 font-black text-[9px] tracking-[0.2em] uppercase hover:bg-red-600 hover:text-white transition-all"><LogOut size={14} /> {!isSidebarCollapsed && "SHUTDOWN"}</button></div>
       </motion.aside>
 
       {/* --- MAIN CONTENT --- */}
       <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
-        <header className="h-20 flex items-center justify-between px-8 lg:px-10 border-b border-white/5 bg-black/40 backdrop-blur-xl">
-            <div className="flex items-center gap-3 px-5 py-2 bg-white/5 border border-white/10 rounded-xl shadow-inner"><div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#34d399]" /><span className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em]">NETWORK: SECURE CLOUD</span></div>
+        <header className="h-16 flex items-center justify-between px-6 lg:px-8 border-b border-white/5 bg-black/40 backdrop-blur-xl">
+            <div className="flex items-center gap-2.5 px-4 py-1.5 bg-white/5 border border-white/10 rounded-lg shadow-inner"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#34d399]" /><span className="text-[8px] font-black text-slate-300 uppercase tracking-[0.2em]">NETWORK: SECURE CLOUD</span></div>
             
             {/* INSTRUCTOR DOSSIER CLICKABLE AREA */}
             <button onClick={() => setProfileModal(true)} className="flex items-center gap-4 text-left group hover:opacity-80 transition-all">
                 <div className="text-right hidden sm:block">
                   <p className="text-[11px] font-black text-white tracking-widest uppercase group-hover:text-fuchsia-400 transition-colors">{user.username}</p>
-                  <p className="text-[8px] font-bold text-fuchsia-400 uppercase tracking-[0.3em] mt-1 flex items-center justify-end gap-1.5"><Radio size={10} className="animate-pulse"/> INSTRUCTOR NODE</p>
+                  <p className="text-[8px] font-bold text-fuchsia-400 uppercase tracking-[0.3em] mt-0.5 flex items-center justify-end gap-1.5"><Radio size={10} className="animate-pulse"/> INSTRUCTOR NODE</p>
                 </div>
                 <div className="w-10 h-10 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-full flex items-center justify-center border border-white/20 shadow-[0_0_15px_rgba(217,70,239,0.3)] group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(217,70,239,0.6)] transition-all">
                   <User size={18} />
@@ -309,7 +299,42 @@ export default function DashboardGuruZenith() {
 
                    <motion.div whileHover={{ y: -4 }} className="lg:col-span-4 lg:row-span-2 bg-[#0a0a0f]/80 border border-white/10 rounded-[2.5rem] p-8 shadow-xl h-[280px] backdrop-blur-2xl relative overflow-hidden group">
                       <p className="text-[10px] font-black text-slate-500 tracking-[0.3em] uppercase mb-6 flex items-center gap-2"><Cpu size={14} className="text-blue-400"/> DOMAIN MASTERY</p>
-                      <ResponsiveContainer><BarChart data={domainAverages} margin={{ left: -35 }}><CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" /><XAxis dataKey="domain" tick={{ fontSize: 9, fontWeight: '900', fill: '#94a3b8' }} axisLine={false} tickLine={false}/><YAxis tick={{ fontSize: 9, fill: '#475569' }} domain={[0, 100]} axisLine={false} tickLine={false}/><Bar dataKey="score" radius={[6, 6, 0, 0]} barSize={35}>{domainAverages.map((e, i) => (<Cell key={i} fill={`url(#barGradient-${i})`} />))}<defs>{domainAverages.map((e, i) => (<linearGradient id={`barGradient-${i}`} key={i} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={e.color} /><stop offset="100%" stopColor={e.color} stopOpacity={0.1} /></linearGradient>))}</defs></Bar></BarChart></ResponsiveContainer>
+                      <ResponsiveContainer>
+                        <BarChart data={domainAverages} margin={{ left: -35 }}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
+                          <XAxis dataKey="domain" tick={{ fontSize: 9, fontWeight: '900', fill: '#94a3b8' }} axisLine={false} tickLine={false}/>
+                          <YAxis tick={{ fontSize: 9, fill: '#475569' }} domain={[0, 100]} axisLine={false} tickLine={false}/>
+                          
+                          {/* FITUR TOOLTIP UNTUK MUNCUL SAAT DIHOVER */}
+                          <Tooltip 
+                            cursor={{ fill: 'rgba(217,70,239,0.1)' }}
+                            contentStyle={{ 
+                              backgroundColor: 'rgba(0,0,0,0.8)', 
+                              border: '1px solid rgba(255,255,255,0.1)', 
+                              borderRadius: '16px', 
+                              backdropFilter: 'blur(10px)',
+                              color: '#fff',
+                              fontWeight: '900',
+                              fontSize: '11px',
+                              textTransform: 'uppercase',
+                              boxShadow: '0 0 20px rgba(0,0,0,0.8)'
+                            }}
+                            itemStyle={{ color: '#d946ef', fontWeight: '900' }}
+                          />
+
+                          <Bar dataKey="score" radius={[6, 6, 0, 0]} barSize={35}>
+                            {domainAverages.map((e, i) => (<Cell key={i} fill={`url(#barGradient-${i})`} />))}
+                            <defs>
+                              {domainAverages.map((e, i) => (
+                                <linearGradient id={`barGradient-${i}`} key={i} x1="0" y1="0" x2="0" y2="1">
+                                  <stop offset="0%" stopColor={e.color} />
+                                  <stop offset="100%" stopColor={e.color} stopOpacity={0.1} />
+                                </linearGradient>
+                              ))}
+                            </defs>
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
                    </motion.div>
                 </div>
 
@@ -373,15 +398,13 @@ export default function DashboardGuruZenith() {
         </main>
       </div>
 
-      {/* --- PROFILE MODAL (INSTRUCTOR DOSSIER - CLEANED & GLASSMORPHISM) --- */}
+      {/* --- PROFILE MODAL (INSTRUCTOR DOSSIER - CLEANED) --- */}
       <AnimatePresence>
         {profileModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/40 backdrop-blur-md">
             <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 10 }} className="relative w-full max-w-2xl bg-[#0a0a0f]/80 backdrop-blur-3xl border border-white/10 rounded-[3rem] p-10 shadow-2xl flex flex-col overflow-hidden">
-               {/* Gradient Top Bar */}
                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-400 via-fuchsia-500 to-indigo-500" />
                
-               {/* Header - Simple & Focused */}
                <div className="flex justify-between items-start mb-8 relative z-10">
                   <div className="flex items-center gap-6">
                      <div className="w-16 h-16 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-[1.2rem] flex items-center justify-center text-white shadow-[0_0_30px_rgba(217,70,239,0.4)] border border-white/10"><User size={32} /></div>
@@ -394,7 +417,6 @@ export default function DashboardGuruZenith() {
                   <button onClick={() => setProfileModal(false)} className="p-3 bg-white/5 rounded-full text-slate-500 hover:bg-white/10 transition-all border border-white/5"><X size={18} /></button>
                </div>
 
-               {/* Content Grid */}
                <div className="grid grid-cols-2 gap-5 relative z-10">
                   <div className="bg-black/40 border border-white/5 p-6 rounded-3xl shadow-inner">
                     <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">SUPERVISED FLEET</p>
@@ -406,7 +428,6 @@ export default function DashboardGuruZenith() {
                   </div>
                </div>
 
-               {/* Assigned Classes */}
                <div className="mt-8 relative z-10">
                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-4 flex items-center gap-3"><Globe size={14}/> ASSIGNED SECTORS</p>
                  <div className="flex flex-wrap gap-3">
