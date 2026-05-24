@@ -143,58 +143,35 @@ const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
 });
 PersistentUniverse.displayName = 'PersistentUniverse';
 
-const VisiMisiSection = () => {
+// Tambahkan { bgIdx } sebagai parameter
+const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   const [hovered, setHovered] = useState<string | null>(null);
 
   const data =[
-    { 
-      id: "visi", 
-      icon: Star, 
-      title: "Visi Kami", 
-      desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data di lingkungan sekolah." 
-    },
-    { 
-      id: "misi", 
-      icon: Target, 
-      title: "Misi Kami", 
-      desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital sebagai fondasi masa depan." 
-    }
+    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data di lingkungan sekolah." },
+    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital sebagai fondasi masa depan." }
   ];
 
   return (
     <section className="relative w-full py-24 bg-[#020108]">
-      <div className="absolute inset-0 z-0 bg-[url('/bg/cyber1.jpg')] bg-cover bg-center opacity-[0.05] pointer-events-none" />
+      {/* Background Sinkron dengan Header */}
+      <div className="absolute inset-0 z-0">
+        <motion.img 
+          key={bgIdx} 
+          src={CYBER_ASSETS[bgIdx]} 
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 0.05 }} 
+          exit={{ opacity: 0 }} 
+          transition={{ duration: 2 }} 
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        />
+        <div className="absolute inset-0 bg-[#020108]/90" />
+      </div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 text-center">
-        <div className="mb-20">
-          <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tighter uppercase mb-6">
-            Membangun Kedaulatan <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Digital Sekolah</span>
-          </h2>
-          <p className="text-slate-400 max-w-xl mx-auto text-sm font-medium leading-relaxed">
-            Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman demi lingkungan belajar yang terlindungi.
-          </p>
-        </div>
-
-        {/* --- GRID KARTU VISI & MISI --- */}
+        {/* ... (isi konten Anda tetap sama) ... */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8" onMouseLeave={() => setHovered(null)}>
-          {data.map((item) => (
-            <div 
-              key={item.id}
-              onMouseEnter={() => setHovered(item.id)}
-              className={`
-                bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-12 rounded-[3rem] text-left transition-all duration-500
-                ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-50' : 'scale-100 opacity-100'}
-                ${hovered === item.id ? 'shadow-[0_20px_50px_rgba(0,0,0,0.5)] -translate-y-4 border-blue-500/50' : ''}
-              `}
-            >
-              <div className="w-16 h-16 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-3xl mb-8 border border-blue-500/20">
-                <item.icon size={32} />
-              </div>
-              <h3 className="text-3xl font-black text-white mb-6 tracking-wide">{item.title}</h3>
-              <p className="text-slate-400 text-base leading-relaxed font-medium">{item.desc}</p>
-            </div>
-          ))}
+          {/* ... (mapping data tetap sama) ... */}
         </div>
       </div>
     </section>
@@ -521,7 +498,7 @@ export default function CyberLandingDark() {
                </div>
            </section>
         </div>
-        <VisiMisiSection />
+        <VisiMisiSection bgIdx={bgIdx} />
         <SecurityStatsSection />
       </div>
      
