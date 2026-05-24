@@ -200,6 +200,41 @@ const VisiMisiSection = () => {
     </section>
   );
 };
+<VisiMisiSection />
+
+const SecurityStatsSection = () => {
+  const stats =[
+    { label: "Data Terlindungi", value: "99.9%", color: "text-emerald-400" },
+    { label: "Deteksi Ancaman", value: "1,240", color: "text-fuchsia-400" },
+    { label: "Siswa Terliterasi", value: "850+", color: "text-blue-400" },
+    { label: "Uptime Sistem", value: "24/7", color: "text-cyan-400" },
+  ];
+
+  return (
+    <section className="py-24 bg-[#030208]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-black text-white uppercase mb-4 tracking-tight">
+            Metrik Ketahanan <span className="text-fuchsia-500">Digital</span>
+          </h2>
+          <p className="text-slate-400 max-w-lg mx-auto text-sm">
+            Laporan real-time mengenai performa dan keamanan infrastruktur siber sekolah kami.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {stats.map((stat, i) => (
+            <div key={i} className="bg-[#0a0a0f] p-8 rounded-[2rem] border border-white/5 text-center hover:border-white/10 transition-colors">
+              <div className={`text-4xl font-black mb-2 ${stat.color}`}>{stat.value}</div>
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+<SecurityStatsSection />
 
 export default function CyberLandingDark() {
   const router = useRouter();
@@ -489,7 +524,6 @@ export default function CyberLandingDark() {
 
       </div>
 
-      <VisiMisiSection />
 
       {/* ========================================================================= */}
       {/* 5. MODAL LOGIN                                                            */}
