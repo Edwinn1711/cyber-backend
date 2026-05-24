@@ -155,11 +155,11 @@ const VisiMisiSection = () => (
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Yang Gemilang</span>
       </h2>
       <p className="text-slate-400 mb-16 max-w-lg mx-auto text-sm font-medium">
-        Bersama-sama mewujudkan visi dan menjalankan misi untuk kemajuan mahasiswa Institut Teknologi Del
+      Mengukur dan mengoptimalkan ketahanan siber melalui penguatan infrastruktur digital yang terintegrasi, demi menciptakan ekosistem akademik yang aman, tangguh, dan adaptif terhadap ancaman masa depan.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {[ { icon: Star, title: "Visi Kami", desc: "Menjadi institusi yang unggul..." }, { icon: Target, title: "Misi Kami", desc: "Menyelenggarakan pendidikan..." } ].map((item, i) => (
+        {[ { icon: Star, title: "Visi Kami", desc: "Menjadi pusat ketahanan siber pendidikan yang unggul, terpercaya, dan proaktif dalam menghadapi tantangan transformasi digital global." }, { icon: Target, title: "Misi Kami", desc: "Menyelenggarakan tata kelola infrastruktur digital yang tangguh, menerapkan protokol keamanan siber yang komprehensif, serta membangun budaya literasi digital bagi seluruh sivitas akademika." } ].map((item, i) => (
           <div key={i} className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2.5rem] text-left hover:border-blue-500/50 transition-all group">
             <div className="w-12 h-12 bg-blue-500/20 text-blue-400 flex items-center justify-center rounded-2xl mb-6 group-hover:scale-110 transition-transform">
                <item.icon size={24} />
