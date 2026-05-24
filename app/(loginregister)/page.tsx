@@ -316,7 +316,7 @@ export default function CyberLandingDark() {
    <div className="whitespace-nowrap">
       <h1 className="font-black text-white tracking-widest text-lg leading-tight">CYBER<span className="text-fuchsia-500">READINESS</span></h1>
       {/* UBAH BARIS DI BAWAH INI */}
-      <p className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase mt-1">INFRASTRUKTUR DEL</p>
+      <p className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase mt-1">CYBER SECURITY</p>
    </div>
 </div>
 
@@ -420,7 +420,7 @@ export default function CyberLandingDark() {
                       Sistem<br/>Keamanan
                     </h3>
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] text-center mt-3 relative z-10" style={{ transform: "translateZ(30px)" }}>
-                      Infrastruktur Del
+                      Cyber Security
                     </p>
                     
                     <div className="absolute -bottom-5 w-[85%] left-[7.5%] bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white px-8 py-3.5 rounded-full text-[10px] font-black tracking-[0.4em] text-center shadow-[0_20px_40px_rgba(217,70,239,0.5)] border border-white/20" style={{ transform: "translateZ(80px)" }}>
