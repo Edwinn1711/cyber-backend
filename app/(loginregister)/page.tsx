@@ -144,7 +144,7 @@ const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
 PersistentUniverse.displayName = 'PersistentUniverse';
 
 const VisiMisiSection = () => {
-  const[hovered, setHovered] = useState<string | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
 
   const data =[
     { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi pusat ketahanan siber pendidikan yang unggul, terpercaya, dan proaktif dalam menghadapi tantangan transformasi digital global." },
@@ -153,13 +153,21 @@ const VisiMisiSection = () => {
 
   return (
     <section className="relative w-full py-24 bg-[#020108]">
-      {/* Background Cyber */}
       <div className="absolute inset-0 z-0 bg-[url('/bg/cyber1.jpg')] bg-cover bg-center opacity-[0.05] pointer-events-none" />
       
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 text-center">
-        <h2 className="text-4xl lg:text-5xl font-black text-white uppercase mb-16">Visi & Misi</h2>
+        {/* --- KATA-KATA YANG HILANG DITAMBAHKAN KEMBALI DI SINI --- */}
+        <div className="mb-20">
+          <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tighter uppercase mb-6">
+            Membangun Masa Depan <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Yang Gemilang</span>
+          </h2>
+          <p className="text-slate-400 max-w-xl mx-auto text-sm font-medium leading-relaxed">
+            Bersama-sama mewujudkan visi dan menjalankan misi untuk kemajuan mahasiswa Institut Teknologi Del
+          </p>
+        </div>
 
-        {/* Container Utama untuk efek blur */}
+        {/* --- GRID KARTU VISI & MISI --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
             <div 
