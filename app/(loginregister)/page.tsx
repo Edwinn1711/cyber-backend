@@ -308,16 +308,17 @@ export default function CyberLandingDark() {
 <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
   <div className="max-w-[1400px] mx-auto px-6 lg:px-10 h-24 flex items-center justify-between">
     
-    {/* AREA KIRI: LOGO (Flex shrink-0 agar tidak gepeng) */}
-    <div className="flex items-center gap-4 shrink-0">
-        <div className="w-12 h-12 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
-          <ShieldCheck size={28} className="text-fuchsia-400" />
-        </div>
-        <div className="hidden sm:block">
-          <h1 className="font-black text-white tracking-widest text-lg leading-tight">CYBER<span className="text-fuchsia-500">READINESS</span></h1>
-          <p className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase mt-1">Infrastruktur Del</p>
-        </div>
-    </div>
+    {/* AREA KIRI: LOGO */}
+<div className="flex items-center gap-4 relative z-10 shrink-0">
+   <div className="w-12 h-12 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
+      <ShieldCheck size={28} className="text-fuchsia-400" />
+   </div>
+   <div className="whitespace-nowrap">
+      <h1 className="font-black text-white tracking-widest text-lg leading-tight">CYBER<span className="text-fuchsia-500">READINESS</span></h1>
+      {/* UBAH BARIS DI BAWAH INI */}
+      <p className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase mt-1">INFRASTRUKTUR DEL</p>
+   </div>
+</div>
 
     {/* AREA TENGAH: NAVIGASI (Menggunakan flex-1 dan justify-center) */}
     <nav className="hidden lg:flex flex-1 justify-center items-center gap-8 xl:gap-12 h-full">
