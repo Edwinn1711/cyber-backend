@@ -244,55 +244,53 @@ export default function CyberLandingDark() {
       <PersistentUniverse bgIdx={bgIdx} />
       <UltraGodTierParticleSystem />
 
-      {/* ========================================================================= */}
-      {/* HEADER NAVBAR (ABSOLUTE LAYOUT - ANTI TABRAKAN & LEGA)                     */}
-      {/* ========================================================================= */}
-      <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 h-24 relative flex items-center justify-between">
-          
-          {/* AREA KIRI: LOGO */}
-          <div className="flex items-center gap-4 relative z-10 shrink-0">
-             <div className="w-12 h-12 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
-                <ShieldCheck size={28} className="text-fuchsia-400" />
-             </div>
-             <div className="whitespace-nowrap">
-                <h1 className="font-black text-white tracking-widest text-lg leading-tight">CYBER<span className="text-fuchsia-500">READINESS</span></h1>
-                <p className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase mt-1">Infrastruktur Del</p>
-             </div>
-          </div>
-
-          {/* AREA TENGAH: MENU (MENGUNCI TEPAT DI TENGAH LAYAR) */}
-          <nav className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center justify-center gap-8 xl:gap-12 h-full z-0 pointer-events-auto">
-             {[ 
-               { icon: Home, label: 'Beranda', active: true }, 
-               { icon: Info, label: 'Profil', active: false }, 
-               { icon: LayoutGrid, label: 'Organisasi', active: false }, 
-               { icon: FileText, label: 'Berita', active: false }, 
-               { icon: Megaphone, label: 'Pengumuman', active: false }, 
-               { icon: HelpCircle, label: 'Layanan', active: false } 
-             ].map((item, idx) => (
-               <div key={idx} className="relative flex flex-col items-center justify-center group cursor-pointer h-24">
-                  <div className={`flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black transition-colors ${item.active ? 'text-fuchsia-400' : 'text-slate-500 group-hover:text-white'}`}>
-                    <item.icon size={15} className={item.active ? "text-fuchsia-500" : "text-slate-600 group-hover:text-fuchsia-400"} />
-                    {item.label}
-                  </div>
-                  {item.active && <div className="absolute bottom-0 w-full h-[2px] bg-fuchsia-500 rounded-t-md shadow-[0_0_10px_#d946ef]" />}
-               </div>
-             ))}
-          </nav>
-
-          {/* AREA KANAN: TOMBOL LOGIN */}
-          <div className="relative z-10 shrink-0">
-            <button 
-               onClick={() => setIsLoginOpen(true)}
-               className="flex items-center gap-3 px-8 py-3.5 bg-fuchsia-600 text-white rounded-full font-black text-[11px] tracking-[0.2em] uppercase hover:bg-fuchsia-500 transition-all shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:shadow-[0_0_30px_rgba(217,70,239,0.6)] hover:-translate-y-0.5"
-            >
-               <User size={18} /> LOGIN
-            </button>
-          </div>
-
+{/* AREA HEADER DIPERBAIKI */}
+<header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
+  <div className="max-w-[1400px] mx-auto px-6 lg:px-10 h-24 flex items-center justify-between">
+    
+    {/* AREA KIRI: LOGO (Flex shrink-0 agar tidak gepeng) */}
+    <div className="flex items-center gap-4 shrink-0">
+        <div className="w-12 h-12 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
+          <ShieldCheck size={28} className="text-fuchsia-400" />
         </div>
-      </header>
+        <div className="hidden sm:block">
+          <h1 className="font-black text-white tracking-widest text-lg leading-tight">CYBER<span className="text-fuchsia-500">READINESS</span></h1>
+          <p className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase mt-1">Infrastruktur Del</p>
+        </div>
+    </div>
+
+    {/* AREA TENGAH: NAVIGASI (Menggunakan flex-1 dan justify-center) */}
+    <nav className="hidden lg:flex flex-1 justify-center items-center gap-8 xl:gap-12 h-full">
+        {[ 
+          { icon: Home, label: 'Beranda', active: true }, 
+          { icon: Info, label: 'Profil', active: false }, 
+          { icon: LayoutGrid, label: 'Organisasi', active: false }, 
+          { icon: FileText, label: 'Berita', active: false }, 
+          { icon: Megaphone, label: 'Pengumuman', active: false }, 
+          { icon: HelpCircle, label: 'Layanan', active: false } 
+        ].map((item, idx) => (
+          <div key={idx} className="relative flex flex-col items-center justify-center group cursor-pointer h-24">
+            <div className={`flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black transition-colors ${item.active ? 'text-fuchsia-400' : 'text-slate-500 group-hover:text-white'}`}>
+              <item.icon size={15} className={item.active ? "text-fuchsia-500" : "text-slate-600 group-hover:text-fuchsia-400"} />
+              {item.label}
+            </div>
+            {item.active && <div className="absolute bottom-0 w-full h-[2px] bg-fuchsia-500 rounded-t-md shadow-[0_0_10px_#d946ef]" />}
+          </div>
+        ))}
+    </nav>
+
+    {/* AREA KANAN: LOGIN (Tetap stabil) */}
+    <div className="shrink-0">
+      <button 
+          onClick={() => setIsLoginOpen(true)}
+          className="flex items-center gap-3 px-6 py-3 bg-fuchsia-600 text-white rounded-full font-black text-[11px] tracking-[0.2em] uppercase hover:bg-fuchsia-500 transition-all shadow-[0_0_20px_rgba(217,70,239,0.4)]"
+      >
+          <User size={16} /> <span className="hidden sm:inline">LOGIN</span>
+      </button>
+    </div>
+
+  </div>
+</header>
 
       {/* ========================================================================= */}
       {/* KONTEN UTAMA (DITAMBAH JANGKAUAN PT AGAR KONTEN ATAS BEBAS MEPEET)         */}
