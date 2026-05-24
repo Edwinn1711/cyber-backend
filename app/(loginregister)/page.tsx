@@ -5,15 +5,16 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 import { 
   ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, 
   MapPin, Calendar, CheckCircle2, School, Network, Server,
-  Home, Info, FileText, LayoutGrid, Megaphone, HelpCircle, X, ArrowRight, Shield, Zap
+  Home, Info, FileText, LayoutGrid, Megaphone, HelpCircle, X, ArrowRight, Shield, Zap,
+  HeartHandshake, Heart, BrainCircuit
 } from 'lucide-react'
 
 // --- ASSET BACKGROUND ---
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. EFEK KLIK PARTIKEL DEWA (SHOCKWAVE + SPARKS + DUST) ---
-const GodTierParticleSystem = () => {
+// --- 1. EFEK KLIK PARTIKEL (DIPERKECIL & DIPERHALUS AGAR ELEGAN) ---
+const SubtleCyberParticleSystem = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -35,33 +36,33 @@ const GodTierParticleSystem = () => {
     resize();
 
     const explode = (x: number, y: number) => {
-      // 1. Shockwave (Gelombang Kejut)
-      shockwaves.push({ x, y, radius: 0, alpha: 1, speed: 8, width: 4 });
+      // 1. Shockwave (Lebih kecil dan cepat pudar)
+      shockwaves.push({ x, y, radius: 0, alpha: 0.8, speed: 4, width: 1.5 });
 
-      // 2. Sparks (Garis Cahaya Elektrik)
-      for (let i = 0; i < 12; i++) {
-        const angle = (Math.PI * 2 / 12) * i + (Math.random() * 0.5);
-        const velocity = Math.random() * 15 + 10;
+      // 2. Sparks (Lebih pendek dan tidak terlalu menyebar)
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI * 2 / 6) * i + (Math.random() * 0.5);
+        const velocity = Math.random() * 6 + 4;
         sparks.push({
           x, y,
           vx: Math.cos(angle) * velocity,
           vy: Math.sin(angle) * velocity,
           life: 1,
-          size: Math.random() * 15 + 10,
+          size: Math.random() * 5 + 3,
           color: Math.random() > 0.5 ? '217, 70, 239' : '56, 189, 248' // Fuchsia or Cyan
         });
       }
 
-      // 3. Stardust (Titik Debu Melayang)
-      for (let i = 0; i < 20; i++) {
+      // 3. Stardust (Lebih sedikit dan titik lebih kecil)
+      for (let i = 0; i < 8; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 6 + 2;
+        const speed = Math.random() * 3 + 1;
         dusts.push({
           x, y,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
           life: 1,
-          radius: Math.random() * 3 + 1,
+          radius: Math.random() * 1.5 + 0.5,
           color: Math.random() > 0.5 ? '217, 70, 239' : '255, 255, 255'
         });
       }
@@ -78,58 +79,58 @@ const GodTierParticleSystem = () => {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.globalCompositeOperation = 'screen'; // Efek neon blending
+      ctx.globalCompositeOperation = 'screen'; 
 
       // Draw Shockwaves
       for (let i = shockwaves.length - 1; i >= 0; i--) {
         let sw = shockwaves[i];
         sw.radius += sw.speed;
-        sw.alpha -= 0.03;
+        sw.alpha -= 0.05; // Cepat pudar
         if (sw.alpha <= 0) { shockwaves.splice(i, 1); continue; }
         
         ctx.beginPath();
         ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(217, 70, 239, ${sw.alpha})`;
+        ctx.strokeStyle = `rgba(56, 189, 248, ${sw.alpha})`; // Cyan shockwave
         ctx.lineWidth = sw.width * sw.alpha;
         ctx.stroke();
       }
 
-      // Draw Sparks (Lines)
+      // Draw Sparks
       for (let i = sparks.length - 1; i >= 0; i--) {
         let sp = sparks[i];
         sp.x += sp.vx;
         sp.y += sp.vy;
-        sp.life -= 0.04;
-        sp.vx *= 0.9; // Friction
-        sp.vy *= 0.9;
+        sp.life -= 0.06;
+        sp.vx *= 0.85; 
+        sp.vy *= 0.85;
         if (sp.life <= 0) { sparks.splice(i, 1); continue; }
 
         ctx.beginPath();
         ctx.moveTo(sp.x, sp.y);
         ctx.lineTo(sp.x - sp.vx * 1.5, sp.y - sp.vy * 1.5);
         ctx.strokeStyle = `rgba(${sp.color}, ${sp.life})`;
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 2;
         ctx.lineCap = 'round';
         ctx.stroke();
       }
 
-      // Draw Dusts (Dots)
+      // Draw Dusts
       for (let i = dusts.length - 1; i >= 0; i--) {
         let d = dusts[i];
         d.x += d.vx;
         d.y += d.vy;
-        d.life -= 0.02;
-        d.vx *= 0.95;
-        d.vy *= 0.95;
+        d.life -= 0.03;
+        d.vx *= 0.9;
+        d.vy *= 0.9;
         if (d.life <= 0) { dusts.splice(i, 1); continue; }
 
         ctx.beginPath();
         ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${d.color}, ${d.life})`;
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 5;
         ctx.shadowColor = `rgba(${d.color}, 1)`;
         ctx.fill();
-        ctx.shadowBlur = 0; // reset
+        ctx.shadowBlur = 0; 
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -148,7 +149,7 @@ const GodTierParticleSystem = () => {
   return <canvas ref={canvasRef} className="fixed inset-0 z-[9999] pointer-events-none" />;
 };
 
-// --- 2. BACKGROUND CYBER (GELAP & TRANSISI SMOOTH) ---
+// --- 2. BACKGROUND CYBER ---
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-[#020108]">
@@ -178,7 +179,6 @@ export default function CyberLandingDark() {
   const [bgIdx, setBgIdx] = useState(0);
   const [isLoginOpen, setIsLoginOpen] = useState(false); 
   
-  // State Form Login
   const [activeTab, setActiveTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -188,7 +188,6 @@ export default function CyberLandingDark() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // 3D Mouse Hover Effect (Super Luwes & Responsif)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [20, -20]), { stiffness: 400, damping: 30 });
@@ -268,15 +267,16 @@ export default function CyberLandingDark() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1500px]">
+    // PENTING: overflow-x-hidden agar tidak ada scroll samping, tetapi membiarkan scroll vertikal
+    <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-fuchsia-500/30 relative perspective-[1500px]">
       
       <PersistentUniverse bgIdx={bgIdx} />
-      <GodTierParticleSystem />
+      <SubtleCyberParticleSystem />
 
       {/* ========================================================================= */}
-      {/* 2. NAVBAR (HEADER GELAP ELEGAN)                                           */}
+      {/* HEADER NAVBAR                                                             */}
       {/* ========================================================================= */}
-      <header className="relative z-20 w-full border-b border-white/5 bg-[#05050a]/60 backdrop-blur-xl">
+      <header className="fixed top-0 left-0 right-0 z-40 w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
              <div className="w-10 h-10 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
@@ -317,93 +317,137 @@ export default function CyberLandingDark() {
       </header>
 
       {/* ========================================================================= */}
-      {/* 3. HERO SECTION (KONTEN UTAMA LANDING PAGE)                               */}
+      {/* KONTEN UTAMA (SCROLLABLE)                                                 */}
       {/* ========================================================================= */}
-      <main className="relative z-10 flex-1 flex items-center w-full max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-0">
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
-            
-            {/* Teks Kiri */}
-            <div className="space-y-8 text-center lg:text-left">
-               <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 text-slate-300 rounded-full text-[10px] font-black tracking-[0.3em] uppercase shadow-lg backdrop-blur-md">
-                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]"/> SECURE CONNECTION ACTIVE
-               </div>
-               
-               <h2 className="text-5xl lg:text-7xl font-black text-white tracking-tighter leading-tight uppercase drop-shadow-2xl">
-                 Kesiapan Siber <br/>
-                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-500 to-indigo-400">Sekolah 2026.</span>
-               </h2>
-               
-               <p className="text-sm lg:text-base font-bold text-slate-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                 Platform ini dirancang untuk mengkaji tingkat ketahanan siber di lingkungan Institut Teknologi Del melalui penyediaan infrastruktur digital yang aman dan terintegrasi secara penuh.
-               </p>
+      <div className="relative z-10 w-full pt-20">
+        
+        {/* SECTION 1: HERO */}
+        <section className="min-h-[calc(100vh-80px)] flex items-center w-full max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-0">
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
+              {/* Teks Kiri */}
+              <div className="space-y-8 text-center lg:text-left">
+                 <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 text-slate-300 rounded-full text-[10px] font-black tracking-[0.3em] uppercase shadow-lg backdrop-blur-md">
+                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]"/> SECURE CONNECTION ACTIVE
+                 </div>
+                 
+                 <h2 className="text-5xl lg:text-7xl font-black text-white tracking-tighter leading-tight uppercase drop-shadow-2xl">
+                   Kesiapan Siber <br/>
+                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-500 to-indigo-400">Sekolah 2026.</span>
+                 </h2>
+                 
+                 <p className="text-sm lg:text-base font-bold text-slate-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                   Platform ini dirancang untuk mengkaji tingkat ketahanan siber di lingkungan Institut Teknologi Del melalui penyediaan infrastruktur digital yang aman dan terintegrasi secara penuh.
+                 </p>
 
-               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5">
-                 <button onClick={() => setIsLoginOpen(true)} className="w-full sm:w-auto px-10 py-4 bg-fuchsia-600 text-white rounded-[1.2rem] font-black text-[11px] tracking-[0.3em] uppercase shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:bg-fuchsia-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.6)] transition-all flex items-center justify-center gap-3 hover:-translate-y-1">
-                    Mulai Evaluasi <ArrowRight size={16}/>
-                 </button>
-                 <button className="w-full sm:w-auto px-10 py-4 bg-white/5 border border-white/10 text-slate-300 rounded-[1.2rem] font-black text-[11px] tracking-[0.3em] uppercase hover:bg-white/10 hover:text-white transition-all flex items-center justify-center gap-3">
-                    Pelajari Modul
-                 </button>
-               </div>
+                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5">
+                   <button onClick={() => setIsLoginOpen(true)} className="w-full sm:w-auto px-10 py-4 bg-fuchsia-600 text-white rounded-[1.2rem] font-black text-[11px] tracking-[0.3em] uppercase shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:bg-fuchsia-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.6)] transition-all flex items-center justify-center gap-3 hover:-translate-y-1">
+                      Mulai Evaluasi <ArrowRight size={16}/>
+                   </button>
+                 </div>
 
-               <div className="pt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6">
-                  {[ 
-                    { icon: Shield, color: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10 shadow-[0_0_15px_rgba(99,102,241,0.2)]' }, 
-                    { icon: Server, color: 'text-fuchsia-400 border-fuchsia-500/30 bg-fuchsia-500/10 shadow-[0_0_15px_rgba(217,70,239,0.2)]' }, 
-                    { icon: Network, color: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10 shadow-[0_0_15px_rgba(34,211,238,0.2)]' }, 
-                    { icon: Fingerprint, color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.2)]' } 
-                  ].map((feat, i) => (
-                    <div key={i} className={`w-14 h-14 rounded-2xl flex items-center justify-center border backdrop-blur-md transition-all hover:-translate-y-1 hover:scale-105 cursor-pointer ${feat.color}`}>
-                       <feat.icon size={24} />
+                 <div className="pt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6">
+                    {[ 
+                      { icon: Shield, color: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10 shadow-[0_0_15px_rgba(99,102,241,0.2)]' }, 
+                      { icon: Server, color: 'text-fuchsia-400 border-fuchsia-500/30 bg-fuchsia-500/10 shadow-[0_0_15px_rgba(217,70,239,0.2)]' }, 
+                      { icon: Network, color: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10 shadow-[0_0_15px_rgba(34,211,238,0.2)]' }, 
+                      { icon: Fingerprint, color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.2)]' } 
+                    ].map((feat, i) => (
+                      <div key={i} className={`w-14 h-14 rounded-2xl flex items-center justify-center border backdrop-blur-md transition-all hover:-translate-y-1 hover:scale-105 cursor-pointer ${feat.color}`}>
+                         <feat.icon size={24} />
+                      </div>
+                    ))}
+                 </div>
+              </div>
+
+              {/* Grafis Kanan (Card 3D Cyber) */}
+              <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} className="hidden lg:flex items-center justify-center relative">
+                 <div className="relative w-full max-w-[400px] aspect-square bg-[#05050a]/80 backdrop-blur-3xl rounded-[3rem] p-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col items-center justify-center" style={{ transformStyle: "preserve-3d" }}>
+                    <div className="absolute inset-0 rounded-[3rem] overflow-hidden pointer-events-none">
+                       <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/20 blur-[100px] rounded-full" />
+                       <div className="absolute top-0 left-0 w-full h-1 bg-fuchsia-500 shadow-[0_0_30px_#d946ef] animate-hologram-scan opacity-60" />
                     </div>
-                  ))}
-               </div>
-            </div>
+                    
+                    <div className="absolute w-40 h-40 border-[2px] border-dashed border-fuchsia-500/20 rounded-full animate-[spin_20s_linear_infinite]" style={{ transform: "translateZ(30px)" }} />
+                    
+                    <div className="w-32 h-32 bg-black border-[2px] border-fuchsia-500/50 rounded-3xl flex items-center justify-center shadow-[0_0_40px_rgba(217,70,239,0.3)] mb-8 relative z-10" style={{ transform: "translateZ(70px)" }}>
+                       <ShieldCheck size={64} className="text-fuchsia-400 drop-shadow-[0_0_15px_#d946ef]" />
+                    </div>
+                    
+                    <h3 className="text-3xl font-black text-white tracking-widest uppercase text-center relative z-10 drop-shadow-2xl" style={{ transform: "translateZ(50px)" }}>
+                      Sistem<br/>Keamanan
+                    </h3>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] text-center mt-3 relative z-10" style={{ transform: "translateZ(30px)" }}>
+                      Infrastruktur Del
+                    </p>
+                    
+                    <div className="absolute -bottom-5 w-[85%] left-[7.5%] bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white px-8 py-3.5 rounded-full text-[10px] font-black tracking-[0.4em] text-center shadow-[0_20px_40px_rgba(217,70,239,0.5)] border border-white/20" style={{ transform: "translateZ(80px)" }}>
+                      TERINTEGRASI 2026
+                    </div>
+                 </div>
+              </motion.div>
+           </div>
+        </section>
 
-            {/* ========================================================================= */}
-            {/* KARTU 3D DEWA (Diperbaiki agar tidak terpotong & ditambah Hologram)       */}
-            {/* ========================================================================= */}
-            <motion.div 
-               style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-               className="hidden lg:flex items-center justify-center relative"
-            >
-               {/* Container Utama Kartu - Dihapus overflow-hidden nya dari parent ini! */}
-               <div className="relative w-full max-w-[400px] aspect-square bg-[#05050a]/80 backdrop-blur-3xl rounded-[3rem] p-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col items-center justify-center" style={{ transformStyle: "preserve-3d" }}>
-                  
-                  {/* Efek Inner Glow Background */}
-                  <div className="absolute inset-0 rounded-[3rem] overflow-hidden pointer-events-none">
-                     <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/20 blur-[100px] rounded-full" />
-                     {/* Garis Scanner Hologram */}
-                     <div className="absolute top-0 left-0 w-full h-1 bg-fuchsia-500 shadow-[0_0_30px_#d946ef] animate-hologram-scan opacity-60" />
-                  </div>
-                  
-                  {/* Cincin Energi Belakang Logo */}
-                  <div className="absolute w-40 h-40 border-[2px] border-dashed border-fuchsia-500/20 rounded-full animate-[spin_20s_linear_infinite]" style={{ transform: "translateZ(30px)" }} />
-                  
-                  {/* Logo Inti */}
-                  <div className="w-32 h-32 bg-black border-[2px] border-fuchsia-500/50 rounded-3xl flex items-center justify-center shadow-[0_0_40px_rgba(217,70,239,0.3)] mb-8 relative z-10" style={{ transform: "translateZ(70px)" }}>
-                     <ShieldCheck size={64} className="text-fuchsia-400 drop-shadow-[0_0_15px_#d946ef]" />
-                  </div>
-                  
-                  <h3 className="text-3xl font-black text-white tracking-widest uppercase text-center relative z-10 drop-shadow-2xl" style={{ transform: "translateZ(50px)" }}>
-                    Sistem<br/>Keamanan
-                  </h3>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] text-center mt-3 relative z-10" style={{ transform: "translateZ(30px)" }}>
-                    Infrastruktur Del
-                  </p>
-                  
-                  {/* Pita Teks Melayang Bawah (TIDAK AKAN TERPOTONG LAGI) */}
-                  <div className="absolute -bottom-5 w-[85%] left-[7.5%] bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white px-8 py-3.5 rounded-full text-[10px] font-black tracking-[0.4em] text-center shadow-[0_20px_40px_rgba(217,70,239,0.5)] border border-white/20" style={{ transform: "translateZ(80px)" }}>
-                    TERINTEGRASI 2026
-                  </div>
-               </div>
-            </motion.div>
+        {/* SECTION 2: VISI & MISI (Sesuai Referensi Gambar dengan Tema Cyber) */}
+        <section className="w-full max-w-7xl mx-auto px-6 lg:px-10 py-24 border-t border-white/10 mt-12 relative">
+           
+           {/* Background Light Decor */}
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-blue-600/5 blur-[150px] rounded-full pointer-events-none" />
 
-         </div>
-      </main>
+           <div className="text-center mb-20 relative z-10">
+             <h2 className="text-4xl lg:text-6xl font-black tracking-tighter uppercase mb-6">
+               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500">Visi & Misi</span> Kami
+             </h2>
+             <p className="text-slate-400 max-w-3xl mx-auto font-medium text-sm lg:text-base leading-relaxed">
+               Berkomitmen untuk menciptakan lingkungan akademik yang dinamis yang mendorong pertumbuhan mahasiswa, inovasi, dan keberhasilan kolaboratif melalui keunggulan dan dedikasi.
+             </p>
+           </div>
+
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+              
+              {/* Card 1: Martuhan */}
+              <div className="bg-[#05050a]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-blue-500/40 hover:-translate-y-2 transition-all duration-500 group">
+                 <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(59,130,246,0.2)] group-hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] transition-all">
+                    <div className="absolute inset-0 rounded-full border-2 border-blue-500/50 animate-[spin_10s_linear_infinite]" />
+                    <HeartHandshake size={32} className="text-blue-400" />
+                 </div>
+                 <h3 className="text-2xl font-black text-white mb-4 tracking-wide">Martuhan</h3>
+                 <p className="text-xs font-medium text-slate-400 leading-relaxed">
+                   Membangun hubungan yang bermakna dan menumbuhkan komunitas yang peduli, di mana setiap individu merasa dihargai, didukung, dan diberdayakan untuk mencapai potensi terbaiknya.
+                 </p>
+              </div>
+
+              {/* Card 2: Maroha */}
+              <div className="bg-[#05050a]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-fuchsia-500/40 hover:-translate-y-2 transition-all duration-500 group">
+                 <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(217,70,239,0.2)] group-hover:shadow-[0_0_40px_rgba(217,70,239,0.5)] transition-all">
+                    <div className="absolute inset-0 rounded-full border-2 border-fuchsia-500/50 animate-[spin_10s_linear_infinite_reverse]" />
+                    <Heart size={32} className="text-fuchsia-400" />
+                 </div>
+                 <h3 className="text-2xl font-black text-white mb-4 tracking-wide">Maroha</h3>
+                 <p className="text-xs font-medium text-slate-400 leading-relaxed">
+                   Membangun hubungan yang bermakna dan menumbuhkan komunitas yang peduli, di mana setiap individu merasa dihargai, didukung, dan diberdayakan untuk mencapai potensi terbaiknya.
+                 </p>
+              </div>
+
+              {/* Card 3: Marbisuk */}
+              <div className="bg-[#05050a]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-emerald-500/40 hover:-translate-y-2 transition-all duration-500 group">
+                 <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(16,185,129,0.2)] group-hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] transition-all">
+                    <div className="absolute inset-0 rounded-full border-2 border-emerald-500/50 animate-[spin_10s_linear_infinite]" />
+                    <BrainCircuit size={32} className="text-emerald-400" />
+                 </div>
+                 <h3 className="text-2xl font-black text-white mb-4 tracking-wide">Marbisuk</h3>
+                 <p className="text-xs font-medium text-slate-400 leading-relaxed">
+                   Membangun hubungan yang bermakna dan menumbuhkan komunitas yang peduli, di mana setiap individu merasa dihargai, didukung, dan diberdayakan untuk mencapai potensi terbaiknya.
+                 </p>
+              </div>
+
+           </div>
+        </section>
+
+      </div>
 
       {/* ========================================================================= */}
-      {/* 4. MODAL LOGIN (MUNCUL JIKA TOMBOL LOGIN DITEKAN)                         */}
+      {/* 5. MODAL LOGIN (TETAP TEMA DARK CYBER)                                    */}
       {/* ========================================================================= */}
       <AnimatePresence>
         {isLoginOpen && (
