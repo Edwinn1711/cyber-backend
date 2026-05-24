@@ -521,10 +521,10 @@ export default function CyberLandingDark() {
                </div>
            </section>
         </div>
-
+        <VisiMisiSection />
+        <SecurityStatsSection />
       </div>
-      <VisiMisiSection />
-      <SecurityStatsSection />
+     
 
       {/* ========================================================================= */}
       {/* 5. MODAL LOGIN                                                            */}
