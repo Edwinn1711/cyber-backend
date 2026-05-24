@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { 
   ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, 
-  MapPin, Calendar, CheckCircle2, School, Network, Server,
-  Home, Info, FileText, LayoutGrid, Megaphone, HelpCircle, X, ArrowRight, Shield, Zap,
+  MapPin, Calendar, CheckCircle2, Server, Network, Shield,
+  Home, Info, FileText, LayoutGrid, Megaphone, HelpCircle, X, ArrowRight, Zap,
   BrainCircuit, ShieldAlert, Cpu
 } from 'lucide-react'
 
@@ -13,8 +13,8 @@ import {
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. EFEK KLIK PARTIKEL DEWA (ANTI-GAGAL, MUNCUL DI MANA SAJA) ---
-const GodTierParticleSystem = () => {
+// --- 1. EFEK KLIK PARTIKEL ULTRA GOD-TIER (PRESISI 100% & RESOLUSI TINGGI) ---
+const UltraGodTierParticleSystem = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -23,52 +23,55 @@ const GodTierParticleSystem = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let shockwaves: any[] = [];
-    let sparks: any[] = [];
-    let dusts: any[] = [];
+    let elements: any[] = [];
     let animationFrameId: number;
 
+    // Menyesuaikan dengan layar resolusi tinggi (Retina Display dll) agar super tajam
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.scale(dpr, dpr);
     };
     window.addEventListener('resize', resize);
     resize();
 
     const explode = (x: number, y: number) => {
-      // 1. Shockwave
-      shockwaves.push({ x, y, radius: 0, alpha: 0.8, speed: 4, width: 1.5 });
+      // Core Flash (Kilatan titik tengah yang langsung hilang)
+      elements.push({ type: 'core', x, y, radius: 0, alpha: 1, speed: 2, maxRadius: 15 });
 
-      // 2. Sparks
-      for (let i = 0; i < 6; i++) {
-        const angle = (Math.PI * 2 / 6) * i + (Math.random() * 0.5);
-        const velocity = Math.random() * 6 + 4;
-        sparks.push({
-          x, y,
-          vx: Math.cos(angle) * velocity,
-          vy: Math.sin(angle) * velocity,
-          life: 1,
-          size: Math.random() * 5 + 3,
-          color: Math.random() > 0.5 ? '217, 70, 239' : '56, 189, 248' // Fuchsia or Cyan
+      // Fast Inner Shockwave
+      elements.push({ type: 'shockwave', x, y, radius: 0, alpha: 0.8, speed: 6, width: 2, color: '56, 189, 248' }); // Cyan
+      
+      // Slower Outer Shockwave
+      elements.push({ type: 'shockwave', x, y, radius: 0, alpha: 0.5, speed: 3, width: 1, color: '217, 70, 239' }); // Fuchsia
+
+      // Electric Sparks
+      for (let i = 0; i < 8; i++) {
+        const angle = (Math.PI * 2 / 8) * i + (Math.random() * 0.5);
+        const velocity = Math.random() * 5 + 3;
+        elements.push({
+          type: 'spark', x, y,
+          vx: Math.cos(angle) * velocity, vy: Math.sin(angle) * velocity,
+          life: 1, color: Math.random() > 0.5 ? '217, 70, 239' : '56, 189, 248'
         });
       }
 
-      // 3. Stardust
-      for (let i = 0; i < 8; i++) {
+      // Stardust
+      for (let i = 0; i < 10; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 3 + 1;
-        dusts.push({
-          x, y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          life: 1,
-          radius: Math.random() * 1.5 + 0.5,
+        const speed = Math.random() * 2 + 0.5;
+        elements.push({
+          type: 'dust', x, y,
+          vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+          life: 1, radius: Math.random() * 1.5 + 0.5,
           color: Math.random() > 0.5 ? '217, 70, 239' : '255, 255, 255'
         });
       }
     };
 
-    // MENGGUNAKAN POINTERDOWN AGAR DETEKSI MOUSE & TOUCH 100% AKURAT WALAUPUN DI-SCROLL
     const handlePointerDown = (e: PointerEvent) => {
       explode(e.clientX, e.clientY);
     };
@@ -76,59 +79,54 @@ const GodTierParticleSystem = () => {
     window.addEventListener('pointerdown', handlePointerDown, { passive: true });
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       ctx.globalCompositeOperation = 'screen'; 
 
-      // Draw Shockwaves
-      for (let i = shockwaves.length - 1; i >= 0; i--) {
-        let sw = shockwaves[i];
-        sw.radius += sw.speed;
-        sw.alpha -= 0.05; 
-        if (sw.alpha <= 0) { shockwaves.splice(i, 1); continue; }
-        
-        ctx.beginPath();
-        ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(56, 189, 248, ${sw.alpha})`;
-        ctx.lineWidth = sw.width * sw.alpha;
-        ctx.stroke();
-      }
+      for (let i = elements.length - 1; i >= 0; i--) {
+        let el = elements[i];
 
-      // Draw Sparks
-      for (let i = sparks.length - 1; i >= 0; i--) {
-        let sp = sparks[i];
-        sp.x += sp.vx;
-        sp.y += sp.vy;
-        sp.life -= 0.06;
-        sp.vx *= 0.85; 
-        sp.vy *= 0.85;
-        if (sp.life <= 0) { sparks.splice(i, 1); continue; }
-
-        ctx.beginPath();
-        ctx.moveTo(sp.x, sp.y);
-        ctx.lineTo(sp.x - sp.vx * 1.5, sp.y - sp.vy * 1.5);
-        ctx.strokeStyle = `rgba(${sp.color}, ${sp.life})`;
-        ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
-        ctx.stroke();
-      }
-
-      // Draw Dusts
-      for (let i = dusts.length - 1; i >= 0; i--) {
-        let d = dusts[i];
-        d.x += d.vx;
-        d.y += d.vy;
-        d.life -= 0.03;
-        d.vx *= 0.9;
-        d.vy *= 0.9;
-        if (d.life <= 0) { dusts.splice(i, 1); continue; }
-
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${d.color}, ${d.life})`;
-        ctx.shadowBlur = 5;
-        ctx.shadowColor = `rgba(${d.color}, 1)`;
-        ctx.fill();
-        ctx.shadowBlur = 0; 
+        if (el.type === 'core') {
+          el.radius += el.speed;
+          el.alpha -= 0.1;
+          if (el.alpha <= 0) { elements.splice(i, 1); continue; }
+          ctx.beginPath();
+          ctx.arc(el.x, el.y, el.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${el.alpha})`;
+          ctx.fill();
+        } 
+        else if (el.type === 'shockwave') {
+          el.radius += el.speed;
+          el.alpha -= 0.04;
+          if (el.alpha <= 0) { elements.splice(i, 1); continue; }
+          ctx.beginPath();
+          ctx.arc(el.x, el.y, el.radius, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(${el.color}, ${el.alpha})`;
+          ctx.lineWidth = el.width * el.alpha;
+          ctx.stroke();
+        } 
+        else if (el.type === 'spark') {
+          el.x += el.vx; el.y += el.vy;
+          el.life -= 0.05;
+          el.vx *= 0.85; el.vy *= 0.85;
+          if (el.life <= 0) { elements.splice(i, 1); continue; }
+          ctx.beginPath();
+          ctx.moveTo(el.x, el.y);
+          ctx.lineTo(el.x - el.vx * 1.5, el.y - el.vy * 1.5);
+          ctx.strokeStyle = `rgba(${el.color}, ${el.life})`;
+          ctx.lineWidth = 2;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        } 
+        else if (el.type === 'dust') {
+          el.x += el.vx; el.y += el.vy;
+          el.life -= 0.03;
+          el.vx *= 0.92; el.vy *= 0.92;
+          if (el.life <= 0) { elements.splice(i, 1); continue; }
+          ctx.beginPath();
+          ctx.arc(el.x, el.y, el.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${el.color}, ${el.life})`;
+          ctx.fill();
+        }
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -143,11 +141,10 @@ const GodTierParticleSystem = () => {
     };
   }, []);
 
-  // z-[9999] memastikan partikel selalu di atas segalanya
   return <canvas ref={canvasRef} className="fixed inset-0 z-[9999] pointer-events-none" />;
 };
 
-// --- 2. BACKGROUND CYBER HERO SECTION ---
+// --- 2. BACKGROUND CYBER (TRANSISI SMOOTH) ---
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-[#020108]">
@@ -177,6 +174,7 @@ export default function CyberLandingDark() {
   const [bgIdx, setBgIdx] = useState(0);
   const [isLoginOpen, setIsLoginOpen] = useState(false); 
   
+  // State Form Login
   const [activeTab, setActiveTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -186,6 +184,7 @@ export default function CyberLandingDark() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
+  // 3D Mouse Hover Effect (Super Luwes)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [20, -20]), { stiffness: 400, damping: 30 });
@@ -265,13 +264,14 @@ export default function CyberLandingDark() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-fuchsia-500/30 relative perspective-[1500px]">
+    // PENTING: Dihapus perspective dari div utama agar Fixed Canvas koordinatnya akurat 100% !!
+    <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-fuchsia-500/30 relative">
       
       {/* 1. BACKGROUND GAMBAR UTAMA */}
       <PersistentUniverse bgIdx={bgIdx} />
       
       {/* 2. EFEK PARTIKEL KURSOR DEWA */}
-      <GodTierParticleSystem />
+      <UltraGodTierParticleSystem />
 
       {/* ========================================================================= */}
       {/* 3. NAVBAR (HEADER GELAP ELEGAN)                                           */}
@@ -321,9 +321,10 @@ export default function CyberLandingDark() {
       {/* ========================================================================= */}
       <div className="relative z-10 w-full pt-20">
         
-        {/* SECTION 1: HERO (TETAP TRANSPARAN KE BACKGROUND GAMBAR) */}
+        {/* SECTION 1: HERO */}
         <section className="min-h-[calc(100vh-80px)] flex items-center w-full max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-0">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
+              
               {/* Teks Kiri */}
               <div className="space-y-8 text-center lg:text-left">
                  <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 text-slate-300 rounded-full text-[10px] font-black tracking-[0.3em] uppercase shadow-lg backdrop-blur-md">
@@ -359,14 +360,19 @@ export default function CyberLandingDark() {
                  </div>
               </div>
 
-              {/* Grafis Kanan (Card 3D Cyber) */}
-              <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} className="hidden lg:flex items-center justify-center relative">
-                 <div className="relative w-full max-w-[400px] aspect-square bg-[#05050a]/80 backdrop-blur-3xl rounded-[3rem] p-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col items-center justify-center" style={{ transformStyle: "preserve-3d" }}>
+              {/* Grafis Kanan (Card 3D Cyber - TEPAT MENGGUNAKAN PERSPECTIVE WRAPPER) */}
+              <div className="hidden lg:flex items-center justify-center relative w-full" style={{ perspective: 1500 }}>
+                 <motion.div 
+                    style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                    className="relative w-full max-w-[400px] aspect-square bg-[#05050a]/80 backdrop-blur-3xl rounded-[3rem] p-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col items-center justify-center"
+                 >
+                    {/* Inner Glow Hologram */}
                     <div className="absolute inset-0 rounded-[3rem] overflow-hidden pointer-events-none">
                        <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/20 blur-[100px] rounded-full" />
                        <div className="absolute top-0 left-0 w-full h-1 bg-fuchsia-500 shadow-[0_0_30px_#d946ef] animate-hologram-scan opacity-60" />
                     </div>
                     
+                    {/* Cincin Energi */}
                     <div className="absolute w-40 h-40 border-[2px] border-dashed border-fuchsia-500/20 rounded-full animate-[spin_20s_linear_infinite]" style={{ transform: "translateZ(30px)" }} />
                     
                     <div className="w-32 h-32 bg-black border-[2px] border-fuchsia-500/50 rounded-3xl flex items-center justify-center shadow-[0_0_40px_rgba(217,70,239,0.3)] mb-8 relative z-10" style={{ transform: "translateZ(70px)" }}>
@@ -383,15 +389,15 @@ export default function CyberLandingDark() {
                     <div className="absolute -bottom-5 w-[85%] left-[7.5%] bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white px-8 py-3.5 rounded-full text-[10px] font-black tracking-[0.4em] text-center shadow-[0_20px_40px_rgba(217,70,239,0.5)] border border-white/20" style={{ transform: "translateZ(80px)" }}>
                       TERINTEGRASI 2026
                     </div>
-                 </div>
-              </motion.div>
+                 </motion.div>
+              </div>
            </div>
         </section>
 
-        {/* SECTION 2: PILAR UTAMA KEMANAN SIBER (BACKGROUND SOLID GELAP & KEREN) */}
+        {/* SECTION 2: PILAR UTAMA KEMANAN SIBER */}
         <div className="relative w-full bg-[#030208] border-t border-white/10 z-20 pb-32 pt-24 mt-12 shadow-[0_-30px_60px_rgba(0,0,0,0.8)]">
            
-           {/* Ambient Lighting Background */}
+           {/* Ambient Lighting Background Khusus Section 2 */}
            <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-indigo-900/10 via-fuchsia-900/5 to-transparent blur-[120px] pointer-events-none" />
            <div className="absolute inset-0 bg-grid-static opacity-[0.05] pointer-events-none" />
 
@@ -450,7 +456,7 @@ export default function CyberLandingDark() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 5. MODAL LOGIN (TETAP TEMA DARK CYBER)                                    */}
+      {/* 5. MODAL LOGIN                                                            */}
       {/* ========================================================================= */}
       <AnimatePresence>
         {isLoginOpen && (
@@ -634,7 +640,6 @@ export default function CyberLandingDark() {
           background-size: 60px 60px;
         }
         ::selection { background: #d946ef; color: white; }
-        .perspective-\\[1500px\\] { perspective: 1500px; }
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
