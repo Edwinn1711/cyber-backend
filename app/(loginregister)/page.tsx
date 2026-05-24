@@ -200,7 +200,7 @@ const VisiMisiSection = () => {
     </section>
   );
 };
-<VisiMisiSection />
+
 
 const SecurityStatsSection = () => {
   const stats =[
@@ -234,7 +234,7 @@ const SecurityStatsSection = () => {
     </section>
   );
 };
-<SecurityStatsSection />
+
 
 export default function CyberLandingDark() {
   const router = useRouter();
@@ -523,7 +523,8 @@ export default function CyberLandingDark() {
         </div>
 
       </div>
-
+      <VisiMisiSection />
+      <SecurityStatsSection />
 
       {/* ========================================================================= */}
       {/* 5. MODAL LOGIN                                                            */}
