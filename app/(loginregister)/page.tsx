@@ -147,8 +147,18 @@ const VisiMisiSection = () => {
   const [hovered, setHovered] = useState<string | null>(null);
 
   const data =[
-    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi pusat ketahanan siber pendidikan yang unggul, terpercaya, dan proaktif dalam menghadapi tantangan transformasi digital global." },
-    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan tata kelola infrastruktur digital yang tangguh, menerapkan protokol keamanan siber yang komprehensif, serta membangun budaya literasi digital bagi seluruh sivitas akademika." }
+    { 
+      id: "visi", 
+      icon: Star, 
+      title: "Visi Kami", 
+      desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data di lingkungan sekolah." 
+    },
+    { 
+      id: "misi", 
+      icon: Target, 
+      title: "Misi Kami", 
+      desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital sebagai fondasi masa depan." 
+    }
   ];
 
   return (
@@ -156,14 +166,13 @@ const VisiMisiSection = () => {
       <div className="absolute inset-0 z-0 bg-[url('/bg/cyber1.jpg')] bg-cover bg-center opacity-[0.05] pointer-events-none" />
       
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 text-center">
-        {/* --- KATA-KATA YANG HILANG DITAMBAHKAN KEMBALI DI SINI --- */}
         <div className="mb-20">
           <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tighter uppercase mb-6">
-            Membangun Masa Depan <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Yang Gemilang</span>
+            Membangun Kedaulatan <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Digital Sekolah</span>
           </h2>
           <p className="text-slate-400 max-w-xl mx-auto text-sm font-medium leading-relaxed">
-            Bersama-sama mewujudkan visi dan menjalankan misi untuk kemajuan mahasiswa Institut Teknologi Del
+            Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman demi lingkungan belajar yang terlindungi.
           </p>
         </div>
 
