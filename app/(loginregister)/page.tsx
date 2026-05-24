@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { 
@@ -12,66 +12,146 @@ import {
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. EFEK KLIK PARTIKEL (TEMA FUCHSIA/UNGU NEON) ---
-const ParticleBurstClickEffect = () => {
-  const [particles, setParticles] = useState<any[]>([]);
-  
+// --- 1. EFEK KLIK PARTIKEL DEWA (SHOCKWAVE + SPARKS + DUST) ---
+const GodTierParticleSystem = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   useEffect(() => {
-    const handleInteraction = (e: MouseEvent | TouchEvent) => {
-      const clientX = 'touches' in e ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
-      const clientY = 'touches' in e ? (e as TouchEvent).touches[0].clientY : (e as MouseEvent).clientY;
-      
-      const newParticles = Array.from({ length: 8 }).map((_, i) => ({
-        id: Math.random(), 
-        x: clientX, 
-        y: clientY, 
-        angle: (Math.PI * 2 / 8) * i, 
-        velocity: Math.random() * 50 + 20
-      }));
-      
-      setParticles(prev => [...prev, ...newParticles]);
-      setTimeout(() => {
-        setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)));
-      }, 800);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let shockwaves: any[] = [];
+    let sparks: any[] = [];
+    let dusts: any[] = [];
+    let animationFrameId: number;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resize);
+    resize();
+
+    const explode = (x: number, y: number) => {
+      // 1. Shockwave (Gelombang Kejut)
+      shockwaves.push({ x, y, radius: 0, alpha: 1, speed: 8, width: 4 });
+
+      // 2. Sparks (Garis Cahaya Elektrik)
+      for (let i = 0; i < 12; i++) {
+        const angle = (Math.PI * 2 / 12) * i + (Math.random() * 0.5);
+        const velocity = Math.random() * 15 + 10;
+        sparks.push({
+          x, y,
+          vx: Math.cos(angle) * velocity,
+          vy: Math.sin(angle) * velocity,
+          life: 1,
+          size: Math.random() * 15 + 10,
+          color: Math.random() > 0.5 ? '217, 70, 239' : '56, 189, 248' // Fuchsia or Cyan
+        });
+      }
+
+      // 3. Stardust (Titik Debu Melayang)
+      for (let i = 0; i < 20; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 6 + 2;
+        dusts.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 1,
+          radius: Math.random() * 3 + 1,
+          color: Math.random() > 0.5 ? '217, 70, 239' : '255, 255, 255'
+        });
+      }
     };
 
-    window.addEventListener('mousedown', handleInteraction);
-    window.addEventListener('touchstart', handleInteraction, { passive: true });
-    
+    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      explode(clientX, clientY);
+    };
+
+    window.addEventListener('mousedown', handlePointerDown);
+    window.addEventListener('touchstart', handlePointerDown, { passive: true });
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'screen'; // Efek neon blending
+
+      // Draw Shockwaves
+      for (let i = shockwaves.length - 1; i >= 0; i--) {
+        let sw = shockwaves[i];
+        sw.radius += sw.speed;
+        sw.alpha -= 0.03;
+        if (sw.alpha <= 0) { shockwaves.splice(i, 1); continue; }
+        
+        ctx.beginPath();
+        ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(217, 70, 239, ${sw.alpha})`;
+        ctx.lineWidth = sw.width * sw.alpha;
+        ctx.stroke();
+      }
+
+      // Draw Sparks (Lines)
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        let sp = sparks[i];
+        sp.x += sp.vx;
+        sp.y += sp.vy;
+        sp.life -= 0.04;
+        sp.vx *= 0.9; // Friction
+        sp.vy *= 0.9;
+        if (sp.life <= 0) { sparks.splice(i, 1); continue; }
+
+        ctx.beginPath();
+        ctx.moveTo(sp.x, sp.y);
+        ctx.lineTo(sp.x - sp.vx * 1.5, sp.y - sp.vy * 1.5);
+        ctx.strokeStyle = `rgba(${sp.color}, ${sp.life})`;
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      }
+
+      // Draw Dusts (Dots)
+      for (let i = dusts.length - 1; i >= 0; i--) {
+        let d = dusts[i];
+        d.x += d.vx;
+        d.y += d.vy;
+        d.life -= 0.02;
+        d.vx *= 0.95;
+        d.vy *= 0.95;
+        if (d.life <= 0) { dusts.splice(i, 1); continue; }
+
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${d.color}, ${d.life})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = `rgba(${d.color}, 1)`;
+        ctx.fill();
+        ctx.shadowBlur = 0; // reset
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
     return () => {
-      window.removeEventListener('mousedown', handleInteraction);
-      window.removeEventListener('touchstart', handleInteraction);
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('mousedown', handlePointerDown);
+      window.removeEventListener('touchstart', handlePointerDown);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
-  return (
-    <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
-      <AnimatePresence>
-        {particles.map((p) => (
-          <motion.div 
-            key={p.id} 
-            initial={{ scale: 0, opacity: 1, x: p.x, y: p.y }} 
-            animate={{ 
-              scale: [0, 1.2, 0], 
-              opacity: [1, 0.5, 0], 
-              x: p.x + Math.cos(p.angle) * p.velocity, 
-              y: p.y + Math.sin(p.angle) * p.velocity 
-            }} 
-            transition={{ duration: 0.8 }} 
-            className="absolute rounded-full bg-fuchsia-400 shadow-[0_0_15px_#d946ef]" 
-            style={{ width: '4px', height: '4px', top: '-2px', left: '-2px' }} 
-          />
-        ))}
-      </AnimatePresence>
-    </div>
-  );
+  return <canvas ref={canvasRef} className="fixed inset-0 z-[9999] pointer-events-none" />;
 };
 
 // --- 2. BACKGROUND CYBER (GELAP & TRANSISI SMOOTH) ---
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-[#020108]">
-      {/* Gambar Latar Belakang (Transisi sangat halus) */}
       <AnimatePresence>
         <motion.img 
           key={bgIdx} 
@@ -83,12 +163,8 @@ const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
           className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-lighten" 
         />
       </AnimatePresence>
-      
-      {/* Efek Cahaya Ungu/Indigo Blur */}
       <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vh] bg-fuchsia-600/10 blur-[120px] rounded-full animate-pulse pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vh] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none" />
-      
-      {/* Overlay Hitam & Grid agar UI mudah dibaca */}
       <div className="absolute inset-0 bg-black/60 pointer-events-none" />
       <div className="absolute inset-0 bg-grid-static opacity-[0.03] pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#000000_100%)] pointer-events-none" />
@@ -100,7 +176,7 @@ PersistentUniverse.displayName = 'PersistentUniverse';
 export default function CyberLandingDark() {
   const router = useRouter();
   const [bgIdx, setBgIdx] = useState(0);
-  const [isLoginOpen, setIsLoginOpen] = useState(false); // Kontrol Modal Login
+  const [isLoginOpen, setIsLoginOpen] = useState(false); 
   
   // State Form Login
   const [activeTab, setActiveTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
@@ -112,23 +188,32 @@ export default function CyberLandingDark() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // 3D Mouse Hover Effect
+  // 3D Mouse Hover Effect (Super Luwes & Responsif)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { stiffness: 800, damping: 40 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 800, damping: 40 });
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [20, -20]), { stiffness: 400, damping: 30 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-20, 20]), { stiffness: 400, damping: 30 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set((e.clientX / window.innerWidth) - 0.5);
       mouseY.set((e.clientY / window.innerHeight) - 0.5);
     };
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouseX.set((e.touches[0].clientX / window.innerWidth) - 0.5);
+        mouseY.set((e.touches[0].clientY / window.innerHeight) - 0.5);
+      }
+    };
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
   }, [mouseX, mouseY]);
 
   useEffect(() => {
-    // Rotasi Background Gambar Setiap 5 Detik
     const interval = setInterval(() => setBgIdx(p => (p + 1) % CYBER_ASSETS.length), 5000);
     return () => clearInterval(interval);
   }, []);
@@ -183,19 +268,16 @@ export default function CyberLandingDark() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1200px]">
+    <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-hidden font-sans selection:bg-fuchsia-500/30 relative perspective-[1500px]">
       
-      {/* 1. BACKGROUND CYBER */}
       <PersistentUniverse bgIdx={bgIdx} />
-      <ParticleBurstClickEffect />
+      <GodTierParticleSystem />
 
       {/* ========================================================================= */}
       {/* 2. NAVBAR (HEADER GELAP ELEGAN)                                           */}
       {/* ========================================================================= */}
       <header className="relative z-20 w-full border-b border-white/5 bg-[#05050a]/60 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
-          
-          {/* Kiri: Logo */}
           <div className="flex items-center gap-4">
              <div className="w-10 h-10 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
                 <ShieldCheck size={24} className="text-fuchsia-400" />
@@ -206,7 +288,6 @@ export default function CyberLandingDark() {
              </div>
           </div>
 
-          {/* Tengah: Menu Navigasi */}
           <nav className="hidden lg:flex items-center gap-8">
              {[ 
                { icon: Home, label: 'Beranda', active: true }, 
@@ -221,20 +302,17 @@ export default function CyberLandingDark() {
                     <item.icon size={14} className={item.active ? "text-fuchsia-500" : "text-slate-600 group-hover:text-fuchsia-400"} />
                     {item.label}
                   </div>
-                  {/* Garis Bawah Glow */}
                   {item.active && <div className="absolute bottom-0 w-full h-[2px] bg-fuchsia-500 rounded-t-md shadow-[0_0_10px_#d946ef]" />}
                </div>
              ))}
           </nav>
 
-          {/* Kanan: Tombol Login */}
           <button 
              onClick={() => setIsLoginOpen(true)}
              className="flex items-center gap-3 px-6 py-2.5 bg-fuchsia-600 text-white rounded-full font-black text-[10px] tracking-[0.2em] uppercase hover:bg-fuchsia-500 transition-all shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:shadow-[0_0_30px_rgba(217,70,239,0.6)] hover:-translate-y-0.5"
           >
              <User size={16} /> Akses Portal
           </button>
-
         </div>
       </header>
 
@@ -259,9 +337,8 @@ export default function CyberLandingDark() {
                  Platform ini dirancang untuk mengkaji tingkat ketahanan siber di lingkungan Institut Teknologi Del melalui penyediaan infrastruktur digital yang aman dan terintegrasi secara penuh.
                </p>
 
-               {/* Tombol Aksi */}
                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5">
-                 <button onClick={() => setIsLoginOpen(true)} className="w-full sm:w-auto px-10 py-4 bg-fuchsia-600 text-white rounded-[1.2rem] font-black text-[11px] tracking-[0.3em] uppercase shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:bg-fuchsia-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.6)] transition-all flex items-center justify-center gap-3">
+                 <button onClick={() => setIsLoginOpen(true)} className="w-full sm:w-auto px-10 py-4 bg-fuchsia-600 text-white rounded-[1.2rem] font-black text-[11px] tracking-[0.3em] uppercase shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:bg-fuchsia-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.6)] transition-all flex items-center justify-center gap-3 hover:-translate-y-1">
                     Mulai Evaluasi <ArrowRight size={16}/>
                  </button>
                  <button className="w-full sm:w-auto px-10 py-4 bg-white/5 border border-white/10 text-slate-300 rounded-[1.2rem] font-black text-[11px] tracking-[0.3em] uppercase hover:bg-white/10 hover:text-white transition-all flex items-center justify-center gap-3">
@@ -269,7 +346,6 @@ export default function CyberLandingDark() {
                  </button>
                </div>
 
-               {/* Ikon Infrastruktur */}
                <div className="pt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6">
                   {[ 
                     { icon: Shield, color: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10 shadow-[0_0_15px_rgba(99,102,241,0.2)]' }, 
@@ -284,26 +360,40 @@ export default function CyberLandingDark() {
                </div>
             </div>
 
-            {/* Grafis Kanan (Card 3D Cyber) */}
+            {/* ========================================================================= */}
+            {/* KARTU 3D DEWA (Diperbaiki agar tidak terpotong & ditambah Hologram)       */}
+            {/* ========================================================================= */}
             <motion.div 
                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-               className="hidden lg:flex items-center justify-center"
+               className="hidden lg:flex items-center justify-center relative"
             >
-               <div className="relative w-full max-w-md aspect-square bg-[#05050a]/80 backdrop-blur-2xl rounded-[3rem] p-10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] border border-white/10 flex flex-col items-center justify-center overflow-hidden">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/20 blur-[100px] rounded-full pointer-events-none" style={{ transform: "translateZ(-50px)" }} />
+               {/* Container Utama Kartu - Dihapus overflow-hidden nya dari parent ini! */}
+               <div className="relative w-full max-w-[400px] aspect-square bg-[#05050a]/80 backdrop-blur-3xl rounded-[3rem] p-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col items-center justify-center" style={{ transformStyle: "preserve-3d" }}>
                   
-                  <div className="w-32 h-32 bg-transparent border border-fuchsia-500/50 rounded-3xl flex items-center justify-center shadow-[0_0_30px_rgba(217,70,239,0.2)] mb-8 relative z-10" style={{ transform: "translateZ(60px)" }}>
-                     <ShieldCheck size={64} className="text-fuchsia-400" />
+                  {/* Efek Inner Glow Background */}
+                  <div className="absolute inset-0 rounded-[3rem] overflow-hidden pointer-events-none">
+                     <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/20 blur-[100px] rounded-full" />
+                     {/* Garis Scanner Hologram */}
+                     <div className="absolute top-0 left-0 w-full h-1 bg-fuchsia-500 shadow-[0_0_30px_#d946ef] animate-hologram-scan opacity-60" />
                   </div>
                   
-                  <h3 className="text-3xl font-black text-white tracking-widest uppercase text-center relative z-10" style={{ transform: "translateZ(40px)" }}>
+                  {/* Cincin Energi Belakang Logo */}
+                  <div className="absolute w-40 h-40 border-[2px] border-dashed border-fuchsia-500/20 rounded-full animate-[spin_20s_linear_infinite]" style={{ transform: "translateZ(30px)" }} />
+                  
+                  {/* Logo Inti */}
+                  <div className="w-32 h-32 bg-black border-[2px] border-fuchsia-500/50 rounded-3xl flex items-center justify-center shadow-[0_0_40px_rgba(217,70,239,0.3)] mb-8 relative z-10" style={{ transform: "translateZ(70px)" }}>
+                     <ShieldCheck size={64} className="text-fuchsia-400 drop-shadow-[0_0_15px_#d946ef]" />
+                  </div>
+                  
+                  <h3 className="text-3xl font-black text-white tracking-widest uppercase text-center relative z-10 drop-shadow-2xl" style={{ transform: "translateZ(50px)" }}>
                     Sistem<br/>Keamanan
                   </h3>
-                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] text-center mt-3 relative z-10" style={{ transform: "translateZ(20px)" }}>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] text-center mt-3 relative z-10" style={{ transform: "translateZ(30px)" }}>
                     Infrastruktur Del
                   </p>
                   
-                  <div className="absolute -bottom-6 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-8 py-3 rounded-full text-[10px] font-black tracking-[0.4em] shadow-[0_0_20px_rgba(217,70,239,0.5)] border border-white/10" style={{ transform: "translateZ(50px)" }}>
+                  {/* Pita Teks Melayang Bawah (TIDAK AKAN TERPOTONG LAGI) */}
+                  <div className="absolute -bottom-5 w-[85%] left-[7.5%] bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white px-8 py-3.5 rounded-full text-[10px] font-black tracking-[0.4em] text-center shadow-[0_20px_40px_rgba(217,70,239,0.5)] border border-white/20" style={{ transform: "translateZ(80px)" }}>
                     TERINTEGRASI 2026
                   </div>
                </div>
@@ -321,7 +411,7 @@ export default function CyberLandingDark() {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
-            className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-black/70 backdrop-blur-xl"
+            className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl"
           >
             <motion.div
               initial={{ scale: 0.9, y: 30 }}
@@ -329,10 +419,8 @@ export default function CyberLandingDark() {
               exit={{ scale: 0.9, y: 20 }}
               className={`relative w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} bg-[#0a0a0f]/95 border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_100px_rgba(0,0,0,1)] overflow-hidden`}
             >
-              {/* Garis gradien di atas card */}
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500" />
 
-              {/* Tombol Close */}
               <button 
                 onClick={() => setIsLoginOpen(false)}
                 className="absolute top-6 right-6 p-2 bg-white/5 text-slate-400 rounded-full hover:bg-white/10 hover:text-white transition-all border border-white/5"
@@ -484,13 +572,22 @@ export default function CyberLandingDark() {
       </AnimatePresence>
 
       <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes hologram-scan {
+          0% { top: -10%; opacity: 0; }
+          10% { opacity: 0.6; }
+          90% { opacity: 0.6; }
+          100% { top: 110%; opacity: 0; }
+        }
+        .animate-hologram-scan {
+          animation: hologram-scan 3s ease-in-out infinite;
+        }
         .bg-grid-static {
           background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
                             linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
           background-size: 60px 60px;
         }
         ::selection { background: #d946ef; color: white; }
-        .perspective-\\[1200px\\] { perspective: 1200px; }
+        .perspective-\\[1500px\\] { perspective: 1500px; }
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
