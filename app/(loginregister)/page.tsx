@@ -147,39 +147,26 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   const [hovered, setHovered] = useState<string | null>(null);
 
   const data =[
-    { 
-      id: "visi", 
-      icon: Star, 
-      title: "Visi Kami", 
-      desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data di lingkungan sekolah." 
-    },
-    { 
-      id: "misi", 
-      icon: Target, 
-      title: "Misi Kami", 
-      desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital sebagai fondasi masa depan." 
-    }
+    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data di lingkungan sekolah." },
+    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital sebagai fondasi masa depan." }
   ];
 
   return (
-    <section className="relative w-full py-24 bg-[#020108]">
-      {/* BACKGROUND YANG DIPERBAIKI */}
-      <div className="absolute inset-0 z-0">
-        <motion.img 
-          key={bgIdx} 
-          src={CYBER_ASSETS[bgIdx]} 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 0.25 }} // NAIKKAN JADI 0.25 AGAR LEBIH TERLIHAT
-          exit={{ opacity: 0 }} 
-          transition={{ duration: 2 }} 
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-        />
-        {/* Layer gelap agar teks tetap terbaca */}
-        <div className="absolute inset-0 bg-[#020108]/80" /> 
-      </div>
+    <section className="relative w-full py-24 bg-[#020108] border-b border-white/5 overflow-hidden">
+      {/* Background Sinkron */}
+      <motion.div 
+        key={bgIdx}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.2 }} 
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1.5 }}
+        className="absolute inset-0 z-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${CYBER_ASSETS[bgIdx]})` }}
+      />
+      <div className="absolute inset-0 z-0 bg-[#020108]/90" />
       
-      
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 text-center">
+      {/* Konten (SectionWrapper) */}
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
         <div className="mb-20">
           <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tighter uppercase mb-6">
             Membangun Kedaulatan <br/>
@@ -190,7 +177,6 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
           </p>
         </div>
 
-        {/* --- GRID KARTU VISI & MISI --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
             <div 
