@@ -163,19 +163,21 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
 
   return (
     <section className="relative w-full py-24 bg-[#020108]">
-      {/* Background Sinkron */}
+      {/* BACKGROUND YANG DIPERBAIKI */}
       <div className="absolute inset-0 z-0">
         <motion.img 
           key={bgIdx} 
           src={CYBER_ASSETS[bgIdx]} 
           initial={{ opacity: 0 }} 
-          animate={{ opacity: 0.05 }} 
+          animate={{ opacity: 0.25 }} // NAIKKAN JADI 0.25 AGAR LEBIH TERLIHAT
           exit={{ opacity: 0 }} 
           transition={{ duration: 2 }} 
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
         />
-        <div className="absolute inset-0 bg-[#020108]/90" />
+        {/* Layer gelap agar teks tetap terbaca */}
+        <div className="absolute inset-0 bg-[#020108]/80" /> 
       </div>
+      
       
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 text-center">
         <div className="mb-20">
