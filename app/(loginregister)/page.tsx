@@ -13,7 +13,7 @@ import {
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. EFEK KLIK PARTIKEL ULTRA GOD-TIER ---
+// --- 1. EFEK KLIK PARTIKEL ULTRA GOD-TIER (PRESISI 100% & RESOLUSI TINGGI) ---
 const UltraGodTierParticleSystem = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -38,10 +38,16 @@ const UltraGodTierParticleSystem = () => {
     resize();
 
     const explode = (x: number, y: number) => {
+      // Core Flash
       elements.push({ type: 'core', x, y, radius: 0, alpha: 1, speed: 2, maxRadius: 15 });
+
+      // Fast Inner Shockwave
       elements.push({ type: 'shockwave', x, y, radius: 0, alpha: 0.8, speed: 6, width: 2, color: '56, 189, 248' }); 
+      
+      // Slower Outer Shockwave
       elements.push({ type: 'shockwave', x, y, radius: 0, alpha: 0.5, speed: 3, width: 1, color: '217, 70, 239' }); 
 
+      // Electric Sparks
       for (let i = 0; i < 8; i++) {
         const angle = (Math.PI * 2 / 8) * i + (Math.random() * 0.5);
         const velocity = Math.random() * 5 + 3;
@@ -52,6 +58,7 @@ const UltraGodTierParticleSystem = () => {
         });
       }
 
+      // Stardust
       for (let i = 0; i < 10; i++) {
         const angle = Math.random() * Math.PI * 2;
         const speed = Math.random() * 2 + 0.5;
@@ -238,32 +245,33 @@ export default function CyberLandingDark() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-fuchsia-500/30 relative">
+    <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-fuchsia-500/30 relative perspective-[1500px]">
       
-      {/* BACKGROUND GAMBAR & EFEK KLIK DEWA */}
+      {/* 1. BACKGROUND GAMBAR UTAMA */}
       <PersistentUniverse bgIdx={bgIdx} />
+      
+      {/* 2. EFEK PARTIKEL KURSOR DEWA */}
       <UltraGodTierParticleSystem />
 
       {/* ========================================================================= */}
-      {/* HEADER NAVBAR (LAYOUT BARU: 1/4 - 2/4 - 1/4 AGAR TIDAK MEPET)             */}
+      {/* 3. NAVBAR (HEADER GELAP ELEGAN - LAYOUT FLEKSIBEL ANTI TABRAKAN)          */}
       {/* ========================================================================= */}
       <header className="fixed top-0 left-0 right-0 z-40 w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
-        {/* max-w-[1600px] agar mengisi pinggir layar lebih luas */}
-        <div className="max-w-[1600px] mx-auto px-6 lg:px-12 h-24 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
           
-          {/* AREA KIRI: LOGO (Lebar 25%) */}
-          <div className="flex items-center gap-4 lg:w-1/4">
-             <div className="w-12 h-12 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)] shrink-0">
-                <ShieldCheck size={28} className="text-fuchsia-400" />
+          {/* Bagian Kiri: Logo */}
+          <div className="flex items-center gap-4 flex-1">
+             <div className="w-10 h-10 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)] shrink-0">
+                <ShieldCheck size={24} className="text-fuchsia-400" />
              </div>
              <div className="whitespace-nowrap">
-                <h1 className="font-black text-white tracking-widest text-base lg:text-lg leading-tight">CYBER<span className="text-fuchsia-500">READINESS</span></h1>
-                <p className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase mt-1">Infrastruktur Del</p>
+                <h1 className="font-black text-white tracking-widest text-sm lg:text-base leading-tight">CYBER<span className="text-fuchsia-500">READINESS</span></h1>
+                <p className="text-[9px] text-slate-400 font-bold tracking-[0.3em] uppercase mt-0.5">Infrastruktur Del</p>
              </div>
           </div>
 
-          {/* AREA TENGAH: MENU (Lebar 50%, Posisi Terpusat Mutlak) */}
-          <nav className="hidden lg:flex items-center justify-center gap-8 xl:gap-14 lg:w-2/4">
+          {/* Bagian Tengah: Menu */}
+          <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-10 flex-1">
              {[ 
                { icon: Home, label: 'Beranda', active: true }, 
                { icon: Info, label: 'Profil', active: false }, 
@@ -272,9 +280,9 @@ export default function CyberLandingDark() {
                { icon: Megaphone, label: 'Pengumuman', active: false }, 
                { icon: HelpCircle, label: 'Layanan', active: false } 
              ].map((item, idx) => (
-               <div key={idx} className="relative flex flex-col items-center justify-center group cursor-pointer h-24">
+               <div key={idx} className="relative flex flex-col items-center justify-center group cursor-pointer h-20">
                   <div className={`flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black transition-colors ${item.active ? 'text-fuchsia-400' : 'text-slate-500 group-hover:text-white'}`}>
-                    <item.icon size={15} className={item.active ? "text-fuchsia-500" : "text-slate-600 group-hover:text-fuchsia-400"} />
+                    <item.icon size={14} className={item.active ? "text-fuchsia-500" : "text-slate-600 group-hover:text-fuchsia-400"} />
                     {item.label}
                   </div>
                   {item.active && <div className="absolute bottom-0 w-full h-[2px] bg-fuchsia-500 rounded-t-md shadow-[0_0_10px_#d946ef]" />}
@@ -282,26 +290,26 @@ export default function CyberLandingDark() {
              ))}
           </nav>
 
-          {/* AREA KANAN: TOMBOL LOGIN (Lebar 25%, Terdorong ke Kanan) */}
-          <div className="flex items-center justify-end lg:w-1/4">
+          {/* Bagian Kanan: Tombol Akses Portal */}
+          <div className="flex items-center justify-end flex-1">
             <button 
                onClick={() => setIsLoginOpen(true)}
-               className="flex items-center gap-3 px-8 py-3.5 bg-fuchsia-600 text-white rounded-full font-black text-[11px] tracking-[0.2em] uppercase hover:bg-fuchsia-500 transition-all shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:shadow-[0_0_30px_rgba(217,70,239,0.6)] hover:-translate-y-0.5"
+               className="flex items-center gap-3 px-6 py-2.5 bg-fuchsia-600 text-white rounded-full font-black text-[10px] tracking-[0.2em] uppercase hover:bg-fuchsia-500 transition-all shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:shadow-[0_0_30px_rgba(217,70,239,0.6)] hover:-translate-y-0.5 whitespace-nowrap"
             >
-               <User size={18} /> AKSES PORTAL
+               <User size={16} /> Akses Portal
             </button>
           </div>
-
+          
         </div>
       </header>
 
       {/* ========================================================================= */}
       {/* KONTEN UTAMA (SCROLLABLE)                                                 */}
       {/* ========================================================================= */}
-      <div className="relative z-10 w-full pt-24">
+      <div className="relative z-10 w-full pt-20">
         
         {/* SECTION 1: HERO */}
-        <section className="min-h-[calc(100vh-96px)] flex items-center w-full max-w-[1600px] mx-auto px-6 lg:px-12 py-12 lg:py-0">
+        <section className="min-h-[calc(100vh-80px)] flex items-center w-full max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-0">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
               
               {/* Teks Kiri */}
@@ -310,7 +318,7 @@ export default function CyberLandingDark() {
                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]"/> SECURE CONNECTION ACTIVE
                  </div>
                  
-                 <h2 className="text-5xl lg:text-7xl xl:text-8xl font-black text-white tracking-tighter leading-[1.1] uppercase drop-shadow-2xl">
+                 <h2 className="text-5xl lg:text-7xl font-black text-white tracking-tighter leading-tight uppercase drop-shadow-2xl">
                    Kesiapan Siber <br/>
                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-500 to-indigo-400">Sekolah 2026.</span>
                  </h2>
@@ -353,15 +361,12 @@ export default function CyberLandingDark() {
                     
                     {/* CONTAINER TERSENTRAL UNTUK CINCIN DAN LOGO */}
                     <div className="relative flex items-center justify-center mb-8" style={{ transform: "translateZ(70px)" }}>
-                       
-                       {/* Cincin Energi (Berputar persis di tengah perisai) */}
-                       <div className="absolute w-48 h-48 border-[2px] border-dashed border-fuchsia-500/30 rounded-full animate-[spin_15s_linear_infinite]" style={{ transform: "translateZ(-10px)" }} />
-                       
+                       {/* Cincin Energi */}
+                       <div className="absolute w-40 h-40 border-[2px] border-dashed border-fuchsia-500/30 rounded-full animate-[spin_15s_linear_infinite]" style={{ transform: "translateZ(-10px)" }} />
                        {/* Logo Inti */}
-                       <div className="w-32 h-32 bg-black border-[2px] border-fuchsia-500/50 rounded-3xl flex items-center justify-center shadow-[0_0_40px_rgba(217,70,239,0.3)] relative z-10">
-                          <ShieldCheck size={64} className="text-fuchsia-400 drop-shadow-[0_0_15px_#d946ef]" />
+                       <div className="w-28 h-28 bg-black border-[2px] border-fuchsia-500/50 rounded-3xl flex items-center justify-center shadow-[0_0_40px_rgba(217,70,239,0.3)] relative z-10">
+                          <ShieldCheck size={56} className="text-fuchsia-400 drop-shadow-[0_0_15px_#d946ef]" />
                        </div>
-
                     </div>
                     
                     <h3 className="text-3xl font-black text-white tracking-widest uppercase text-center relative z-10 drop-shadow-2xl" style={{ transform: "translateZ(50px)" }}>
@@ -386,7 +391,7 @@ export default function CyberLandingDark() {
            <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-indigo-900/10 via-fuchsia-900/5 to-transparent blur-[120px] pointer-events-none" />
            <div className="absolute inset-0 bg-grid-static opacity-[0.05] pointer-events-none" />
 
-           <section className="max-w-[1600px] mx-auto px-6 lg:px-12 relative z-10">
+           <section className="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
                <div className="text-center mb-20">
                  <h2 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase mb-6 drop-shadow-2xl">
                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500">Pilar Strategis</span> Kami
@@ -396,40 +401,39 @@ export default function CyberLandingDark() {
                  </p>
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
-                  
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {/* Card 1: Infrastruktur */}
-                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 lg:p-12 flex flex-col items-center text-center shadow-2xl hover:border-cyan-500/40 hover:-translate-y-2 transition-all duration-500 group">
-                     <div className="w-24 h-24 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(34,211,238,0.1)] group-hover:shadow-[0_0_40px_rgba(34,211,238,0.3)] transition-all">
+                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-cyan-500/40 hover:-translate-y-2 transition-all duration-500 group">
+                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(34,211,238,0.1)] group-hover:shadow-[0_0_40px_rgba(34,211,238,0.3)] transition-all">
                         <div className="absolute inset-0 rounded-full border-2 border-cyan-500/30 group-hover:border-cyan-500/80 animate-[spin_10s_linear_infinite]" />
-                        <Server size={36} className="text-cyan-400" />
+                        <Server size={32} className="text-cyan-400" />
                      </div>
                      <h3 className="text-2xl font-black text-white mb-4 tracking-wider uppercase">Infrastruktur Tangguh</h3>
-                     <p className="text-sm font-medium text-slate-400 leading-relaxed">
+                     <p className="text-[13px] font-medium text-slate-400 leading-relaxed">
                        Membangun dan memelihara arsitektur jaringan sekolah yang terpusat, berkinerja tinggi, dan tahan terhadap gangguan atau serangan siber berskala besar.
                      </p>
                   </div>
 
                   {/* Card 2: Keamanan Proaktif */}
-                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 lg:p-12 flex flex-col items-center text-center shadow-2xl hover:border-fuchsia-500/40 hover:-translate-y-2 transition-all duration-500 group">
-                     <div className="w-24 h-24 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(217,70,239,0.1)] group-hover:shadow-[0_0_40px_rgba(217,70,239,0.3)] transition-all">
+                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-fuchsia-500/40 hover:-translate-y-2 transition-all duration-500 group">
+                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(217,70,239,0.1)] group-hover:shadow-[0_0_40px_rgba(217,70,239,0.3)] transition-all">
                         <div className="absolute inset-0 rounded-full border-2 border-fuchsia-500/30 group-hover:border-fuchsia-500/80 animate-[spin_10s_linear_infinite_reverse]" />
-                        <ShieldAlert size={36} className="text-fuchsia-400" />
+                        <ShieldAlert size={32} className="text-fuchsia-400" />
                      </div>
                      <h3 className="text-2xl font-black text-white mb-4 tracking-wider uppercase">Keamanan Proaktif</h3>
-                     <p className="text-sm font-medium text-slate-400 leading-relaxed">
+                     <p className="text-[13px] font-medium text-slate-400 leading-relaxed">
                        Menerapkan protokol enkripsi end-to-end dan pemantauan real-time untuk mendeteksi serta menetralisir ancaman siber sebelum berdampak pada sistem.
                      </p>
                   </div>
 
                   {/* Card 3: Literasi Digital */}
-                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 lg:p-12 flex flex-col items-center text-center shadow-2xl hover:border-emerald-500/40 hover:-translate-y-2 transition-all duration-500 group">
-                     <div className="w-24 h-24 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(16,185,129,0.1)] group-hover:shadow-[0_0_40px_rgba(16,185,129,0.3)] transition-all">
+                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-emerald-500/40 hover:-translate-y-2 transition-all duration-500 group">
+                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(16,185,129,0.1)] group-hover:shadow-[0_0_40px_rgba(16,185,129,0.3)] transition-all">
                         <div className="absolute inset-0 rounded-full border-2 border-emerald-500/30 group-hover:border-emerald-500/80 animate-[spin_10s_linear_infinite]" />
-                        <BrainCircuit size={36} className="text-emerald-400" />
+                        <BrainCircuit size={32} className="text-emerald-400" />
                      </div>
                      <h3 className="text-2xl font-black text-white mb-4 tracking-wider uppercase">Literasi Digital</h3>
-                     <p className="text-sm font-medium text-slate-400 leading-relaxed">
+                     <p className="text-[13px] font-medium text-slate-400 leading-relaxed">
                        Meningkatkan kesadaran dan kompetensi seluruh sivitas akademika dalam menjaga keamanan data pribadi maupun data institusi di dunia maya.
                      </p>
                   </div>
@@ -441,7 +445,7 @@ export default function CyberLandingDark() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 5. MODAL LOGIN (MUNCUL SAAT DIKLIK AKSES PORTAL)                          */}
+      {/* 5. MODAL LOGIN                                                            */}
       {/* ========================================================================= */}
       <AnimatePresence>
         {isLoginOpen && (
@@ -625,6 +629,7 @@ export default function CyberLandingDark() {
           background-size: 60px 60px;
         }
         ::selection { background: #d946ef; color: white; }
+        .perspective-\\[1500px\\] { perspective: 1500px; }
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
