@@ -6,15 +6,15 @@ import {
   ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, 
   MapPin, Calendar, CheckCircle2, School, Network, Server,
   Home, Info, FileText, LayoutGrid, Megaphone, HelpCircle, X, ArrowRight, Shield, Zap,
-  HeartHandshake, Heart, BrainCircuit
+  BrainCircuit, ShieldAlert, Cpu
 } from 'lucide-react'
 
 // --- ASSET BACKGROUND ---
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
-// --- 1. EFEK KLIK PARTIKEL (DIPERKECIL & DIPERHALUS AGAR ELEGAN) ---
-const SubtleCyberParticleSystem = () => {
+// --- 1. EFEK KLIK PARTIKEL DEWA (ANTI-GAGAL, MUNCUL DI MANA SAJA) ---
+const GodTierParticleSystem = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -36,10 +36,10 @@ const SubtleCyberParticleSystem = () => {
     resize();
 
     const explode = (x: number, y: number) => {
-      // 1. Shockwave (Lebih kecil dan cepat pudar)
+      // 1. Shockwave
       shockwaves.push({ x, y, radius: 0, alpha: 0.8, speed: 4, width: 1.5 });
 
-      // 2. Sparks (Lebih pendek dan tidak terlalu menyebar)
+      // 2. Sparks
       for (let i = 0; i < 6; i++) {
         const angle = (Math.PI * 2 / 6) * i + (Math.random() * 0.5);
         const velocity = Math.random() * 6 + 4;
@@ -53,7 +53,7 @@ const SubtleCyberParticleSystem = () => {
         });
       }
 
-      // 3. Stardust (Lebih sedikit dan titik lebih kecil)
+      // 3. Stardust
       for (let i = 0; i < 8; i++) {
         const angle = Math.random() * Math.PI * 2;
         const speed = Math.random() * 3 + 1;
@@ -68,14 +68,12 @@ const SubtleCyberParticleSystem = () => {
       }
     };
 
-    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      explode(clientX, clientY);
+    // MENGGUNAKAN POINTERDOWN AGAR DETEKSI MOUSE & TOUCH 100% AKURAT WALAUPUN DI-SCROLL
+    const handlePointerDown = (e: PointerEvent) => {
+      explode(e.clientX, e.clientY);
     };
 
-    window.addEventListener('mousedown', handlePointerDown);
-    window.addEventListener('touchstart', handlePointerDown, { passive: true });
+    window.addEventListener('pointerdown', handlePointerDown, { passive: true });
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -85,12 +83,12 @@ const SubtleCyberParticleSystem = () => {
       for (let i = shockwaves.length - 1; i >= 0; i--) {
         let sw = shockwaves[i];
         sw.radius += sw.speed;
-        sw.alpha -= 0.05; // Cepat pudar
+        sw.alpha -= 0.05; 
         if (sw.alpha <= 0) { shockwaves.splice(i, 1); continue; }
         
         ctx.beginPath();
         ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(56, 189, 248, ${sw.alpha})`; // Cyan shockwave
+        ctx.strokeStyle = `rgba(56, 189, 248, ${sw.alpha})`;
         ctx.lineWidth = sw.width * sw.alpha;
         ctx.stroke();
       }
@@ -140,16 +138,16 @@ const SubtleCyberParticleSystem = () => {
 
     return () => {
       window.removeEventListener('resize', resize);
-      window.removeEventListener('mousedown', handlePointerDown);
-      window.removeEventListener('touchstart', handlePointerDown);
+      window.removeEventListener('pointerdown', handlePointerDown);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
+  // z-[9999] memastikan partikel selalu di atas segalanya
   return <canvas ref={canvasRef} className="fixed inset-0 z-[9999] pointer-events-none" />;
 };
 
-// --- 2. BACKGROUND CYBER ---
+// --- 2. BACKGROUND CYBER HERO SECTION ---
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-[#020108]">
@@ -267,16 +265,18 @@ export default function CyberLandingDark() {
   };
 
   return (
-    // PENTING: overflow-x-hidden agar tidak ada scroll samping, tetapi membiarkan scroll vertikal
     <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-fuchsia-500/30 relative perspective-[1500px]">
       
+      {/* 1. BACKGROUND GAMBAR UTAMA */}
       <PersistentUniverse bgIdx={bgIdx} />
-      <SubtleCyberParticleSystem />
+      
+      {/* 2. EFEK PARTIKEL KURSOR DEWA */}
+      <GodTierParticleSystem />
 
       {/* ========================================================================= */}
-      {/* HEADER NAVBAR                                                             */}
+      {/* 3. NAVBAR (HEADER GELAP ELEGAN)                                           */}
       {/* ========================================================================= */}
-      <header className="fixed top-0 left-0 right-0 z-40 w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl">
+      <header className="fixed top-0 left-0 right-0 z-40 w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
              <div className="w-10 h-10 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
@@ -321,7 +321,7 @@ export default function CyberLandingDark() {
       {/* ========================================================================= */}
       <div className="relative z-10 w-full pt-20">
         
-        {/* SECTION 1: HERO */}
+        {/* SECTION 1: HERO (TETAP TRANSPARAN KE BACKGROUND GAMBAR) */}
         <section className="min-h-[calc(100vh-80px)] flex items-center w-full max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-0">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
               {/* Teks Kiri */}
@@ -388,61 +388,64 @@ export default function CyberLandingDark() {
            </div>
         </section>
 
-        {/* SECTION 2: VISI & MISI (Sesuai Referensi Gambar dengan Tema Cyber) */}
-        <section className="w-full max-w-7xl mx-auto px-6 lg:px-10 py-24 border-t border-white/10 mt-12 relative">
+        {/* SECTION 2: PILAR UTAMA KEMANAN SIBER (BACKGROUND SOLID GELAP & KEREN) */}
+        <div className="relative w-full bg-[#030208] border-t border-white/10 z-20 pb-32 pt-24 mt-12 shadow-[0_-30px_60px_rgba(0,0,0,0.8)]">
            
-           {/* Background Light Decor */}
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-blue-600/5 blur-[150px] rounded-full pointer-events-none" />
+           {/* Ambient Lighting Background */}
+           <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-indigo-900/10 via-fuchsia-900/5 to-transparent blur-[120px] pointer-events-none" />
+           <div className="absolute inset-0 bg-grid-static opacity-[0.05] pointer-events-none" />
 
-           <div className="text-center mb-20 relative z-10">
-             <h2 className="text-4xl lg:text-6xl font-black tracking-tighter uppercase mb-6">
-               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500">Visi & Misi</span> Kami
-             </h2>
-             <p className="text-slate-400 max-w-3xl mx-auto font-medium text-sm lg:text-base leading-relaxed">
-               Berkomitmen untuk menciptakan lingkungan akademik yang dinamis yang mendorong pertumbuhan mahasiswa, inovasi, dan keberhasilan kolaboratif melalui keunggulan dan dedikasi.
-             </p>
-           </div>
-
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-              
-              {/* Card 1: Martuhan */}
-              <div className="bg-[#05050a]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-blue-500/40 hover:-translate-y-2 transition-all duration-500 group">
-                 <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(59,130,246,0.2)] group-hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] transition-all">
-                    <div className="absolute inset-0 rounded-full border-2 border-blue-500/50 animate-[spin_10s_linear_infinite]" />
-                    <HeartHandshake size={32} className="text-blue-400" />
-                 </div>
-                 <h3 className="text-2xl font-black text-white mb-4 tracking-wide">Martuhan</h3>
-                 <p className="text-xs font-medium text-slate-400 leading-relaxed">
-                   Membangun hubungan yang bermakna dan menumbuhkan komunitas yang peduli, di mana setiap individu merasa dihargai, didukung, dan diberdayakan untuk mencapai potensi terbaiknya.
+           <section className="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+               <div className="text-center mb-20">
+                 <h2 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase mb-6 drop-shadow-2xl">
+                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500">Pilar Strategis</span> Kami
+                 </h2>
+                 <p className="text-slate-400 max-w-3xl mx-auto font-medium text-sm lg:text-base leading-relaxed">
+                   Berkomitmen untuk menciptakan lingkungan akademik yang tangguh terhadap ancaman digital melalui penguatan infrastruktur, edukasi berkelanjutan, dan sistem keamanan proaktif.
                  </p>
-              </div>
+               </div>
 
-              {/* Card 2: Maroha */}
-              <div className="bg-[#05050a]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-fuchsia-500/40 hover:-translate-y-2 transition-all duration-500 group">
-                 <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(217,70,239,0.2)] group-hover:shadow-[0_0_40px_rgba(217,70,239,0.5)] transition-all">
-                    <div className="absolute inset-0 rounded-full border-2 border-fuchsia-500/50 animate-[spin_10s_linear_infinite_reverse]" />
-                    <Heart size={32} className="text-fuchsia-400" />
-                 </div>
-                 <h3 className="text-2xl font-black text-white mb-4 tracking-wide">Maroha</h3>
-                 <p className="text-xs font-medium text-slate-400 leading-relaxed">
-                   Membangun hubungan yang bermakna dan menumbuhkan komunitas yang peduli, di mana setiap individu merasa dihargai, didukung, dan diberdayakan untuk mencapai potensi terbaiknya.
-                 </p>
-              </div>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  
+                  {/* Card 1: Infrastruktur */}
+                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-cyan-500/40 hover:-translate-y-2 transition-all duration-500 group">
+                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(34,211,238,0.1)] group-hover:shadow-[0_0_40px_rgba(34,211,238,0.3)] transition-all">
+                        <div className="absolute inset-0 rounded-full border-2 border-cyan-500/30 group-hover:border-cyan-500/80 animate-[spin_10s_linear_infinite]" />
+                        <Server size={32} className="text-cyan-400" />
+                     </div>
+                     <h3 className="text-2xl font-black text-white mb-4 tracking-wider uppercase">Infrastruktur Tangguh</h3>
+                     <p className="text-[13px] font-medium text-slate-400 leading-relaxed">
+                       Membangun dan memelihara arsitektur jaringan sekolah yang terpusat, berkinerja tinggi, dan tahan terhadap gangguan atau serangan siber berskala besar.
+                     </p>
+                  </div>
 
-              {/* Card 3: Marbisuk */}
-              <div className="bg-[#05050a]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-emerald-500/40 hover:-translate-y-2 transition-all duration-500 group">
-                 <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(16,185,129,0.2)] group-hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] transition-all">
-                    <div className="absolute inset-0 rounded-full border-2 border-emerald-500/50 animate-[spin_10s_linear_infinite]" />
-                    <BrainCircuit size={32} className="text-emerald-400" />
-                 </div>
-                 <h3 className="text-2xl font-black text-white mb-4 tracking-wide">Marbisuk</h3>
-                 <p className="text-xs font-medium text-slate-400 leading-relaxed">
-                   Membangun hubungan yang bermakna dan menumbuhkan komunitas yang peduli, di mana setiap individu merasa dihargai, didukung, dan diberdayakan untuk mencapai potensi terbaiknya.
-                 </p>
-              </div>
+                  {/* Card 2: Keamanan Proaktif */}
+                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-fuchsia-500/40 hover:-translate-y-2 transition-all duration-500 group">
+                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(217,70,239,0.1)] group-hover:shadow-[0_0_40px_rgba(217,70,239,0.3)] transition-all">
+                        <div className="absolute inset-0 rounded-full border-2 border-fuchsia-500/30 group-hover:border-fuchsia-500/80 animate-[spin_10s_linear_infinite_reverse]" />
+                        <ShieldAlert size={32} className="text-fuchsia-400" />
+                     </div>
+                     <h3 className="text-2xl font-black text-white mb-4 tracking-wider uppercase">Keamanan Proaktif</h3>
+                     <p className="text-[13px] font-medium text-slate-400 leading-relaxed">
+                       Menerapkan protokol enkripsi end-to-end dan pemantauan real-time untuk mendeteksi serta menetralisir ancaman siber sebelum berdampak pada sistem.
+                     </p>
+                  </div>
 
-           </div>
-        </section>
+                  {/* Card 3: Literasi Digital */}
+                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-emerald-500/40 hover:-translate-y-2 transition-all duration-500 group">
+                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(16,185,129,0.1)] group-hover:shadow-[0_0_40px_rgba(16,185,129,0.3)] transition-all">
+                        <div className="absolute inset-0 rounded-full border-2 border-emerald-500/30 group-hover:border-emerald-500/80 animate-[spin_10s_linear_infinite]" />
+                        <BrainCircuit size={32} className="text-emerald-400" />
+                     </div>
+                     <h3 className="text-2xl font-black text-white mb-4 tracking-wider uppercase">Literasi Digital</h3>
+                     <p className="text-[13px] font-medium text-slate-400 leading-relaxed">
+                       Meningkatkan kesadaran dan kompetensi seluruh sivitas akademika dalam menjaga keamanan data pribadi maupun data institusi di dunia maya.
+                     </p>
+                  </div>
+
+               </div>
+           </section>
+        </div>
 
       </div>
 
