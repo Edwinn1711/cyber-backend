@@ -143,35 +143,46 @@ const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
 });
 PersistentUniverse.displayName = 'PersistentUniverse';
 
-const VisiMisiSection = () => (
-  <section className="relative w-full py-24 bg-[#020108]">
-    {/* Background Cyber (Hanya muncul di sini) */}
-    <div className="absolute inset-0 z-0 bg-[url('/bg/cyber1.jpg')] bg-cover bg-center opacity-[0.05] pointer-events-none" />
-    <div className="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-[#020108]/50 to-[#020108]" />
+const VisiMisiSection = () => {
+  const[hovered, setHovered] = useState<string | null>(null);
 
-    <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 text-center">
-      <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tighter uppercase mb-4">
-        Membangun Masa Depan <br/>
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Yang Gemilang</span>
-      </h2>
-      <p className="text-slate-400 mb-16 max-w-lg mx-auto text-sm font-medium">
-      Mengukur dan mengoptimalkan ketahanan siber melalui penguatan infrastruktur digital yang terintegrasi, demi menciptakan ekosistem akademik yang aman, tangguh, dan adaptif terhadap ancaman masa depan.
-      </p>
+  const data =[
+    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi pusat ketahanan siber pendidikan yang unggul, terpercaya, dan proaktif dalam menghadapi tantangan transformasi digital global." },
+    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan tata kelola infrastruktur digital yang tangguh, menerapkan protokol keamanan siber yang komprehensif, serta membangun budaya literasi digital bagi seluruh sivitas akademika." }
+  ];
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {[ { icon: Star, title: "Visi Kami", desc: "Menjadi pusat ketahanan siber pendidikan yang unggul, terpercaya, dan proaktif dalam menghadapi tantangan transformasi digital global." }, { icon: Target, title: "Misi Kami", desc: "Menyelenggarakan tata kelola infrastruktur digital yang tangguh, menerapkan protokol keamanan siber yang komprehensif, serta membangun budaya literasi digital bagi seluruh sivitas akademika." } ].map((item, i) => (
-          <div key={i} className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2.5rem] text-left hover:border-blue-500/50 transition-all group">
-            <div className="w-12 h-12 bg-blue-500/20 text-blue-400 flex items-center justify-center rounded-2xl mb-6 group-hover:scale-110 transition-transform">
-               <item.icon size={24} />
+  return (
+    <section className="relative w-full py-24 bg-[#020108]">
+      {/* Background Cyber */}
+      <div className="absolute inset-0 z-0 bg-[url('/bg/cyber1.jpg')] bg-cover bg-center opacity-[0.05] pointer-events-none" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 text-center">
+        <h2 className="text-4xl lg:text-5xl font-black text-white uppercase mb-16">Visi & Misi</h2>
+
+        {/* Container Utama untuk efek blur */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8" onMouseLeave={() => setHovered(null)}>
+          {data.map((item) => (
+            <div 
+              key={item.id}
+              onMouseEnter={() => setHovered(item.id)}
+              className={`
+                bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-12 rounded-[3rem] text-left transition-all duration-500
+                ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-50' : 'scale-100 opacity-100'}
+                ${hovered === item.id ? 'shadow-[0_20px_50px_rgba(0,0,0,0.5)] -translate-y-4 border-blue-500/50' : ''}
+              `}
+            >
+              <div className="w-16 h-16 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-3xl mb-8 border border-blue-500/20">
+                <item.icon size={32} />
+              </div>
+              <h3 className="text-3xl font-black text-white mb-6 tracking-wide">{item.title}</h3>
+              <p className="text-slate-400 text-base leading-relaxed font-medium">{item.desc}</p>
             </div>
-            <h3 className="text-2xl font-black text-white mb-4">{item.title}</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default function CyberLandingDark() {
   const router = useRouter();
