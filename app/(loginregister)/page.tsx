@@ -152,18 +152,22 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   ];
 
   return (
+    // Tambahkan border-b untuk garis pemisah, dan z-index yang cukup
     <section className="relative w-full py-24 bg-[#020108] border-b border-white/5 overflow-hidden">
-      {/* Background Sinkron */}
-      <motion.div 
-        key={bgIdx}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.2 }} 
-        exit={{ opacity: 0 }}
-        transition={{ duration: 1.5 }}
-        className="absolute inset-0 z-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${CYBER_ASSETS[bgIdx]})` }}
-      />
-      <div className="absolute inset-0 z-0 bg-[#020108]/90" />
+      
+      {/* Background Cyber (Layer Bawah) */}
+      <div className="absolute inset-0 z-0">
+        <motion.img 
+          key={bgIdx}
+          src={CYBER_ASSETS[bgIdx]}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.2 }} // Naikkan agar lebih nampak
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.5 }}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[#020108]/90" /> {/* Overlay gelap agar teks terbaca */}
+      </div>
       
       {/* Konten (SectionWrapper) */}
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
