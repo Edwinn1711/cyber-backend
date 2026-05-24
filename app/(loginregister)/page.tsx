@@ -6,7 +6,7 @@ import {
   ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, 
   MapPin, Calendar, CheckCircle2, Server, Network, Shield,
   Home, Info, FileText, LayoutGrid, Megaphone, HelpCircle, X, ArrowRight, Zap,
-  BrainCircuit, ShieldAlert, Cpu
+  BrainCircuit, ShieldAlert, Cpu, Star, Target
 } from 'lucide-react'
 
 // --- ASSET BACKGROUND ---
@@ -143,6 +143,36 @@ const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
 });
 PersistentUniverse.displayName = 'PersistentUniverse';
 
+const VisiMisiSection = () => (
+  <section className="relative w-full py-24 bg-[#020108]">
+    {/* Background Cyber (Hanya muncul di sini) */}
+    <div className="absolute inset-0 z-0 bg-[url('/bg/cyber1.jpg')] bg-cover bg-center opacity-[0.05] pointer-events-none" />
+    <div className="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-[#020108]/50 to-[#020108]" />
+
+    <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 text-center">
+      <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tighter uppercase mb-4">
+        Membangun Masa Depan <br/>
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Yang Gemilang</span>
+      </h2>
+      <p className="text-slate-400 mb-16 max-w-lg mx-auto text-sm font-medium">
+        Bersama-sama mewujudkan visi dan menjalankan misi untuk kemajuan mahasiswa Institut Teknologi Del
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {[ { icon: Star, title: "Visi Kami", desc: "Menjadi institusi yang unggul..." }, { icon: Target, title: "Misi Kami", desc: "Menyelenggarakan pendidikan..." } ].map((item, i) => (
+          <div key={i} className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2.5rem] text-left hover:border-blue-500/50 transition-all group">
+            <div className="w-12 h-12 bg-blue-500/20 text-blue-400 flex items-center justify-center rounded-2xl mb-6 group-hover:scale-110 transition-transform">
+               <item.icon size={24} />
+            </div>
+            <h3 className="text-2xl font-black text-white mb-4">{item.title}</h3>
+            <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
 export default function CyberLandingDark() {
   const router = useRouter();
   const [bgIdx, setBgIdx] = useState(0);
@@ -243,6 +273,8 @@ export default function CyberLandingDark() {
       {/* BACKGROUND GAMBAR & EFEK KLIK DEWA */}
       <PersistentUniverse bgIdx={bgIdx} />
       <UltraGodTierParticleSystem />
+
+      
 
 {/* AREA HEADER DIPERBAIKI */}
 <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
@@ -427,6 +459,8 @@ export default function CyberLandingDark() {
         </div>
 
       </div>
+
+      <VisiMisiSection />
 
       {/* ========================================================================= */}
       {/* 5. MODAL LOGIN                                                            */}
