@@ -232,7 +232,7 @@ const CyberInfrastructureSection = () => {
           </h2>
           <p className="text-slate-400 max-w-xl mx-auto text-sm">Sistem pemantauan operasional sekolah terintegrasi.</p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sectors.map((s, i) => (
             <div 
@@ -454,46 +454,85 @@ export default function CyberLandingDark() {
       {/* ========================================================================= */}
       <div className="relative z-10 w-full pt-36 lg:pt-44">
         
-        {/* --- HALAMAN 1: HERO --- */}
-        <section className="min-h-[calc(100vh-96px)] flex items-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 py-12 lg:py-0">
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
-              {/* Teks Kiri */}
-              <div className="space-y-8 text-center lg:text-left">
-                 <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 text-slate-300 rounded-full text-[9px] font-black tracking-[0.5em] uppercase shadow-lg backdrop-blur-md">
-                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_#34d399]"/> SECURE CONNECTION ACTIVE
-                 </div>
-                 <h2 className="text-5xl lg:text-7xl font-black text-white tracking-tighter leading-tight uppercase drop-shadow-2xl">
-                   Kesiapan Siber <br/>
-                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-500 to-indigo-400">Sekolah 2026.</span>
+{/* SECTION 1: HERO (REVISI ULTRA LUXURY) */}
+        <section className="min-h-[calc(100vh-120px)] flex items-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 py-12 lg:py-0">
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center w-full">
+              
+              {/* Teks Kiri - Tipografi Elegan */}
+              <div className="space-y-10 text-center lg:text-left">
+                 <motion.div 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="inline-flex items-center gap-3 px-5 py-2 bg-white/5 border border-white/10 text-cyan-400 rounded-full text-[10px] font-black tracking-[0.4em] uppercase backdrop-blur-md shadow-[0_0_20px_rgba(34,211,238,0.1)]"
+                 >
+                   <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
+                   Secure Protocol v.2.6
+                 </motion.div>
+                 
+                 <h2 className="text-4xl lg:text-6xl font-black text-white tracking-tighter leading-[1.1] uppercase">
+                    Kesiapan Siber <br/>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-fuchsia-500 to-cyan-400 animate-gradient-x">
+                       Sekolah 2026.
+                    </span>
                  </h2>
-                 <p className="text-sm lg:text-base font-bold text-slate-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                   Platform ini dirancang untuk mengkaji tingkat ketahanan siber sekolah melalui penyediaan infrastruktur digital yang aman dan terintegrasi secara penuh.
+                 
+                 <p className="text-sm lg:text-base font-medium text-slate-400 leading-relaxed max-w-xl mx-auto lg:mx-0 opacity-80">
+                    Platform kesiapan digital sekolah yang mengintegrasikan keamanan tingkat tinggi dengan infrastruktur modern untuk masa depan pendidikan yang terlindungi.
                  </p>
-                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5">
-                   <button onClick={() => setIsLoginOpen(true)} className="w-full sm:w-auto px-10 py-4 bg-fuchsia-600 text-white rounded-[1.2rem] font-black text-[11px] tracking-[0.3em] uppercase shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:bg-fuchsia-500 transition-all flex items-center justify-center gap-3 hover:-translate-y-1">
-                      Mulai Evaluasi <ArrowRight size={16}/>
+
+                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6">
+                   <button onClick={() => setIsLoginOpen(true)} className="group relative w-full sm:w-auto px-10 py-4 bg-white text-black rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all hover:bg-cyan-400 hover:text-white hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] flex items-center justify-center gap-3">
+                      Mulai Evaluasi <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform"/>
                    </button>
                  </div>
-                 <div className="pt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6">
-                    {[ { icon: Shield, col: 'text-indigo-400' }, { icon: Server, col: 'text-fuchsia-400' }, { icon: Network, col: 'text-cyan-400' }, { icon: Fingerprint, col: 'text-emerald-400' } ].map((feat, i) => (
-                      <div key={i} className={`w-14 h-14 rounded-2xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all hover:-translate-y-1 cursor-pointer ${feat.col}`}>
-                         <feat.icon size={24} />
+
+                 <div className="pt-8 flex flex-wrap items-center justify-center lg:justify-start gap-5">
+                    {[ Shield, Server, Network, Fingerprint ].map((Icon, i) => (
+                      <div key={i} className="w-12 h-12 rounded-xl flex items-center justify-center border border-white/5 bg-white/5 backdrop-blur-sm text-slate-500 hover:text-cyan-400 hover:border-cyan-500/30 transition-all cursor-crosshair">
+                         <Icon size={20} />
                       </div>
                     ))}
                  </div>
               </div>
 
-              {/* Grafis 3D Kanan */}
-              <div className="hidden lg:flex items-center justify-center relative w-full" style={{ perspective: 1500 }}>
-                 <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} className="relative w-full max-w-[400px] aspect-square bg-[#05050a]/80 backdrop-blur-3xl rounded-[3rem] p-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col items-center justify-center">
-                    <div className="relative flex items-center justify-center mb-8" style={{ transform: "translateZ(70px)" }}>
-                       <div className="w-32 h-32 bg-black border-[2px] border-fuchsia-500/50 rounded-3xl flex items-center justify-center shadow-[0_0_40px_rgba(217,70,239,0.3)]">
-                          <ShieldCheck size={64} className="text-fuchsia-400" />
+              {/* Grafis Kanan (Card 3D Ultra Luxury) */}
+              <div className="hidden lg:flex items-center justify-center relative w-full" style={{ perspective: 2000 }}>
+                 <motion.div 
+                    style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                    className="relative w-full max-w-[420px] aspect-[4/5] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-[3.5rem] p-1 shadow-[0_50px_100px_rgba(0,0,0,0.6)] border border-white/20 flex flex-col items-center justify-center group/card"
+                 >
+                    {/* Inner Decorative Border */}
+                    <div className="absolute inset-4 border border-white/5 rounded-[2.5rem] pointer-events-none" />
+                    
+                    {/* Corner Marks */}
+                    <div className="absolute top-8 left-8 w-4 h-4 border-t-2 border-l-2 border-cyan-500/30" />
+                    <div className="absolute bottom-8 right-8 w-4 h-4 border-b-2 border-r-2 border-fuchsia-500/30" />
+
+                    <div className="relative flex items-center justify-center mb-12" style={{ transform: "translateZ(100px)" }}>
+                       {/* Animated Rotating Rings */}
+                       <div className="absolute w-56 h-56 border border-cyan-500/20 rounded-full animate-[spin_20s_linear_infinite]" />
+                       <div className="absolute w-48 h-48 border-dashed border border-fuchsia-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
+                       
+                       <div className="w-32 h-32 bg-black/80 border border-white/10 rounded-3xl flex items-center justify-center shadow-[0_0_50px_rgba(34,211,238,0.2)]">
+                          <ShieldCheck size={60} className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
                        </div>
                     </div>
-                    <h3 className="text-3xl font-black text-white tracking-widest uppercase text-center" style={{ transform: "translateZ(50px)" }}>Sistem<br/>Keamanan</h3>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-3" style={{ transform: "translateZ(30px)" }}>Cyber Security</p>
-                    <div className="absolute -bottom-5 w-[85%] bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white px-8 py-3.5 rounded-full text-[10px] font-black tracking-[0.4em] text-center shadow-2xl" style={{ transform: "translateZ(80px)" }}>TERINTEGRASI 2026</div>
+                    
+                    <div className="text-center space-y-2" style={{ transform: "translateZ(60px)" }}>
+                       <h3 className="text-2xl font-black text-white tracking-[0.2em] uppercase">
+                          Security <span className="text-cyan-400">System</span>
+                       </h3>
+                       <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
+                          Cyber Security Active
+                       </p>
+                    </div>
+                    
+                    <div 
+                      className="absolute -bottom-6 px-10 py-4 bg-black border border-white/10 text-white rounded-2xl text-[10px] font-black tracking-[0.4em] shadow-2xl transition-all group-hover/card:border-cyan-500/50" 
+                      style={{ transform: "translateZ(120px)" }}
+                    >
+                      ENCRYPTED 2026
+                    </div>
                  </motion.div>
               </div>
            </div>
@@ -554,6 +593,29 @@ export default function CyberLandingDark() {
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
+        /* 1. Animasi Gradasi Teks Bergerak (Hero & Judul) */
+        @keyframes gradient-x {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-x {
+          background-size: 200% 200%;
+          animation: gradient-x 5s ease infinite;
+        }
+
+        /* 2. Animasi Laser Scanner pada Card Modul */
+        @keyframes scanner {
+          0% { top: 0%; opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { top: 100%; opacity: 0; }
+        }
+        .animate-scanner {
+          animation: scanner 3s linear infinite;
+        }
+
+        /* 3. Animasi Hologram Scan (Lama) */
         @keyframes hologram-scan {
           0% { top: -10%; opacity: 0; }
           10% { opacity: 0.6; }
@@ -563,23 +625,46 @@ export default function CyberLandingDark() {
         .animate-hologram-scan {
           animation: hologram-scan 3s ease-in-out infinite;
         }
+
+        /* 4. Background Grid Statis */
         .bg-grid-static {
           background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
                             linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
           background-size: 60px 60px;
         }
-        ::selection { background: #d946ef; color: white; }
-        .perspective-\\[1500px\\] { perspective: 1500px; }
+
+        /* 5. Custom Selection & Input Fixes */
+        ::selection { background: #06b6d4; color: white; }
+        
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
-        input:-webkit-autofill:active{
+        input:-webkit-autofill:active {
             -webkit-box-shadow: 0 0 0 30px #050505 inset !important;
             -webkit-text-fill-color: white !important;
             transition: background-color 5000s ease-in-out 0s;
         }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.5; cursor: pointer; }
-        input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 0.8; }
+
+        input[type="date"]::-webkit-calendar-picker-indicator { 
+          filter: invert(1) hue-rotate(180deg) brightness(1.5); 
+          opacity: 0.5; 
+          cursor: pointer; 
+        }
+
+        /* 6. Scrollbar Mewah (Biru ke Ungu) */
+        ::-webkit-scrollbar {
+          width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+          background: #020108;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(to bottom, #22d3ee, #d946ef);
+          border-radius: 10px;
+        }
+
+        /* 7. Utilitas Tambahan */
+        .perspective-[2000px] { perspective: 2000px; }
       `}} />
     </div>
   );
