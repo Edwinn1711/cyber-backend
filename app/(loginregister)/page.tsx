@@ -113,60 +113,51 @@ const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
 });
 PersistentUniverse.displayName = 'PersistentUniverse';
 
+const SectionDivider = () => (
+  <div className="relative w-full h-px overflow-hidden z-20">
+    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-fuchsia-500/40 to-transparent blur-[2px]" />
+    <motion.div 
+      initial={{ x: '-100%' }}
+      animate={{ x: '100%' }}
+      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+      className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+    />
+  </div>
+);
+
 const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   const [hovered, setHovered] = useState<string | null>(null);
-
-  const data =[
-    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data di lingkungan sekolah." },
-    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital sebagai fondasi masa depan." }
+  const data = [
+    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data." },
+    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital." }
   ];
 
   return (
-    <section className="relative w-full py-24 bg-black border-t border-white/5 overflow-hidden">
-      {/* BACKGROUND - Opacity dinaikkan agar nampak selaras dengan Page 1 */}
+    <section className="relative w-full py-24 bg-black overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="wait">
-          <motion.img 
-            key={bgIdx}
-            src={CYBER_ASSETS[bgIdx]}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.3 }} // Opacity dinaikkan ke 30%
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5 }}
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          />
-        </AnimatePresence>
-        {/* Overlay hitam ditipiskan dari /90 ke /70 agar gambar tembus */}
-        <div className="absolute inset-0 bg-black/70" /> 
+        <motion.img 
+          key={bgIdx} src={CYBER_ASSETS[bgIdx]} 
+          initial={{ opacity: 0 }} animate={{ opacity: 0.2 }} exit={{ opacity: 0 }}
+          transition={{ duration: 1.5 }} className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/80" />
       </div>
-      
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
         <div className="mb-20">
-          <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tighter uppercase mb-6">
-            Membangun Kedaulatan <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Digital Sekolah</span>
+          <h2 className="text-5xl font-black text-white uppercase tracking-tighter mb-6">
+            Membangun Kedaulatan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Digital Sekolah</span>
           </h2>
-          <p className="text-slate-300 max-w-xl mx-auto text-sm font-medium leading-relaxed">
-            Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman demi lingkungan belajar yang terlindungi.
-          </p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
             <div 
-              key={item.id}
-              onMouseEnter={() => setHovered(item.id)}
-              className={`
-                bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-12 rounded-[3rem] text-left transition-all duration-500
-                ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-50' : 'scale-100 opacity-100'}
-                ${hovered === item.id ? 'shadow-[0_20px_50px_rgba(0,0,0,0.5)] -translate-y-4 border-blue-500/50' : ''}
-              `}
+              key={item.id} onMouseEnter={() => setHovered(item.id)}
+              className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-12 rounded-[3rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm opacity-50' : ''} ${hovered === item.id ? '-translate-y-4 border-blue-500/50' : ''}`}
             >
-              <div className="w-16 h-16 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-3xl mb-8 border border-blue-500/20">
-                <item.icon size={32} />
-              </div>
-              <h3 className="text-3xl font-black text-white mb-6 tracking-wide">{item.title}</h3>
-              <p className="text-slate-400 text-base leading-relaxed font-medium">{item.desc}</p>
+              <div className="w-14 h-14 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-8"><item.icon size={28} /></div>
+              <h3 className="text-2xl font-black text-white mb-4">{item.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -174,52 +165,23 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
     </section>
   );
 };
+
 const SecurityStatsSection = () => {
-  const stats =[
-    { label: "Data Terlindungi", value: "99.9%", color: "text-emerald-400", sub: "Protokol Enkripsi AES-256" },
-    { label: "Deteksi Ancaman", value: "1,240", color: "text-fuchsia-400", sub: "Upaya Peretasan Terblokir" },
-    { label: "Siswa Terliterasi", value: "850+", color: "text-blue-400", sub: "Sertifikasi Keamanan Dasar" },
-    { label: "Uptime Sistem", value: "24/7", color: "text-cyan-400", sub: "Konektivitas Tanpa Henti" },
+  const stats = [
+    { label: "Data Terlindungi", value: "99.9%", color: "text-emerald-400" },
+    { label: "Deteksi Ancaman", value: "1,240", color: "text-fuchsia-400" },
+    { label: "Siswa Terliterasi", value: "850+", color: "text-blue-400" },
+    { label: "Uptime Sistem", value: "24/7", color: "text-cyan-400" },
   ];
-
   return (
-    <section className="relative w-full min-h-[85vh] flex items-center justify-center py-32 bg-[#030208] border-b border-white/5 overflow-hidden">
-      {/* Efek Cahaya Latar (Agar tidak terlihat kosong/jelek) */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-fuchsia-600/5 blur-[150px] rounded-full pointer-events-none" />
-      
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 w-full">
-        {/* Judul yang Lebih Besar */}
-        <div className="text-center mb-28">
-          <h2 className="text-5xl lg:text-7xl font-black text-white uppercase tracking-tighter mb-8 drop-shadow-2xl">
-            Metrik Ketahanan <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-violet-500">Digital</span>
-          </h2>
-          <p className="text-slate-400 max-w-3xl mx-auto text-base lg:text-lg font-medium opacity-80 leading-relaxed">
-            Laporan komprehensif mengenai tingkat keamanan, stabilitas infrastruktur, dan kesiapan siber sekolah dalam periode operasional 2026.
-          </p>
-        </div>
-
-        {/* Grid Kartu yang Lebih Besar & Tebal */}
+    <section className="relative w-full min-h-[80vh] flex items-center justify-center py-24 bg-[#030208]">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
+        <h2 className="text-6xl font-black text-white uppercase mb-20 tracking-tighter">METRIK KETAHANAN <span className="text-fuchsia-500">DIGITAL</span></h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((s, i) => (
-            <div key={i} className="group relative bg-[#08070d]/50 backdrop-blur-sm border border-white/5 p-14 rounded-[3rem] hover:border-fuchsia-500/30 transition-all duration-500 flex flex-col items-center justify-center text-center shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-              
-              {/* Glow saat Hover */}
-              <div className="absolute inset-0 bg-fuchsia-500/0 group-hover:bg-fuchsia-500/5 rounded-[3rem] transition-colors" />
-
-              {/* Angka Statistik Super Besar */}
-              <div className={`text-6xl lg:text-8xl font-black mb-6 transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(217,70,239,0.2)] ${s.color}`}>
-                {s.value}
-              </div>
-              
-              {/* Label Utama */}
-              <div className="text-sm lg:text-base font-black text-white uppercase tracking-[0.3em] mb-3 transition-colors group-hover:text-fuchsia-400">
-                {s.label}
-              </div>
-              
-              {/* Sub-keterangan Tambahan agar padat */}
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest opacity-60">
-                {s.sub}
-              </div>
+            <div key={i} className="bg-[#08070d] p-14 rounded-[3rem] border border-white/5 hover:border-fuchsia-500/30 transition-all group">
+              <div className={`text-7xl font-black mb-4 transition-transform group-hover:scale-110 ${s.color}`}>{s.value}</div>
+              <div className="text-xs font-black text-slate-500 uppercase tracking-[0.3em]">{s.label}</div>
             </div>
           ))}
         </div>
@@ -230,77 +192,28 @@ const SecurityStatsSection = () => {
 
 const CyberInfrastructureSection = () => {
   const sectors = [
-    { title: "Firewall Perbatasan", desc: "Filtering trafik masuk-keluar jaringan sekolah secara real-time.", icon: ShieldAlert },
-    { title: "Monitoring Jaringan", desc: "Pemantauan beban bandwidth dan stabilitas koneksi tiap kelas.", icon: Network },
-    { title: "Server Terpusat", desc: "Manajemen data akademik di server sekolah yang terenkripsi.", icon: Server },
-    { title: "Deteksi Intrusi (IDS)", desc: "Mendeteksi akses ilegal atau upaya peretasan ke sistem.", icon: ScanLine },
-    { title: "Autentikasi Siswa", desc: "Sistem login terintegrasi dengan enkripsi identitas digital.", icon: Fingerprint },
-    { title: "Backup Data Lokal", desc: "Redundansi data mingguan untuk mencegah kehilangan dokumen.", icon: Cpu }
+    { title: "Firewall", icon: ShieldAlert, desc: "Filtering trafik masuk-keluar jaringan." },
+    { title: "Monitoring", icon: Network, desc: "Pemantauan beban bandwidth tiap kelas." },
+    { title: "Server", icon: Server, desc: "Manajemen data akademik terenkripsi." },
+    { title: "IDS", icon: ScanLine, desc: "Mendeteksi upaya peretasan sistem." },
+    { title: "Auth", icon: Fingerprint, desc: "Sistem login identitas digital." },
+    { title: "Backup", icon: Cpu, desc: "Redundansi data mingguan lokal." }
   ];
-
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center py-24 bg-black overflow-hidden border-b border-cyan-500/20">
-      
-      {/* --- VIDEO BACKGROUND ENGINE (DIBERSIHKAN AGAR MIRIP ASLINYA) --- */}
       <div className="absolute inset-0 z-0">
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
-          className="w-full h-full object-cover opacity-100" // Opacity dikembalikan ke 100%
-        >
-          <source src="/bg/hacking-bg.mp4" type="video/mp4" />
-        </video>
-        
-        {/* Layer 1: Overlay Hitam Transparan (Hanya sedikit agar teks terbaca) */}
+        <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-100"><source src="/bg/hacking-bg.mp4" type="video/mp4" /></video>
         <div className="absolute inset-0 bg-black/40" />
-        
-        {/* Layer 2: Gradient Halus (Hanya di pinggir agar tidak kaku potongannya) */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#000000_100%)] opacity-80" />
       </div>
-
-      {/* --- KONTEN UTAMA --- */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 w-full">
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.4em] uppercase mb-8 animate-pulse">
-            <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" /> Live Infrastructure Stream
-          </div>
-          <h2 className="text-5xl lg:text-7xl font-black text-white uppercase tracking-tighter mb-4 drop-shadow-[0_0_20px_rgba(34,211,238,0.5)]">
-            MODUL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">PERTAHANAN</span> SIBER
-          </h2>
-          <p className="text-slate-400 max-w-2xl mx-auto text-sm lg:text-base font-medium">
-            Sistem pemantauan operasional sekolah yang terintegrasi penuh dengan protokol keamanan tingkat lanjut.
-          </p>
-        </div>
-
-        {/* --- GRID 6 KOTAK HACKING UI --- */}
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 w-full text-center">
+        <h2 className="text-6xl font-black text-white uppercase tracking-tighter mb-16 drop-shadow-[0_0_20px_rgba(34,211,238,0.5)]">MODUL <span className="text-cyan-400">PERTAHANAN</span> SIBER</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sectors.map((s, i) => (
-            <div 
-              key={i} 
-              className="group/card relative bg-[#050811]/40 backdrop-blur-xl border border-cyan-500/10 p-10 rounded-2xl hover:border-cyan-400/50 transition-all duration-500 hover:-translate-y-2 shadow-2xl"
-            >
-              {/* Dekorasi Sudut Interface */}
-              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-500/40" />
-              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-500/40" />
-              
-              <div className="w-14 h-14 bg-cyan-950/30 border border-cyan-500/20 text-cyan-400 rounded-xl flex items-center justify-center mb-8 group-hover/card:shadow-[0_0_30px_rgba(34,211,238,0.4)] group-hover/card:scale-110 transition-all">
-                <s.icon size={26} />
-              </div>
-              
-              <h3 className="text-xl font-black text-white mb-4 uppercase tracking-widest group-hover/card:text-cyan-400 transition-colors">{s.title}</h3>
-              <p className="text-cyan-100/40 text-[13px] leading-relaxed font-medium group-hover/card:text-cyan-100/70 transition-colors">{s.desc}</p>
-
-              {/* Animasi Loading Bar di setiap Card */}
-              <div className="mt-8 h-1 w-full bg-cyan-950 rounded-full overflow-hidden">
-                <motion.div 
-                  initial={{ width: "0%" }}
-                  animate={{ width: "100%" }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="h-full bg-cyan-500/60 shadow-[0_0_10px_#22d3ee]" 
-                />
-              </div>
+            <div key={i} className="group relative bg-[#050811]/40 backdrop-blur-2xl border border-cyan-500/10 p-10 rounded-2xl hover:border-cyan-400/50 transition-all duration-500 shadow-2xl">
+              <div className="w-14 h-14 bg-cyan-950/30 text-cyan-400 rounded-xl flex items-center justify-center mb-8 mx-auto"><s.icon size={26} /></div>
+              <h3 className="text-xl font-black text-white mb-4 uppercase">{s.title}</h3>
+              <p className="text-cyan-100/40 text-xs leading-relaxed">{s.desc}</p>
             </div>
           ))}
         </div>
@@ -460,314 +373,108 @@ export default function CyberLandingDark() {
 </header>
 
       {/* ========================================================================= */}
-      {/* KONTEN UTAMA (DITAMBAH JANGKAUAN PT AGAR KONTEN ATAS BEBAS MEPEET)         */}
+      {/* KONTEN UTAMA (SISTEM 5 HALAMAN DENGAN PEMISAH BERCAHAYA)                   */}
       {/* ========================================================================= */}
-      <div className="relative z-10 w-full pt-36 lg:pt-44"> {/* Naik dari pt-24 ke pt-36/pt-44 */}
+      <div className="relative z-10 w-full pt-36 lg:pt-44">
         
-        {/* SECTION 1: HERO */}
+        {/* --- HALAMAN 1: HERO --- */}
         <section className="min-h-[calc(100vh-96px)] flex items-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 py-12 lg:py-0">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
-              
               {/* Teks Kiri */}
               <div className="space-y-8 text-center lg:text-left">
-                 {/* Lencana Atas dengan Jarak Huruf Lebar & Mewah */}
                  <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 text-slate-300 rounded-full text-[9px] font-black tracking-[0.5em] uppercase shadow-lg backdrop-blur-md">
                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_#34d399]"/> SECURE CONNECTION ACTIVE
                  </div>
-                 
                  <h2 className="text-5xl lg:text-7xl font-black text-white tracking-tighter leading-tight uppercase drop-shadow-2xl">
                    Kesiapan Siber <br/>
                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-500 to-indigo-400">Sekolah 2026.</span>
                  </h2>
-                 
                  <p className="text-sm lg:text-base font-bold text-slate-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                   Platform ini dirancang untuk mengkaji tingkat ketahanan siber di lingkungan Institut Teknologi Del melalui penyediaan infrastruktur digital yang aman dan terintegrasi secara penuh.
+                   Platform ini dirancang untuk mengkaji tingkat ketahanan siber sekolah melalui penyediaan infrastruktur digital yang aman dan terintegrasi secara penuh.
                  </p>
-
                  <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5">
-                   <button onClick={() => setIsLoginOpen(true)} className="w-full sm:w-auto px-10 py-4 bg-fuchsia-600 text-white rounded-[1.2rem] font-black text-[11px] tracking-[0.3em] uppercase shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:bg-fuchsia-500 hover:shadow-[0_0_30px_rgba(217,70,239,0.6)] transition-all flex items-center justify-center gap-3 hover:-translate-y-1">
+                   <button onClick={() => setIsLoginOpen(true)} className="w-full sm:w-auto px-10 py-4 bg-fuchsia-600 text-white rounded-[1.2rem] font-black text-[11px] tracking-[0.3em] uppercase shadow-[0_0_20px_rgba(217,70,239,0.4)] hover:bg-fuchsia-500 transition-all flex items-center justify-center gap-3 hover:-translate-y-1">
                       Mulai Evaluasi <ArrowRight size={16}/>
                    </button>
                  </div>
-
                  <div className="pt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6">
-                    {[ 
-                      { icon: Shield, color: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10 shadow-[0_0_15px_rgba(99,102,241,0.2)]' }, 
-                      { icon: Server, color: 'text-fuchsia-400 border-fuchsia-500/30 bg-fuchsia-500/10 shadow-[0_0_15px_rgba(217,70,239,0.2)]' }, 
-                      { icon: Network, color: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10 shadow-[0_0_15px_rgba(34,211,238,0.2)]' }, 
-                      { icon: Fingerprint, color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.2)]' } 
-                    ].map((feat, i) => (
-                      <div key={i} className={`w-14 h-14 rounded-2xl flex items-center justify-center border backdrop-blur-md transition-all hover:-translate-y-1 hover:scale-105 cursor-pointer ${feat.color}`}>
+                    {[ { icon: Shield, col: 'text-indigo-400' }, { icon: Server, col: 'text-fuchsia-400' }, { icon: Network, col: 'text-cyan-400' }, { icon: Fingerprint, col: 'text-emerald-400' } ].map((feat, i) => (
+                      <div key={i} className={`w-14 h-14 rounded-2xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all hover:-translate-y-1 cursor-pointer ${feat.col}`}>
                          <feat.icon size={24} />
                       </div>
                     ))}
                  </div>
               </div>
 
-              {/* Grafis Kanan (Card 3D) */}
+              {/* Grafis 3D Kanan */}
               <div className="hidden lg:flex items-center justify-center relative w-full" style={{ perspective: 1500 }}>
-                 <motion.div 
-                    style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                    className="relative w-full max-w-[400px] aspect-square bg-[#05050a]/80 backdrop-blur-3xl rounded-[3rem] p-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col items-center justify-center"
-                 >
-                    <div className="absolute inset-0 rounded-[3rem] overflow-hidden pointer-events-none">
-                       <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-600/20 blur-[100px] rounded-full" />
-                       <div className="absolute top-0 left-0 w-full h-1 bg-fuchsia-500 shadow-[0_0_30px_#d946ef] animate-hologram-scan opacity-60" />
-                    </div>
-                    
+                 <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} className="relative w-full max-w-[400px] aspect-square bg-[#05050a]/80 backdrop-blur-3xl rounded-[3rem] p-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col items-center justify-center">
                     <div className="relative flex items-center justify-center mb-8" style={{ transform: "translateZ(70px)" }}>
-                       <div className="absolute w-48 h-48 border-[2px] border-dashed border-fuchsia-500/30 rounded-full animate-[spin_15s_linear_infinite]" style={{ transform: "translateZ(-10px)" }} />
-                       <div className="w-32 h-32 bg-black border-[2px] border-fuchsia-500/50 rounded-3xl flex items-center justify-center shadow-[0_0_40px_rgba(217,70,239,0.3)] relative z-10">
-                          <ShieldCheck size={64} className="text-fuchsia-400 drop-shadow-[0_0_15px_#d946ef]" />
+                       <div className="w-32 h-32 bg-black border-[2px] border-fuchsia-500/50 rounded-3xl flex items-center justify-center shadow-[0_0_40px_rgba(217,70,239,0.3)]">
+                          <ShieldCheck size={64} className="text-fuchsia-400" />
                        </div>
                     </div>
-                    
-                    <h3 className="text-3xl font-black text-white tracking-widest uppercase text-center relative z-10 drop-shadow-2xl" style={{ transform: "translateZ(50px)" }}>
-                      Sistem<br/>Keamanan
-                    </h3>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] text-center mt-3 relative z-10" style={{ transform: "translateZ(30px)" }}>
-                      Cyber Security
-                    </p>
-                    
-                    <div className="absolute -bottom-5 w-[85%] left-[7.5%] bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white px-8 py-3.5 rounded-full text-[10px] font-black tracking-[0.4em] text-center shadow-[0_20px_40px_rgba(217,70,239,0.5)] border border-white/20" style={{ transform: "translateZ(80px)" }}>
-                      TERINTEGRASI 2026
-                    </div>
+                    <h3 className="text-3xl font-black text-white tracking-widest uppercase text-center" style={{ transform: "translateZ(50px)" }}>Sistem<br/>Keamanan</h3>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-3" style={{ transform: "translateZ(30px)" }}>Cyber Security</p>
+                    <div className="absolute -bottom-5 w-[85%] bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white px-8 py-3.5 rounded-full text-[10px] font-black tracking-[0.4em] text-center shadow-2xl" style={{ transform: "translateZ(80px)" }}>TERINTEGRASI 2026</div>
                  </motion.div>
               </div>
            </div>
         </section>
 
-        {/* SECTION 2: PILAR UTAMA KEMANAN SIBER */}
-        <div className="relative w-full bg-[#030208] border-t border-white/10 z-20 pb-32 pt-24 shadow-[0_-30px_60px_rgba(0,0,0,0.8)] border-b border-white/5">
-           <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-indigo-900/10 via-fuchsia-900/5 to-transparent blur-[120px] pointer-events-none" />
-           <div className="absolute inset-0 bg-grid-static opacity-[0.05] pointer-events-none" />
+        <SectionDivider />
 
+        {/* --- HALAMAN 2: PILAR STRATEGIS --- */}
+        <div className="relative w-full bg-[#030208] z-20 pb-32 pt-24 shadow-[0_-30px_60px_rgba(0,0,0,0.8)]">
+           <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-indigo-900/10 via-fuchsia-900/5 to-transparent blur-[120px] pointer-events-none" />
            <section className="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
                <div className="text-center mb-20">
-                 <h2 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase mb-6 drop-shadow-2xl">
+                 <h2 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase mb-6">
                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500">Pilar Strategis</span> Kami
                  </h2>
-                 <p className="text-slate-400 max-w-3xl mx-auto font-medium text-sm lg:text-base leading-relaxed">
-                   Berkomitmen untuk menciptakan lingkungan akademik yang tangguh terhadap ancaman digital melalui penguatan infrastruktur, edukasi berkelanjutan, dan sistem keamanan proaktif.
+                 <p className="text-slate-400 max-w-3xl mx-auto font-medium text-sm leading-relaxed">
+                   Berkomitmen untuk menciptakan lingkungan akademik yang tangguh terhadap ancaman digital melalui penguatan infrastruktur dan sistem keamanan proaktif.
                  </p>
                </div>
-
                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  {/* Card 1: Infrastruktur */}
-                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-cyan-500/40 hover:-translate-y-2 transition-all duration-500 group">
-                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(34,211,238,0.1)] group-hover:shadow-[0_0_40px_rgba(34,211,238,0.3)] transition-all">
-                        <div className="absolute inset-0 rounded-full border-2 border-cyan-500/30 group-hover:border-cyan-500/80 animate-[spin_10s_linear_infinite]" />
-                        <Server size={32} className="text-cyan-400" />
-                     </div>
-                     <h3 className="text-2xl font-black text-white mb-4 tracking-wider uppercase">Infrastruktur Tangguh</h3>
-                     <p className="text-[13px] font-medium text-slate-400 leading-relaxed">
-                       Membangun dan memelihara arsitektur jaringan sekolah yang terpusat, berkinerja tinggi, dan tahan terhadap gangguan atau serangan siber berskala besar.
-                     </p>
+                  {/* Card 1 */}
+                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 text-center hover:border-cyan-500/40 transition-all duration-500">
+                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 mx-auto"><Server size={32} className="text-cyan-400" /></div>
+                     <h3 className="text-2xl font-black text-white mb-4 uppercase">Infrastruktur</h3>
+                     <p className="text-[13px] text-slate-400 leading-relaxed">Membangun arsitektur jaringan sekolah yang terpusat dan tahan terhadap serangan siber.</p>
                   </div>
-
-                  {/* Card 2: Keamanan Proaktif */}
-                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-fuchsia-500/40 hover:-translate-y-2 transition-all duration-500 group">
-                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(217,70,239,0.1)] group-hover:shadow-[0_0_40px_rgba(217,70,239,0.3)] transition-all">
-                        <div className="absolute inset-0 rounded-full border-2 border-fuchsia-500/30 group-hover:border-fuchsia-500/80 animate-[spin_10s_linear_infinite_reverse]" />
-                        <ShieldAlert size={32} className="text-fuchsia-400" />
-                     </div>
-                     <h3 className="text-2xl font-black text-white mb-4 tracking-wider uppercase">Keamanan Proaktif</h3>
-                     <p className="text-[13px] font-medium text-slate-400 leading-relaxed">
-                       Menerapkan protokol enkripsi end-to-end dan pemantauan real-time untuk mendeteksi serta menetralisir ancaman siber sebelum berdampak pada sistem.
-                     </p>
+                  {/* Card 2 */}
+                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 text-center hover:border-fuchsia-500/40 transition-all duration-500">
+                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 mx-auto"><ShieldAlert size={32} className="text-fuchsia-400" /></div>
+                     <h3 className="text-2xl font-black text-white mb-4 uppercase">Keamanan</h3>
+                     <p className="text-[13px] text-slate-400 leading-relaxed">Menerapkan protokol enkripsi dan pemantauan real-time untuk mendeteksi ancaman.</p>
                   </div>
-
-                  {/* Card 3: Literasi Digital */}
-                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 flex flex-col items-center text-center shadow-2xl hover:border-emerald-500/40 hover:-translate-y-2 transition-all duration-500 group">
-                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 relative shadow-[0_0_30px_rgba(16,185,129,0.1)] group-hover:shadow-[0_0_40px_rgba(16,185,129,0.3)] transition-all">
-                        <div className="absolute inset-0 rounded-full border-2 border-emerald-500/30 group-hover:border-emerald-500/80 animate-[spin_10s_linear_infinite]" />
-                        <BrainCircuit size={32} className="text-emerald-400" />
-                     </div>
-                     <h3 className="text-2xl font-black text-white mb-4 tracking-wider uppercase">Literasi Digital</h3>
-                     <p className="text-[13px] font-medium text-slate-400 leading-relaxed">
-                       Meningkatkan kesadaran dan kompetensi seluruh sivitas akademika dalam menjaga keamanan data pribadi maupun data institusi di dunia maya.
-                     </p>
+                  {/* Card 3 */}
+                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 text-center hover:border-emerald-500/40 transition-all duration-500">
+                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 mx-auto"><BrainCircuit size={32} className="text-emerald-400" /></div>
+                     <h3 className="text-2xl font-black text-white mb-4 uppercase">Literasi</h3>
+                     <p className="text-[13px] text-slate-400 leading-relaxed">Meningkatkan kesadaran sivitas akademika dalam menjaga keamanan data pribadi.</p>
                   </div>
-
                </div>
            </section>
         </div>
-        <div> 
-  <VisiMisiSection bgIdx={bgIdx} />
-  <SecurityStatsSection />
-  <CyberInfrastructureSection /> 
-</div>
-</div>
 
+        <SectionDivider />
 
-      {/* ========================================================================= */}
-      {/* 5. MODAL LOGIN                                                            */}
-      {/* ========================================================================= */}
-      <AnimatePresence>
-        {isLoginOpen && (
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }} 
-            className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl"
-          >
-            <motion.div
-              initial={{ scale: 0.9, y: 30 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              className={`relative w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} bg-[#0a0a0f]/95 border border-white/10 rounded-[2.5rem] p-10 shadow-[0_40px_100px_rgba(0,0,0,1)] overflow-hidden`}
-            >
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500" />
+        {/* --- HALAMAN 3: VISI MISI (DENGAN BACKGROUND CYBER SINKRON) --- */}
+        <VisiMisiSection bgIdx={bgIdx} />
 
-              <button 
-                onClick={() => setIsLoginOpen(false)}
-                className="absolute top-6 right-6 p-2 bg-white/5 text-slate-400 rounded-full hover:bg-white/10 hover:text-white transition-all border border-white/5"
-              >
-                <X size={16} />
-              </button>
+        <SectionDivider />
 
-              <div className="mx-auto w-12 h-12 bg-transparent border border-fuchsia-500/50 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(217,70,239,0.15)]">
-                <ShieldCheck className="text-fuchsia-400" size={24} />
-              </div>
+        {/* --- HALAMAN 4: STATISTIK (UKURAN FULL & MEGA TYPOGRAPHY) --- */}
+        <SecurityStatsSection />
 
-              <div className="mb-8 text-center">
-                <h2 className="text-2xl font-black text-white tracking-widest uppercase mb-1">
-                  PORTAL <span className="text-fuchsia-500">AKSES</span>
-                </h2>
-                <p className="text-[9px] font-bold text-slate-500 tracking-[0.2em] uppercase">
-                  Otentikasi Identitas Jaringan
-                </p>
-              </div>
+        <SectionDivider />
 
-              <div className="flex border-b border-white/10 mb-8 relative">
-                <button 
-                  type="button"
-                  onClick={() => { setActiveTab('LOGIN'); setErrorMessage(''); }} 
-                  className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-colors ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
-                >
-                  MASUK
-                </button>
-                <button 
-                  type="button"
-                  onClick={() => { setActiveTab('REGISTER'); setErrorMessage(''); }} 
-                  className={`flex-1 pb-3 text-[10px] font-black tracking-[0.3em] uppercase transition-colors ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
-                >
-                  DAFTAR BARU
-                </button>
-                <div className={`absolute bottom-0 h-[2px] w-1/2 bg-fuchsia-500 transition-transform duration-300 shadow-[0_0_10px_#d946ef] ${activeTab === 'LOGIN' ? 'translate-x-0' : 'translate-x-full'}`} />
-              </div>
+        {/* --- HALAMAN 5: INFRASTRUKTUR (FULL VIDEO BG HACKING) --- */}
+        <CyberInfrastructureSection />
 
-              <form onSubmit={handleAuthenticate} className="space-y-4">
-                
-                <div className="relative group">
-                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-                     <User size={16} />
-                  </div>
-                  <input 
-                    type="text" 
-                    placeholder="NAMA PENGGUNA" 
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    disabled={status === 'loading' || status === 'success'}
-                    className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner" 
-                  />
-                </div>
-
-                <div className="relative group">
-                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-                     <Lock size={16} />
-                  </div>
-                  <input 
-                    type="password" 
-                    placeholder="KATA SANDI" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={status === 'loading' || status === 'success'}
-                    className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner" 
-                  />
-                </div>
-
-                <AnimatePresence>
-                  {activeTab === 'REGISTER' && (
-                    <motion.div 
-                      initial={{ height: 0, opacity: 0 }} 
-                      animate={{ height: 'auto', opacity: 1 }} 
-                      exit={{ height: 0, opacity: 0 }} 
-                      className="space-y-4 pt-2 overflow-hidden"
-                    >
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="relative group">
-                          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-                             <MapPin size={14} />
-                          </div>
-                          <input 
-                            type="text" 
-                            placeholder="ASAL / KOTA" 
-                            value={asal}
-                            onChange={(e) => setAsal(e.target.value)}
-                            disabled={status === 'loading' || status === 'success'}
-                            className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner uppercase" 
-                          />
-                        </div>
-
-                        <div className="relative group">
-                          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-                             <Calendar size={14} />
-                          </div>
-                          <input 
-                            type="date" 
-                            value={tanggalLahir}
-                            onChange={(e) => setTanggalLahir(e.target.value)}
-                            disabled={status === 'loading' || status === 'success'}
-                            style={{ colorScheme: 'dark' }}
-                            className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-10 pr-3 text-[10px] md:text-[11px] font-bold text-white tracking-widest placeholder:text-slate-600 focus:border-fuchsia-500 outline-none transition-colors disabled:opacity-50 shadow-inner uppercase" 
-                          />
-                        </div>
-                      </div>
-
-                      <div className="relative group">
-                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors z-10 pointer-events-none">
-                           <Server size={16} />
-                        </div>
-                        <select 
-                          value={className}
-                          onChange={(e) => setClassName(e.target.value)}
-                          disabled={status === 'loading' || status === 'success'}
-                          className="w-full relative z-20 bg-black/60 border border-white/5 rounded-[1.2rem] py-4 pl-14 pr-4 text-[11px] font-bold text-slate-300 tracking-widest focus:border-fuchsia-500 outline-none transition-colors appearance-none cursor-pointer uppercase shadow-inner"
-                        >
-                          {AVAILABLE_CLASSES.map(cls => (
-                            <option key={cls} value={cls} className="bg-black">{cls}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <AnimatePresence>
-                  {status === 'error' && (
-                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex items-center justify-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase relative z-20">
-                       <AlertTriangle size={14} className="shrink-0" /> {errorMessage}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <button 
-                  type="submit" 
-                  disabled={status === 'loading' || status === 'success'}
-                  className={`w-full relative z-20 mt-4 py-4 rounded-[1.2rem] font-black text-[10px] tracking-[0.4em] text-white transition-colors flex items-center justify-center gap-3 uppercase overflow-hidden shadow-lg ${status === 'success' ? 'bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.5)]' : 'bg-fuchsia-600 hover:bg-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.4)] disabled:opacity-50 disabled:cursor-not-allowed'}`}
-                >
-                   {status === 'loading' && <span className="animate-pulse">MEMVERIFIKASI...</span>}
-                   {status === 'success' && <><CheckCircle2 size={16} /> AKSES DIBERIKAN</>}
-                   {status !== 'loading' && status !== 'success' && (
-                     <>OTENTIKASI <Zap size={14} /></>
-                   )}
-                </button>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes hologram-scan {
