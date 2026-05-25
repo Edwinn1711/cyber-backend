@@ -176,20 +176,50 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
 };
 const SecurityStatsSection = () => {
   const stats =[
-    { label: "Data Terlindungi", value: "99.9%", color: "text-emerald-400" },
-    { label: "Deteksi Ancaman", value: "1,240", color: "text-fuchsia-400" },
-    { label: "Siswa Terliterasi", value: "850+", color: "text-blue-400" },
-    { label: "Uptime Sistem", value: "24/7", color: "text-cyan-400" },
+    { label: "Data Terlindungi", value: "99.9%", color: "text-emerald-400", sub: "Protokol Enkripsi AES-256" },
+    { label: "Deteksi Ancaman", value: "1,240", color: "text-fuchsia-400", sub: "Upaya Peretasan Terblokir" },
+    { label: "Siswa Terliterasi", value: "850+", color: "text-blue-400", sub: "Sertifikasi Keamanan Dasar" },
+    { label: "Uptime Sistem", value: "24/7", color: "text-cyan-400", sub: "Konektivitas Tanpa Henti" },
   ];
+
   return (
-    <section className="py-24 bg-[#030208] border-b border-white/5">
-      <div className="max-w-7xl mx-auto px-6 text-center">
-        <h2 className="text-4xl font-black text-white uppercase mb-16">Metrik Ketahanan <span className="text-fuchsia-500">Digital</span></h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <section className="relative w-full min-h-[85vh] flex items-center justify-center py-32 bg-[#030208] border-b border-white/5 overflow-hidden">
+      {/* Efek Cahaya Latar (Agar tidak terlihat kosong/jelek) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-fuchsia-600/5 blur-[150px] rounded-full pointer-events-none" />
+      
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 w-full">
+        {/* Judul yang Lebih Besar */}
+        <div className="text-center mb-28">
+          <h2 className="text-5xl lg:text-7xl font-black text-white uppercase tracking-tighter mb-8 drop-shadow-2xl">
+            Metrik Ketahanan <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-violet-500">Digital</span>
+          </h2>
+          <p className="text-slate-400 max-w-3xl mx-auto text-base lg:text-lg font-medium opacity-80 leading-relaxed">
+            Laporan komprehensif mengenai tingkat keamanan, stabilitas infrastruktur, dan kesiapan siber sekolah dalam periode operasional 2026.
+          </p>
+        </div>
+
+        {/* Grid Kartu yang Lebih Besar & Tebal */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((s, i) => (
-            <div key={i} className="bg-[#0a0a0f] p-8 rounded-[2rem] border border-white/5">
-              <div className={`text-4xl font-black mb-2 ${s.color}`}>{s.value}</div>
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">{s.label}</div>
+            <div key={i} className="group relative bg-[#08070d]/50 backdrop-blur-sm border border-white/5 p-14 rounded-[3rem] hover:border-fuchsia-500/30 transition-all duration-500 flex flex-col items-center justify-center text-center shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+              
+              {/* Glow saat Hover */}
+              <div className="absolute inset-0 bg-fuchsia-500/0 group-hover:bg-fuchsia-500/5 rounded-[3rem] transition-colors" />
+
+              {/* Angka Statistik Super Besar */}
+              <div className={`text-6xl lg:text-8xl font-black mb-6 transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(217,70,239,0.2)] ${s.color}`}>
+                {s.value}
+              </div>
+              
+              {/* Label Utama */}
+              <div className="text-sm lg:text-base font-black text-white uppercase tracking-[0.3em] mb-3 transition-colors group-hover:text-fuchsia-400">
+                {s.label}
+              </div>
+              
+              {/* Sub-keterangan Tambahan agar padat */}
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest opacity-60">
+                {s.sub}
+              </div>
             </div>
           ))}
         </div>
