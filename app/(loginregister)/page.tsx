@@ -200,36 +200,102 @@ const SecurityStatsSection = () => {
 
 const CyberInfrastructureSection = () => {
   const sectors = [
-    { title: "Firewall", icon: ShieldAlert, desc: "Filtering trafik masuk-keluar jaringan." },
+    { title: "Firewall", icon: ShieldAlert, desc: "Filtering trafik masuk-keluar jaringan sekolah." },
     { title: "Monitoring", icon: Network, desc: "Pemantauan beban bandwidth tiap kelas." },
-    { title: "Server", icon: Server, desc: "Manajemen data akademik terenkripsi." },
-    { title: "IDS", icon: ScanLine, desc: "Mendeteksi upaya peretasan sistem." },
-    { title: "Auth", icon: Fingerprint, desc: "Sistem login identitas digital." },
-    { title: "Backup", icon: Cpu, desc: "Redundansi data mingguan lokal." }
+    { title: "Server", icon: Server, desc: "Manajemen data akademik sekolah terenkripsi." },
+    { title: "IDS", icon: ScanLine, desc: "Mendeteksi akses ilegal atau upaya peretasan." },
+    { title: "Auth", icon: Fingerprint, desc: "Sistem login terintegrasi identitas digital." },
+    { title: "Backup", icon: Cpu, desc: "Redundansi data mingguan otomatis lokal." }
   ];
+
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center py-24 bg-black overflow-hidden border-b border-cyan-500/20">
+    <section className="relative w-full min-h-screen flex items-center justify-center py-24 bg-black overflow-hidden group/hacking border-b border-cyan-500/20">
+      
+      {/* --- VIDEO BACKGROUND (DIBERSIHKAN) --- */}
       <div className="absolute inset-0 z-0">
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-100"><source src="/bg/hacking-bg.mp4" type="video/mp4" /></video>
+        <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60">
+          <source src="/bg/hacking-bg.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#000000_100%)] opacity-80" />
       </div>
+
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 w-full text-center">
-        <h2 className="text-6xl font-black text-white uppercase tracking-tighter mb-16 drop-shadow-[0_0_20px_rgba(34,211,238,0.5)]">MODUL <span className="text-cyan-400">PERTAHANAN</span> SIBER</h2>
+        <div className="mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.4em] uppercase mb-8 animate-pulse">
+            <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" /> System Monitoring Active
+          </div>
+          <h2 className="text-6xl lg:text-8xl font-black text-white uppercase tracking-tighter mb-6 drop-shadow-[0_0_30px_rgba(34,211,238,0.5)]">
+            MODUL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">PERTAHANAN</span> SIBER
+          </h2>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sectors.map((s, i) => (
-            <div key={i} className="group relative bg-[#050811]/40 backdrop-blur-2xl border border-cyan-500/10 p-10 rounded-2xl hover:border-cyan-400/50 transition-all duration-500 shadow-2xl">
-              <div className="w-14 h-14 bg-cyan-950/30 text-cyan-400 rounded-xl flex items-center justify-center mb-8 mx-auto"><s.icon size={26} /></div>
-              <h3 className="text-xl font-black text-white mb-4 uppercase">{s.title}</h3>
-              <p className="text-cyan-100/40 text-xs leading-relaxed">{s.desc}</p>
+            <div 
+              key={i} 
+              className="group/card relative bg-[#050811]/60 backdrop-blur-2xl border border-cyan-500/10 p-12 rounded-[2.5rem] hover:border-cyan-400/50 transition-all duration-700 hover:-translate-y-4 overflow-hidden shadow-2xl"
+            >
+              {/* 1. ANIMASI SCANNER (Laser Line) */}
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent animate-scanner opacity-0 group-hover/card:opacity-100" />
+              
+              {/* 2. DIGITAL PARTICLES (Internal Sparks) */}
+              <div className="absolute inset-0 z-0 opacity-0 group-hover/card:opacity-20 pointer-events-none">
+                {[...Array(5)].map((_, j) => (
+                  <motion.div
+                    key={j}
+                    animate={{ y: [0, -100], opacity: [0, 1, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: j * 0.4 }}
+                    className="absolute w-px h-10 bg-cyan-400"
+                    style={{ left: `${20 * j}%`, bottom: '-20px' }}
+                  />
+                ))}
+              </div>
+
+              {/* 3. DEKORASI SUDUT (Holographic Corners) */}
+              <div className="absolute top-6 left-6 w-6 h-6 border-t-2 border-l-2 border-cyan-500/20 group-hover/card:border-cyan-400 transition-colors" />
+              <div className="absolute bottom-6 right-6 w-6 h-6 border-b-2 border-r-2 border-cyan-500/20 group-hover/card:border-cyan-400 transition-colors" />
+              
+              {/* 4. RADAR PULSE ICON CONTAINER */}
+              <div className="relative w-20 h-20 mx-auto mb-10">
+                {/* Gelombang Radar */}
+                <div className="absolute inset-0 rounded-full bg-cyan-500/20 animate-ping opacity-0 group-hover/card:opacity-100" />
+                <div className="absolute inset-0 rounded-full border border-cyan-500/40 animate-pulse" />
+                
+                <div className="relative w-full h-full bg-cyan-950/30 border border-cyan-500/30 text-cyan-400 rounded-3xl flex items-center justify-center group-hover/card:shadow-[0_0_30px_rgba(34,211,238,0.5)] group-hover/card:scale-110 transition-all duration-500">
+                  <s.icon size={36} className="drop-shadow-[0_0_8px_#22d3ee]" />
+                </div>
+              </div>
+              
+              <h3 className="relative z-10 text-2xl font-black text-white mb-4 uppercase tracking-[0.2em] group-hover/card:text-cyan-400 transition-colors">{s.title}</h3>
+              <p className="relative z-10 text-cyan-100/40 text-sm leading-relaxed font-medium group-hover/card:text-cyan-100/80 transition-all">{s.desc}</p>
+
+              {/* 5. DATA FLOW BAR */}
+              <div className="mt-10 h-1.5 w-full bg-cyan-950/50 rounded-full overflow-hidden border border-white/5">
+                <motion.div 
+                  initial={{ x: "-100%" }}
+                  animate={{ x: "100%" }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+                  className="h-full w-1/3 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_15px_#22d3ee]" 
+                />
+              </div>
             </div>
           ))}
         </div>
       </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes scanner {
+          0% { top: 0; }
+          100% { top: 100%; }
+        }
+        .animate-scanner {
+          animation: scanner 3s linear infinite;
+        }
+      `}} />
     </section>
   );
 };
-
 export default function CyberLandingDark() {
   const router = useRouter();
   const [bgIdx, setBgIdx] = useState(0);
