@@ -20,76 +20,72 @@ const UltraGodTierParticleSystem = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true }); // Alpha true lebih ringan
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let elements: any[] =[];
     let animationFrameId: number;
-    // Deteksi mobile untuk membatasi jumlah partikel
-    const isMobile = window.innerWidth < 768;
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
       ctx.scale(dpr, dpr);
     };
     window.addEventListener('resize', resize);
     resize();
 
     const explode = (x: number, y: number) => {
-      // Kurangi jumlah partikel drastis jika di HP
-      const count = isMobile ? 4 : 8; 
-      const dustCount = isMobile ? 5 : 10;
+      // Dapatkan posisi relatif terhadap canvas
+      const rect = canvas.getBoundingClientRect();
+      const relX = x - rect.left;
+      const relY = y - rect.top;
 
-      elements.push({ type: 'core', x, y, radius: 0, alpha: 1, speed: 2 });
-      
-      for (let i = 0; i < count; i++) {
-        const angle = (Math.PI * 2 / count) * i;
-        elements.push({ type: 'spark', x, y, vx: Math.cos(angle) * 4, vy: Math.sin(angle) * 4, life: 1 });
-      }
-
-      for (let i = 0; i < dustCount; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        elements.push({ type: 'dust', x, y, vx: Math.cos(angle) * 2, vy: Math.sin(angle) * 2, life: 1, radius: Math.random() * 2 });
+      elements.push({ type: 'core', x: relX, y: relY, radius: 0, alpha: 1, speed: 2 });
+      // Spark
+      for (let i = 0; i < 8; i++) {
+        const angle = (Math.PI * 2 / 8) * i;
+        elements.push({ type: 'spark', x: relX, y: relY, vx: Math.cos(angle) * 4, vy: Math.sin(angle) * 4, life: 1 });
       }
     };
 
     const handlePointerDown = (e: PointerEvent) => explode(e.clientX, e.clientY);
-    window.addEventListener('pointerdown', handlePointerDown, { passive: true });
+    window.addEventListener('pointerdown', handlePointerDown);
 
     const animate = () => {
-      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      // Kurangi penggunaan blending mode yang berat jika tidak perlu
-      ctx.globalCompositeOperation = 'lighter'; 
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Bersihkan dengan ukuran canvas sebenarnya
+      ctx.globalCompositeOperation = 'lighter';
 
       for (let i = elements.length - 1; i >= 0; i--) {
         let el = elements[i];
-        el.alpha -= 0.02; // Partikel hilang lebih cepat = lebih ringan
-        
+        el.alpha -= 0.02;
         if (el.alpha <= 0) { elements.splice(i, 1); continue; }
 
         if (el.type === 'core') {
           el.radius += 2;
-          ctx.beginPath(); ctx.arc(el.x, el.y, el.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255,255,255,${el.alpha})`; ctx.fill();
+          ctx.beginPath();
+          ctx.arc(el.x, el.y, el.radius, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(56, 189, 248, ${el.alpha})`; // Ubah ke outline biru muda agar tidak abu-abu
+          ctx.stroke();
         } else {
           el.x += el.vx; el.y += el.vy;
           ctx.fillStyle = `rgba(217, 70, 239, ${el.alpha})`;
-          ctx.fillRect(el.x, el.y, 2, 2);
+          ctx.fillRect(el.x, el.y, 3, 3);
         }
       }
       animationFrameId = requestAnimationFrame(animate);
     };
-
     animate();
+
     return () => { 
-      window.removeEventListener('pointerdown', handlePointerDown); 
+      window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('resize', resize);
       cancelAnimationFrame(animationFrameId); 
     };
   },[]);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-[9999] pointer-events-none" style={{ touchAction: 'none' }} />;
+  return <canvas ref={canvasRef} className="fixed inset-0 z-[9999] pointer-events-none w-full h-full" />;
 };
 
 // --- 2. BACKGROUND CYBER (TRANSISI SMOOTH) ---
