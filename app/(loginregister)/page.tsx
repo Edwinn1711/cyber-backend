@@ -209,68 +209,93 @@ const CyberInfrastructureSection = () => {
   ];
 
   return (
-    <section className="relative w-full py-32 bg-[#020108] border-b border-white/5 overflow-hidden group/infra">
+    <section className="relative w-full min-h-screen flex items-center justify-center py-20 bg-[#020108] border-b border-cyan-500/20 overflow-hidden group/hacking">
       
-      {/* --- BACKGROUND ANIMASI 3D GRID (VERSI MEWAH) --- */}
+      {/* --- BACKGROUND HACKING ALIVE (BIRU NEON) --- */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Efek Perspektif Lantai Digital */}
-        <div className="absolute inset-0" style={{ perspective: '1000px' }}>
-          <div 
-            className="absolute inset-0 opacity-[0.15]"
-            style={{
-              backgroundImage: `
-                linear-gradient(to right, #d946ef 1px, transparent 1px),
-                linear-gradient(to bottom, #d946ef 1px, transparent 1px)
-              `,
-              backgroundSize: '50px 50px',
-              transform: 'rotateX(60deg) translateY(-10%)',
-              transformOrigin: 'top',
-              animation: 'infra-grid-move 20s linear infinite'
-            }}
-          />
+        {/* 1. Map & Grid Base */}
+        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] mix-blend-screen" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_100%)]" />
+        
+        {/* 2. Scrolling Code Streams (Efek Teks Hacking Berjalan) */}
+        <div className="absolute inset-0 flex justify-around opacity-20 select-none">
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={i}
+              initial={{ y: "-100%" }}
+              animate={{ y: "100%" }}
+              transition={{ duration: Math.random() * 10 + 10, repeat: Infinity, ease: "linear" }}
+              className="text-[10px] font-mono text-cyan-500 leading-none whitespace-nowrap orientation-vertical tracking-[0.5em]"
+              style={{ writingMode: 'vertical-rl' }}
+            >
+              010101 SYSTEM_OVERRIDE_INITIATED ACCESS_GRANTED_PROTOCOL_BLUE_REACH {Math.random().toString(36)}
+            </motion.div>
+          ))}
         </div>
 
-        {/* Cahaya Biru/Ungu yang Berdenyut di Belakang */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[100vw] h-[50vh] bg-gradient-to-t from-fuchsia-600/10 to-transparent blur-[120px]" />
-        
-        {/* Garis Pemindaian (Scanline) */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_4px,3px_100%] pointer-events-none opacity-20" />
+        {/* 3. Floating Hacking Windows (Kotak-kotak UI di Background) */}
+        <div className="absolute inset-0 overflow-hidden opacity-30">
+          <div className="absolute top-10 left-10 w-48 h-32 border border-cyan-500/30 rounded-lg animate-pulse" />
+          <div className="absolute bottom-20 right-20 w-64 h-48 border border-blue-500/20 rounded-lg animate-bounce" style={{ animationDuration: '8s' }} />
+          <div className="absolute top-1/2 left-20 w-32 h-64 border-l border-cyan-500/20" />
+        </div>
+
+        {/* 4. Glowing Blue Aura */}
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_30%,rgba(6,182,212,0.1),transparent_50%)]" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="text-center mb-20">
-          <h2 className="text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-4 drop-shadow-[0_0_15px_rgba(217,70,239,0.3)]">
-            Modul <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Pertahanan</span> Siber
+      {/* --- KONTEN UTAMA --- */}
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 w-full">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.3em] uppercase mb-6 animate-pulse">
+            <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_10px_#22d3ee]" /> System Monitoring Active
+          </div>
+          <h2 className="text-5xl lg:text-7xl font-black text-white uppercase tracking-tighter mb-4 drop-shadow-[0_0_20px_rgba(34,211,238,0.4)]">
+            MODUL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">PERTAHANAN</span> SIBER
           </h2>
-          <p className="text-slate-500 max-w-xl mx-auto text-sm font-medium">
-            Infrastruktur digital sekolah yang dipantau secara ketat untuk menjamin keamanan operasional kegiatan belajar mengajar.
+          <p className="text-slate-500 max-w-2xl mx-auto text-sm lg:text-base font-medium">
+            Visualisasi kontrol infrastruktur siber sekolah. Semua sistem beroperasi dalam parameter keamanan optimal.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* --- GRID 6 KOTAK (BIRU HACKING UI) --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sectors.map((s, i) => (
             <div 
               key={i} 
-              className="group/card relative bg-[#05050a]/60 backdrop-blur-xl border border-white/10 p-10 rounded-[2.5rem] hover:border-fuchsia-500/50 transition-all duration-500 hover:-translate-y-3 overflow-hidden shadow-2xl"
+              className="group/card relative bg-[#050811]/60 backdrop-blur-2xl border border-cyan-500/10 p-10 rounded-2xl hover:border-cyan-400/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)]"
             >
-              {/* Efek Hover Light */}
-              <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity" />
+              {/* UI Decorative Corners (Sudut ala interface hacking) */}
+              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-500/40" />
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-500/40" />
               
-              <div className="w-16 h-16 bg-black border border-white/10 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-8 relative shadow-[0_0_20px_rgba(217,70,239,0.15)] group-hover/card:shadow-[0_0_40px_rgba(217,70,239,0.4)] group-hover/card:scale-110 transition-all duration-500">
+              <div className="w-14 h-14 bg-cyan-950/30 border border-cyan-500/20 text-cyan-400 rounded-xl flex items-center justify-center mb-8 group-hover/card:shadow-[0_0_30px_rgba(34,211,238,0.3)] transition-all">
                 <s.icon size={28} />
               </div>
               
-              <h3 className="text-xl font-black text-white mb-4 uppercase tracking-widest group-hover/card:text-fuchsia-400 transition-colors">{s.title}</h3>
-              <p className="text-slate-400 text-[13px] leading-relaxed font-medium">{s.desc}</p>
+              <h3 className="text-xl font-black text-white mb-4 uppercase tracking-widest group-hover/card:text-cyan-400 transition-colors">{s.title}</h3>
+              <p className="text-cyan-100/40 text-[13px] leading-relaxed font-medium group-hover/card:text-cyan-100/70 transition-colors">{s.desc}</p>
+
+              {/* Fake Data Stream Bar */}
+              <div className="mt-8 h-1 w-full bg-cyan-950 rounded-full overflow-hidden">
+                <motion.div 
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                  className="h-full bg-cyan-500/40" 
+                />
+              </div>
             </div>
           ))}
         </div>
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes infra-grid-move {
-          0% { background-position: 0 0; }
-          100% { background-position: 0 100px; }
+        .orientation-vertical {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
         }
       `}} />
     </section>
