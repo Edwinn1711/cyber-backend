@@ -199,7 +199,7 @@ const SecurityStatsSection = () => {
 };
 
 const CyberInfrastructureSection = () => {
-  const sectors =[
+  const sectors = [
     { title: "Firewall Perbatasan", desc: "Filtering trafik masuk-keluar jaringan sekolah secara real-time.", icon: ShieldAlert },
     { title: "Monitoring Jaringan", desc: "Pemantauan beban bandwidth dan stabilitas koneksi tiap kelas.", icon: Network },
     { title: "Server Terpusat", desc: "Manajemen data akademik di server sekolah yang terenkripsi.", icon: Server },
@@ -209,40 +209,41 @@ const CyberInfrastructureSection = () => {
   ];
 
   return (
-    <section className="relative w-full py-32 bg-[#020108] border-b border-white/5 overflow-hidden group/glitch">
-      {/* --- EFEK GLITCH MEWAH (KHUSUS DISINI) --- */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
-        {/* Layer 1: Digital Grid Glitch */}
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 animate-glitch-move" />
-        
-        {/* Layer 2: Chromatic Aberration Lines (Garis digital yang berkedip) */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(3)].map((_, i) => (
-            <div 
-              key={i} 
-              className="absolute w-full h-[1px] bg-cyan-500/30 blur-[1px]" 
-              style={{ 
-                top: `${Math.random() * 100}%`,
-                animation: `glitch-line ${2 + i}s linear infinite`,
-                animationDelay: `${i * 0.5}s`
-              }} 
-            />
-          ))}
+    <section className="relative w-full py-32 bg-[#020108] border-b border-white/5 overflow-hidden group/infra">
+      
+      {/* --- BACKGROUND ANIMASI 3D GRID (VERSI MEWAH) --- */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* Efek Perspektif Lantai Digital */}
+        <div className="absolute inset-0" style={{ perspective: '1000px' }}>
+          <div 
+            className="absolute inset-0 opacity-[0.15]"
+            style={{
+              backgroundImage: `
+                linear-gradient(to right, #d946ef 1px, transparent 1px),
+                linear-gradient(to bottom, #d946ef 1px, transparent 1px)
+              `,
+              backgroundSize: '50px 50px',
+              transform: 'rotateX(60deg) translateY(-10%)',
+              transformOrigin: 'top',
+              animation: 'infra-grid-move 20s linear infinite'
+            }}
+          />
         </div>
 
-        {/* Layer 3: RGB Shift Overlay (Efek bayangan warna saat di hover) */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-fuchsia-500/5 via-transparent to-cyan-500/5 mix-blend-overlay group-hover/glitch:animate-pulse" />
+        {/* Cahaya Biru/Ungu yang Berdenyut di Belakang */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[100vw] h-[50vh] bg-gradient-to-t from-fuchsia-600/10 to-transparent blur-[120px]" />
+        
+        {/* Garis Pemindaian (Scanline) */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_4px,3px_100%] pointer-events-none opacity-20" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="text-center mb-20 relative">
-          {/* Judul dengan Efek Glitch Halus */}
-          <h2 className="text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-4 relative inline-block">
-            Modul <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Pertahanan</span> Siber
-            <div className="absolute -inset-1 bg-cyan-500/10 blur-xl opacity-0 group-hover/glitch:opacity-100 transition-opacity duration-700" />
+        <div className="text-center mb-20">
+          <h2 className="text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-4 drop-shadow-[0_0_15px_rgba(217,70,239,0.3)]">
+            Modul <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Pertahanan</span> Siber
           </h2>
-          <p className="text-slate-500 max-w-lg mx-auto text-sm font-medium">
-            Infrastruktur digital sekolah yang dipantau secara ketat untuk menjamin keamanan operasional.
+          <p className="text-slate-500 max-w-xl mx-auto text-sm font-medium">
+            Infrastruktur digital sekolah yang dipantau secara ketat untuk menjamin keamanan operasional kegiatan belajar mengajar.
           </p>
         </div>
 
@@ -250,30 +251,26 @@ const CyberInfrastructureSection = () => {
           {sectors.map((s, i) => (
             <div 
               key={i} 
-              className="group/card relative bg-[#0a0a0f]/40 backdrop-blur-md border border-white/5 p-10 rounded-[2.5rem] hover:border-cyan-500/40 transition-all duration-500 hover:-translate-y-2 overflow-hidden shadow-2xl"
+              className="group/card relative bg-[#05050a]/60 backdrop-blur-xl border border-white/10 p-10 rounded-[2.5rem] hover:border-fuchsia-500/50 transition-all duration-500 hover:-translate-y-3 overflow-hidden shadow-2xl"
             >
-              {/* Card Glitch Shine */}
-              <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-[-20deg] group-hover/card:left-full transition-all duration-1000" />
+              {/* Efek Hover Light */}
+              <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity" />
               
-              <div className="w-14 h-14 bg-black border border-white/10 text-cyan-400 rounded-2xl flex items-center justify-center mb-8 relative shadow-[0_0_20px_rgba(34,211,238,0.1)] group-hover/card:shadow-[0_0_30px_rgba(34,211,238,0.3)] group-hover/card:scale-110 transition-all duration-500">
-                <s.icon size={26} />
+              <div className="w-16 h-16 bg-black border border-white/10 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-8 relative shadow-[0_0_20px_rgba(217,70,239,0.15)] group-hover/card:shadow-[0_0_40px_rgba(217,70,239,0.4)] group-hover/card:scale-110 transition-all duration-500">
+                <s.icon size={28} />
               </div>
-              <h3 className="text-xl font-black text-white mb-4 uppercase tracking-widest">{s.title}</h3>
-              <p className="text-slate-500 text-[13px] leading-relaxed font-medium">{s.desc}</p>
+              
+              <h3 className="text-xl font-black text-white mb-4 uppercase tracking-widest group-hover/card:text-fuchsia-400 transition-colors">{s.title}</h3>
+              <p className="text-slate-400 text-[13px] leading-relaxed font-medium">{s.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes glitch-move {
+        @keyframes infra-grid-move {
           0% { background-position: 0 0; }
-          100% { background-position: 100px 100px; }
-        }
-        @keyframes glitch-line {
-          0% { transform: translateX(-100%); opacity: 0; }
-          50% { opacity: 1; }
-          100% { transform: translateX(100%); opacity: 0; }
+          100% { background-position: 0 100px; }
         }
       `}} />
     </section>
