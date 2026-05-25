@@ -20,102 +20,76 @@ const UltraGodTierParticleSystem = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true }); // Alpha true lebih ringan
     if (!ctx) return;
 
-    let elements: any[] = [];
+    let elements: any[] =[];
     let animationFrameId: number;
+    // Deteksi mobile untuk membatasi jumlah partikel
+    const isMobile = window.innerWidth < 768;
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
       ctx.scale(dpr, dpr);
     };
     window.addEventListener('resize', resize);
     resize();
 
     const explode = (x: number, y: number) => {
-      elements.push({ type: 'core', x, y, radius: 0, alpha: 1, speed: 2, maxRadius: 15 });
-      elements.push({ type: 'shockwave', x, y, radius: 0, alpha: 0.8, speed: 6, width: 2, color: '56, 189, 248' }); 
-      elements.push({ type: 'shockwave', x, y, radius: 0, alpha: 0.5, speed: 3, width: 1, color: '217, 70, 239' }); 
+      // Kurangi jumlah partikel drastis jika di HP
+      const count = isMobile ? 4 : 8; 
+      const dustCount = isMobile ? 5 : 10;
 
-      for (let i = 0; i < 8; i++) {
-        const angle = (Math.PI * 2 / 8) * i + (Math.random() * 0.5);
-        const velocity = Math.random() * 5 + 3;
-        elements.push({
-          type: 'spark', x, y,
-          vx: Math.cos(angle) * velocity, vy: Math.sin(angle) * velocity,
-          life: 1, color: Math.random() > 0.5 ? '217, 70, 239' : '56, 189, 248'
-        });
+      elements.push({ type: 'core', x, y, radius: 0, alpha: 1, speed: 2 });
+      
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 / count) * i;
+        elements.push({ type: 'spark', x, y, vx: Math.cos(angle) * 4, vy: Math.sin(angle) * 4, life: 1 });
       }
 
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < dustCount; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 2 + 0.5;
-        elements.push({
-          type: 'dust', x, y,
-          vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
-          life: 1, radius: Math.random() * 1.5 + 0.5,
-          color: Math.random() > 0.5 ? '217, 70, 239' : '255, 255, 255'
-        });
+        elements.push({ type: 'dust', x, y, vx: Math.cos(angle) * 2, vy: Math.sin(angle) * 2, life: 1, radius: Math.random() * 2 });
       }
     };
 
-    const handlePointerDown = (e: PointerEvent) => {
-      explode(e.clientX, e.clientY);
-    };
-
+    const handlePointerDown = (e: PointerEvent) => explode(e.clientX, e.clientY);
     window.addEventListener('pointerdown', handlePointerDown, { passive: true });
 
     const animate = () => {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      ctx.globalCompositeOperation = 'screen'; 
+      // Kurangi penggunaan blending mode yang berat jika tidak perlu
+      ctx.globalCompositeOperation = 'lighter'; 
 
       for (let i = elements.length - 1; i >= 0; i--) {
         let el = elements[i];
+        el.alpha -= 0.02; // Partikel hilang lebih cepat = lebih ringan
+        
+        if (el.alpha <= 0) { elements.splice(i, 1); continue; }
 
         if (el.type === 'core') {
-          el.radius += el.speed; el.alpha -= 0.1;
-          if (el.alpha <= 0) { elements.splice(i, 1); continue; }
+          el.radius += 2;
           ctx.beginPath(); ctx.arc(el.x, el.y, el.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${el.alpha})`; ctx.fill();
-        } 
-        else if (el.type === 'shockwave') {
-          el.radius += el.speed; el.alpha -= 0.04;
-          if (el.alpha <= 0) { elements.splice(i, 1); continue; }
-          ctx.beginPath(); ctx.arc(el.x, el.y, el.radius, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(${el.color}, ${el.alpha})`; ctx.lineWidth = el.width * el.alpha; ctx.stroke();
-        } 
-        else if (el.type === 'spark') {
-          el.x += el.vx; el.y += el.vy; el.life -= 0.05; el.vx *= 0.85; el.vy *= 0.85;
-          if (el.life <= 0) { elements.splice(i, 1); continue; }
-          ctx.beginPath(); ctx.moveTo(el.x, el.y); ctx.lineTo(el.x - el.vx * 1.5, el.y - el.vy * 1.5);
-          ctx.strokeStyle = `rgba(${el.color}, ${el.life})`; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.stroke();
-        } 
-        else if (el.type === 'dust') {
-          el.x += el.vx; el.y += el.vy; el.life -= 0.03; el.vx *= 0.92; el.vy *= 0.92;
-          if (el.life <= 0) { elements.splice(i, 1); continue; }
-          ctx.beginPath(); ctx.arc(el.x, el.y, el.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${el.color}, ${el.life})`; ctx.fill();
+          ctx.fillStyle = `rgba(255,255,255,${el.alpha})`; ctx.fill();
+        } else {
+          el.x += el.vx; el.y += el.vy;
+          ctx.fillStyle = `rgba(217, 70, 239, ${el.alpha})`;
+          ctx.fillRect(el.x, el.y, 2, 2);
         }
       }
-
       animationFrameId = requestAnimationFrame(animate);
     };
 
     animate();
-
-    return () => {
-      window.removeEventListener('resize', resize);
-      window.removeEventListener('pointerdown', handlePointerDown);
-      cancelAnimationFrame(animationFrameId);
+    return () => { 
+      window.removeEventListener('pointerdown', handlePointerDown); 
+      cancelAnimationFrame(animationFrameId); 
     };
-  }, []);
+  },[]);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-[9999] pointer-events-none" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 z-[9999] pointer-events-none" style={{ touchAction: 'none' }} />;
 };
 
 // --- 2. BACKGROUND CYBER (TRANSISI SMOOTH) ---
@@ -145,56 +119,37 @@ PersistentUniverse.displayName = 'PersistentUniverse';
 
 const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   const [hovered, setHovered] = useState<string | null>(null);
-
   const data =[
     { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data di lingkungan sekolah." },
     { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital sebagai fondasi masa depan." }
   ];
 
   return (
-    // Tambahkan border-b untuk garis pemisah, dan z-index yang cukup
     <section className="relative w-full py-24 bg-[#020108] border-b border-white/5 overflow-hidden">
+      <motion.div 
+        key={bgIdx}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.2 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1.5 }}
+        className="absolute inset-0 z-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${CYBER_ASSETS[bgIdx]})` }}
+      />
+      <div className="absolute inset-0 z-0 bg-[#020108]/90" />
       
-      {/* Background Cyber (Layer Bawah) */}
-      <div className="absolute inset-0 z-0">
-        <motion.img 
-          key={bgIdx}
-          src={CYBER_ASSETS[bgIdx]}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.2 }} // Naikkan agar lebih nampak
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.5 }}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-[#020108]/90" /> {/* Overlay gelap agar teks terbaca */}
-      </div>
-      
-      {/* Konten (SectionWrapper) */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 text-center">
         <div className="mb-20">
           <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tighter uppercase mb-6">
             Membangun Kedaulatan <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Digital Sekolah</span>
           </h2>
-          <p className="text-slate-400 max-w-xl mx-auto text-sm font-medium leading-relaxed">
-            Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman demi lingkungan belajar yang terlindungi.
-          </p>
+          <p className="text-slate-400 max-w-xl mx-auto text-sm font-medium">Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman demi lingkungan belajar yang terlindungi.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
-            <div 
-              key={item.id}
-              onMouseEnter={() => setHovered(item.id)}
-              className={`
-                bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-12 rounded-[3rem] text-left transition-all duration-500
-                ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-50' : 'scale-100 opacity-100'}
-                ${hovered === item.id ? 'shadow-[0_20px_50px_rgba(0,0,0,0.5)] -translate-y-4 border-blue-500/50' : ''}
-              `}
-            >
-              <div className="w-16 h-16 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-3xl mb-8 border border-blue-500/20">
-                <item.icon size={32} />
-              </div>
+            <div key={item.id} onMouseEnter={() => setHovered(item.id)} className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-12 rounded-[3rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-50' : ''} ${hovered === item.id ? 'shadow-[0_20px_50px_rgba(0,0,0,0.5)] -translate-y-4 border-blue-500/50' : ''}`}>
+              <div className="w-16 h-16 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-3xl mb-8 border border-blue-500/20"><item.icon size={32} /></div>
               <h3 className="text-3xl font-black text-white mb-6 tracking-wide">{item.title}</h3>
               <p className="text-slate-400 text-base leading-relaxed font-medium">{item.desc}</p>
             </div>
@@ -212,24 +167,15 @@ const SecurityStatsSection = () => {
     { label: "Siswa Terliterasi", value: "850+", color: "text-blue-400" },
     { label: "Uptime Sistem", value: "24/7", color: "text-cyan-400" },
   ];
-
   return (
-    <section className="py-24 bg-[#030208]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-black text-white uppercase mb-4 tracking-tight">
-            Metrik Ketahanan <span className="text-fuchsia-500">Digital</span>
-          </h2>
-          <p className="text-slate-400 max-w-lg mx-auto text-sm">
-            Laporan real-time mengenai performa dan keamanan infrastruktur siber sekolah kami.
-          </p>
-        </div>
-
+    <section className="py-24 bg-[#030208] border-b border-white/5">
+      <div className="max-w-7xl mx-auto px-6 text-center">
+        <h2 className="text-4xl font-black text-white uppercase mb-16">Metrik Ketahanan <span className="text-fuchsia-500">Digital</span></h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map((stat, i) => (
-            <div key={i} className="bg-[#0a0a0f] p-8 rounded-[2rem] border border-white/5 text-center hover:border-white/10 transition-colors">
-              <div className={`text-4xl font-black mb-2 ${stat.color}`}>{stat.value}</div>
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">{stat.label}</div>
+          {stats.map((s, i) => (
+            <div key={i} className="bg-[#0a0a0f] p-8 rounded-[2rem] border border-white/5">
+              <div className={`text-4xl font-black mb-2 ${s.color}`}>{s.value}</div>
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">{s.label}</div>
             </div>
           ))}
         </div>
