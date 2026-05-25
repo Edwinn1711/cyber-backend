@@ -114,14 +114,22 @@ const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
 PersistentUniverse.displayName = 'PersistentUniverse';
 
 const SectionDivider = () => (
-  <div className="relative w-full h-px overflow-hidden z-20">
-    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-fuchsia-500/40 to-transparent blur-[2px]" />
+  <div className="relative w-full h-[2px] flex items-center justify-center z-50 overflow-visible">
+    {/* Cahaya Latar Luar (Spread) */}
+    <div className="absolute w-[80%] h-[20px] bg-fuchsia-500/10 blur-[20px] pointer-events-none" />
+    
+    {/* Garis Dasar Bergradasi */}
+    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+    
+    {/* Inti Garis Bercahaya (Neon) */}
+    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-fuchsia-500 to-transparent shadow-[0_0_15px_#d946ef]" />
+    
+    {/* Animasi Sinyal Berjalan (Data Pulse) */}
     <motion.div 
       initial={{ x: '-100%' }}
       animate={{ x: '100%' }}
-      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-      className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+      transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+      className="absolute inset-0 w-[30%] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-80"
     />
   </div>
 );
