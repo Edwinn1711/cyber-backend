@@ -209,29 +209,25 @@ const CyberInfrastructureSection = () => {
   ];
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center py-24 bg-black overflow-hidden group/hacking border-b border-cyan-500/20">
+    <section className="relative w-full min-h-screen flex items-center justify-center py-24 bg-black overflow-hidden border-b border-cyan-500/20">
       
-      {/* --- VIDEO BACKGROUND ENGINE (BIRU NEON ALIVE) --- */}
+      {/* --- VIDEO BACKGROUND ENGINE (DIBERSIHKAN AGAR MIRIP ASLINYA) --- */}
       <div className="absolute inset-0 z-0">
         <video 
           autoPlay 
           loop 
           muted 
           playsInline 
-          className="w-full h-full object-cover opacity-50"
+          className="w-full h-full object-cover opacity-100" // Opacity dikembalikan ke 100%
         >
-          {/* Pastikan file video kamu ada di /public/bg/hacking-bg.mp4 */}
           <source src="/bg/hacking-bg.mp4" type="video/mp4" />
         </video>
         
-        {/* Layer 1: Overlay Biru (Memberikan warna biru ke video) */}
-        <div className="absolute inset-0 bg-cyan-950/40 mix-blend-color" />
+        {/* Layer 1: Overlay Hitam Transparan (Hanya sedikit agar teks terbaca) */}
+        <div className="absolute inset-0 bg-black/40" />
         
-        {/* Layer 2: Gradient Hitam Pekat di Pinggir (Vignette) */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_90%)]" />
-        
-        {/* Layer 3: Tech Scanlines (Efek garis monitor digital) */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] pointer-events-none opacity-30" />
+        {/* Layer 2: Gradient Halus (Hanya di pinggir agar tidak kaku potongannya) */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#000000_100%)] opacity-80" />
       </div>
 
       {/* --- KONTEN UTAMA --- */}
