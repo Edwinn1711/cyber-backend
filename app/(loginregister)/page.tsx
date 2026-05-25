@@ -142,20 +142,18 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   ];
 
   return (
-    <section className="relative w-full py-24 bg-black overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <motion.img 
-          key={bgIdx} src={CYBER_ASSETS[bgIdx]} 
-          initial={{ opacity: 0 }} animate={{ opacity: 0.2 }} exit={{ opacity: 0 }}
-          transition={{ duration: 1.5 }} className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-black/80" />
-      </div>
+    <section className="relative w-full py-24 bg-black border-t border-white/5 overflow-hidden">
+      {/* Background sinkron tetap di sini */}
+      
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
-        <div className="mb-20">
-          <h2 className="text-5xl font-black text-white uppercase tracking-tighter mb-6">
+        <div className="mb-16">
+          {/* UKURAN DIKECILKAN: text-3xl di HP, text-4xl di Desktop */}
+          <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tight mb-4">
             Membangun Kedaulatan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Digital Sekolah</span>
           </h2>
+          <p className="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
+            Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman.
+          </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
@@ -182,14 +180,20 @@ const SecurityStatsSection = () => {
     { label: "Uptime Sistem", value: "24/7", color: "text-cyan-400" },
   ];
   return (
-    <section className="relative w-full min-h-[80vh] flex items-center justify-center py-24 bg-[#030208]">
+    <section className="relative w-full py-24 bg-[#030208] border-b border-white/5">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
-        <h2 className="text-6xl font-black text-white uppercase mb-20 tracking-tighter">METRIK KETAHANAN <span className="text-fuchsia-500">DIGITAL</span></h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* JUDUL DIKECILKAN: text-3xl lg:text-4xl */}
+        <h2 className="text-3xl lg:text-4xl font-black text-white uppercase mb-16 tracking-tight">
+          Metrik Ketahanan <span className="text-fuchsia-500">Digital</span>
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((s, i) => (
-            <div key={i} className="bg-[#08070d] p-14 rounded-[3rem] border border-white/5 hover:border-fuchsia-500/30 transition-all group">
-              <div className={`text-7xl font-black mb-4 transition-transform group-hover:scale-110 ${s.color}`}>{s.value}</div>
-              <div className="text-xs font-black text-slate-500 uppercase tracking-[0.3em]">{s.label}</div>
+            <div key={i} className="bg-[#0a0a0f] p-8 rounded-[2rem] border border-white/5 hover:border-fuchsia-500/20 transition-all group">
+              {/* ANGKA DIKECILKAN: text-4xl lg:text-5xl */}
+              <div className={`text-4xl lg:text-5xl font-black mb-2 transition-transform group-hover:scale-105 ${s.color}`}>
+                {s.value}
+              </div>
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">{s.label}</div>
             </div>
           ))}
         </div>
@@ -209,7 +213,7 @@ const CyberInfrastructureSection = () => {
   ];
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center py-24 bg-black overflow-hidden group/hacking border-b border-cyan-500/20">
+    <section className="relative w-full py-24 bg-black overflow-hidden border-b border-cyan-500/10">
       
       {/* --- VIDEO BACKGROUND (DIBERSIHKAN) --- */}
       <div className="absolute inset-0 z-0">
@@ -221,15 +225,14 @@ const CyberInfrastructureSection = () => {
       </div>
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 w-full text-center">
-        <div className="mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.4em] uppercase mb-8 animate-pulse">
-            <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" /> System Monitoring Active
-          </div>
-          <h2 className="text-6xl lg:text-8xl font-black text-white uppercase tracking-tighter mb-6 drop-shadow-[0_0_30px_rgba(34,211,238,0.5)]">
+        <div className="mb-16">
+          {/* JUDUL DIKECILKAN: text-3xl lg:text-5xl */}
+          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">
             MODUL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">PERTAHANAN</span> SIBER
           </h2>
+          <p className="text-slate-400 max-w-xl mx-auto text-sm">Sistem pemantauan operasional sekolah terintegrasi.</p>
         </div>
-
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sectors.map((s, i) => (
             <div 
