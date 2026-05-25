@@ -180,6 +180,45 @@ const SecurityStatsSection = () => {
   );
 };
 
+const CyberInfrastructureSection = () => {
+  const sectors =[
+    { title: "Firewall Perbatasan", desc: "Filtering trafik masuk-keluar jaringan sekolah secara real-time.", icon: ShieldAlert },
+    { title: "Monitoring Jaringan", desc: "Pemantauan beban bandwidth dan stabilitas koneksi tiap kelas.", icon: Network },
+    { title: "Server Terpusat", desc: "Manajemen data akademik di server sekolah yang terenkripsi.", icon: Server },
+    { title: "Deteksi Intrusi (IDS)", desc: "Mendeteksi akses ilegal atau upaya peretasan ke sistem.", icon: ScanLine },
+    { title: "Autentikasi Siswa", desc: "Sistem login terintegrasi dengan enkripsi identitas digital.", icon: Fingerprint },
+    { title: "Backup Data Lokal", desc: "Redundansi data mingguan untuk mencegah kehilangan dokumen.", icon: Cpu }
+  ];
+
+  return (
+    <section className="relative w-full py-24 bg-[#020108] border-b border-white/5">
+      <div className="absolute inset-0 z-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+            Modul <span className="text-cyan-400">Pertahanan</span> Siber
+          </h2>
+          <p className="text-slate-400 max-w-lg mx-auto text-sm">
+            Infrastruktur digital sekolah yang dipantau secara ketat untuk menjamin keamanan operasional kegiatan belajar mengajar.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sectors.map((s, i) => (
+            <div key={i} className="group bg-[#0a0a0f] border border-white/5 p-8 rounded-[2rem] hover:border-cyan-500/30 transition-all duration-300 hover:bg-[#0d0d14]">
+              <div className="w-12 h-12 bg-cyan-500/10 text-cyan-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <s.icon size={24} />
+              </div>
+              <h3 className="text-lg font-black text-white mb-3 uppercase tracking-wider">{s.title}</h3>
+              <p className="text-slate-500 text-xs leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 export default function CyberLandingDark() {
   const router = useRouter();
@@ -469,6 +508,7 @@ export default function CyberLandingDark() {
         <div> 
   <VisiMisiSection bgIdx={bgIdx} />
   <SecurityStatsSection />
+  <CyberInfrastructureSection /> 
 </div>
 </div>
 
