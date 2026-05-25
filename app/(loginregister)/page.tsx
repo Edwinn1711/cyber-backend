@@ -209,95 +209,76 @@ const CyberInfrastructureSection = () => {
   ];
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center py-20 bg-[#020108] border-b border-cyan-500/20 overflow-hidden group/hacking">
+    <section className="relative w-full min-h-screen flex items-center justify-center py-24 bg-black overflow-hidden group/hacking border-b border-cyan-500/20">
       
-      {/* --- BACKGROUND HACKING ALIVE (BIRU NEON) --- */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* 1. Map & Grid Base */}
-        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] mix-blend-screen" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_100%)]" />
+      {/* --- VIDEO BACKGROUND ENGINE (BIRU NEON ALIVE) --- */}
+      <div className="absolute inset-0 z-0">
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          className="w-full h-full object-cover opacity-50"
+        >
+          {/* Pastikan file video kamu ada di /public/bg/hacking-bg.mp4 */}
+          <source src="/bg/hacking-bg.mp4" type="video/mp4" />
+        </video>
         
-        {/* 2. Scrolling Code Streams (Efek Teks Hacking Berjalan) */}
-        <div className="absolute inset-0 flex justify-around opacity-20 select-none">
-          {[...Array(6)].map((_, i) => (
-            <motion.div
-              key={i}
-              initial={{ y: "-100%" }}
-              animate={{ y: "100%" }}
-              transition={{ duration: Math.random() * 10 + 10, repeat: Infinity, ease: "linear" }}
-              className="text-[10px] font-mono text-cyan-500 leading-none whitespace-nowrap orientation-vertical tracking-[0.5em]"
-              style={{ writingMode: 'vertical-rl' }}
-            >
-              010101 SYSTEM_OVERRIDE_INITIATED ACCESS_GRANTED_PROTOCOL_BLUE_REACH {Math.random().toString(36)}
-            </motion.div>
-          ))}
-        </div>
-
-        {/* 3. Floating Hacking Windows (Kotak-kotak UI di Background) */}
-        <div className="absolute inset-0 overflow-hidden opacity-30">
-          <div className="absolute top-10 left-10 w-48 h-32 border border-cyan-500/30 rounded-lg animate-pulse" />
-          <div className="absolute bottom-20 right-20 w-64 h-48 border border-blue-500/20 rounded-lg animate-bounce" style={{ animationDuration: '8s' }} />
-          <div className="absolute top-1/2 left-20 w-32 h-64 border-l border-cyan-500/20" />
-        </div>
-
-        {/* 4. Glowing Blue Aura */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_30%,rgba(6,182,212,0.1),transparent_50%)]" />
+        {/* Layer 1: Overlay Biru (Memberikan warna biru ke video) */}
+        <div className="absolute inset-0 bg-cyan-950/40 mix-blend-color" />
+        
+        {/* Layer 2: Gradient Hitam Pekat di Pinggir (Vignette) */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_90%)]" />
+        
+        {/* Layer 3: Tech Scanlines (Efek garis monitor digital) */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] pointer-events-none opacity-30" />
       </div>
 
       {/* --- KONTEN UTAMA --- */}
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 w-full">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.3em] uppercase mb-6 animate-pulse">
-            <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_10px_#22d3ee]" /> System Monitoring Active
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.4em] uppercase mb-8 animate-pulse">
+            <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" /> Live Infrastructure Stream
           </div>
-          <h2 className="text-5xl lg:text-7xl font-black text-white uppercase tracking-tighter mb-4 drop-shadow-[0_0_20px_rgba(34,211,238,0.4)]">
-            MODUL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">PERTAHANAN</span> SIBER
+          <h2 className="text-5xl lg:text-7xl font-black text-white uppercase tracking-tighter mb-4 drop-shadow-[0_0_20px_rgba(34,211,238,0.5)]">
+            MODUL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">PERTAHANAN</span> SIBER
           </h2>
-          <p className="text-slate-500 max-w-2xl mx-auto text-sm lg:text-base font-medium">
-            Visualisasi kontrol infrastruktur siber sekolah. Semua sistem beroperasi dalam parameter keamanan optimal.
+          <p className="text-slate-400 max-w-2xl mx-auto text-sm lg:text-base font-medium">
+            Sistem pemantauan operasional sekolah yang terintegrasi penuh dengan protokol keamanan tingkat lanjut.
           </p>
         </div>
 
-        {/* --- GRID 6 KOTAK (BIRU HACKING UI) --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* --- GRID 6 KOTAK HACKING UI --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sectors.map((s, i) => (
             <div 
               key={i} 
-              className="group/card relative bg-[#050811]/60 backdrop-blur-2xl border border-cyan-500/10 p-10 rounded-2xl hover:border-cyan-400/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)]"
+              className="group/card relative bg-[#050811]/40 backdrop-blur-xl border border-cyan-500/10 p-10 rounded-2xl hover:border-cyan-400/50 transition-all duration-500 hover:-translate-y-2 shadow-2xl"
             >
-              {/* UI Decorative Corners (Sudut ala interface hacking) */}
+              {/* Dekorasi Sudut Interface */}
               <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-500/40" />
               <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-500/40" />
               
-              <div className="w-14 h-14 bg-cyan-950/30 border border-cyan-500/20 text-cyan-400 rounded-xl flex items-center justify-center mb-8 group-hover/card:shadow-[0_0_30px_rgba(34,211,238,0.3)] transition-all">
-                <s.icon size={28} />
+              <div className="w-14 h-14 bg-cyan-950/30 border border-cyan-500/20 text-cyan-400 rounded-xl flex items-center justify-center mb-8 group-hover/card:shadow-[0_0_30px_rgba(34,211,238,0.4)] group-hover/card:scale-110 transition-all">
+                <s.icon size={26} />
               </div>
               
               <h3 className="text-xl font-black text-white mb-4 uppercase tracking-widest group-hover/card:text-cyan-400 transition-colors">{s.title}</h3>
               <p className="text-cyan-100/40 text-[13px] leading-relaxed font-medium group-hover/card:text-cyan-100/70 transition-colors">{s.desc}</p>
 
-              {/* Fake Data Stream Bar */}
+              {/* Animasi Loading Bar di setiap Card */}
               <div className="mt-8 h-1 w-full bg-cyan-950 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ width: "0%" }}
                   animate={{ width: "100%" }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-                  className="h-full bg-cyan-500/40" 
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="h-full bg-cyan-500/60 shadow-[0_0_10px_#22d3ee]" 
                 />
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        .orientation-vertical {
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
-      `}} />
     </section>
   );
 };
