@@ -136,34 +136,61 @@ const SectionDivider = () => (
 
 const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   const [hovered, setHovered] = useState<string | null>(null);
+
   const data = [
-    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data." },
-    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital." }
+    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data di lingkungan sekolah." },
+    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital sebagai fondasi masa depan." }
   ];
 
   return (
-    <section className="relative w-full py-24 bg-black border-t border-white/5 overflow-hidden">
-      {/* Background sinkron tetap di sini */}
+    <section className="relative w-full py-24 bg-[#020108] border-t border-white/5 overflow-hidden">
+      {/* --- BACKGROUND SINKRON (DIPERBAIKI OPACITYNYA) --- */}
+      <div className="absolute inset-0 z-0">
+        <AnimatePresence mode="wait">
+          <motion.img 
+            key={bgIdx}
+            src={CYBER_ASSETS[bgIdx]}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.35 }} // Dinaikkan ke 0.35 agar nampak jelas
+            exit={{ opacity: 0 }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-lighten"
+          />
+        </AnimatePresence>
+        
+        {/* Overlay hitam ditipiskan dari /90 ke /70 agar gambar tidak tertutup total */}
+        <div className="absolute inset-0 bg-black/70 pointer-events-none" />
+        
+        {/* Tambahan Gradient halus agar transisi antar section lebih mewah */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-80" />
+      </div>
       
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
         <div className="mb-16">
-          {/* UKURAN DIKECILKAN: text-3xl di HP, text-4xl di Desktop */}
-          <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tight mb-4">
-            Membangun Kedaulatan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Digital Sekolah</span>
+          <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+            Membangun Kedaulatan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 animate-gradient-x">Digital Sekolah</span>
           </h2>
-          <p className="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
-            Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman.
+          <p className="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed opacity-90">
+            Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman demi lingkungan belajar yang terlindungi.
           </p>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
             <div 
-              key={item.id} onMouseEnter={() => setHovered(item.id)}
-              className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-12 rounded-[3rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm opacity-50' : ''} ${hovered === item.id ? '-translate-y-4 border-blue-500/50' : ''}`}
+              key={item.id}
+              onMouseEnter={() => setHovered(item.id)}
+              className={`
+                bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-10 lg:p-12 rounded-[2.5rem] text-left transition-all duration-500
+                ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-50' : 'scale-100 opacity-100'}
+                ${hovered === item.id ? 'shadow-[0_20px_50px_rgba(0,0,0,0.5)] -translate-y-4 border-blue-500/50' : ''}
+              `}
             >
-              <div className="w-14 h-14 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-8"><item.icon size={28} /></div>
-              <h3 className="text-2xl font-black text-white mb-4">{item.title}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+              <div className="w-14 h-14 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-8 border border-blue-500/20">
+                <item.icon size={28} />
+              </div>
+              <h3 className="text-2xl font-black text-white mb-4 tracking-wide">{item.title}</h3>
+              <p className="text-slate-400 text-sm lg:text-base leading-relaxed font-medium">{item.desc}</p>
             </div>
           ))}
         </div>
