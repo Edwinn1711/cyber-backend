@@ -137,35 +137,35 @@ const SectionDivider = () => (
 const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   const [hovered, setHovered] = useState<string | null>(null);
   const data = [
-    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data di lingkungan sekolah." },
-    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital sebagai fondasi masa depan." }
+    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data." },
+    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan." }
   ];
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#020108] border-t border-white/5 overflow-hidden">
-      {/* Background Sync Tetap Sama */}
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-20 bg-[#020108] border-t border-white/5 overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <motion.img key={bgIdx} src={CYBER_ASSETS[bgIdx]} initial={{ opacity: 0 }} animate={{ opacity: 0.15 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }} className="w-full h-full object-cover pointer-events-none" />
+        <div className="absolute inset-0 bg-black/80" />
+      </div>
       
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-16 w-full text-center">
-        <div className="mb-20">
-          {/* JUDUL DIKECILKAN: Dari 7xl ke 5xl (Desktop) dan 3xl (Mobile) */}
-          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-2xl">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 w-full text-center">
+        <div className="mb-16">
+          {/* JUDUL PAS: text-4xl (Desktop) */}
+          <h2 className="text-2xl lg:text-4xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-2xl">
             Membangun Kedaulatan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 animate-gradient-x">Digital Sekolah</span>
           </h2>
-          <p className="text-slate-400 max-w-2xl mx-auto text-sm lg:text-base font-medium opacity-80 leading-relaxed">
-            Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman demi lingkungan belajar yang terlindungi.
+          <p className="text-slate-400 max-w-2xl mx-auto text-xs lg:text-sm font-medium opacity-80 leading-relaxed">
+            Integrasi infrastruktur siber aman demi lingkungan belajar terlindungi.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12" onMouseLeave={() => setHovered(null)}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
-            <div 
-              key={item.id} onMouseEnter={() => setHovered(item.id)}
-              className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-10 lg:p-14 rounded-[3rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-50' : 'scale-100'} ${hovered === item.id ? 'shadow-[0_20px_70px_rgba(0,0,0,0.8)] -translate-y-4 border-blue-500/50' : ''}`}
-            >
-              <div className="w-14 h-14 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-8 border border-blue-500/20"><item.icon size={28} /></div>
-              {/* JUDUL KARTU DIKECILKAN: text-2xl lg:text-3xl */}
-              <h3 className="text-2xl lg:text-3xl font-black text-white mb-4 uppercase tracking-wider">{item.title}</h3>
-              <p className="text-slate-400 text-sm lg:text-base leading-relaxed font-medium">{item.desc}</p>
+            <div key={item.id} onMouseEnter={() => setHovered(item.id)} className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-8 lg:p-12 rounded-[2.5rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm opacity-50' : 'scale-100'}`}>
+              <div className="w-12 h-12 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-6"><item.icon size={24} /></div>
+              {/* SUBJUDUL PAS: text-xl (Desktop) */}
+              <h3 className="text-lg lg:text-xl font-black text-white mb-3 uppercase tracking-wider">{item.title}</h3>
+              <p className="text-slate-400 text-xs lg:text-sm leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -173,7 +173,6 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
     </section>
   );
 };
-
 const SecurityStatsSection = () => {
   const stats = [
     { label: "Data Terlindungi", value: "99.9%", color: "text-emerald-400" },
@@ -182,30 +181,24 @@ const SecurityStatsSection = () => {
     { label: "Uptime Sistem", value: "24/7", color: "text-cyan-400" },
   ];
 
-  eturn (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-16 w-full text-center">
-        <div className="mb-24">
-          {/* JUDUL DIKECILKAN: Sama dengan Visi Misi (5xl) */}
-          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6 drop-shadow-2xl">
-            Metrik Ketahanan <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-indigo-500">Digital</span>
+  return (
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-20 bg-[#030208] border-b border-white/5 overflow-hidden">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 w-full text-center">
+        <div className="mb-20">
+          <h2 className="text-2xl lg:text-4xl font-black text-white uppercase tracking-tighter mb-4">
+            Metrik Ketahanan <span className="text-fuchsia-500">Digital</span>
           </h2>
-          <p className="text-slate-500 max-w-2xl mx-auto text-sm lg:text-base font-medium">
-            Visualisasi kontrol infrastruktur siber sekolah dalam parameter keamanan optimal secara real-time.
-          </p>
+          <p className="text-slate-500 max-w-xl mx-auto text-xs lg:text-sm font-medium">Visualisasi data infrastruktur siber sekolah.</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((s, i) => (
-            <div 
-              key={i} 
-              className="bg-[#0a0a0f]/60 backdrop-blur-xl p-10 lg:p-12 rounded-[2.5rem] border border-white/5 hover:border-fuchsia-500/30 transition-all duration-700 group relative shadow-2xl"
-            >
-              {/* ANGKA DIKECILKAN: Dari 8xl ke 6xl */}
-              <div className={`text-5xl lg:text-6xl font-black mb-3 transition-transform duration-700 group-hover:scale-110 ${s.color}`}>
+            <div key={i} className="bg-[#0a0a0f] p-8 lg:p-10 rounded-[2rem] border border-white/5 hover:border-fuchsia-500/20 transition-all duration-500 group relative">
+              {/* ANGKA AMAN: text-3xl di HP, text-5xl di Laptop */}
+              <div className={`text-3xl lg:text-5xl font-black mb-3 transition-transform group-hover:scale-105 ${s.color}`}>
                 {s.value}
               </div>
-              <div className="text-[10px] lg:text-xs font-black text-slate-500 uppercase tracking-[0.4em] group-hover:text-fuchsia-400 transition-colors">
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">
                 {s.label}
               </div>
             </div>
