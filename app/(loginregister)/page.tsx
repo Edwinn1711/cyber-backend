@@ -454,87 +454,71 @@ export default function CyberLandingDark() {
       {/* ========================================================================= */}
       <div className="relative z-10 w-full pt-36 lg:pt-44">
         
-{/* SECTION 1: HERO (REVISI ULTRA LUXURY) */}
-        <section className="min-h-[calc(100vh-120px)] flex items-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 py-12 lg:py-0">
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center w-full">
+{/* SECTION 1: HERO (OPTIMASI DESKTOP & MOBILE LUXURY) */}
+<section className="min-h-screen lg:min-h-[calc(100vh-120px)] flex items-center justify-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 py-20 lg:py-0">
+           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-24 items-center w-full">
               
-              {/* Teks Kiri - Tipografi Elegan */}
-              <div className="space-y-10 text-center lg:text-left">
+              {/* Teks - Sekarang adaptif di HP dan Laptop */}
+              <div className="space-y-6 lg:space-y-10 text-center lg:text-left order-2 lg:order-1">
                  <motion.div 
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="inline-flex items-center gap-3 px-5 py-2 bg-white/5 border border-white/10 text-cyan-400 rounded-full text-[10px] font-black tracking-[0.4em] uppercase backdrop-blur-md shadow-[0_0_20px_rgba(34,211,238,0.1)]"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 text-cyan-400 rounded-full text-[9px] lg:text-[10px] font-black tracking-[0.3em] uppercase backdrop-blur-md"
                  >
-                   <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
+                   <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
                    Secure Protocol v.2.6
                  </motion.div>
                  
-                 <h2 className="text-4xl lg:text-6xl font-black text-white tracking-tighter leading-[1.1] uppercase">
+                 <h2 className="text-3xl sm:text-4xl lg:text-6xl font-black text-white tracking-tighter leading-[1.2] lg:leading-[1.1] uppercase">
                     Kesiapan Siber <br/>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-fuchsia-500 to-cyan-400 animate-gradient-x">
                        Sekolah 2026.
                     </span>
                  </h2>
                  
-                 <p className="text-sm lg:text-base font-medium text-slate-400 leading-relaxed max-w-xl mx-auto lg:mx-0 opacity-80">
-                    Platform kesiapan digital sekolah yang mengintegrasikan keamanan tingkat tinggi dengan infrastruktur modern untuk masa depan pendidikan yang terlindungi.
+                 <p className="text-xs lg:text-base font-medium text-slate-400 leading-relaxed max-w-xl mx-auto lg:mx-0 opacity-80 px-4 lg:px-0">
+                    Platform kesiapan digital sekolah dengan keamanan tingkat tinggi untuk masa depan pendidikan yang terlindungi.
                  </p>
 
-                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6">
-                   <button onClick={() => setIsLoginOpen(true)} className="group relative w-full sm:w-auto px-10 py-4 bg-white text-black rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all hover:bg-cyan-400 hover:text-white hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] flex items-center justify-center gap-3">
-                      Mulai Evaluasi <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform"/>
+                 <div className="flex justify-center lg:justify-start px-4 lg:px-0">
+                   <button onClick={() => setIsLoginOpen(true)} className="group relative w-full sm:w-auto px-8 lg:px-10 py-4 bg-white text-black rounded-2xl font-black text-[10px] lg:text-[11px] tracking-[0.2em] uppercase transition-all hover:bg-cyan-400 hover:text-white hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] flex items-center justify-center gap-3">
+                      Mulai Evaluasi <ArrowRight size={16} />
                    </button>
-                 </div>
-
-                 <div className="pt-8 flex flex-wrap items-center justify-center lg:justify-start gap-5">
-                    {[ Shield, Server, Network, Fingerprint ].map((Icon, i) => (
-                      <div key={i} className="w-12 h-12 rounded-xl flex items-center justify-center border border-white/5 bg-white/5 backdrop-blur-sm text-slate-500 hover:text-cyan-400 hover:border-cyan-500/30 transition-all cursor-crosshair">
-                         <Icon size={20} />
-                      </div>
-                    ))}
                  </div>
               </div>
 
-              {/* Grafis Kanan (Card 3D Ultra Luxury) */}
-              <div className="hidden lg:flex items-center justify-center relative w-full" style={{ perspective: 2000 }}>
+              {/* Grafis Card 3D - SEKARANG MUNCUL DI HP JUGA (order-1 agar di HP nampak di atas teks) */}
+              <div className="relative w-full flex items-center justify-center order-1 lg:order-2" style={{ perspective: 2000 }}>
                  <motion.div 
                     style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                    className="relative w-full max-w-[420px] aspect-[4/5] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-[3.5rem] p-1 shadow-[0_50px_100px_rgba(0,0,0,0.6)] border border-white/20 flex flex-col items-center justify-center group/card"
+                    className="relative w-[280px] h-[350px] lg:w-[420px] lg:h-[525px] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-[2.5rem] lg:rounded-[3.5rem] p-1 shadow-[0_50px_100px_rgba(0,0,0,0.6)] border border-white/20 flex flex-col items-center justify-center group/card"
                  >
-                    {/* Inner Decorative Border */}
-                    <div className="absolute inset-4 border border-white/5 rounded-[2.5rem] pointer-events-none" />
-                    
-                    {/* Corner Marks */}
-                    <div className="absolute top-8 left-8 w-4 h-4 border-t-2 border-l-2 border-cyan-500/30" />
-                    <div className="absolute bottom-8 right-8 w-4 h-4 border-b-2 border-r-2 border-fuchsia-500/30" />
+                    {/* Hiasan Sudut */}
+                    <div className="absolute top-6 left-6 w-3 h-3 lg:w-4 lg:h-4 border-t-2 border-l-2 border-cyan-500/30" />
+                    <div className="absolute bottom-6 right-6 w-3 h-3 lg:w-4 lg:h-4 border-b-2 border-r-2 border-fuchsia-500/30" />
 
-                    <div className="relative flex items-center justify-center mb-12" style={{ transform: "translateZ(100px)" }}>
-                       {/* Animated Rotating Rings */}
-                       <div className="absolute w-56 h-56 border border-cyan-500/20 rounded-full animate-[spin_20s_linear_infinite]" />
-                       <div className="absolute w-48 h-48 border-dashed border border-fuchsia-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
-                       
-                       <div className="w-32 h-32 bg-black/80 border border-white/10 rounded-3xl flex items-center justify-center shadow-[0_0_50px_rgba(34,211,238,0.2)]">
-                          <ShieldCheck size={60} className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
+                    <div className="relative flex items-center justify-center mb-8 lg:mb-12" style={{ transform: "translateZ(80px)" }}>
+                       <div className="absolute w-40 h-40 lg:w-56 lg:h-56 border border-cyan-500/20 rounded-full animate-[spin_20s_linear_infinite]" />
+                       <div className="w-24 h-24 lg:w-32 lg:h-32 bg-black/80 border border-white/10 rounded-2xl lg:rounded-3xl flex items-center justify-center shadow-[0_0_50px_rgba(34,211,238,0.2)]">
+                          <ShieldCheck size={40} className="lg:size-[60px] text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
                        </div>
                     </div>
                     
-                    <div className="text-center space-y-2" style={{ transform: "translateZ(60px)" }}>
-                       <h3 className="text-2xl font-black text-white tracking-[0.2em] uppercase">
+                    <div className="text-center space-y-1 lg:space-y-2" style={{ transform: "translateZ(50px)" }}>
+                       <h3 className="text-lg lg:text-2xl font-black text-white tracking-[0.2em] uppercase">
                           Security <span className="text-cyan-400">System</span>
                        </h3>
-                       <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
+                       <p className="text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em]">
                           Cyber Security Active
                        </p>
                     </div>
                     
-                    <div 
-                      className="absolute -bottom-6 px-10 py-4 bg-black border border-white/10 text-white rounded-2xl text-[10px] font-black tracking-[0.4em] shadow-2xl transition-all group-hover/card:border-cyan-500/50" 
-                      style={{ transform: "translateZ(120px)" }}
-                    >
+                    <div className="absolute -bottom-4 lg:-bottom-6 px-6 lg:px-10 py-3 lg:py-4 bg-black border border-white/10 text-white rounded-xl lg:rounded-2xl text-[8px] lg:text-[10px] font-black tracking-[0.3em] shadow-2xl transition-all" style={{ transform: "translateZ(100px)" }}>
                       ENCRYPTED 2026
                     </div>
                  </motion.div>
               </div>
+
            </div>
         </section>
 
