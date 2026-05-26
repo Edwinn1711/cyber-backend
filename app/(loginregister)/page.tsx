@@ -6,7 +6,8 @@ import {
   ShieldCheck, User, Lock, ScanLine, AlertTriangle, Fingerprint, 
   MapPin, Calendar, CheckCircle2, Server, Network, Shield,
   Home, Info, FileText, LayoutGrid, Megaphone, HelpCircle, X, ArrowRight, Zap,
-  BrainCircuit, ShieldAlert, Cpu, Star, Target
+  BrainCircuit, ShieldAlert, Cpu, Star, Target,
+  CreditCard, Globe, Key, Bug, Mail, Cloud, Search, Terminal, Eye
 } from 'lucide-react'
 
 // --- ASSET BACKGROUND ---
@@ -438,6 +439,104 @@ const CyberFooter = () => (
     </div>
   </footer>
 );
+
+// --- HIGH-TECH COMPOSITE DIAGNOSTIC WIDGETS ---
+const TECH_NODES = [
+  { id: "card", label: "Card Security", icon: CreditCard, col: "text-cyan-400", border: "border-cyan-500/20", bg: "bg-cyan-500/5", status: "SECURE" },
+  { id: "phishing", label: "Phishing Hook", icon: ShieldAlert, col: "text-red-400", border: "border-red-500/20", bg: "bg-red-500/5", status: "BLOCKED" },
+  { id: "shield_chip", label: "Shielded Chip", icon: Cpu, col: "text-emerald-400", border: "border-emerald-500/20", bg: "bg-emerald-500/5", status: "SHIELDED" },
+  { id: "secure_chip", label: "Secure Chip", icon: Cpu, col: "text-indigo-400", border: "border-indigo-500/20", bg: "bg-indigo-500/5", status: "CRYPTED" },
+  { id: "globe", label: "Globe Lock", icon: Globe, col: "text-cyan-400", border: "border-cyan-500/20", bg: "bg-cyan-500/5", status: "WAN_LOCK" },
+  { id: "key_tech", label: "Key Tech", icon: Key, col: "text-fuchsia-400", border: "border-fuchsia-500/20", bg: "bg-fuchsia-500/5", status: "TOKEN_OK" },
+  { id: "antivirus", label: "Find Antivirus", icon: Bug, col: "text-amber-400", border: "border-amber-500/20", bg: "bg-amber-500/5", status: "CLEANED" },
+  { id: "warning_win", label: "Warning Window", icon: Terminal, col: "text-red-400", border: "border-red-500/20", bg: "bg-red-500/5", status: "SYS_WARN" },
+  { id: "secure_mail", label: "Secure Mail", icon: Mail, col: "text-emerald-400", border: "border-emerald-500/20", bg: "bg-emerald-500/5", status: "MX_PASS" },
+  { id: "cloud_net", label: "Cloud Network", icon: Cloud, col: "text-cyan-400", border: "border-cyan-500/20", bg: "bg-cyan-500/5", status: "SYNCED" },
+  { id: "doc", label: "Locked Document", icon: FileText, col: "text-fuchsia-400", border: "border-fuchsia-500/20", bg: "bg-fuchsia-500/5", status: "DB_CRYPT" }
+];
+
+const RenderCompositeIcon = ({ id, Icon, col }: { id: string, Icon: any, col: string }) => (
+  <div className="relative w-12 h-12 flex items-center justify-center">
+    {/* Ikon Utama */}
+    <Icon size={26} className={`${col} drop-shadow-[0_0_8px_currentColor] transition-transform duration-300 group-hover:scale-110`} />
+    
+    {/* Micro-Overlays yang meniru persis detail referensi gambar Anda */}
+    {id === "card" && (
+      <div className="absolute -top-1 -right-1 bg-cyan-950/90 p-0.5 rounded border border-cyan-500/50 text-cyan-400"><Lock size={10} /></div>
+    )}
+    {id === "phishing" && (
+      <div className="absolute -top-1 -right-1 bg-red-950/90 p-0.5 rounded border border-red-500/50 text-red-400"><AlertTriangle size={10} /></div>
+    )}
+    {id === "shield_chip" && (
+      <div className="absolute -top-1 -right-1 bg-emerald-950/90 p-0.5 rounded border border-emerald-500/50 text-emerald-400"><ShieldCheck size={10} /></div>
+    )}
+    {id === "secure_chip" && (
+      <div className="absolute -top-1 -right-1 bg-indigo-950/90 p-0.5 rounded border border-indigo-500/50 text-indigo-400"><Lock size={10} /></div>
+    )}
+    {id === "globe" && (
+      <div className="absolute -top-1 -right-1 bg-cyan-950/90 p-0.5 rounded border border-cyan-500/50 text-cyan-400"><Lock size={10} /></div>
+    )}
+    {id === "antivirus" && (
+      <div className="absolute -bottom-1 -right-1 bg-amber-950/90 p-0.5 rounded border border-amber-500/50 text-amber-400"><Search size={10} /></div>
+    )}
+    {id === "secure_mail" && (
+      <div className="absolute -top-1 -right-1 bg-emerald-950/90 p-0.5 rounded border border-emerald-500/50 text-emerald-400"><ShieldCheck size={10} /></div>
+    )}
+    {id === "doc" && (
+      <div className="absolute -bottom-1 -right-1 bg-fuchsia-950/90 p-0.5 rounded border border-fuchsia-500/50 text-fuchsia-400"><Lock size={10} /></div>
+    )}
+    {id === "warning_win" && (
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-500/80"><AlertTriangle size={14} className="animate-pulse" /></div>
+    )}
+  </div>
+);
+
+const LogoMarquee = () => {
+  return (
+    <div className="relative w-full overflow-hidden py-8 select-none">
+      {/* Masking Gradasi Tepian Halus agar Terkesan Hologram Memudar di Kiri-Kanan */}
+      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black via-black/50 to-transparent z-20 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black via-black/50 to-transparent z-20 pointer-events-none" />
+
+      {/* Infinite Moving Track */}
+      <motion.div 
+        className="flex gap-6 w-max"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      >
+        {[...TECH_NODES, ...TECH_NODES].map((node, i) => (
+          <div 
+            key={i} 
+            className={`flex-shrink-0 w-44 h-48 rounded-[2rem] border ${node.border} ${node.bg} backdrop-blur-md flex flex-col items-center justify-between p-6 relative overflow-hidden group transition-all duration-300 hover:bg-[#070913] hover:border-white/20`}
+          >
+            {/* Hologram Grid Pattern di Belakang Setiap Card */}
+            <div className="absolute inset-0 bg-grid-static opacity-[0.03] z-0 pointer-events-none" />
+            
+            {/* Garis Pemindaian Laser Vertikal saat Hover */}
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-10" />
+
+            {/* Top Diagnostics Label */}
+            <div className="w-full flex justify-between items-center z-10">
+              <span className="text-[7px] font-mono text-slate-500 tracking-wider">CHAMBER_0{i % 10}</span>
+              <span className={`text-[7px] font-mono font-bold px-2 py-0.5 rounded bg-white/5 ${node.col} tracking-widest`}>{node.status}</span>
+            </div>
+
+            {/* Composite Icon (Vektor Gabungan Custom) */}
+            <div className="z-10 py-2">
+              <RenderCompositeIcon id={node.id} Icon={node.icon} col={node.col} />
+            </div>
+
+            {/* Bottom Cyber Label */}
+            <div className="text-center z-10">
+              <p className="text-[10px] font-black text-white uppercase tracking-[0.2em]">{node.label}</p>
+              <span className="text-[6px] font-mono text-slate-600 tracking-widest block mt-1">SYS_STATUS: ACTIVE</span>
+            </div>
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
 
 
 export default function CyberLandingDark() {
