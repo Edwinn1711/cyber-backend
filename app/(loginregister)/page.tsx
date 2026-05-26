@@ -303,6 +303,7 @@ export default function CyberLandingDark() {
   const router = useRouter();
   const [bgIdx, setBgIdx] = useState(0);
   const [isLoginOpen, setIsLoginOpen] = useState(false); 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
   
   // State Form Login
   const [activeTab, setActiveTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
@@ -313,6 +314,7 @@ export default function CyberLandingDark() {
   const [className, setClassName] = useState('X MIPA 1');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  
 
   // 3D Mouse Hover Effect
   const mouseX = useMotionValue(0);
@@ -400,53 +402,89 @@ export default function CyberLandingDark() {
 
       
 
-{/* AREA HEADER DIPERBAIKI */}
-<header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
-  <div className="max-w-[1400px] mx-auto px-6 lg:px-10 h-24 flex items-center justify-between">
+      <header className="fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
+  <div className="max-w-[1400px] mx-auto px-6 lg:px-10 h-20 lg:h-24 flex items-center justify-between">
     
     {/* AREA KIRI: LOGO */}
-<div className="flex items-center gap-4 relative z-10 shrink-0">
-   <div className="w-12 h-12 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
-      <ShieldCheck size={28} className="text-fuchsia-400" />
-   </div>
-   <div className="whitespace-nowrap">
-      <h1 className="font-black text-white tracking-widest text-lg leading-tight">CYBER<span className="text-fuchsia-500">READINESS</span></h1>
-      {/* UBAH BARIS DI BAWAH INI */}
-      <p className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase mt-1">CYBER SECURITY</p>
-   </div>
-</div>
+    <div className="flex items-center gap-3 lg:gap-4 shrink-0 relative z-[110]">
+       <div className="w-10 h-10 lg:w-12 lg:h-12 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
+          <ShieldCheck size={24} className="text-fuchsia-400" />
+       </div>
+       <div className="whitespace-nowrap">
+          <h1 className="font-black text-white tracking-widest text-sm lg:text-lg leading-tight">CYBER<span className="text-fuchsia-500">READINESS</span></h1>
+          <p className="text-[8px] lg:text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase">CYBER SECURITY</p>
+       </div>
+    </div>
 
-    {/* AREA TENGAH: NAVIGASI (Menggunakan flex-1 dan justify-center) */}
+    {/* AREA TENGAH: NAVIGASI DESKTOP (Tetap Hidden di HP) */}
     <nav className="hidden lg:flex flex-1 justify-center items-center gap-8 xl:gap-12 h-full">
         {[ 
           { icon: Home, label: 'Beranda', active: true }, 
-          { icon: Info, label: 'Profil', active: false }, 
-          { icon: LayoutGrid, label: 'Organisasi', active: false }, 
-          { icon: FileText, label: 'Berita', active: false }, 
-          { icon: Megaphone, label: 'Pengumuman', active: false }, 
-          { icon: HelpCircle, label: 'Layanan', active: false } 
+          { icon: Info, label: 'Profil' }, 
+          { icon: LayoutGrid, label: 'Organisasi' }, 
+          { icon: FileText, label: 'Berita' }, 
+          { icon: Megaphone, label: 'Pengumuman' }, 
+          { icon: HelpCircle, label: 'Layanan' } 
         ].map((item, idx) => (
-          <div key={idx} className="relative flex flex-col items-center justify-center group cursor-pointer h-24">
-            <div className={`flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black transition-colors ${item.active ? 'text-fuchsia-400' : 'text-slate-500 group-hover:text-white'}`}>
-              <item.icon size={15} className={item.active ? "text-fuchsia-500" : "text-slate-600 group-hover:text-fuchsia-400"} />
-              {item.label}
-            </div>
-            {item.active && <div className="absolute bottom-0 w-full h-[2px] bg-fuchsia-500 rounded-t-md shadow-[0_0_10px_#d946ef]" />}
+          <div key={idx} className="relative flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black cursor-pointer transition-colors text-slate-500 hover:text-white group">
+            <item.icon size={15} className="group-hover:text-fuchsia-400" />
+            {item.label}
+            {item.active && <div className="absolute -bottom-8 w-full h-[2px] bg-fuchsia-500 shadow-[0_0_10px_#d946ef]" />}
           </div>
         ))}
     </nav>
 
-    {/* AREA KANAN: LOGIN (Tetap stabil) */}
-    <div className="shrink-0">
+    {/* AREA KANAN: LOGIN + HAMBURGER (Mobile) */}
+    <div className="flex items-center gap-4 relative z-[110]">
       <button 
           onClick={() => setIsLoginOpen(true)}
-          className="flex items-center gap-3 px-6 py-3 bg-fuchsia-600 text-white rounded-full font-black text-[11px] tracking-[0.2em] uppercase hover:bg-fuchsia-500 transition-all shadow-[0_0_20px_rgba(217,70,239,0.4)]"
+          className="flex items-center gap-2 px-5 py-2.5 lg:px-8 lg:py-3.5 bg-fuchsia-600 text-white rounded-full font-black text-[10px] lg:text-[11px] tracking-[0.2em] uppercase hover:bg-fuchsia-500 transition-all shadow-[0_0_20px_rgba(217,70,239,0.4)]"
       >
           <User size={16} /> <span className="hidden sm:inline">LOGIN</span>
+      </button>
+
+      {/* Tombol Hamburger - HANYA MUNCUL DI HP */}
+      <button 
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="lg:hidden p-2.5 bg-white/5 border border-white/10 rounded-xl text-white hover:bg-white/10 transition-all"
+      >
+        {isMobileMenuOpen ? <X size={24} /> : <LayoutGrid size={24} />}
       </button>
     </div>
 
   </div>
+
+  {/* ========================================================================= */}
+  {/* OVERLAY MENU MOBILE (MUNCUL SAAT KLIK HAMBURGER)                         */}
+  {/* ========================================================================= */}
+  <AnimatePresence>
+    {isMobileMenuOpen && (
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        className="absolute top-full left-0 w-full bg-[#05050a]/95 backdrop-blur-2xl border-b border-white/10 py-8 px-6 lg:hidden flex flex-col gap-6 shadow-2xl"
+      >
+        {[ 
+          { icon: Home, label: 'Beranda' }, 
+          { icon: Info, label: 'Profil' }, 
+          { icon: LayoutGrid, label: 'Organisasi' }, 
+          { icon: FileText, label: 'Berita' }, 
+          { icon: Megaphone, label: 'Pengumuman' }, 
+          { icon: HelpCircle, label: 'Layanan' } 
+        ].map((item, idx) => (
+          <div 
+            key={idx} 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold tracking-widest text-xs uppercase hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition-all"
+          >
+            <item.icon size={18} />
+            {item.label}
+          </div>
+        ))}
+      </motion.div>
+    )}
+  </AnimatePresence>
 </header>
 
       {/* ========================================================================= */}
