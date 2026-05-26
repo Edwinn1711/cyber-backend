@@ -136,61 +136,42 @@ const SectionDivider = () => (
 
 const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   const [hovered, setHovered] = useState<string | null>(null);
-
   const data = [
-    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data di lingkungan sekolah." },
-    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital sebagai fondasi masa depan." }
+    { id: "visi", icon: Star, title: "Visi Kami", desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data." },
+    { id: "misi", icon: Target, title: "Misi Kami", desc: "Menyelenggarakan infrastruktur digital yang terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital." }
   ];
 
   return (
     <section className="relative w-full py-24 bg-[#020108] border-t border-white/5 overflow-hidden">
-      {/* --- BACKGROUND SINKRON (DIPERBAIKI OPACITYNYA) --- */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
           <motion.img 
-            key={bgIdx}
-            src={CYBER_ASSETS[bgIdx]}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.35 }} // Dinaikkan ke 0.35 agar nampak jelas
-            exit={{ opacity: 0 }}
-            transition={{ duration: 2, ease: "easeInOut" }}
+            key={bgIdx} src={CYBER_ASSETS[bgIdx]} initial={{ opacity: 0 }}
+            animate={{ opacity: 0.35 }} exit={{ opacity: 0 }} transition={{ duration: 2 }}
             className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-lighten"
           />
         </AnimatePresence>
-        
-        {/* Overlay hitam ditipiskan dari /90 ke /70 agar gambar tidak tertutup total */}
         <div className="absolute inset-0 bg-black/70 pointer-events-none" />
-        
-        {/* Tambahan Gradient halus agar transisi antar section lebih mewah */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-80" />
       </div>
       
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
-        <div className="mb-16">
-          <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+      {/* UBAH KE max-w-[1600px] DAN px-16 AGAR LEBAR */}
+      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-16 text-center">
+        <div className="mb-20">
+          <h2 className="text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6">
             Membangun Kedaulatan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 animate-gradient-x">Digital Sekolah</span>
           </h2>
-          <p className="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed opacity-90">
-            Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman demi lingkungan belajar yang terlindungi.
-          </p>
+          <p className="text-slate-400 max-w-2xl mx-auto text-base">Mengokohkan kedaulatan digital melalui integrasi infrastruktur siber yang aman.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8" onMouseLeave={() => setHovered(null)}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
             <div 
-              key={item.id}
-              onMouseEnter={() => setHovered(item.id)}
-              className={`
-                bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-10 lg:p-12 rounded-[2.5rem] text-left transition-all duration-500
-                ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-50' : 'scale-100 opacity-100'}
-                ${hovered === item.id ? 'shadow-[0_20px_50px_rgba(0,0,0,0.5)] -translate-y-4 border-blue-500/50' : ''}
-              `}
+              key={item.id} onMouseEnter={() => setHovered(item.id)}
+              className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-12 lg:p-16 rounded-[3.5rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-50' : 'scale-100'} ${hovered === item.id ? '-translate-y-4 border-blue-500/50 shadow-2xl' : ''}`}
             >
-              <div className="w-14 h-14 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-8 border border-blue-500/20">
-                <item.icon size={28} />
-              </div>
-              <h3 className="text-2xl font-black text-white mb-4 tracking-wide">{item.title}</h3>
-              <p className="text-slate-400 text-sm lg:text-base leading-relaxed font-medium">{item.desc}</p>
+              <div className="w-16 h-16 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-8 border border-blue-500/20"><item.icon size={32} /></div>
+              <h3 className="text-3xl font-black text-white mb-6">{item.title}</h3>
+              <p className="text-slate-400 text-base leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -706,37 +687,29 @@ export default function CyberLandingDark() {
 
         <SectionDivider />
 
-        {/* --- HALAMAN 2: PILAR STRATEGIS --- */}
-        <div className="relative w-full bg-[#030208] z-20 pb-32 pt-24 shadow-[0_-30px_60px_rgba(0,0,0,0.8)]">
+{/* --- HALAMAN 2: PILAR STRATEGIS (DIBUAT LEBAR) --- */}
+<div className="relative w-full bg-[#030208] z-20 pb-32 pt-24 shadow-[0_-30px_60px_rgba(0,0,0,0.8)] border-b border-white/5">
            <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-indigo-900/10 via-fuchsia-900/5 to-transparent blur-[120px] pointer-events-none" />
-           <section className="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
-               <div className="text-center mb-20">
+           
+           {/* UBAH KE max-w-[1600px] DAN px-16 DISINI JUGA */}
+           <section className="max-w-[1600px] mx-auto px-6 lg:px-16 relative z-10">
+               <div className="text-center mb-24">
                  <h2 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase mb-6">
                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500">Pilar Strategis</span> Kami
                  </h2>
-                 <p className="text-slate-400 max-w-3xl mx-auto font-medium text-sm leading-relaxed">
-                   Berkomitmen untuk menciptakan lingkungan akademik yang tangguh terhadap ancaman digital melalui penguatan infrastruktur dan sistem keamanan proaktif.
-                 </p>
                </div>
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  {/* Card 1 */}
-                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 text-center hover:border-cyan-500/40 transition-all duration-500">
-                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 mx-auto"><Server size={32} className="text-cyan-400" /></div>
-                     <h3 className="text-2xl font-black text-white mb-4 uppercase">Infrastruktur</h3>
-                     <p className="text-[13px] text-slate-400 leading-relaxed">Membangun arsitektur jaringan sekolah yang terpusat dan tahan terhadap serangan siber.</p>
-                  </div>
-                  {/* Card 2 */}
-                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 text-center hover:border-fuchsia-500/40 transition-all duration-500">
-                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 mx-auto"><ShieldAlert size={32} className="text-fuchsia-400" /></div>
-                     <h3 className="text-2xl font-black text-white mb-4 uppercase">Keamanan</h3>
-                     <p className="text-[13px] text-slate-400 leading-relaxed">Menerapkan protokol enkripsi dan pemantauan real-time untuk mendeteksi ancaman.</p>
-                  </div>
-                  {/* Card 3 */}
-                  <div className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] p-10 text-center hover:border-emerald-500/40 transition-all duration-500">
-                     <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 mx-auto"><BrainCircuit size={32} className="text-emerald-400" /></div>
-                     <h3 className="text-2xl font-black text-white mb-4 uppercase">Literasi</h3>
-                     <p className="text-[13px] text-slate-400 leading-relaxed">Meningkatkan kesadaran sivitas akademika dalam menjaga keamanan data pribadi.</p>
-                  </div>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
+                  {[ 
+                    { t: "Infrastruktur", i: Server, c: "text-cyan-400", d: "Membangun arsitektur jaringan sekolah yang terpusat dan tahan terhadap serangan siber." },
+                    { t: "Keamanan", i: ShieldAlert, c: "text-fuchsia-400", d: "Menerapkan protokol enkripsi dan pemantauan real-time untuk mendeteksi ancaman." },
+                    { t: "Literasi", i: BrainCircuit, c: "text-emerald-400", d: "Meningkatkan kesadaran sivitas akademika dalam menjaga keamanan data pribadi." }
+                  ].map((item, i) => (
+                    <div key={i} className="bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[3rem] p-12 lg:p-14 text-center hover:border-white/20 transition-all duration-500 hover:-translate-y-2">
+                       <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-10 mx-auto shadow-xl"><item.i size={36} className={item.c} /></div>
+                       <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-widest">{item.t}</h3>
+                       <p className="text-sm text-slate-400 leading-relaxed">{item.d}</p>
+                    </div>
+                  ))}
                </div>
            </section>
         </div>
