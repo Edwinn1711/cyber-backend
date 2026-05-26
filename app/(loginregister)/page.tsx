@@ -189,36 +189,39 @@ const SecurityStatsSection = () => {
   ];
 
   return (
-    <section className="relative w-full py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
-      {/* Efek Glow Latar Belakang agar tidak kosong */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-fuchsia-600/5 blur-[120px] rounded-full pointer-events-none" />
+    // min-h-screen memaksa tinggi section ini minimal setinggi layar HP/Laptop pengguna
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
+      
+      {/* Efek Glow Latar Belakang (Dibuat lebih besar agar mengisi layar penuh) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-fuchsia-600/5 blur-[150px] rounded-full pointer-events-none" />
 
-      {/* UBAH KE max-w-[1600px] DAN px-16 AGAR MERATA DENGAN HALAMAN LAIN */}
-      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-16 text-center">
+      {/* Kontainer Utama Ultra-Wide 1600px */}
+      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-16 w-full flex flex-col justify-center">
         
-        <div className="mb-20">
-          <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tight mb-4">
-            Metrik Ketahanan <span className="text-fuchsia-500">Digital</span>
+        {/* Judul dengan Ukuran Lebih Pas & Elegan */}
+        <div className="text-center mb-28">
+          <h2 className="text-4xl lg:text-6xl font-black text-white uppercase tracking-tighter mb-6 drop-shadow-2xl">
+            Metrik Ketahanan <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-indigo-500">Digital</span>
           </h2>
-          <p className="text-slate-500 max-w-2xl mx-auto text-sm">
-            Statistik operasional infrastruktur siber sekolah dalam menjamin keamanan data.
+          <p className="text-slate-500 max-w-2xl mx-auto text-sm lg:text-base font-medium opacity-80">
+            Laporan operasional infrastruktur siber sekolah dalam menjamin keamanan data dan stabilitas jaringan secara real-time.
           </p>
         </div>
 
-        {/* Grid dengan Gap yang lebih lebar agar proporsional */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-10">
+        {/* Grid Kartu Statistik - Dibuat Lebih Besar & Kokoh */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {stats.map((s, i) => (
             <div 
               key={i} 
-              className="bg-[#0a0a0f] p-10 lg:p-14 rounded-[3rem] border border-white/5 hover:border-fuchsia-500/20 transition-all duration-500 group relative overflow-hidden shadow-2xl"
+              className="bg-[#0a0a0f]/60 backdrop-blur-xl p-12 lg:p-16 rounded-[3.5rem] border border-white/5 hover:border-fuchsia-500/30 transition-all duration-700 group relative overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
             >
-              {/* Animasi Glow saat di-hover */}
-              <div className="absolute inset-0 bg-fuchsia-500/0 group-hover:bg-fuchsia-500/5 transition-colors duration-500" />
+              {/* Efek Kilatan Cahaya di dalam Box */}
+              <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/0 via-fuchsia-500/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               
-              <div className={`text-4xl lg:text-6xl font-black mb-3 transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_15px_rgba(0,0,0,0.5)] ${s.color}`}>
+              <div className={`text-6xl lg:text-7xl font-black mb-4 transition-transform duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(217,70,239,0.3)] ${s.color}`}>
                 {s.value}
               </div>
-              <div className="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-[0.2em] group-hover:text-slate-300 transition-colors">
+              <div className="text-xs lg:text-sm font-black text-slate-500 uppercase tracking-[0.4em] group-hover:text-fuchsia-400 transition-colors duration-500">
                 {s.label}
               </div>
             </div>
