@@ -449,68 +449,77 @@ export default function CyberLandingDark() {
   </div>
 </header>
 
+{/* ========================================================================= */}
+      {/* KONTEN UTAMA (OPTIMASI PADDING AGAR TIDAK TERLIHAT JAUH DI HP)             */}
       {/* ========================================================================= */}
-      {/* KONTEN UTAMA (SISTEM 5 HALAMAN DENGAN PEMISAH BERCAHAYA)                   */}
-      {/* ========================================================================= */}
-      <div className="relative z-10 w-full pt-36 lg:pt-44">
+      <div className="relative z-10 w-full pt-24 lg:pt-44"> {/* pt-24 di HP agar tidak terlalu turun */}
         
-{/* SECTION 1: HERO (SAMA PERSIS LAPTOP & HP - SIDE BY SIDE) */}
-<section className="min-h-[60vh] lg:min-h-[calc(100vh-120px)] flex items-center justify-start w-full max-w-[1400px] mx-auto px-4 lg:px-10 py-10 lg:py-0">
-           <div className="grid grid-cols-2 gap-4 lg:gap-24 items-center w-full">
+        {/* SECTION 1: HERO (MOBILE BOLD & DESKTOP LUXURY) */}
+        <section className="min-h-[85vh] lg:min-h-[calc(100vh-120px)] flex items-center justify-start w-full max-w-[1400px] mx-auto px-6 lg:px-10 py-10 lg:py-0">
+           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-24 items-start w-full">
               
-              {/* SISI KIRI: TEKS (Rata Kiri) */}
-              <div className="space-y-4 lg:space-y-10 text-left w-full">
+              {/* GRAFIS CARD 3D - Dibuat BESAR di HP agar layar penuh (Tampil Duluan di HP) */}
+              <div className="relative w-full flex items-center justify-start lg:justify-center order-1 lg:order-2" style={{ perspective: 2000 }}>
+                 <motion.div 
+                    style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                    className="relative w-[300px] h-[380px] sm:w-[340px] sm:h-[430px] lg:w-[420px] lg:h-[525px] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-[2.5rem] lg:rounded-[3.5rem] p-1 shadow-[0_50px_100px_rgba(0,0,0,0.6)] border border-white/20 flex flex-col items-center justify-center group/card"
+                 >
+                    {/* Sudut Dekoratif */}
+                    <div className="absolute top-8 left-8 w-4 h-4 border-t-2 border-l-2 border-cyan-500/30" />
+                    <div className="absolute bottom-8 right-8 w-4 h-4 border-b-2 border-r-2 border-fuchsia-500/30" />
+
+                    <div className="relative flex items-center justify-center mb-10 lg:mb-12" style={{ transform: "translateZ(80px)" }}>
+                       <div className="absolute w-44 h-44 lg:w-56 lg:h-56 border border-cyan-500/20 rounded-full animate-[spin_20s_linear_infinite]" />
+                       <div className="w-24 h-24 lg:w-32 lg:h-32 bg-black/80 border border-white/10 rounded-3xl flex items-center justify-center shadow-[0_0_50px_rgba(34,211,238,0.2)]">
+                          <ShieldCheck size={48} className="lg:size-[60px] text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
+                       </div>
+                    </div>
+                    
+                    <div className="text-center space-y-2" style={{ transform: "translateZ(50px)" }}>
+                       <h3 className="text-xl lg:text-2xl font-black text-white tracking-[0.2em] uppercase">
+                          Security <span className="text-cyan-400">System</span>
+                       </h3>
+                       <p className="text-[9px] lg:text-[10px] font-bold text-slate-500 uppercase tracking-[0.5em]">
+                          Cyber Security Active
+                       </p>
+                    </div>
+                    
+                    <div 
+                      className="absolute -bottom-6 px-10 py-4 bg-black border border-white/10 text-white rounded-2xl text-[9px] lg:text-[10px] font-black tracking-[0.4em] shadow-2xl transition-all group-hover/card:border-cyan-500/50" 
+                      style={{ transform: "translateZ(100px)" }}
+                    >
+                      ENCRYPTED 2026
+                    </div>
+                 </motion.div>
+              </div>
+
+              {/* TEKS - Rata Kiri, Ukuran Besar (Tampil di Bawah Gambar di HP) */}
+              <div className="space-y-8 lg:space-y-10 text-left order-2 lg:order-1 w-full">
                  <motion.div 
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 text-cyan-400 rounded-full text-[7px] lg:text-[10px] font-black tracking-[0.2em] lg:tracking-[0.4em] uppercase backdrop-blur-md"
+                    className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 text-cyan-400 rounded-full text-[9px] lg:text-[10px] font-black tracking-[0.4em] uppercase backdrop-blur-md"
                  >
-                   <div className="w-1 h-1 lg:w-1.5 lg:h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
+                   <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
                    SECURE PROTOCOL ACTIVE
                  </motion.div>
                  
-                 <h2 className="text-lg sm:text-2xl lg:text-6xl font-black text-white tracking-tighter leading-tight lg:leading-[1.1] uppercase">
+                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-[1.1] uppercase">
                     Kesiapan Siber <br/>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-fuchsia-500 to-cyan-400 animate-gradient-x">
                        Sekolah 2026.
                     </span>
                  </h2>
                  
-                 <p className="text-[8px] lg:text-base font-medium text-slate-400 leading-relaxed max-w-xl opacity-80 pr-2 lg:pr-0">
-                    Platform kesiapan digital sekolah dengan keamanan tingkat tinggi.
+                 <p className="text-sm lg:text-base font-medium text-slate-400 leading-relaxed max-w-xl opacity-80">
+                    Platform kesiapan digital sekolah yang mengintegrasikan keamanan tingkat tinggi dengan infrastruktur modern untuk masa depan pendidikan yang terlindungi.
                  </p>
 
                  <div className="flex justify-start">
-                   <button onClick={() => setIsLoginOpen(true)} className="group relative px-4 lg:px-10 py-2.5 lg:py-4 bg-white text-black rounded-lg lg:rounded-2xl font-black text-[7px] lg:text-[11px] tracking-[0.1em] lg:tracking-[0.2em] uppercase transition-all hover:bg-cyan-400 hover:text-white shadow-lg flex items-center justify-center gap-2">
-                      Mulai <ArrowRight size={10} className="lg:w-4 lg:h-4" />
+                   <button onClick={() => setIsLoginOpen(true)} className="group relative w-full sm:w-auto px-10 py-4 bg-white text-black rounded-2xl font-black text-[10px] lg:text-[11px] tracking-[0.2em] uppercase transition-all hover:bg-cyan-400 hover:text-white hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] flex items-center justify-center gap-3">
+                      Mulai Evaluasi <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform"/>
                    </button>
                  </div>
-              </div>
-
-              {/* SISI KANAN: CARD 3D (Ukuran menyesuaikan layar) */}
-              <div className="relative w-full flex items-center justify-center" style={{ perspective: 2000 }}>
-                 <motion.div 
-                    style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                    className="relative w-full aspect-[4/5] max-w-[140px] lg:max-w-[420px] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-2xl lg:rounded-[3.5rem] p-1 shadow-2xl border border-white/20 flex flex-col items-center justify-center group/card"
-                 >
-                    {/* Detail Card Kecil untuk HP */}
-                    <div className="relative flex items-center justify-center mb-3 lg:mb-12" style={{ transform: "translateZ(40px)" }}>
-                       <div className="absolute w-16 h-16 lg:w-56 lg:h-56 border border-cyan-500/20 rounded-full animate-[spin_20s_linear_infinite]" />
-                       <div className="w-10 h-10 lg:w-32 lg:h-32 bg-black/80 border border-white/10 rounded-lg lg:rounded-3xl flex items-center justify-center">
-                          <ShieldCheck size={18} className="lg:size-[60px] text-cyan-400" />
-                       </div>
-                    </div>
-                    
-                    <div className="text-center" style={{ transform: "translateZ(30px)" }}>
-                       <h3 className="text-[7px] lg:text-2xl font-black text-white uppercase">
-                          Security <span className="text-cyan-400">System</span>
-                       </h3>
-                    </div>
-                    
-                    <div className="absolute -bottom-2 lg:-bottom-6 px-3 lg:px-10 py-1.5 lg:py-4 bg-black border border-white/10 text-white rounded-md lg:rounded-2xl text-[5px] lg:text-[10px] font-black tracking-[0.1em] lg:tracking-[0.4em]" style={{ transform: "translateZ(50px)" }}>
-                      ENCRYPTED 2026
-                    </div>
-                 </motion.div>
               </div>
 
            </div>
