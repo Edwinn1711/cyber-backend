@@ -181,27 +181,46 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
 };
 
 const SecurityStatsSection = () => {
-  const stats = [
+  const stats =[
     { label: "Data Terlindungi", value: "99.9%", color: "text-emerald-400" },
     { label: "Deteksi Ancaman", value: "1,240", color: "text-fuchsia-400" },
     { label: "Siswa Terliterasi", value: "850+", color: "text-blue-400" },
     { label: "Uptime Sistem", value: "24/7", color: "text-cyan-400" },
   ];
+
   return (
-    <section className="relative w-full py-24 bg-[#030208] border-b border-white/5">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
-        {/* JUDUL DIKECILKAN: text-3xl lg:text-4xl */}
-        <h2 className="text-3xl lg:text-4xl font-black text-white uppercase mb-16 tracking-tight">
-          Metrik Ketahanan <span className="text-fuchsia-500">Digital</span>
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <section className="relative w-full py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
+      {/* Efek Glow Latar Belakang agar tidak kosong */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-fuchsia-600/5 blur-[120px] rounded-full pointer-events-none" />
+
+      {/* UBAH KE max-w-[1600px] DAN px-16 AGAR MERATA DENGAN HALAMAN LAIN */}
+      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-16 text-center">
+        
+        <div className="mb-20">
+          <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tight mb-4">
+            Metrik Ketahanan <span className="text-fuchsia-500">Digital</span>
+          </h2>
+          <p className="text-slate-500 max-w-2xl mx-auto text-sm">
+            Statistik operasional infrastruktur siber sekolah dalam menjamin keamanan data.
+          </p>
+        </div>
+
+        {/* Grid dengan Gap yang lebih lebar agar proporsional */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-10">
           {stats.map((s, i) => (
-            <div key={i} className="bg-[#0a0a0f] p-8 rounded-[2rem] border border-white/5 hover:border-fuchsia-500/20 transition-all group">
-              {/* ANGKA DIKECILKAN: text-4xl lg:text-5xl */}
-              <div className={`text-4xl lg:text-5xl font-black mb-2 transition-transform group-hover:scale-105 ${s.color}`}>
+            <div 
+              key={i} 
+              className="bg-[#0a0a0f] p-10 lg:p-14 rounded-[3rem] border border-white/5 hover:border-fuchsia-500/20 transition-all duration-500 group relative overflow-hidden shadow-2xl"
+            >
+              {/* Animasi Glow saat di-hover */}
+              <div className="absolute inset-0 bg-fuchsia-500/0 group-hover:bg-fuchsia-500/5 transition-colors duration-500" />
+              
+              <div className={`text-4xl lg:text-6xl font-black mb-3 transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_15px_rgba(0,0,0,0.5)] ${s.color}`}>
                 {s.value}
               </div>
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">{s.label}</div>
+              <div className="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-[0.2em] group-hover:text-slate-300 transition-colors">
+                {s.label}
+              </div>
             </div>
           ))}
         </div>
