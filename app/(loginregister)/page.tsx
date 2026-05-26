@@ -299,6 +299,120 @@ const CyberInfrastructureSection = () => {
     </section>
   );
 };
+
+// --- SECTION 6: READYNESS PROTOCOLS ---
+const ReadinessProtocolSection = () => {
+  const protocols = [
+    { title: "Identifikasi", desc: "Audit menyeluruh terhadap seluruh titik akses digital di lingkungan sekolah.", icon: ScanLine, col: "text-blue-400" },
+    { title: "Proteksi", desc: "Penerapan enkripsi end-to-end dan firewall berlapis pada database siswa.", icon: ShieldCheck, col: "text-emerald-400" },
+    { title: "Deteksi", desc: "Pemantauan aktif 24/7 terhadap anomali trafik jaringan yang mencurigakan.", icon: Zap, col: "text-fuchsia-400" },
+    { title: "Respon", desc: "Prosedur mitigasi instan untuk mengisolasi ancaman sebelum menyebar.", icon: ShieldAlert, col: "text-orange-400" },
+    { title: "Pemulihan", desc: "Sistem restorasi data cepat dari cadangan lokal yang terenkripsi.", icon: Cpu, col: "text-cyan-400" },
+    { title: "Edukasi", desc: "Pelatihan literasi siber berkelanjutan bagi seluruh warga sekolah.", icon: BrainCircuit, col: "text-violet-400" },
+  ];
+
+  return (
+    <section className="relative w-full py-24 bg-[#030208] border-b border-white/5">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+        <div className="text-center mb-20">
+          <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tighter mb-4">
+            Protokol <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">Kesiapan</span> Siber
+          </h2>
+          <p className="text-slate-500 max-w-xl mx-auto text-xs lg:text-sm font-medium">Siklus pertahanan digital terintegrasi untuk menjamin kedaulatan data sekolah.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+          {protocols.map((p, i) => (
+            <div key={i} className="group relative">
+              <div className="flex items-start gap-6">
+                <div className={`shrink-0 w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all group-hover:border-white/20 ${p.col}`}><p.icon size={24} /></div>
+                <div className="space-y-2">
+                  <h3 className="text-lg font-black text-white uppercase tracking-wider flex items-center gap-3"><span className="text-[10px] font-mono opacity-30">0{i+1}</span> {p.title}</h3>
+                  <p className="text-slate-500 text-xs leading-relaxed font-medium">{p.desc}</p>
+                </div>
+              </div>
+              <div className="absolute -bottom-6 left-20 right-0 h-px bg-gradient-to-r from-white/10 to-transparent opacity-50" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// --- SECTION 7: BLOG ---
+const CyberBlogSection = () => {
+  const articles = [
+    { title: "Mencegah Phishing di Lingkungan Sekolah", date: "24 MEI 2026", cat: "Edukasi", icon: ShieldCheck },
+    { title: "Update Protokol Keamanan Firewall v.3", date: "20 MEI 2026", cat: "Sistem", icon: Zap },
+    { title: "Membangun Budaya Literasi Password Siswa", date: "15 MEI 2026", cat: "Literasi", icon: Fingerprint },
+  ];
+  return (
+    <section className="relative w-full py-24 bg-black border-b border-white/5">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div className="text-left">
+            <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tighter mb-4">Intelligence <span className="text-cyan-400">Hub</span></h2>
+            <p className="text-slate-500 text-xs lg:text-sm font-medium">Wawasan terbaru mengenai keamanan siber dan teknologi pendidikan.</p>
+          </div>
+          <button className="px-6 py-3 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all">Lihat Semua</button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {articles.map((art, i) => (
+            <div key={i} className="group cursor-pointer">
+              <div className="relative aspect-[16/9] rounded-[2rem] overflow-hidden mb-6 border border-white/5 bg-white/[0.02]">
+                <div className="absolute inset-0 flex items-center justify-center"><art.icon size={40} className="text-cyan-500/20 group-hover:text-cyan-400 transition-all group-hover:scale-110" /></div>
+                <div className="absolute bottom-6 left-6"><span className="px-3 py-1 rounded-full bg-cyan-500 text-black text-[9px] font-black uppercase">{art.cat}</span></div>
+              </div>
+              <h3 className="text-xl font-black text-white mb-2 group-hover:text-cyan-400 transition-colors uppercase">{art.title}</h3>
+              <p className="text-slate-600 text-[10px] font-bold tracking-[0.2em]">{art.date}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// --- SECTION 8: FOOTER ---
+const CyberFooter = () => (
+  <footer className="relative w-full pt-20 pb-10 bg-[#020108]">
+    <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+        <div className="col-span-1 space-y-6">
+          <div className="flex items-center gap-3">
+             <ShieldCheck size={28} className="text-fuchsia-500" />
+             <h2 className="font-black text-white text-xl tracking-tighter uppercase leading-none">CYBER<br/><span className="text-fuchsia-500 text-sm">READINESS</span></h2>
+          </div>
+          <p className="text-slate-500 text-xs leading-relaxed font-medium">Platform Ketahanan Siber Sekolah Terintegrasi. Mengamankan masa depan digital pendidikan.</p>
+        </div>
+        {[ 
+          { t: "Layanan", l: ["Monitoring", "E-Learning", "Lapor Insiden"] },
+          { t: "Organisasi", l: ["Profil", "Tim IT", "Kontak"] },
+          { t: "Legal", l: ["Privasi", "Syarat", "SOP"] }
+        ].map((item, i) => (
+          <div key={i} className="space-y-6">
+            <h4 className="text-white font-black text-xs uppercase tracking-widest">{item.t}</h4>
+            <ul className="space-y-3">
+              {item.l.map((link, j) => (
+                <li key={j} className="text-slate-500 text-xs hover:text-cyan-400 cursor-pointer transition-colors">{link}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-slate-600 text-[9px] font-bold tracking-widest">© 2026 CYBER READINESS. ALL RIGHTS RESERVED.</p>
+        <div className="flex gap-4">
+           {[Info, HelpCircle].map((Icon, i) => (
+             <div key={i} className="w-8 h-8 rounded-lg border border-white/5 flex items-center justify-center text-slate-500 hover:text-white transition-all cursor-pointer"><Icon size={14}/></div>
+           ))}
+        </div>
+      </div>
+    </div>
+  </footer>
+);
+
+
 export default function CyberLandingDark() {
   const router = useRouter();
   const [bgIdx, setBgIdx] = useState(0);
@@ -600,20 +714,15 @@ export default function CyberLandingDark() {
            </section>
         </div>
 
-        <SectionDivider />
-
-        {/* --- HALAMAN 3: VISI MISI (DENGAN BACKGROUND CYBER SINKRON) --- */}
-        <VisiMisiSection bgIdx={bgIdx} />
-
-        <SectionDivider />
-
-        {/* --- HALAMAN 4: STATISTIK (UKURAN FULL & MEGA TYPOGRAPHY) --- */}
-        <SecurityStatsSection />
-
-        <SectionDivider />
-
-        {/* --- HALAMAN 5: INFRASTRUKTUR (FULL VIDEO BG HACKING) --- */}
         <CyberInfrastructureSection />
+
+<SectionDivider />
+<ReadinessProtocolSection />
+
+<SectionDivider />
+<CyberBlogSection />
+
+<CyberFooter />
 
       </div>
 
