@@ -714,15 +714,29 @@ export default function CyberLandingDark() {
            </section>
         </div>
 
-        <CyberInfrastructureSection />
+        <SectionDivider />
+
+{/* HALAMAN 3: VISI MISI (KEMBALIKAN DISINI) */}
+<VisiMisiSection bgIdx={bgIdx} />
 
 <SectionDivider />
-<ReadinessProtocolSection />
 
+{/* HALAMAN 4: STATISTIK */}
+<SecurityStatsSection />
+
+<SectionDivider />
+
+{/* HALAMAN 5: INFRASTRUKTUR */}
+<CyberInfrastructureSection />
+
+{/* HALAMAN 6 & 7: PROTOKOL & BLOG */}
+<SectionDivider />
+<ReadinessProtocolSection />
 <SectionDivider />
 <CyberBlogSection />
 
 <CyberFooter />
+
 
       </div>
 
