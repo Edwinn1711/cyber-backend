@@ -143,15 +143,30 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
 
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-20 bg-[#020108] border-t border-white/5 overflow-hidden">
+      
+      {/* --- BACKGROUND SINKRON (DITERANGKAN & DIBUAT GLOWING) --- */}
       <div className="absolute inset-0 z-0">
-        <motion.img key={bgIdx} src={CYBER_ASSETS[bgIdx]} initial={{ opacity: 0 }} animate={{ opacity: 0.15 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }} className="w-full h-full object-cover pointer-events-none" />
-        <div className="absolute inset-0 bg-black/80" />
+        <AnimatePresence mode="wait">
+          <motion.img 
+            key={bgIdx} 
+            src={CYBER_ASSETS[bgIdx]} 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 0.4 }} /* Dinaikkan ke 40% agar sangat nampak */
+            exit={{ opacity: 0 }} 
+            transition={{ duration: 1.5 }} 
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-lighten" /* mix-blend-lighten membuat cahaya cyber menyala */
+          />
+        </AnimatePresence>
+        {/* Overlay hitam ditipiskan dari 80% menjadi 60% */}
+        <div className="absolute inset-0 bg-black/60 pointer-events-none" />
+        {/* Vignette (gelap di pinggir, terang di tengah) */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#000000_100%)] opacity-80 pointer-events-none" />
       </div>
       
+      {/* --- KONTEN UTAMA --- */}
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 w-full text-center">
         <div className="mb-16">
-          {/* JUDUL PAS: text-4xl (Desktop) */}
-          <h2 className="text-2xl lg:text-4xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-2xl">
+          <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-2xl">
             Membangun Kedaulatan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 animate-gradient-x">Digital Sekolah</span>
           </h2>
           <p className="text-slate-400 max-w-2xl mx-auto text-xs lg:text-sm font-medium opacity-80 leading-relaxed">
@@ -161,9 +176,13 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
-            <div key={item.id} onMouseEnter={() => setHovered(item.id)} className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-8 lg:p-12 rounded-[2.5rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm opacity-50' : 'scale-100'}`}>
-              <div className="w-12 h-12 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-6"><item.icon size={24} /></div>
-              {/* SUBJUDUL PAS: text-xl (Desktop) */}
+            <div 
+              key={item.id} onMouseEnter={() => setHovered(item.id)} 
+              className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-8 lg:p-12 rounded-[2.5rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm opacity-50' : 'scale-100'} ${hovered === item.id ? 'shadow-[0_20px_50px_rgba(0,0,0,0.6)] -translate-y-2 border-blue-500/50' : ''}`}
+            >
+              <div className="w-12 h-12 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-6 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                <item.icon size={24} />
+              </div>
               <h3 className="text-lg lg:text-xl font-black text-white mb-3 uppercase tracking-wider">{item.title}</h3>
               <p className="text-slate-400 text-xs lg:text-sm leading-relaxed">{item.desc}</p>
             </div>
@@ -173,6 +192,7 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
     </section>
   );
 };
+
 const SecurityStatsSection = () => {
   const stats = [
     { label: "Data Terlindungi", value: "99.9%", color: "text-emerald-400" },
