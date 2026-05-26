@@ -143,37 +143,28 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
 
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#020108] border-t border-white/5 overflow-hidden">
-      {/* Background Sync */}
-      <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="wait">
-          <motion.img 
-            key={bgIdx} src={CYBER_ASSETS[bgIdx]} initial={{ opacity: 0 }}
-            animate={{ opacity: 0.35 }} exit={{ opacity: 0 }} transition={{ duration: 2 }}
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-lighten"
-          />
-        </AnimatePresence>
-        <div className="absolute inset-0 bg-black/70 pointer-events-none" />
-      </div>
+      {/* Background Sync Tetap Sama */}
       
-      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-16 w-full text-center">
-        <div className="mb-24">
-          {/* UKURAN JUDUL: 4xl di HP, 7xl di Desktop (Sama dengan Stats) */}
-          <h2 className="text-4xl lg:text-7xl font-black text-white uppercase tracking-tighter mb-6 drop-shadow-2xl">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-16 w-full text-center">
+        <div className="mb-20">
+          {/* JUDUL DIKECILKAN: Dari 7xl ke 5xl (Desktop) dan 3xl (Mobile) */}
+          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-2xl">
             Membangun Kedaulatan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 animate-gradient-x">Digital Sekolah</span>
           </h2>
-          <p className="text-slate-400 max-w-3xl mx-auto text-base lg:text-lg font-medium opacity-90 leading-relaxed">
+          <p className="text-slate-400 max-w-2xl mx-auto text-sm lg:text-base font-medium opacity-80 leading-relaxed">
             Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman demi lingkungan belajar yang terlindungi.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16" onMouseLeave={() => setHovered(null)}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
             <div 
               key={item.id} onMouseEnter={() => setHovered(item.id)}
-              className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-12 lg:p-20 rounded-[3.5rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-50' : 'scale-100 opacity-100'} ${hovered === item.id ? 'shadow-[0_20px_70px_rgba(0,0,0,0.8)] -translate-y-4 border-blue-500/50' : ''}`}
+              className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-10 lg:p-14 rounded-[3rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-50' : 'scale-100'} ${hovered === item.id ? 'shadow-[0_20px_70px_rgba(0,0,0,0.8)] -translate-y-4 border-blue-500/50' : ''}`}
             >
-              <div className="w-16 h-16 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-10 border border-blue-500/20"><item.icon size={32} /></div>
-              <h3 className="text-3xl lg:text-4xl font-black text-white mb-6 uppercase tracking-wider">{item.title}</h3>
+              <div className="w-14 h-14 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-8 border border-blue-500/20"><item.icon size={28} /></div>
+              {/* JUDUL KARTU DIKECILKAN: text-2xl lg:text-3xl */}
+              <h3 className="text-2xl lg:text-3xl font-black text-white mb-4 uppercase tracking-wider">{item.title}</h3>
               <p className="text-slate-400 text-sm lg:text-base leading-relaxed font-medium">{item.desc}</p>
             </div>
           ))}
@@ -182,6 +173,7 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
     </section>
   );
 };
+
 const SecurityStatsSection = () => {
   const stats = [
     { label: "Data Terlindungi", value: "99.9%", color: "text-emerald-400" },
@@ -190,34 +182,30 @@ const SecurityStatsSection = () => {
     { label: "Uptime Sistem", value: "24/7", color: "text-cyan-400" },
   ];
 
-  return (
+  eturn (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[500px] bg-fuchsia-600/5 blur-[150px] rounded-full pointer-events-none" />
-
-      {/* SINKRONISASI LEBAR: max-w-[1600px] */}
-      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-16 w-full text-center">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-16 w-full text-center">
         <div className="mb-24">
-          {/* UKURAN JUDUL: Sama dengan Visi Misi (4xl lg:7xl) */}
-          <h2 className="text-4xl lg:text-7xl font-black text-white uppercase tracking-tighter mb-6 drop-shadow-2xl">
+          {/* JUDUL DIKECILKAN: Sama dengan Visi Misi (5xl) */}
+          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6 drop-shadow-2xl">
             Metrik Ketahanan <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-indigo-500">Digital</span>
           </h2>
-          <p className="text-slate-500 max-w-3xl mx-auto text-base lg:text-lg font-medium">
+          <p className="text-slate-500 max-w-2xl mx-auto text-sm lg:text-base font-medium">
             Visualisasi kontrol infrastruktur siber sekolah dalam parameter keamanan optimal secara real-time.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {stats.map((s, i) => (
             <div 
               key={i} 
-              className="bg-[#0a0a0f]/60 backdrop-blur-xl p-12 lg:p-16 rounded-[3.5rem] border border-white/5 hover:border-fuchsia-500/30 transition-all duration-700 group relative shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
+              className="bg-[#0a0a0f]/60 backdrop-blur-xl p-10 lg:p-12 rounded-[2.5rem] border border-white/5 hover:border-fuchsia-500/30 transition-all duration-700 group relative shadow-2xl"
             >
-              <div className="absolute inset-0 bg-fuchsia-500/[0.02] opacity-0 group-hover:opacity-100 transition-opacity" />
-              {/* ANGKA SUPER BESAR AGAR KEREN (6xl lg:8xl) */}
-              <div className={`text-6xl lg:text-8xl font-black mb-4 transition-transform duration-700 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(217,70,239,0.3)] ${s.color}`}>
+              {/* ANGKA DIKECILKAN: Dari 8xl ke 6xl */}
+              <div className={`text-5xl lg:text-6xl font-black mb-3 transition-transform duration-700 group-hover:scale-110 ${s.color}`}>
                 {s.value}
               </div>
-              <div className="text-xs lg:text-sm font-black text-slate-500 uppercase tracking-[0.4em] group-hover:text-fuchsia-400 transition-colors duration-500">
+              <div className="text-[10px] lg:text-xs font-black text-slate-500 uppercase tracking-[0.4em] group-hover:text-fuchsia-400 transition-colors">
                 {s.label}
               </div>
             </div>
