@@ -7,7 +7,8 @@ import {
   MapPin, Calendar, CheckCircle2, Server, Network, Shield,
   Home, Info, FileText, LayoutGrid, Megaphone, HelpCircle, X, ArrowRight, Zap,
   BrainCircuit, ShieldAlert, Cpu, Star, Target,
-  CreditCard, Globe, Key, Bug, Mail, Cloud, Search, Terminal, Eye
+  CreditCard, Globe, Key, Bug, Mail, Cloud, Search, Terminal, Eye,
+  Activity
 } from 'lucide-react'
 
 // --- ASSET BACKGROUND ---
@@ -447,104 +448,86 @@ const CyberFooter = () => (
   </footer>
 );
 
-// --- HIGH-TECH COMPOSITE DIAGNOSTIC WIDGETS ---
-const TECH_NODES = [
-  { id: "card", label: "Card Security", icon: CreditCard, col: "text-cyan-400", border: "border-cyan-500/20", bg: "bg-cyan-500/5", status: "SECURE" },
-  { id: "phishing", label: "Phishing Hook", icon: ShieldAlert, col: "text-red-400", border: "border-red-500/20", bg: "bg-red-500/5", status: "BLOCKED" },
-  { id: "shield_chip", label: "Shielded Chip", icon: Cpu, col: "text-emerald-400", border: "border-emerald-500/20", bg: "bg-emerald-500/5", status: "SHIELDED" },
-  { id: "secure_chip", label: "Secure Chip", icon: Cpu, col: "text-indigo-400", border: "border-indigo-500/20", bg: "bg-indigo-500/5", status: "CRYPTED" },
-  { id: "globe", label: "Globe Lock", icon: Globe, col: "text-cyan-400", border: "border-cyan-500/20", bg: "bg-cyan-500/5", status: "WAN_LOCK" },
-  { id: "key_tech", label: "Key Tech", icon: Key, col: "text-fuchsia-400", border: "border-fuchsia-500/20", bg: "bg-fuchsia-500/5", status: "TOKEN_OK" },
-  { id: "antivirus", label: "Find Antivirus", icon: Bug, col: "text-amber-400", border: "border-amber-500/20", bg: "bg-amber-500/5", status: "CLEANED" },
-  { id: "warning_win", label: "Warning Window", icon: Terminal, col: "text-red-400", border: "border-red-500/20", bg: "bg-red-500/5", status: "SYS_WARN" },
-  { id: "secure_mail", label: "Secure Mail", icon: Mail, col: "text-emerald-400", border: "border-emerald-500/20", bg: "bg-emerald-500/5", status: "MX_PASS" },
-  { id: "cloud_net", label: "Cloud Network", icon: Cloud, col: "text-cyan-400", border: "border-cyan-500/20", bg: "bg-cyan-500/5", status: "SYNCED" },
-  { id: "doc", label: "Locked Document", icon: FileText, col: "text-fuchsia-400", border: "border-fuchsia-500/20", bg: "bg-fuchsia-500/5", status: "DB_CRYPT" }
+// --- DATA IKON TECH (BERDASARKAN REFERENSI GAMBAR) ---
+const TECH_ICONS = [
+  { id: "c1", icon: CreditCard, label: "CARD_SEC", col: "text-cyan-400" },
+  { id: "c2", icon: ShieldAlert, label: "PHISH_HOOK", col: "text-red-400" },
+  { id: "c3", icon: Cpu, label: "SHIELD_CHIP", col: "text-emerald-400" },
+  { id: "c4", icon: Globe, label: "GLOBE_LCK", col: "text-blue-400" },
+  { id: "c5", icon: Key, label: "KEY_VAULT", col: "text-fuchsia-400" },
+  { id: "c6", icon: Bug, label: "ANTIVIRUS", col: "text-amber-400" },
+  { id: "c7", icon: Terminal, label: "WARN_WIN", col: "text-orange-400" },
+  { id: "c8", icon: Mail, label: "SECURE_MAIL", col: "text-cyan-300" },
+  { id: "c9", icon: Cloud, label: "CLOUD_NET", col: "text-indigo-400" },
+  { id: "c10", icon: FileText, label: "DOC_CRYPT", col: "text-fuchsia-300" },
 ];
 
-const RenderCompositeIcon = ({ id, Icon, col }: { id: string, Icon: any, col: string }) => (
-  <div className="relative w-12 h-12 flex items-center justify-center">
-    {/* Ikon Utama */}
-    <Icon size={26} className={`${col} drop-shadow-[0_0_8px_currentColor] transition-transform duration-300 group-hover:scale-110`} />
-    
-    {/* Micro-Overlays yang meniru persis detail referensi gambar Anda */}
-    {id === "card" && (
-      <div className="absolute -top-1 -right-1 bg-cyan-950/90 p-0.5 rounded border border-cyan-500/50 text-cyan-400"><Lock size={10} /></div>
-    )}
-    {id === "phishing" && (
-      <div className="absolute -top-1 -right-1 bg-red-950/90 p-0.5 rounded border border-red-500/50 text-red-400"><AlertTriangle size={10} /></div>
-    )}
-    {id === "shield_chip" && (
-      <div className="absolute -top-1 -right-1 bg-emerald-950/90 p-0.5 rounded border border-emerald-500/50 text-emerald-400"><ShieldCheck size={10} /></div>
-    )}
-    {id === "secure_chip" && (
-      <div className="absolute -top-1 -right-1 bg-indigo-950/90 p-0.5 rounded border border-indigo-500/50 text-indigo-400"><Lock size={10} /></div>
-    )}
-    {id === "globe" && (
-      <div className="absolute -top-1 -right-1 bg-cyan-950/90 p-0.5 rounded border border-cyan-500/50 text-cyan-400"><Lock size={10} /></div>
-    )}
-    {id === "antivirus" && (
-      <div className="absolute -bottom-1 -right-1 bg-amber-950/90 p-0.5 rounded border border-amber-500/50 text-amber-400"><Search size={10} /></div>
-    )}
-    {id === "secure_mail" && (
-      <div className="absolute -top-1 -right-1 bg-emerald-950/90 p-0.5 rounded border border-emerald-500/50 text-emerald-400"><ShieldCheck size={10} /></div>
-    )}
-    {id === "doc" && (
-      <div className="absolute -bottom-1 -right-1 bg-fuchsia-950/90 p-0.5 rounded border border-fuchsia-500/50 text-fuchsia-400"><Lock size={10} /></div>
-    )}
-    {id === "warning_win" && (
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-500/80"><AlertTriangle size={14} className="animate-pulse" /></div>
-    )}
-  </div>
-);
-
-const LogoMarquee = () => {
+const CyberHiveMarquee = () => {
   return (
-    <div className="relative w-full overflow-hidden py-8 select-none">
-      {/* Masking Gradasi Tepian Halus agar Terkesan Hologram Memudar di Kiri-Kanan */}
-      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black via-black/50 to-transparent z-20 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black via-black/50 to-transparent z-20 pointer-events-none" />
+    <div className="relative w-full h-[180px] lg:h-[250px] overflow-hidden mt-8 lg:mt-12 select-none">
+      {/* Masking Halus (Fade Out Kiri & Kanan) */}
+      <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+      
+      <div className="flex items-center h-full">
+        <motion.div 
+          className="flex gap-6 lg:gap-10 px-10"
+          animate={{ x: [0, -1500] }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+        >
+          {/* Duplicate data 3x agar animasi loop tidak putus */}
+          {[...TECH_ICONS, ...TECH_ICONS, ...TECH_ICONS].map((node, i) => (
+            <motion.div
+              key={i}
+              // GERAKAN BEBAS (Floating & Rotating)
+              animate={{ 
+                y: [0, Math.sin(i) * 12, 0],
+                rotate: [0, Math.cos(i) * 4, 0],
+                scale: [1, 1.03, 1]
+              }}
+              transition={{ 
+                duration: 5 + (i % 3), 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+              className="group relative flex-shrink-0"
+            >
+              {/* Box Hologram Mewah */}
+              <div className="relative w-24 h-28 lg:w-32 lg:h-40 bg-[#0a0c1a]/40 backdrop-blur-md border border-white/5 rounded-2xl flex flex-col items-center justify-center p-4 transition-all duration-500 group-hover:border-cyan-500/50 group-hover:bg-[#0d1126]/80 group-hover:shadow-[0_0_30px_rgba(34,211,238,0.2)]">
+                
+                {/* Detail Micro-Tech di Pojok */}
+                <div className="absolute top-2 left-2 flex gap-1 opacity-30">
+                  <div className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
+                </div>
+                <div className="absolute top-2 right-2 font-mono text-[5px] lg:text-[7px] text-slate-600 uppercase tracking-widest">
+                  sys_active
+                </div>
 
-      {/* Infinite Moving Track */}
-      <motion.div 
-        className="flex gap-6 w-max"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-      >
-        {[...TECH_NODES, ...TECH_NODES].map((node, i) => (
-          <div 
-            key={i} 
-            className={`flex-shrink-0 w-44 h-48 rounded-[2rem] border ${node.border} ${node.bg} backdrop-blur-md flex flex-col items-center justify-between p-6 relative overflow-hidden group transition-all duration-300 hover:bg-[#070913] hover:border-white/20`}
-          >
-            {/* Hologram Grid Pattern di Belakang Setiap Card */}
-            <div className="absolute inset-0 bg-grid-static opacity-[0.03] z-0 pointer-events-none" />
-            
-            {/* Garis Pemindaian Laser Vertikal saat Hover */}
-            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-10" />
+                {/* Ikon dengan Glow Effect */}
+                <div className={`${node.col} mb-3 lg:mb-5 relative`}>
+                  <node.icon size={28} className="lg:size-9 drop-shadow-[0_0_10px_currentColor] transition-transform duration-500 group-hover:scale-110" />
+                  {/* Efek Aura saat Hover */}
+                  <div className="absolute inset-0 bg-white/10 rounded-full blur-xl scale-0 group-hover:scale-150 transition-transform duration-700" />
+                </div>
 
-            {/* Top Diagnostics Label */}
-            <div className="w-full flex justify-between items-center z-10">
-              <span className="text-[7px] font-mono text-slate-500 tracking-wider">CHAMBER_0{i % 10}</span>
-              <span className={`text-[7px] font-mono font-bold px-2 py-0.5 rounded bg-white/5 ${node.col} tracking-widest`}>{node.status}</span>
-            </div>
+                {/* Label Teks */}
+                <div className="text-center">
+                  <p className="text-[7px] lg:text-[9px] font-black text-white/70 uppercase tracking-[0.2em] leading-none mb-1">
+                    {node.label}
+                  </p>
+                  <span className="text-[5px] lg:text-[6px] font-mono text-slate-600 tracking-tighter">ENCRYPT_PASS</span>
+                </div>
 
-            {/* Composite Icon (Vektor Gabungan Custom) */}
-            <div className="z-10 py-2">
-              <RenderCompositeIcon id={node.id} Icon={node.icon} col={node.col} />
-            </div>
-
-            {/* Bottom Cyber Label */}
-            <div className="text-center z-10">
-              <p className="text-[10px] font-black text-white uppercase tracking-[0.2em]">{node.label}</p>
-              <span className="text-[6px] font-mono text-slate-600 tracking-widest block mt-1">SYS_STATUS: ACTIVE</span>
-            </div>
-          </div>
-        ))}
-      </motion.div>
+                {/* Neon Bottom Line */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-cyan-400 transition-all duration-500 group-hover:w-[80%] group-hover:shadow-[0_0_10px_#22d3ee]" />
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
     </div>
   );
 };
-
 
 export default function CyberLandingDark() {
   const router = useRouter();
@@ -739,17 +722,20 @@ export default function CyberLandingDark() {
       {/* ========================================================================= */}
       <div className="relative z-10 w-full pt-36 lg:pt-44">
         
-{/* SECTION 1: HERO (OPTIMASI MOBILE: WIDGET ATAS, TEKS BAWAH, SEMUA RATA TENGAH) */}
-<section className="relative min-h-screen lg:min-h-[calc(100vh-120px)] flex items-center justify-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 pt-28 pb-10 lg:py-0">
+{/* ========================================================================= */}
+        {/* SECTION 1: HERO (MOBILE: CENTER + STACKED | DESKTOP: LEFT + SIDE-BY-SIDE) */}
+        {/* ========================================================================= */}
+        <section className="relative min-h-screen lg:min-h-[calc(100vh-120px)] flex items-center justify-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 pt-28 pb-10 lg:py-0">
            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-16 lg:gap-24 items-center w-full">
               
-              {/* --- 1. AREA WIDGET CARD 3D (MUNCUL DI PALING ATAS PADA HP) --- */}
-              <div className="relative w-full flex items-center justify-center lg:justify-end order-1 lg:order-2" style={{ perspective: 2000 }}>
+              {/* --- AREA WIDGET & MARQUEE (HP: ATAS | LAPTOP: KANAN) --- */}
+              <div className="relative w-full flex flex-col items-center justify-center order-1 lg:order-2" style={{ perspective: 2000 }}>
+                 
+                 {/* 3D SECURITY CARD */}
                  <motion.div 
                     style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
                     className="relative w-[300px] h-[380px] sm:w-[340px] sm:h-[430px] lg:w-[420px] lg:h-[525px] bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-2xl rounded-[3rem] p-1 shadow-[0_50px_100px_rgba(0,0,0,0.7)] border border-white/20 flex flex-col items-center justify-center group/card"
                  >
-                    {/* Dekorasi Neon Sudut */}
                     <div className="absolute top-8 left-8 w-6 h-6 border-t-2 border-l-2 border-cyan-400/50" />
                     <div className="absolute bottom-8 right-8 w-6 h-6 border-b-2 border-r-2 border-fuchsia-400/50" />
 
@@ -769,16 +755,18 @@ export default function CyberLandingDark() {
                        </p>
                     </div>
                     
-                    <div 
-                      className="absolute -bottom-6 px-10 py-4 bg-black border border-white/10 text-white rounded-2xl text-[10px] font-black tracking-[0.4em] shadow-2xl" 
-                      style={{ transform: "translateZ(100px)" }}
-                    >
+                    <div className="absolute -bottom-6 px-10 py-4 bg-black border border-white/10 text-white rounded-2xl text-[10px] font-black tracking-[0.4em] shadow-2xl" style={{ transform: "translateZ(100px)" }}>
                       ENCRYPTED 2026
                     </div>
                  </motion.div>
+
+                 {/* CYBER HIVE MARQUEE (Logo Melayang Bebas) */}
+                 <div className="w-full max-w-[100vw]">
+                    <CyberHiveMarquee />
+                 </div>
               </div>
 
-              {/* --- 2. AREA TEKS (MUNCUL DI BAWAH WIDGET PADA HP) --- */}
+              {/* --- AREA TEKS (HP: BAWAH | LAPTOP: KIRI) --- */}
               <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-8 lg:space-y-10 w-full order-2 lg:order-1">
                  <motion.div 
                     initial={{ opacity: 0, y: 10 }}
@@ -805,11 +793,20 @@ export default function CyberLandingDark() {
                       Mulai Evaluasi <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform"/>
                    </button>
                  </div>
+
+                 {/* Mini Icons Row (Optional, sesuai seleramu) */}
+                 <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-5 opacity-40">
+                    {[ Shield, Server, Network, Fingerprint ].map((Icon, i) => (
+                      <div key={i} className="w-10 h-10 rounded-xl border border-white/5 bg-white/5 flex items-center justify-center text-slate-400">
+                         <Icon size={18} />
+                      </div>
+                    ))}
+                 </div>
               </div>
 
            </div>
         </section>
-
+        
         <SectionDivider />
 
 {/* --- HALAMAN 2: PILAR STRATEGIS (DIBUAT LEBAR) --- */}
