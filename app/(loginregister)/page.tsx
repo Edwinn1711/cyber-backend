@@ -498,43 +498,39 @@ const TECH_ICONS = [
 
 const CyberHiveMarquee = () => {
   return (
-    // h-[100px] agar tetap ramping dan elegan
-    <div className="relative w-full h-[100px] lg:h-[130px] overflow-hidden select-none bg-transparent mt-2">
+    // h-[90px] agar tetap ramping di HP
+    <div className="relative w-full h-[90px] lg:h-[130px] overflow-hidden select-none bg-transparent mt-2">
       
-      {/* --- MASKING GRADIENT (BAYANGAN SAMPING) --- */}
-      {/* SISI KIRI: w-10 di HP (setengah dari laptop), w-32 di Laptop */}
-      <div className="absolute inset-y-0 left-0 w-10 lg:w-32 bg-gradient-to-r from-[#020108] to-transparent z-10 pointer-events-none" />
+      {/* --- MASKING GRADIENT SUPER TIPIS (KHUSUS HP) --- */}
+      {/* SISI KIRI: w-6 (24px) di HP agar area tengah luas | w-32 di Laptop */}
+      <div className="absolute inset-y-0 left-0 w-6 lg:w-32 bg-gradient-to-r from-[#020108] to-transparent z-10 pointer-events-none" />
       
-      {/* SISI KANAN: w-10 di HP, w-32 di Laptop */}
-      <div className="absolute inset-y-0 right-0 w-10 lg:w-32 bg-gradient-to-l from-[#020108] to-transparent z-10 pointer-events-none" />
+      {/* SISI KANAN: w-6 di HP | w-32 di Laptop */}
+      <div className="absolute inset-y-0 right-0 w-6 lg:w-32 bg-gradient-to-l from-[#020108] to-transparent z-10 pointer-events-none" />
       
       <div className="flex items-center h-full">
         <motion.div 
-          className="flex gap-10 lg:gap-20 px-6"
+          className="flex gap-8 lg:gap-20 px-4"
           animate={{ x: [0, -1800] }}
           transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
         >
           {[...TECH_ICONS, ...TECH_ICONS, ...TECH_ICONS].map((node, i) => (
             <motion.div
               key={i}
-              // Efek melayang bebas (Gaya Bebas)
-              animate={{ y: [0, Math.sin(i) * 8, 0] }}
+              animate={{ y: [0, Math.sin(i) * 6, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               className="group relative flex-shrink-0 flex flex-col items-center justify-center bg-transparent"
             >
-              {/* Orb Lingkaran Ikon */}
-              <div className="relative w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center transition-all duration-500 group-hover:scale-110">
-                {/* Aura Cahaya Halus */}
-                <div className={`absolute inset-0 rounded-full blur-xl opacity-5 group-hover:opacity-20 transition-opacity ${node.col.replace('text', 'bg')}`} />
-                
-                {/* Ikon Neon */}
+              {/* Orb Lingkaran Ikon Mini */}
+              <div className="relative w-9 h-9 lg:w-12 lg:h-12 flex items-center justify-center transition-all duration-500 group-hover:scale-110">
+                <div className={`absolute inset-0 rounded-full blur-xl opacity-5 group-hover:opacity-20 ${node.col.replace('text', 'bg')}`} />
                 <node.icon 
                   size={20} 
-                  className={`${node.col} lg:size-6 drop-shadow-[0_0_10px_currentColor] opacity-60 group-hover:opacity-100 transition-all`} 
+                  className={`${node.col} lg:size-6 drop-shadow-[0_0_8px_currentColor] opacity-70 group-hover:opacity-100 transition-all`} 
                 />
               </div>
 
-              {/* Teks Label di Bawah Ikon */}
+              {/* Label Teks HUD */}
               <div className="mt-2 text-center pointer-events-none">
                 <p className="text-[6px] lg:text-[8px] font-black text-white/30 uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors">
                   {node.label}
@@ -665,7 +661,7 @@ export default function CyberLandingDark() {
           </div>
 
           <nav className="hidden lg:flex flex-1 justify-center items-center gap-8 xl:gap-12 h-full">
-            {[ { icon: Home, label: 'Beranda', active: true }, { icon: Info, label: 'Profil' }, { icon: LayoutGrid, label: 'Organisasi' }, { icon: FileText, label: 'Berita' }, { icon: Megaphone, label: 'Pengumuman' }, { icon: HelpCircle, label: 'Layanan' } ].map((item, idx) => (
+            {[ { icon: Home, label: 'Beranda' }, { icon: Info, label: 'Profil' }, { icon: LayoutGrid, label: 'Organisasi' }, { icon: FileText, label: 'Berita' }, { icon: Megaphone, label: 'Pengumuman' }, { icon: HelpCircle, label: 'Layanan' } ].map((item, idx) => (
               <div key={idx} className="relative flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black cursor-pointer transition-colors text-slate-500 hover:text-white group">
                 <item.icon size={15} className="group-hover:text-fuchsia-400" />
                 {item.label}
@@ -699,7 +695,7 @@ export default function CyberLandingDark() {
       {/* 3. KONTEN UTAMA */}
       <main className="relative z-10 w-full pt-24 lg:pt-44">
         
-        {/* --- HALAMAN 1: HERO --- */}
+        {/* HALAMAN 1: HERO */}
         <section className="relative min-h-screen lg:min-h-[calc(100vh-120px)] flex items-center justify-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 pt-24 pb-10 lg:py-0">
            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-24 items-center w-full">
               <div className="relative w-full flex flex-col items-center justify-center order-1 lg:order-2 gap-2 lg:gap-6">
@@ -707,7 +703,7 @@ export default function CyberLandingDark() {
                     <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} className="relative w-[240px] h-[300px] sm:w-[280px] sm:h-[350px] lg:w-[350px] lg:h-[440px] bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl rounded-[2.5rem] lg:rounded-[3.5rem] p-1 shadow-2xl border border-white/10 flex flex-col items-center justify-center group/card">
                        <div className="relative flex items-center justify-center mb-6 lg:mb-8" style={{ transform: "translateZ(60px)" }}>
                           <div className="absolute w-32 h-32 lg:w-44 lg:h-44 border border-cyan-500/20 rounded-full animate-[spin_20s_linear_infinite]" />
-                          <div className="w-16 h-16 lg:w-24 lg:h-24 bg-black border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.2)]">
+                          <div className="w-16 h-16 lg:w-24 lg:h-24 bg-black border border-cyan-500/30 rounded-2xl flex items-center justify-center">
                              <ShieldCheck size={36} className="lg:size-12 text-cyan-400 drop-shadow-[0_0_8px_#22d3ee]" />
                           </div>
                        </div>
@@ -736,43 +732,20 @@ export default function CyberLandingDark() {
 
         <SectionDivider />
 
-{/* --- HALAMAN 2: PILAR STRATEGIS (DIBUAT FULL PAGE & ULTRA-WIDE) --- */}
-<section className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
-          {/* Efek Ambient Glow Latar Belakang */}
-          <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-indigo-900/10 via-fuchsia-900/5 to-transparent blur-[120px] pointer-events-none" />
-          <div className="absolute inset-0 bg-grid-static opacity-[0.05] pointer-events-none" />
-          
-          {/* Kontainer Ultra-Wide 1600px */}
+        {/* HALAMAN 2: PILAR STRATEGIS */}
+        <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
           <div className="max-w-[1600px] mx-auto px-6 lg:px-16 relative z-10 w-full text-center">
-            
-            {/* Judul: Ukuran disamakan dengan Visi Misi & Statistik (5xl) */}
-            <div className="mb-24">
-              <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500">Pilar Strategis</span> Kami
-              </h2>
-              <p className="text-slate-500 max-w-3xl mx-auto text-sm lg:text-base font-medium opacity-80">
-                Komitmen kami dalam membangun fondasi keamanan siber yang kokoh melalui tiga pilar utama infrastruktur dan edukasi.
-              </p>
-            </div>
-
-            {/* Grid 3 Kotak: Dibuat lebih besar dan rapi */}
+            <h2 className="text-3xl lg:text-5xl font-black text-white uppercase mb-16"><span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500">Pilar Strategis</span> Kami</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
               {[
                 { t: "Infrastruktur", i: Server, c: "text-cyan-400", d: "Membangun arsitektur jaringan sekolah yang terpusat dan tahan terhadap serangan siber." },
                 { t: "Keamanan", i: ShieldAlert, c: "text-fuchsia-400", d: "Menerapkan protokol enkripsi dan pemantauan real-time untuk mendeteksi ancaman." },
                 { t: "Literasi", i: BrainCircuit, c: "text-emerald-400", d: "Meningkatkan kesadaran sivitas akademika dalam menjaga keamanan data pribadi." }
               ].map((item, i) => (
-                <div key={i} className="group relative bg-[#08070d]/80 backdrop-blur-2xl border border-white/5 rounded-[3rem] p-12 lg:p-16 text-center hover:border-white/20 transition-all duration-700 hover:-translate-y-2 shadow-2xl">
-                  {/* Ikon di dalam lingkaran neon */}
-                  <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-10 mx-auto shadow-xl group-hover:shadow-cyan-500/10 transition-all">
-                    <item.i size={36} className={`${item.c} drop-shadow-[0_0_10px_currentColor]`} />
-                  </div>
-                  <h3 className="text-xl lg:text-2xl font-black text-white mb-4 uppercase tracking-widest group-hover:text-white transition-colors">
-                    {item.t}
-                  </h3>
-                  <p className="text-sm text-slate-400 leading-relaxed font-medium">
-                    {item.d}
-                  </p>
+                <div key={i} className="bg-[#08070d]/80 border border-white/5 p-12 lg:p-16 rounded-[3rem] hover:border-white/20 transition-all duration-700 hover:-translate-y-2">
+                  <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-10 mx-auto shadow-xl"><item.i size={36} className={`${item.c} drop-shadow-[0_0_10px_currentColor]`} /></div>
+                  <h3 className="text-xl lg:text-2xl font-black text-white mb-4 uppercase">{item.t}</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">{item.d}</p>
                 </div>
               ))}
             </div>
@@ -781,19 +754,14 @@ export default function CyberLandingDark() {
 
         <SectionDivider />
         <VisiMisiSection bgIdx={bgIdx} />
-        
         <SectionDivider />
         <SecurityStatsSection />
-        
         <SectionDivider />
         <CyberInfrastructureSection />
-
         <SectionDivider />
         <ReadinessProtocolSection />
-        
         <SectionDivider />
         <CyberBlogSection />
-
         <CyberFooter />
       </main>
 
@@ -804,9 +772,7 @@ export default function CyberLandingDark() {
             <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} className={`relative w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} bg-[#0a0a0f]/95 border border-white/10 rounded-[2.5rem] p-10 shadow-2xl overflow-hidden`}>
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500" />
               <button onClick={() => setIsLoginOpen(false)} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-white"><X size={16} /></button>
-              <div className="mx-auto w-12 h-12 border border-fuchsia-500/50 rounded-2xl flex items-center justify-center mb-6"><ShieldCheck className="text-fuchsia-400" size={24} /></div>
-              <div className="mb-8 text-center"><h2 className="text-2xl font-black text-white uppercase mb-1">PORTAL <span className="text-fuchsia-500">AKSES</span></h2></div>
-              <form onSubmit={handleAuthenticate} className="space-y-4">
+              <form onSubmit={handleAuthenticate} className="space-y-4 pt-10">
                 <input type="text" placeholder="USER" value={username} onChange={(e)=>setUsername(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-6 text-white text-xs font-bold" />
                 <input type="password" placeholder="PASS" value={password} onChange={(e)=>setPassword(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-6 text-white text-xs font-bold" />
                 <button type="submit" className="w-full py-4 bg-fuchsia-600 rounded-2xl font-black text-white text-xs uppercase shadow-lg">OTENTIKASI</button>
