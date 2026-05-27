@@ -463,57 +463,42 @@ const TECH_ICONS = [
 
 const CyberHiveMarquee = () => {
   return (
-    <div className="relative w-full h-[120px] lg:h-[160px] overflow-hidden mt-2 select-none bg-transparent">
-      {/* Masking Halus (Fade Out) - Tanpa warna hitam, hanya gradasi transparansi */}
-      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#020108] to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#020108] to-transparent z-10 pointer-events-none" />
+    // mt-0 dan h-[120px] menjaga agar tetap mungil dan tidak makan tempat
+    <div className="relative w-full h-[120px] lg:h-[150px] overflow-hidden mt-0 select-none bg-transparent">
+      {/* Masking Halus Transparan */}
+      <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#020108] to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#020108] to-transparent z-10 pointer-events-none" />
       
       <div className="flex items-center h-full">
         <motion.div 
-          className="flex gap-16 lg:gap-24 px-10"
+          className="flex gap-12 lg:gap-20 px-10"
           animate={{ x: [0, -1800] }}
-          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
         >
           {[...TECH_ICONS, ...TECH_ICONS, ...TECH_ICONS].map((node, i) => (
             <motion.div
               key={i}
-              animate={{ 
-                y: [0, Math.sin(i) * 15, 0],
-                filter: ["brightness(1) contrast(1)", "brightness(1.5) contrast(1.2)", "brightness(1) contrast(1)"]
-              }}
-              transition={{ duration: 4 + (i % 3), repeat: Infinity, ease: "easeInOut" }}
+              animate={{ y: [0, Math.sin(i) * 10, 0] }}
+              transition={{ duration: 5 + (i % 2), repeat: Infinity, ease: "easeInOut" }}
               className="group relative flex-shrink-0 flex flex-col items-center justify-center"
             >
-              
-              {/* --- AREA LOGO: TANPA KOTAK, TANPA BORDER, TANPA BAYANGAN HITAM --- */}
-              <div className="relative w-16 h-16 flex items-center justify-center transition-all duration-500 group-hover:scale-125">
+              <div className="relative w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center transition-all duration-500 group-hover:scale-125">
+                {/* Glow Belakang - Dipertahankan tipis agar tidak gelap */}
+                <div className={`absolute inset-0 rounded-full blur-2xl opacity-10 group-hover:opacity-30 transition-opacity ${node.col.replace('text', 'bg')}`} />
                 
-                {/* 1. Efek Cahaya Belakang (Glow) - Menyatu dengan Video BG */}
-                <div className={`absolute inset-0 rounded-full blur-2xl opacity-10 group-hover:opacity-40 transition-opacity duration-700 ${node.col.replace('text', 'bg')}`} />
-                
-                {/* 2. Ikon Utama (Neon High-Contrast) */}
+                {/* Ikon Utama - Opacity ditingkatkan agar nampak jelas */}
                 <node.icon 
-                  size={28} 
-                  className={`${node.col} lg:size-10 drop-shadow-[0_0_15px_currentColor] brightness-125 transition-all duration-500`} 
+                  size={24} 
+                  className={`${node.col} lg:size-7 drop-shadow-[0_0_12px_currentColor] brightness-125 opacity-70 group-hover:opacity-100 transition-all`} 
                 />
-
-                {/* 3. Orbit Ring (Hanya nampak saat Hover) */}
-                <div className="absolute inset-[-8px] rounded-full border border-cyan-500/0 group-hover:border-cyan-500/20 border-dashed animate-[spin_10s_linear_infinite] transition-all" />
               </div>
 
-              {/* --- LABEL TEKS (MINIMALIS & SANGAT TERANG) --- */}
-              <div className="mt-4 text-center">
-                <p className="text-[8px] lg:text-[10px] font-black text-white/50 uppercase tracking-[0.5em] group-hover:text-cyan-400 group-hover:tracking-[0.6em] transition-all duration-500">
+              {/* Label Teks HUD */}
+              <div className="mt-3 text-center pointer-events-none">
+                <p className="text-[7px] lg:text-[8px] font-black text-white/40 uppercase tracking-[0.4em] group-hover:text-cyan-400 transition-colors">
                   {node.label}
                 </p>
-                {/* Garis sinyal digital kecil */}
-                <div className="flex gap-0.5 justify-center mt-1">
-                   {[...Array(3)].map((_, index) => (
-                     <div key={index} className="w-1 h-[1px] bg-white/10 group-hover:bg-cyan-500/40" />
-                   ))}
-                </div>
               </div>
-
             </motion.div>
           ))}
         </motion.div>
@@ -720,40 +705,35 @@ export default function CyberLandingDark() {
         <section className="relative min-h-screen lg:min-h-[calc(100vh-120px)] flex items-center justify-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 pt-28 pb-10 lg:py-0">
            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-16 lg:gap-24 items-center w-full">
               
-{/* --- AREA WIDGET & MARQUEE (REVISI: MINI, MEWAH, LEGA) --- */}
-<div className="relative w-full flex flex-col items-center justify-center order-1 lg:order-2 pt-6 lg:pt-0 pb-16 lg:pb-0">
+{/* --- AREA WIDGET & MARQUEE (REVISI: POSISI NAIK & TIDAK MEPET GARIS) --- */}
+<div className="relative w-full flex flex-col items-center justify-center order-1 lg:order-2 pt-6 lg:pt-0 pb-28 lg:pb-12">
                  
-                 {/* 3D SECURITY CARD (DIKECILKAN LAGI) */}
-                 <div className="relative mb-6 lg:mb-10" style={{ perspective: 2000 }}>
+                 {/* 3D SECURITY CARD (WIDGET UTAMA) */}
+                 <div className="relative mb-2 lg:mb-4" style={{ perspective: 2000 }}>
                     <motion.div 
                        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                       className="relative w-[240px] h-[300px] sm:w-[280px] sm:h-[350px] lg:w-[350px] lg:h-[440px] bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl rounded-[2.5rem] lg:rounded-[3rem] p-1 shadow-[0_30px_60px_rgba(0,0,0,0.5)] border border-white/10 flex flex-col items-center justify-center group/card"
+                       className="relative w-[240px] h-[300px] sm:w-[280px] sm:h-[350px] lg:w-[350px] lg:h-[440px] bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl rounded-[2.5rem] lg:rounded-[3.5rem] p-1 shadow-[0_40px_80px_rgba(0,0,0,0.6)] border border-white/10 flex flex-col items-center justify-center group/card"
                     >
-                       {/* Neon Corners */}
-                       <div className="absolute top-6 left-6 w-4 h-4 border-t border-l border-cyan-400/40" />
-                       <div className="absolute bottom-6 right-6 w-4 h-4 border-b border-r border-fuchsia-400/40" />
-
+                       {/* Isi Card Tetap Mewah Seperti Sebelumnya */}
                        <div className="relative flex items-center justify-center mb-6 lg:mb-8" style={{ transform: "translateZ(60px)" }}>
                           <div className="absolute w-32 h-32 lg:w-44 lg:h-44 border border-cyan-500/20 rounded-full animate-[spin_20s_linear_infinite]" />
-                          <div className="w-16 h-16 lg:w-24 lg:h-24 bg-black border border-cyan-500/30 rounded-2xl lg:rounded-3xl flex items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.2)]">
+                          <div className="w-16 h-16 lg:w-24 lg:h-24 bg-black border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.2)]">
                              <ShieldCheck size={36} className="lg:size-12 text-cyan-400 drop-shadow-[0_0_8px_#22d3ee]" />
                           </div>
                        </div>
-                       
                        <div className="text-center" style={{ transform: "translateZ(40px)" }}>
                           <h3 className="text-lg lg:text-xl font-black text-white tracking-[0.1em] uppercase">
                              Security <span className="text-cyan-400">System</span>
                           </h3>
                        </div>
-                       
                        <div className="absolute -bottom-4 lg:-bottom-6 px-8 py-3 bg-black border border-white/5 text-white rounded-xl text-[7px] lg:text-[9px] font-black tracking-[0.4em]" style={{ transform: "translateZ(70px)" }}>
                          ENCRYPTED 2026
                        </div>
                     </motion.div>
                  </div>
 
-                 {/* LOGO MARQUEE (PURE NEON HUD) */}
-                 <div className="w-full max-w-[100vw]">
+                 {/* LOGO MARQUEE (DITARIK KE ATAS MENGGUNAKAN MARGIN NEGATIF) */}
+                 <div className="w-full max-w-[100vw] -mt-6 lg:-mt-10"> 
                     <CyberHiveMarquee />
                  </div>
               </div>
