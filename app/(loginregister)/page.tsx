@@ -336,37 +336,72 @@ const CyberInfrastructureSection = () => {
   );
 };
 
-// --- SECTION 6: READYNESS PROTOCOLS ---
 const ReadinessProtocolSection = () => {
   const protocols = [
-    { title: "Identifikasi", desc: "Audit menyeluruh terhadap seluruh titik akses digital di lingkungan sekolah.", icon: ScanLine, col: "text-blue-400" },
-    { title: "Proteksi", desc: "Penerapan enkripsi end-to-end dan firewall berlapis pada database siswa.", icon: ShieldCheck, col: "text-emerald-400" },
-    { title: "Deteksi", desc: "Pemantauan aktif 24/7 terhadap anomali trafik jaringan yang mencurigakan.", icon: Zap, col: "text-fuchsia-400" },
-    { title: "Respon", desc: "Prosedur mitigasi instan untuk mengisolasi ancaman sebelum menyebar.", icon: ShieldAlert, col: "text-orange-400" },
-    { title: "Pemulihan", desc: "Sistem restorasi data cepat dari cadangan lokal yang terenkripsi.", icon: Cpu, col: "text-cyan-400" },
-    { title: "Edukasi", desc: "Pelatihan literasi siber berkelanjutan bagi seluruh warga sekolah.", icon: BrainCircuit, col: "text-violet-400" },
+    { num: "01", title: "IDENTIFIKASI", desc: "Pemetaan seluruh perangkat, akun, dan jaringan Wi-Fi sekolah untuk memantau potensi risiko.", icon: ScanLine, col: "text-cyan-400" },
+    { num: "02", title: "PROTEKSI", desc: "Penerapan password kuat, autentikasi ganda, firewall, dan enkripsi data warga sekolah.", icon: ShieldCheck, col: "text-blue-400" },
+    { num: "03", title: "DETEKSI", desc: "Pemantauan aktif sistem sekolah untuk mendeteksi malware, phishing, atau akses mencurigakan.", icon: Search, col: "text-emerald-400" },
+    { num: "04", title: "RESPON", desc: "Tindakan cepat isolasi perangkat terinfeksi dan pemulihan akses saat terjadi insiden siber.", icon: ShieldAlert, col: "text-red-400" },
+    { num: "05", title: "PEMULIHAN", desc: "Restorasi layanan sekolah melalui backup rutin agar KBM tetap berjalan normal.", icon: Cpu, col: "text-fuchsia-400" },
+    { num: "06", title: "EDUKASI", desc: "Pelatihan literasi digital bagi siswa dan staf untuk membangun budaya waspada siber.", icon: BrainCircuit, col: "text-violet-400" },
+    { num: "07", title: "KEBIJAKAN", desc: "Penyusunan aturan penggunaan internet dan perlindungan privasi data pribadi sekolah.", icon: FileText, col: "text-indigo-400" },
+    { num: "08", title: "EVALUASI", desc: "Peninjauan berkala sistem keamanan sekolah agar tetap efektif menghadapi ancaman baru.", icon: Activity, col: "text-orange-400" },
   ];
 
   return (
-    <section className="relative w-full py-24 bg-[#030208] border-b border-white/5">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
+      {/* Background Decor (Cyber Lines) */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent" />
+        <div className="absolute top-0 right-1/4 w-px h-full bg-gradient-to-b from-transparent via-fuchsia-500/20 to-transparent" />
+      </div>
+
+      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-16 w-full">
         <div className="text-center mb-20">
-          <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tighter mb-4">
-            Protokol <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">Kesiapan</span> Siber
+          <div className="inline-block px-4 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black tracking-[0.5em] text-slate-400 uppercase mb-4">
+            Security Operating Procedure
+          </div>
+          <h2 className="text-4xl lg:text-6xl font-black text-white uppercase tracking-tighter mb-6">
+            PROTOKOL <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">KESIAPAN SIBER</span> SMA/SMK
           </h2>
-          <p className="text-slate-500 max-w-xl mx-auto text-xs lg:text-sm font-medium">Siklus pertahanan digital terintegrasi untuk menjamin kedaulatan data sekolah.</p>
+          <p className="text-slate-500 max-w-2xl mx-auto text-sm lg:text-base font-medium">
+            Standar operasional perlindungan data dan aset digital sekolah untuk menciptakan ekosistem belajar yang aman.
+          </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+
+        {/* GRID 8 KOTAK (4 Kolom di Desktop, 2 di Tablet, 1 di Mobile) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {protocols.map((p, i) => (
-            <div key={i} className="group relative">
-              <div className="flex items-start gap-6">
-                <div className={`shrink-0 w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center transition-all group-hover:border-white/20 ${p.col}`}><p.icon size={24} /></div>
-                <div className="space-y-2">
-                  <h3 className="text-lg font-black text-white uppercase tracking-wider flex items-center gap-3"><span className="text-[10px] font-mono opacity-30">0{i+1}</span> {p.title}</h3>
-                  <p className="text-slate-500 text-xs leading-relaxed font-medium">{p.desc}</p>
+            <div 
+              key={i} 
+              className="group relative bg-[#0a0a0f]/40 backdrop-blur-xl border border-white/5 p-8 rounded-[2.5rem] hover:border-white/20 transition-all duration-500 flex flex-col items-start shadow-2xl overflow-hidden"
+            >
+              {/* Glow Effect saat Hover */}
+              <div className={`absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-700 ${p.col.replace('text', 'bg')}`} />
+
+              {/* Header Card: Number & Icon */}
+              <div className="w-full flex justify-between items-center mb-8">
+                <span className="text-2xl font-mono font-black text-white/10 group-hover:text-white/30 transition-colors">
+                  {p.num}
+                </span>
+                <div className={`w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5 ${p.col} group-hover:scale-110 transition-transform duration-500`}>
+                  <p.icon size={24} />
                 </div>
               </div>
-              <div className="absolute -bottom-6 left-20 right-0 h-px bg-gradient-to-r from-white/10 to-transparent opacity-50" />
+
+              {/* Title & Desc */}
+              <h3 className="text-lg font-black text-white mb-4 tracking-widest uppercase group-hover:text-cyan-400 transition-colors">
+                {p.title}
+              </h3>
+              <p className="text-slate-500 text-xs lg:text-[13px] leading-relaxed font-medium">
+                {p.desc}
+              </p>
+
+              {/* Footer Decoration */}
+              <div className="mt-8 pt-6 border-t border-white/5 w-full flex justify-between items-center opacity-50">
+                <span className="text-[8px] font-mono tracking-widest text-slate-600 uppercase">Status: Validated</span>
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              </div>
             </div>
           ))}
         </div>
