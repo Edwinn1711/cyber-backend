@@ -135,6 +135,18 @@ const SectionDivider = () => (
   </div>
 );
 
+const CyberDecoration = ({ className = "" }: { className?: string }) => (
+  <div className={`absolute pointer-events-none select-none opacity-20 lg:opacity-30 ${className}`}>
+    <div className="relative w-64 h-64">
+      <div className="absolute inset-0 border border-cyan-500/40 rounded-full animate-pulse" />
+      <div className="absolute inset-4 border border-fuchsia-500/30 rounded-full animate-pulse delay-75" />
+      <div className="absolute inset-10 border border-cyan-500/20 rounded-full animate-pulse delay-150" />
+      <div className="absolute inset-[40%] bg-cyan-500/10 blur-2xl rounded-full" />
+    </div>
+  </div>
+);
+
+
 const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   const [hovered, setHovered] = useState<string | null>(null);
   const data = [
@@ -143,48 +155,43 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   ];
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-20 bg-[#020108] border-t border-white/5 overflow-hidden">
+    // Penyesuaian: py-16 di mobile, py-24 di desktop. min-h-fit di mobile agar tidak bolong.
+    <section className="relative w-full min-h-fit lg:min-h-screen flex flex-col items-center justify-center py-16 lg:py-24 bg-[#020108] border-t border-white/5 overflow-hidden">
       
-      {/* --- BACKGROUND SINKRON (DITERANGKAN & DIBUAT GLOWING) --- */}
+      {/* BACKGROUND SINKRON */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
           <motion.img 
-            key={bgIdx} 
-            src={CYBER_ASSETS[bgIdx]} 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 0.4 }} /* Dinaikkan ke 40% agar sangat nampak */
-            exit={{ opacity: 0 }} 
-            transition={{ duration: 1.5 }} 
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-lighten" /* mix-blend-lighten membuat cahaya cyber menyala */
+            key={bgIdx} src={CYBER_ASSETS[bgIdx]} initial={{ opacity: 0 }}
+            animate={{ opacity: 0.4 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }}
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-lighten"
           />
         </AnimatePresence>
-        {/* Overlay hitam ditipiskan dari 80% menjadi 60% */}
-        <div className="absolute inset-0 bg-black/60 pointer-events-none" />
-        {/* Vignette (gelap di pinggir, terang di tengah) */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#000000_100%)] opacity-80 pointer-events-none" />
+        <div className="absolute inset-0 bg-black/60" />
       </div>
+
+      {/* --- DEKORASI PENGISI AREA KOSONG (SEPERTI GAMBAR 3) --- */}
+      <CyberDecoration className="-bottom-20 -right-20" />
+      <CyberDecoration className="-top-20 -left-20 scale-75" />
       
-      {/* --- KONTEN UTAMA --- */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 w-full text-center">
-        <div className="mb-16">
-          <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-2xl">
+      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-16 w-full text-center">
+        <div className="mb-12 lg:mb-20">
+          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-4">
             Membangun Kedaulatan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 animate-gradient-x">Digital Sekolah</span>
           </h2>
-          <p className="text-slate-400 max-w-2xl mx-auto text-xs lg:text-sm font-medium opacity-80 leading-relaxed">
-            Integrasi infrastruktur siber aman demi lingkungan belajar terlindungi.
+          <p className="text-slate-400 max-w-2xl mx-auto text-xs lg:text-base font-medium opacity-80 leading-relaxed">
+            Mengokohkan kedaulatan digital sekolah melalui integrasi infrastruktur siber yang aman.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10" onMouseLeave={() => setHovered(null)}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-12" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
             <div 
-              key={item.id} onMouseEnter={() => setHovered(item.id)} 
-              className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-8 lg:p-12 rounded-[2.5rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm opacity-50' : 'scale-100'} ${hovered === item.id ? 'shadow-[0_20px_50px_rgba(0,0,0,0.6)] -translate-y-2 border-blue-500/50' : ''}`}
+              key={item.id} onMouseEnter={() => setHovered(item.id)}
+              className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-8 lg:p-14 rounded-[2.5rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm opacity-50' : 'scale-100'}`}
             >
-              <div className="w-12 h-12 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-6 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                <item.icon size={24} />
-              </div>
-              <h3 className="text-lg lg:text-xl font-black text-white mb-3 uppercase tracking-wider">{item.title}</h3>
+              <div className="w-12 h-12 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-2xl mb-6"><item.icon size={24} /></div>
+              <h3 className="text-xl lg:text-3xl font-black text-white mb-4 uppercase">{item.title}</h3>
               <p className="text-slate-400 text-xs lg:text-sm leading-relaxed">{item.desc}</p>
             </div>
           ))}
@@ -203,25 +210,26 @@ const SecurityStatsSection = () => {
   ];
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-20 bg-[#030208] border-b border-white/5 overflow-hidden">
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 w-full text-center">
-        <div className="mb-20">
-          <h2 className="text-2xl lg:text-4xl font-black text-white uppercase tracking-tighter mb-4">
+    // Penyesuaian height: min-h-fit di mobile
+    <section className="relative w-full min-h-fit lg:min-h-screen flex flex-col items-center justify-center py-16 lg:py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
+      
+      {/* PENGISI AREA KOSONG */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-fuchsia-600/5 blur-[120px] rounded-full pointer-events-none" />
+      <CyberDecoration className="bottom-0 left-0 scale-50 opacity-10" />
+
+      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-16 w-full text-center">
+        <div className="mb-16 lg:mb-24">
+          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-4">
             Metrik Ketahanan <span className="text-fuchsia-500">Digital</span>
           </h2>
-          <p className="text-slate-500 max-w-xl mx-auto text-xs lg:text-sm font-medium">Visualisasi data infrastruktur siber sekolah.</p>
+          <p className="text-slate-500 max-w-xl mx-auto text-xs lg:text-base font-medium">Monitoring performa infrastruktur siber secara real-time.</p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
           {stats.map((s, i) => (
-            <div key={i} className="bg-[#0a0a0f] p-8 lg:p-10 rounded-[2rem] border border-white/5 hover:border-fuchsia-500/20 transition-all duration-500 group relative">
-              {/* ANGKA AMAN: text-3xl di HP, text-5xl di Laptop */}
-              <div className={`text-3xl lg:text-5xl font-black mb-3 transition-transform group-hover:scale-105 ${s.color}`}>
-                {s.value}
-              </div>
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">
-                {s.label}
-              </div>
+            <div key={i} className="bg-[#0a0a0f]/60 backdrop-blur-xl p-6 lg:p-12 rounded-[2rem] border border-white/5 group relative overflow-hidden">
+              <div className={`text-3xl lg:text-6xl font-black mb-2 ${s.color}`}>{s.value}</div>
+              <div className="text-[8px] lg:text-xs font-black text-slate-500 uppercase tracking-widest">{s.label}</div>
             </div>
           ))}
         </div>
@@ -229,7 +237,6 @@ const SecurityStatsSection = () => {
     </section>
   );
 };
-
 const CyberInfrastructureSection = () => {
   const sectors = [
     { title: "Firewall", icon: ShieldAlert, desc: "Filtering trafik masuk-keluar jaringan sekolah." },
