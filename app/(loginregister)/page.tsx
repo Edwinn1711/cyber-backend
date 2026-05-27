@@ -8,7 +8,8 @@ import {
   Home, Info, FileText, LayoutGrid, Megaphone, HelpCircle, X, ArrowRight, Zap,
   BrainCircuit, ShieldAlert, Cpu, Star, Target,
   CreditCard, Globe, Key, Bug, Mail, Cloud, Search, Terminal, Eye,
-  Activity
+  Activity, 
+  Facebook, Twitter, Youtube, Instagram, Send, Phone, Globe2
 } from 'lucide-react'
 
 // --- ASSET BACKGROUND ---
@@ -410,74 +411,152 @@ const ReadinessProtocolSection = () => {
   );
 };
 
-// --- SECTION 7: BLOG ---
-const CyberBlogSection = () => {
-  const articles = [
-    { title: "Mencegah Phishing di Lingkungan Sekolah", date: "24 MEI 2026", cat: "Edukasi", icon: ShieldCheck },
-    { title: "Update Protokol Keamanan Firewall v.3", date: "20 MEI 2026", cat: "Sistem", icon: Zap },
-    { title: "Membangun Budaya Literasi Password Siswa", date: "15 MEI 2026", cat: "Literasi", icon: Fingerprint },
-  ];
-  return (
-    <section className="relative w-full py-24 bg-black border-b border-white/5">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-          <div className="text-left">
-            <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tighter mb-4">Intelligence <span className="text-cyan-400">Hub</span></h2>
-            <p className="text-slate-500 text-xs lg:text-sm font-medium">Wawasan terbaru mengenai keamanan siber dan teknologi pendidikan.</p>
-          </div>
-          <button className="px-6 py-3 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all">Lihat Semua</button>
+// --- SECTION 7: CYBER COMMAND FINALE (PENGGANTI INTELLIGENCE HUB) ---
+const CyberClosingSection = () => (
+  <section className="relative w-full min-h-[70vh] flex items-center justify-center py-20 bg-black overflow-hidden border-b border-white/5">
+    {/* Background Effect: Neural Network Pulse */}
+    <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.08)_0%,transparent_70%)]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-cyan-500/10 rounded-full animate-[ping_10s_linear_infinite] opacity-20" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-fuchsia-500/10 rounded-full animate-[pulse_8s_ease-in-out_infinite] opacity-30" />
+    </div>
+
+    <div className="relative z-10 max-w-[1400px] mx-auto px-6 text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="space-y-8"
+      >
+        <div className="w-20 h-20 bg-cyan-500/10 border border-cyan-500/20 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-[0_0_50px_rgba(34,211,238,0.2)]">
+          <Globe2 size={40} className="text-cyan-400 animate-pulse" />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {articles.map((art, i) => (
-            <div key={i} className="group cursor-pointer">
-              <div className="relative aspect-[16/9] rounded-[2rem] overflow-hidden mb-6 border border-white/5 bg-white/[0.02]">
-                <div className="absolute inset-0 flex items-center justify-center"><art.icon size={40} className="text-cyan-500/20 group-hover:text-cyan-400 transition-all group-hover:scale-110" /></div>
-                <div className="absolute bottom-6 left-6"><span className="px-3 py-1 rounded-full bg-cyan-500 text-black text-[9px] font-black uppercase">{art.cat}</span></div>
-              </div>
-              <h3 className="text-xl font-black text-white mb-2 group-hover:text-cyan-400 transition-colors uppercase">{art.title}</h3>
-              <p className="text-slate-600 text-[10px] font-bold tracking-[0.2em]">{art.date}</p>
-            </div>
-          ))}
+        
+        <h2 className="text-4xl lg:text-6xl font-black text-white uppercase tracking-tighter leading-none">
+          PERTAHANAN SIBER <br/>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 animate-gradient-x">
+            DI TANGAN ANDA.
+          </span>
+        </h2>
+        
+        <p className="text-slate-400 max-w-2xl mx-auto text-sm lg:text-base font-medium opacity-80">
+          Membangun masa depan digital sekolah yang tidak hanya cerdas, tetapi juga tak tertembus. 
+          Bergabunglah dalam revolusi keamanan siber pendidikan 2026.
+        </p>
+
+        <div className="pt-10">
+          <button className="group relative px-12 py-4 bg-white text-black rounded-full font-black text-[11px] tracking-[0.3em] uppercase overflow-hidden transition-all hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+            <span className="relative z-10">AMANKAN SEKOLAH SEKARANG</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-fuchsia-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  </section>
+);
+
+// --- SECTION 7: CYBER COMMAND FINALE (PENGGANTI INTELLIGENCE HUB) ---
+const CyberClosingSection = () => (
+  <section className="relative w-full min-h-[60vh] flex items-center justify-center py-20 bg-black overflow-hidden border-b border-white/5">
+    {/* Background Glow */}
+    <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.08)_0%,transparent_70%)]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-cyan-500/10 rounded-full animate-[ping_10s_linear_infinite] opacity-20" />
+    </div>
+
+    <div className="relative z-10 max-w-[1400px] mx-auto px-6 text-center">
+      <div className="w-16 h-16 bg-cyan-500/10 border border-cyan-500/20 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-[0_0_40px_rgba(34,211,238,0.2)]">
+        <Globe2 size={32} className="text-cyan-400 animate-pulse" />
+      </div>
+      
+      <h2 className="text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6">
+        PERTAHANAN SIBER <br/>
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 animate-gradient-x">
+          DI TANGAN ANDA.
+        </span>
+      </h2>
+      
+      <p className="text-slate-400 max-w-xl mx-auto text-sm font-medium opacity-80 mb-10">
+        Membangun masa depan digital sekolah yang tidak hanya cerdas, tetapi juga tak tertembus.
+      </p>
+
+      <button className="group relative px-10 py-4 bg-white text-black rounded-full font-black text-[10px] tracking-[0.3em] uppercase transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+        AMANKAN SEKOLAH SEKARANG
+      </button>
+    </div>
+  </section>
+);
+
+// --- SECTION 8: ULTIMATE HUD FOOTER (TIPIS, MEWAH, NO UNDERSCORE) ---
+const CyberFooterLuxury = () => (
+  <footer className="relative w-full bg-[#020108] pt-16 pb-8 overflow-hidden">
+    <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+      
+      {/* Newsletter HUD Style */}
+      <div className="flex flex-col lg:flex-row justify-between items-center pb-16 mb-16 border-b border-white/5 gap-8">
+        <div className="text-left">
+          <h4 className="text-white font-black text-xs tracking-[0.3em] uppercase mb-2">SYSTEM UPDATE SUBSCRIBE</h4>
+          <p className="text-slate-500 text-[10px] font-medium italic flex items-center gap-2">
+            <Mail size={12} className="text-cyan-400" /> Dapatkan laporan intelijen siber terbaru langsung ke email Anda.
+          </p>
+        </div>
+        <div className="relative w-full lg:w-[400px]">
+          <input 
+            type="email" 
+            placeholder="ENTER EMAIL ADDRESS..." 
+            className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-6 pr-16 text-[10px] font-mono text-cyan-400 focus:border-cyan-500/50 outline-none transition-all"
+          />
+          <button className="absolute right-2 top-2 bottom-2 px-4 bg-cyan-500 text-black rounded-lg hover:bg-white transition-all">
+            <Send size={14} />
+          </button>
         </div>
       </div>
-    </section>
-  );
-};
 
-// --- SECTION 8: FOOTER ---
-const CyberFooter = () => (
-  <footer className="relative w-full pt-20 pb-10 bg-[#020108]">
-    <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-        <div className="col-span-1 space-y-6">
+      {/* Main Footer Links */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-12 lg:gap-8 mb-16">
+        <div className="col-span-2 md:col-span-1 space-y-6">
           <div className="flex items-center gap-3">
-             <ShieldCheck size={28} className="text-fuchsia-500" />
-             <h2 className="font-black text-white text-xl tracking-tighter uppercase leading-none">CYBER<br/><span className="text-fuchsia-500 text-sm">READINESS</span></h2>
+            <ShieldCheck size={24} className="text-fuchsia-500" />
+            <h3 className="font-black text-white text-lg tracking-tighter uppercase">CYBER<span className="text-fuchsia-500">READINESS</span></h3>
           </div>
-          <p className="text-slate-500 text-xs leading-relaxed font-medium">Platform Ketahanan Siber Sekolah Terintegrasi. Mengamankan masa depan digital pendidikan.</p>
+          <p className="text-slate-500 text-[11px] leading-relaxed font-medium">
+            Pusat komando pertahanan digital sekolah terintegrasi dengan standar enkripsi militer.
+          </p>
+          <div className="flex items-center gap-3 text-slate-500 text-[10px] font-bold">
+            <Phone size={14} className="text-cyan-400" /> +62 812 3456 7890
+          </div>
         </div>
-        {[ 
-          { t: "Layanan", l: ["Monitoring", "E-Learning", "Lapor Insiden"] },
-          { t: "Organisasi", l: ["Profil", "Tim IT", "Kontak"] },
-          { t: "Legal", l: ["Privasi", "Syarat", "SOP"] }
+
+        {[
+          { t: "QUICK LINKS", l: ["BERANDA", "PROFIL", "SOP SIBER", "LAYANAN"], icon: Globe },
+          { t: "INFORMATION", l: ["SECURITY AUDIT", "HELP CENTER", "PARTNERSHIP"], icon: Info },
+          { t: "LOCATION", l: ["CYBER HUB BUILDING", "TECH DISTRICT ST 26", "JAKARTA INDONESIA"], icon: MapPin }
         ].map((item, i) => (
           <div key={i} className="space-y-6">
-            <h4 className="text-white font-black text-xs uppercase tracking-widest">{item.t}</h4>
+            <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-50 flex items-center gap-2">
+               <item.icon size={12} /> {item.t}
+            </h5>
             <ul className="space-y-3">
               {item.l.map((link, j) => (
-                <li key={j} className="text-slate-500 text-xs hover:text-cyan-400 cursor-pointer transition-colors">{link}</li>
+                <li key={j} className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors tracking-widest">{link}</li>
               ))}
             </ul>
           </div>
         ))}
       </div>
-      <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-slate-600 text-[9px] font-bold tracking-widest">© 2026 CYBER READINESS. ALL RIGHTS RESERVED.</p>
+
+      {/* Bottom Bar */}
+      <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="flex gap-4">
-           {[Info, HelpCircle].map((Icon, i) => (
-             <div key={i} className="w-8 h-8 rounded-lg border border-white/5 flex items-center justify-center text-slate-500 hover:text-white transition-all cursor-pointer"><Icon size={14}/></div>
-           ))}
+          {[Facebook, Twitter, Youtube, Instagram].map((Icon, i) => (
+            <div key={i} className="w-8 h-8 rounded-lg border border-white/5 flex items-center justify-center text-slate-500 hover:text-cyan-400 transition-all cursor-pointer bg-white/[0.02]">
+              <Icon size={14} />
+            </div>
+          ))}
         </div>
+        <p className="text-slate-700 text-[8px] font-mono tracking-[0.5em] uppercase">
+          © 2026 CYBER READINESS // ALL SYSTEMS OPERATIONAL
+        </p>
       </div>
     </div>
   </footer>
@@ -641,37 +720,46 @@ export default function CyberLandingDark() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-fuchsia-500/30 relative">
+    <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-cyan-500/30 relative">
       
-      {/* 1. BACKGROUND GLOBAL */}
+      {/* 1. BACKGROUND GLOBAL & PARTIKEL */}
       <PersistentUniverse bgIdx={bgIdx} />
       <UltraGodTierParticleSystem />
 
-      {/* 2. HEADER NAVBAR */}
+      {/* 2. HEADER NAVBAR (RESPONSIF) */}
       <header className="fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 h-20 lg:h-24 flex items-center justify-between">
+          
           <div className="flex items-center gap-3 lg:gap-4 shrink-0 relative z-[110]">
-            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
-              <ShieldCheck size={24} className="text-fuchsia-400" />
-            </div>
-            <div className="whitespace-nowrap">
-              <h1 className="font-black text-white tracking-widest text-sm lg:text-lg leading-tight">CYBER<span className="text-fuchsia-500">READINESS</span></h1>
-              <p className="text-[8px] lg:text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase">CYBER SECURITY</p>
-            </div>
+             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
+                <ShieldCheck size={24} className="text-fuchsia-400" />
+             </div>
+             <div className="whitespace-nowrap">
+                <h1 className="font-black text-white tracking-widest text-sm lg:text-lg leading-tight uppercase">CYBER<span className="text-fuchsia-500">READINESS</span></h1>
+                <p className="text-[8px] lg:text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase">Cyber Security</p>
+             </div>
           </div>
 
           <nav className="hidden lg:flex flex-1 justify-center items-center gap-8 xl:gap-12 h-full">
-            {[ { icon: Home, label: 'Beranda' }, { icon: Info, label: 'Profil' }, { icon: LayoutGrid, label: 'Organisasi' }, { icon: FileText, label: 'Berita' }, { icon: Megaphone, label: 'Pengumuman' }, { icon: HelpCircle, label: 'Layanan' } ].map((item, idx) => (
-              <div key={idx} className="relative flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black cursor-pointer transition-colors text-slate-500 hover:text-white group">
-                <item.icon size={15} className="group-hover:text-fuchsia-400" />
-                {item.label}
-              </div>
-            ))}
+             {[ 
+               { icon: Home, label: 'Beranda', active: true }, 
+               { icon: Info, label: 'Profil' }, 
+               { icon: LayoutGrid, label: 'Organisasi' }, 
+               { icon: FileText, label: 'Berita' }, 
+               { icon: Megaphone, label: 'Pengumuman' }, 
+               { icon: HelpCircle, label: 'Layanan' } 
+             ].map((item, idx) => (
+               <div key={idx} className="relative flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black cursor-pointer transition-colors text-slate-500 hover:text-white group h-full">
+                  <item.icon size={15} className="group-hover:text-fuchsia-400" />
+                  {item.label}
+                  {item.active && <div className="absolute bottom-0 w-full h-[2px] bg-fuchsia-500 shadow-[0_0_10px_#d946ef]" />}
+               </div>
+             ))}
           </nav>
 
           <div className="flex items-center gap-4 relative z-[110]">
-            <button onClick={() => setIsLoginOpen(true)} className="flex items-center gap-2 px-5 py-2.5 lg:px-8 lg:py-3.5 bg-fuchsia-600 text-white rounded-full font-black text-[10px] lg:text-[11px] tracking-[0.2em] uppercase hover:bg-fuchsia-500 transition-all shadow-[0_0_20px_rgba(217,70,239,0.4)]">
-              <User size={16} /> <span className="hidden sm:inline">LOGIN</span>
+            <button onClick={() => setIsLoginOpen(true)} className="flex items-center gap-2 px-5 py-2.5 lg:px-8 lg:py-3.5 bg-fuchsia-600 text-white rounded-full font-black text-[10px] lg:text-[11px] tracking-[0.2em] uppercase hover:bg-fuchsia-500 transition-all shadow-lg">
+               <User size={16} /> <span className="hidden sm:inline">LOGIN</span>
             </button>
             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden p-2.5 bg-white/5 border border-white/10 rounded-xl text-white">
               {isMobileMenuOpen ? <X size={24} /> : <LayoutGrid size={24} />}
@@ -682,11 +770,11 @@ export default function CyberLandingDark() {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="absolute top-full left-0 w-full bg-[#05050a]/95 backdrop-blur-2xl border-b border-white/10 py-8 px-6 lg:hidden flex flex-col gap-6 shadow-2xl">
-              {[ { icon: Home, label: 'Beranda' }, { icon: Info, label: 'Profil' }, { icon: LayoutGrid, label: 'Organisasi' }, { icon: FileText, label: 'Berita' }, { icon: Megaphone, label: 'Pengumuman' }, { icon: HelpCircle, label: 'Layanan' } ].map((item, idx) => (
-                <div key={idx} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 text-slate-300 font-bold tracking-widest text-xs uppercase hover:text-fuchsia-400">
-                  <item.icon size={18} /> {item.label}
-                </div>
-              ))}
+               {[ { icon: Home, label: 'Beranda' }, { icon: Info, label: 'Profil' }, { icon: LayoutGrid, label: 'Organisasi' }, { icon: FileText, label: 'Berita' }, { icon: Megaphone, label: 'Pengumuman' }, { icon: HelpCircle, label: 'Layanan' } ].map((item, idx) => (
+                 <div key={idx} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 text-slate-300 font-bold tracking-widest text-xs uppercase hover:text-fuchsia-400 transition-all">
+                   <item.icon size={18} /> {item.label}
+                 </div>
+               ))}
             </motion.div>
           )}
         </AnimatePresence>
@@ -695,15 +783,16 @@ export default function CyberLandingDark() {
       {/* 3. KONTEN UTAMA */}
       <main className="relative z-10 w-full pt-24 lg:pt-44">
         
-        {/* HALAMAN 1: HERO */}
-        <section className="relative min-h-screen lg:min-h-[calc(100vh-120px)] flex items-center justify-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 pt-24 pb-10 lg:py-0">
-           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-24 items-center w-full">
+        {/* --- HALAMAN 1: HERO (OPTIMASI RATA TENGAH MOBILE) --- */}
+        <section className="relative min-h-[90vh] lg:min-h-[calc(100vh-120px)] flex items-center justify-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-12 lg:py-0">
+           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-10 lg:gap-24 items-center w-full">
+              
               <div className="relative w-full flex flex-col items-center justify-center order-1 lg:order-2 gap-2 lg:gap-6">
                  <div className="relative" style={{ perspective: 2000 }}>
                     <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} className="relative w-[240px] h-[300px] sm:w-[280px] sm:h-[350px] lg:w-[350px] lg:h-[440px] bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl rounded-[2.5rem] lg:rounded-[3.5rem] p-1 shadow-2xl border border-white/10 flex flex-col items-center justify-center group/card">
                        <div className="relative flex items-center justify-center mb-6 lg:mb-8" style={{ transform: "translateZ(60px)" }}>
                           <div className="absolute w-32 h-32 lg:w-44 lg:h-44 border border-cyan-500/20 rounded-full animate-[spin_20s_linear_infinite]" />
-                          <div className="w-16 h-16 lg:w-24 lg:h-24 bg-black border border-cyan-500/30 rounded-2xl flex items-center justify-center">
+                          <div className="w-16 h-16 lg:w-24 lg:h-24 bg-black border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.2)]">
                              <ShieldCheck size={36} className="lg:size-12 text-cyan-400 drop-shadow-[0_0_8px_#22d3ee]" />
                           </div>
                        </div>
@@ -715,6 +804,7 @@ export default function CyberLandingDark() {
                  </div>
                  <div className="w-full max-w-[100vw]"><CyberHiveMarquee /></div>
               </div>
+
               <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 lg:space-y-10 w-full order-2 lg:order-1 pt-2 lg:pt-0">
                  <div className="inline-flex items-center gap-3 px-4 py-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-full text-[9px] lg:text-[10px] font-black tracking-[0.4em] uppercase backdrop-blur-md">
                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]"/> SECURE PROTOCOL ACTIVE
@@ -726,62 +816,111 @@ export default function CyberLandingDark() {
                       Mulai Evaluasi <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform"/>
                    </button>
                  </div>
+                 <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-5 opacity-40">
+                    {[ Shield, Server, Network, Fingerprint ].map((Icon, i) => (
+                      <div key={i} className="w-10 h-10 rounded-xl border border-white/5 bg-white/5 flex items-center justify-center text-slate-400"><Icon size={18} /></div>
+                    ))}
+                 </div>
               </div>
            </div>
         </section>
 
         <SectionDivider />
 
-        {/* HALAMAN 2: PILAR STRATEGIS */}
+        {/* --- HALAMAN 2: PILAR STRATEGIS (FULL PAGE) --- */}
         <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
-          <div className="max-w-[1600px] mx-auto px-6 lg:px-16 relative z-10 w-full text-center">
-            <h2 className="text-3xl lg:text-5xl font-black text-white uppercase mb-16"><span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500">Pilar Strategis</span> Kami</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-              {[
-                { t: "Infrastruktur", i: Server, c: "text-cyan-400", d: "Membangun arsitektur jaringan sekolah yang terpusat dan tahan terhadap serangan siber." },
-                { t: "Keamanan", i: ShieldAlert, c: "text-fuchsia-400", d: "Menerapkan protokol enkripsi dan pemantauan real-time untuk mendeteksi ancaman." },
-                { t: "Literasi", i: BrainCircuit, c: "text-emerald-400", d: "Meningkatkan kesadaran sivitas akademika dalam menjaga keamanan data pribadi." }
-              ].map((item, i) => (
-                <div key={i} className="bg-[#08070d]/80 border border-white/5 p-12 lg:p-16 rounded-[3rem] hover:border-white/20 transition-all duration-700 hover:-translate-y-2">
-                  <div className="w-20 h-20 bg-black border border-white/10 rounded-full flex items-center justify-center mb-10 mx-auto shadow-xl"><item.i size={36} className={`${item.c} drop-shadow-[0_0_10px_currentColor]`} /></div>
-                  <h3 className="text-xl lg:text-2xl font-black text-white mb-4 uppercase">{item.t}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{item.d}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+           <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-indigo-900/10 via-fuchsia-900/5 to-transparent blur-[120px] pointer-events-none" />
+           <div className="max-w-[1600px] mx-auto px-6 lg:px-16 relative z-10 w-full text-center">
+             <div className="mb-20 lg:mb-28">
+               <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6">
+                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500">Pilar Strategis</span> Kami
+               </h2>
+               <p className="text-slate-500 max-w-3xl mx-auto text-sm lg:text-base font-medium opacity-80">Membangun fondasi keamanan siber yang kokoh melalui tiga pilar utama infrastruktur dan edukasi.</p>
+             </div>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+               {[
+                 { t: "Infrastruktur", i: Server, c: "text-cyan-400", d: "Membangun arsitektur jaringan sekolah yang terpusat dan tahan serangan." },
+                 { t: "Keamanan", i: ShieldAlert, c: "text-fuchsia-400", d: "Menerapkan protokol enkripsi dan pemantauan real-time deteksi ancaman." },
+                 { t: "Literasi", i: BrainCircuit, c: "text-emerald-400", d: "Meningkatkan kesadaran sivitas akademika dalam menjaga keamanan data." }
+               ].map((item, i) => (
+                 <div key={i} className="group relative bg-[#08070d]/80 border border-white/5 p-12 lg:p-16 rounded-[3rem] hover:border-white/20 transition-all duration-700 hover:-translate-y-2 shadow-2xl">
+                   <div className="w-16 h-16 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 mx-auto shadow-xl group-hover:shadow-cyan-500/10 transition-all">
+                     <item.i size={32} className={`${item.c} drop-shadow-[0_0_10px_currentColor]`} />
+                   </div>
+                   <h3 className="text-xl lg:text-2xl font-black text-white mb-4 uppercase tracking-widest">{item.t}</h3>
+                   <p className="text-sm text-slate-400 leading-relaxed">{item.d}</p>
+                 </div>
+               ))}
+             </div>
+           </div>
         </section>
 
         <SectionDivider />
+
+        {/* --- HALAMAN 3: VISI MISI (FULL PAGE & SYNC BG) --- */}
         <VisiMisiSection bgIdx={bgIdx} />
+
         <SectionDivider />
+
+        {/* --- HALAMAN 4: METRIK STATISTIK (FULL PAGE ULTRA WIDE) --- */}
         <SecurityStatsSection />
+
         <SectionDivider />
+
+        {/* --- HALAMAN 5: INFRASTRUKTUR (FULL PAGE VIDEO) --- */}
         <CyberInfrastructureSection />
+
         <SectionDivider />
+
+        {/* --- HALAMAN 6: PROTOKOL KESIAPAN (8 GRID DEWA) --- */}
         <ReadinessProtocolSection />
+
         <SectionDivider />
-        <CyberBlogSection />
-        <CyberFooter />
+
+        {/* --- HALAMAN 7: CLOSING FINALE --- */}
+        <CyberClosingSection />
+
+        {/* --- HALAMAN 8: FOOTER LUXURY --- */}
+        <CyberFooterLuxury />
+
       </main>
 
-      {/* 4. MODAL LOGIN */}
+      {/* 4. MODAL LOGIN (OTENTIKASI LENGKAP) */}
       <AnimatePresence>
         {isLoginOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl">
             <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} className={`relative w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} bg-[#0a0a0f]/95 border border-white/10 rounded-[2.5rem] p-10 shadow-2xl overflow-hidden`}>
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500" />
-              <button onClick={() => setIsLoginOpen(false)} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-white"><X size={16} /></button>
-              <form onSubmit={handleAuthenticate} className="space-y-4 pt-10">
-                <input type="text" placeholder="USER" value={username} onChange={(e)=>setUsername(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-6 text-white text-xs font-bold" />
-                <input type="password" placeholder="PASS" value={password} onChange={(e)=>setPassword(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-6 text-white text-xs font-bold" />
-                <button type="submit" className="w-full py-4 bg-fuchsia-600 rounded-2xl font-black text-white text-xs uppercase shadow-lg">OTENTIKASI</button>
+              <button onClick={() => setIsLoginOpen(false)} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-white transition-all"><X size={16} /></button>
+              <div className="mx-auto w-12 h-12 border border-fuchsia-500/50 rounded-2xl flex items-center justify-center mb-6 shadow-xl"><ShieldCheck className="text-fuchsia-400" size={24} /></div>
+              <div className="mb-8 text-center"><h2 className="text-2xl font-black text-white uppercase mb-1">PORTAL <span className="text-fuchsia-500">AKSES</span></h2><p className="text-[9px] font-bold text-slate-500 tracking-widest">Otentikasi Identitas Jaringan</p></div>
+              <div className="flex border-b border-white/10 mb-8 relative">
+                <button type="button" onClick={() => setActiveTab('LOGIN')} className={`flex-1 pb-3 text-[10px] font-black tracking-widest ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600'}`}>MASUK</button>
+                <button type="button" onClick={() => setActiveTab('REGISTER')} className={`flex-1 pb-3 text-[10px] font-black tracking-widest ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600'}`}>DAFTAR</button>
+                <div className={`absolute bottom-0 h-[2px] w-1/2 bg-fuchsia-500 transition-transform duration-300 ${activeTab === 'LOGIN' ? 'translate-x-0' : 'translate-x-full'}`} />
+              </div>
+              <form onSubmit={handleAuthenticate} className="space-y-4">
+                <div className="relative"><User size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500" /><input type="text" placeholder="NAMA PENGGUNA" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-xs text-white" /></div>
+                <div className="relative"><Lock size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500" /><input type="password" placeholder="KATA SANDI" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-xs text-white" /></div>
+                {activeTab === 'REGISTER' && (
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} className="space-y-4 pt-2">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="relative"><MapPin size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" /><input type="text" placeholder="ASAL" value={asal} onChange={(e) => setAsal(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-10 pr-4 text-[10px] text-white" /></div>
+                      <div className="relative"><Calendar size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" /><input type="date" value={tanggalLahir} onChange={(e) => setTanggalLahir(e.target.value)} style={{ colorScheme: 'dark' }} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-10 pr-4 text-[10px] text-white" /></div>
+                    </div>
+                  </motion.div>
+                )}
+                {status === 'error' && <div className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold"><AlertTriangle size={14} /> {errorMessage}</div>}
+                <button type="submit" disabled={status === 'loading'} className={`w-full py-4 rounded-2xl font-black text-xs uppercase shadow-lg transition-all ${status === 'success' ? 'bg-emerald-500' : 'bg-fuchsia-600 hover:bg-fuchsia-500'}`}>
+                   {status === 'loading' ? 'VERIFIKASI...' : status === 'success' ? 'BERHASIL' : 'OTENTIKASI'} <Zap size={14} className="inline ml-2" />
+                </button>
               </form>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* 5. STYLE CSS GLOBAL */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes gradient-x { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .animate-gradient-x { background-size: 200% 200%; animation: gradient-x 5s ease infinite; }
@@ -792,6 +931,7 @@ export default function CyberLandingDark() {
         ::-webkit-scrollbar-track { background: #020108; }
         ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #22d3ee, #d946ef); border-radius: 10px; }
       `}} />
+
     </div>
   );
 }
