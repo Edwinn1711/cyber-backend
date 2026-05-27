@@ -463,50 +463,57 @@ const TECH_ICONS = [
 
 const CyberHiveMarquee = () => {
   return (
-    <div className="relative w-full h-[120px] lg:h-[160px] overflow-hidden select-none bg-transparent">
-      {/* Masking Halus Pinggiran (Fading effect kiri-kanan) */}
-      <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+    <div className="relative w-full h-[140px] lg:h-[180px] overflow-hidden mt-2 select-none bg-transparent">
+      {/* Masking Halus di pinggir agar logo muncul/hilang seperti kabut digital */}
+      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
       
       <div className="flex items-center h-full">
         <motion.div 
-          className="flex gap-10 lg:gap-16 px-10"
+          className="flex gap-12 lg:gap-20 px-10"
           animate={{ x: [0, -1800] }}
-          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
         >
-          {/* Mapping data 3x agar loop tidak terputus */}
           {[...TECH_ICONS, ...TECH_ICONS, ...TECH_ICONS].map((node, i) => (
             <motion.div
               key={i}
-              // Animasi melayang naik turun yang halus
-              animate={{ y: [0, Math.sin(i) * 8, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              // Animasi melayang organik (Gaya Bebas)
+              animate={{ 
+                y: [0, Math.sin(i) * 12, 0],
+                opacity: [0.4, 0.7, 0.4] // Efek nafas digital (flicker halus)
+              }}
+              transition={{ duration: 6 + (i % 2), repeat: Infinity, ease: "easeInOut" }}
               className="group relative flex-shrink-0 flex flex-col items-center justify-center bg-transparent"
             >
-              {/* --- LINGKARAN (ORB) MINI & TRANSPARAN --- */}
-              <div className="relative w-12 h-12 lg:w-14 lg:h-14 rounded-full border border-white/10 bg-white/5 backdrop-blur-md flex items-center justify-center transition-all duration-500 group-hover:border-cyan-500/40 group-hover:scale-110 shadow-none">
+              
+              {/* --- AREA IKON (TANPA BORDER / TANPA BACKGROUND KERAS) --- */}
+              <div className="relative w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center transition-all duration-500 group-hover:scale-125">
                 
-                {/* Ikon dengan Glow tipis */}
+                {/* 1. Cahaya Aura (Halo) - Sangat Tipis & Menyatu dengan BG */}
+                <div className={`absolute inset-0 rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-700 ${node.col.replace('text', 'bg')}`} />
+                
+                {/* 2. Ring Orbit Micro (Hanya titik-titik samar agar terlihat teknis) */}
+                <div className="absolute inset-[-6px] rounded-full border border-white/[0.03] border-dashed animate-[spin_20s_linear_infinite]" />
+
+                {/* 3. Ikon Vektor Utama (Pusat Perhatian) */}
                 <node.icon 
-                  size={18} 
-                  className={`${node.col} lg:size-6 drop-shadow-[0_0_8px_currentColor] transition-all`} 
+                  size={24} 
+                  className={`${node.col} lg:size-8 drop-shadow-[0_0_15px_currentColor] transition-all duration-500`} 
                 />
 
-                {/* Ring Orbit Putus-putus (Sangat Tipis) */}
-                <div className="absolute inset-[-2px] rounded-full border border-dashed border-white/5 animate-[spin_15s_linear_infinite] opacity-40" />
+                {/* 4. Scanner Line Kecil (Hanya muncul saat hover) */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-white/20 opacity-0 group-hover:opacity-100 group-hover:animate-scanner pointer-events-none" />
               </div>
 
-              {/* --- LABEL TEKS (HUD STYLE) --- */}
-              <div className="mt-2 text-center pointer-events-none">
-                <p className="text-[7px] lg:text-[8px] font-black text-white/30 uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors duration-300">
+              {/* --- LABEL TEKS (MINIMALIS & TRANSPARAN) --- */}
+              <div className="mt-4 text-center pointer-events-none">
+                <p className="text-[8px] lg:text-[10px] font-black text-white/30 uppercase tracking-[0.4em] group-hover:text-white/80 transition-all duration-500">
                   {node.label}
                 </p>
-                {/* Indikator Status Kecil */}
-                <div className="flex items-center justify-center gap-1 mt-0.5 opacity-20">
-                  <div className="w-0.5 h-0.5 rounded-full bg-emerald-500" />
-                  <span className="text-[5px] font-mono text-slate-500 uppercase">ACTIVE</span>
-                </div>
+                {/* Status bar kecil ala HUD */}
+                <div className="w-6 h-[1px] bg-white/10 mx-auto mt-1 group-hover:bg-cyan-500/50 transition-colors" />
               </div>
+
             </motion.div>
           ))}
         </motion.div>
@@ -514,6 +521,8 @@ const CyberHiveMarquee = () => {
     </div>
   );
 };
+
+
 export default function CyberLandingDark() {
   const router = useRouter();
   const [bgIdx, setBgIdx] = useState(0);
