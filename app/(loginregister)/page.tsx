@@ -498,35 +498,45 @@ const TECH_ICONS = [
 
 const CyberHiveMarquee = () => {
   return (
-    // h-[90px] agar lebih tipis, mt-2 untuk merapatkan jarak dengan widget atas
-    <div className="relative w-full h-[90px] lg:h-[130px] overflow-hidden select-none bg-transparent mt-2">
-      {/* Masking Halus (Bayangan Samping) - Dibuat jauh lebih pendek di HP (w-12) */}
-      <div className="absolute inset-y-0 left-0 w-12 lg:w-32 bg-gradient-to-r from-[#020108] to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-12 lg:w-32 bg-gradient-to-l from-[#020108] to-transparent z-10 pointer-events-none" />
+    // h-[100px] agar tetap ramping dan elegan
+    <div className="relative w-full h-[100px] lg:h-[130px] overflow-hidden select-none bg-transparent mt-2">
+      
+      {/* --- MASKING GRADIENT (BAYANGAN SAMPING) --- */}
+      {/* SISI KIRI: w-10 di HP (setengah dari laptop), w-32 di Laptop */}
+      <div className="absolute inset-y-0 left-0 w-10 lg:w-32 bg-gradient-to-r from-[#020108] to-transparent z-10 pointer-events-none" />
+      
+      {/* SISI KANAN: w-10 di HP, w-32 di Laptop */}
+      <div className="absolute inset-y-0 right-0 w-10 lg:w-32 bg-gradient-to-l from-[#020108] to-transparent z-10 pointer-events-none" />
       
       <div className="flex items-center h-full">
         <motion.div 
-          className="flex gap-10 lg:gap-20 px-10"
+          className="flex gap-10 lg:gap-20 px-6"
           animate={{ x: [0, -1800] }}
           transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
         >
           {[...TECH_ICONS, ...TECH_ICONS, ...TECH_ICONS].map((node, i) => (
             <motion.div
               key={i}
-              animate={{ y: [0, Math.sin(i) * 6, 0] }}
+              // Efek melayang bebas (Gaya Bebas)
+              animate={{ y: [0, Math.sin(i) * 8, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="group relative flex-shrink-0 flex flex-col items-center justify-center"
+              className="group relative flex-shrink-0 flex flex-col items-center justify-center bg-transparent"
             >
-              <div className="relative w-8 h-8 lg:w-12 lg:h-12 flex items-center justify-center transition-all duration-500 group-hover:scale-110">
-                <div className={`absolute inset-0 rounded-full blur-xl opacity-5 group-hover:opacity-20 ${node.col.replace('text', 'bg')}`} />
+              {/* Orb Lingkaran Ikon */}
+              <div className="relative w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center transition-all duration-500 group-hover:scale-110">
+                {/* Aura Cahaya Halus */}
+                <div className={`absolute inset-0 rounded-full blur-xl opacity-5 group-hover:opacity-20 transition-opacity ${node.col.replace('text', 'bg')}`} />
+                
+                {/* Ikon Neon */}
                 <node.icon 
-                  size={18} 
-                  className={`${node.col} lg:size-6 drop-shadow-[0_0_8px_currentColor] opacity-70 group-hover:opacity-100 transition-all`} 
+                  size={20} 
+                  className={`${node.col} lg:size-6 drop-shadow-[0_0_10px_currentColor] opacity-60 group-hover:opacity-100 transition-all`} 
                 />
               </div>
 
-              <div className="mt-2 text-center">
-                <p className="text-[6px] lg:text-[8px] font-black text-white/20 uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors">
+              {/* Teks Label di Bawah Ikon */}
+              <div className="mt-2 text-center pointer-events-none">
+                <p className="text-[6px] lg:text-[8px] font-black text-white/30 uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors">
                   {node.label}
                 </p>
               </div>
