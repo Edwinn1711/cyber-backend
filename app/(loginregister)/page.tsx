@@ -463,52 +463,45 @@ const TECH_ICONS = [
 
 const CyberHiveMarquee = () => {
   return (
-    <div className="relative w-full h-[200px] lg:h-[280px] overflow-hidden mt-4 lg:mt-6 select-none">
-      {/* Masking Halus agar tidak terpotong kaku di pinggir */}
-      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+    <div className="relative w-full h-[150px] lg:h-[200px] overflow-hidden mt-2 select-none bg-transparent">
+      {/* Masking Halus Pinggiran */}
+      <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
       
       <div className="flex items-center h-full">
         <motion.div 
-          className="flex gap-12 lg:gap-20 px-10"
+          className="flex gap-8 lg:gap-14 px-10"
           animate={{ x: [0, -1800] }}
-          transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
         >
           {[...TECH_ICONS, ...TECH_ICONS, ...TECH_ICONS].map((node, i) => (
             <motion.div
               key={i}
-              animate={{ 
-                y: [0, Math.sin(i) * 20, 0],
-                rotate: [0, Math.cos(i) * 8, 0]
-              }}
-              transition={{ duration: 6 + (i % 3), repeat: Infinity, ease: "easeInOut" }}
-              className="group relative flex-shrink-0 flex flex-col items-center"
+              animate={{ y: [0, Math.sin(i) * 10, 0] }}
+              transition={{ duration: 5 + (i % 2), repeat: Infinity, ease: "easeInOut" }}
+              className="group relative flex-shrink-0 flex flex-col items-center justify-center bg-transparent"
             >
-              {/* --- LINGKARAN (ORB) UTAMA --- */}
-              <div className="relative w-20 h-20 lg:w-28 lg:h-28 rounded-full border border-white/5 bg-white/5 backdrop-blur-md flex items-center justify-center transition-all duration-500 group-hover:border-cyan-500/50 group-hover:bg-cyan-500/10 shadow-[0_0_20px_rgba(0,0,0,0.3)] group-hover:shadow-[0_0_40px_rgba(34,211,238,0.2)]">
+              {/* --- LINGKARAN (ORB) - UKURAN DIKECILKAN --- */}
+              <div className="relative w-14 h-14 lg:w-16 lg:h-16 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm flex items-center justify-center transition-all duration-500 group-hover:border-cyan-500/40 group-hover:scale-110 shadow-none">
                 
-                {/* Efek Pendaran di belakang ikon */}
-                <div className={`absolute inset-0 rounded-full blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-700 ${node.col.replace('text', 'bg')}`} />
-                
-                {/* Ikon Utama */}
+                {/* Efek Cahaya Ikon */}
                 <node.icon 
-                  size={32} 
-                  className={`${node.col} lg:size-10 drop-shadow-[0_0_12px_currentColor] transition-all duration-500 group-hover:scale-125`} 
+                  size={20} 
+                  className={`${node.col} lg:size-6 drop-shadow-[0_0_8px_currentColor] transition-all`} 
                 />
 
-                {/* Ring Orbit Kecil (Dekorasi Mewah) */}
-                <div className="absolute inset-[-4px] rounded-full border border-dashed border-white/10 animate-[spin_10s_linear_infinite] group-hover:border-cyan-500/40" />
+                {/* Ring Orbit Tipis */}
+                <div className="absolute inset-[-3px] rounded-full border border-dashed border-white/5 animate-[spin_15s_linear_infinite] opacity-50" />
               </div>
 
-              {/* --- LABEL TEKS (TANPA GARIS BAWAH) --- */}
-              <div className="mt-4 text-center">
-                <p className="text-[9px] lg:text-[11px] font-black text-white/60 uppercase tracking-[0.3em] group-hover:text-cyan-400 transition-colors duration-300">
+              {/* --- LABEL TEKS (MELAYANG BEBAS) --- */}
+              <div className="mt-3 text-center pointer-events-none">
+                <p className="text-[7px] lg:text-[9px] font-black text-white/40 uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors">
                   {node.label}
                 </p>
-                {/* Indikator Status titik kecil */}
-                <div className="flex items-center justify-center gap-1.5 mt-1">
-                  <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[6px] lg:text-[8px] font-mono text-slate-600 tracking-widest uppercase">Encrypted</span>
+                <div className="flex items-center justify-center gap-1 mt-0.5 opacity-30">
+                  <div className="w-0.5 h-0.5 rounded-full bg-emerald-500" />
+                  <span className="text-[5px] font-mono text-slate-500 uppercase">SSL</span>
                 </div>
               </div>
             </motion.div>
