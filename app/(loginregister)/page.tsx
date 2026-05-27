@@ -448,78 +448,68 @@ const CyberFooter = () => (
   </footer>
 );
 
-// --- DATA IKON TECH (BERDASARKAN REFERENSI GAMBAR) ---
 const TECH_ICONS = [
-  { id: "c1", icon: CreditCard, label: "CARD_SEC", col: "text-cyan-400" },
-  { id: "c2", icon: ShieldAlert, label: "PHISH_HOOK", col: "text-red-400" },
-  { id: "c3", icon: Cpu, label: "SHIELD_CHIP", col: "text-emerald-400" },
-  { id: "c4", icon: Globe, label: "GLOBE_LCK", col: "text-blue-400" },
-  { id: "c5", icon: Key, label: "KEY_VAULT", col: "text-fuchsia-400" },
+  { id: "c1", icon: CreditCard, label: "CARD SEC", col: "text-cyan-400" },
+  { id: "c2", icon: ShieldAlert, label: "PHISH HOOK", col: "text-red-400" },
+  { id: "c3", icon: Cpu, label: "SHIELD CHIP", col: "text-emerald-400" },
+  { id: "c4", icon: Globe, label: "GLOBE LCK", col: "text-blue-400" },
+  { id: "c5", icon: Key, label: "KEY VAULT", col: "text-fuchsia-400" },
   { id: "c6", icon: Bug, label: "ANTIVIRUS", col: "text-amber-400" },
-  { id: "c7", icon: Terminal, label: "WARN_WIN", col: "text-orange-400" },
-  { id: "c8", icon: Mail, label: "SECURE_MAIL", col: "text-cyan-300" },
-  { id: "c9", icon: Cloud, label: "CLOUD_NET", col: "text-indigo-400" },
-  { id: "c10", icon: FileText, label: "DOC_CRYPT", col: "text-fuchsia-300" },
+  { id: "c7", icon: Terminal, label: "WARN WIN", col: "text-orange-400" },
+  { id: "c8", icon: Mail, label: "SECURE MAIL", col: "text-cyan-300" },
+  { id: "c9", icon: Cloud, label: "CLOUD NET", col: "text-indigo-400" },
+  { id: "c10", icon: FileText, label: "DOC CRYPT", col: "text-fuchsia-300" },
 ];
 
 const CyberHiveMarquee = () => {
   return (
-    <div className="relative w-full h-[180px] lg:h-[250px] overflow-hidden mt-8 lg:mt-12 select-none">
-      {/* Masking Halus (Fade Out Kiri & Kanan) */}
-      <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+    <div className="relative w-full h-[200px] lg:h-[280px] overflow-hidden mt-4 lg:mt-6 select-none">
+      {/* Masking Halus agar tidak terpotong kaku di pinggir */}
+      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
       
       <div className="flex items-center h-full">
         <motion.div 
-          className="flex gap-6 lg:gap-10 px-10"
-          animate={{ x: [0, -1500] }}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          className="flex gap-12 lg:gap-20 px-10"
+          animate={{ x: [0, -1800] }}
+          transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
         >
-          {/* Duplicate data 3x agar animasi loop tidak putus */}
           {[...TECH_ICONS, ...TECH_ICONS, ...TECH_ICONS].map((node, i) => (
             <motion.div
               key={i}
-              // GERAKAN BEBAS (Floating & Rotating)
               animate={{ 
-                y: [0, Math.sin(i) * 12, 0],
-                rotate: [0, Math.cos(i) * 4, 0],
-                scale: [1, 1.03, 1]
+                y: [0, Math.sin(i) * 20, 0],
+                rotate: [0, Math.cos(i) * 8, 0]
               }}
-              transition={{ 
-                duration: 5 + (i % 3), 
-                repeat: Infinity, 
-                ease: "easeInOut" 
-              }}
-              className="group relative flex-shrink-0"
+              transition={{ duration: 6 + (i % 3), repeat: Infinity, ease: "easeInOut" }}
+              className="group relative flex-shrink-0 flex flex-col items-center"
             >
-              {/* Box Hologram Mewah */}
-              <div className="relative w-24 h-28 lg:w-32 lg:h-40 bg-[#0a0c1a]/40 backdrop-blur-md border border-white/5 rounded-2xl flex flex-col items-center justify-center p-4 transition-all duration-500 group-hover:border-cyan-500/50 group-hover:bg-[#0d1126]/80 group-hover:shadow-[0_0_30px_rgba(34,211,238,0.2)]">
+              {/* --- LINGKARAN (ORB) UTAMA --- */}
+              <div className="relative w-20 h-20 lg:w-28 lg:h-28 rounded-full border border-white/5 bg-white/5 backdrop-blur-md flex items-center justify-center transition-all duration-500 group-hover:border-cyan-500/50 group-hover:bg-cyan-500/10 shadow-[0_0_20px_rgba(0,0,0,0.3)] group-hover:shadow-[0_0_40px_rgba(34,211,238,0.2)]">
                 
-                {/* Detail Micro-Tech di Pojok */}
-                <div className="absolute top-2 left-2 flex gap-1 opacity-30">
-                  <div className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
-                </div>
-                <div className="absolute top-2 right-2 font-mono text-[5px] lg:text-[7px] text-slate-600 uppercase tracking-widest">
-                  sys_active
-                </div>
+                {/* Efek Pendaran di belakang ikon */}
+                <div className={`absolute inset-0 rounded-full blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-700 ${node.col.replace('text', 'bg')}`} />
+                
+                {/* Ikon Utama */}
+                <node.icon 
+                  size={32} 
+                  className={`${node.col} lg:size-10 drop-shadow-[0_0_12px_currentColor] transition-all duration-500 group-hover:scale-125`} 
+                />
 
-                {/* Ikon dengan Glow Effect */}
-                <div className={`${node.col} mb-3 lg:mb-5 relative`}>
-                  <node.icon size={28} className="lg:size-9 drop-shadow-[0_0_10px_currentColor] transition-transform duration-500 group-hover:scale-110" />
-                  {/* Efek Aura saat Hover */}
-                  <div className="absolute inset-0 bg-white/10 rounded-full blur-xl scale-0 group-hover:scale-150 transition-transform duration-700" />
-                </div>
+                {/* Ring Orbit Kecil (Dekorasi Mewah) */}
+                <div className="absolute inset-[-4px] rounded-full border border-dashed border-white/10 animate-[spin_10s_linear_infinite] group-hover:border-cyan-500/40" />
+              </div>
 
-                {/* Label Teks */}
-                <div className="text-center">
-                  <p className="text-[7px] lg:text-[9px] font-black text-white/70 uppercase tracking-[0.2em] leading-none mb-1">
-                    {node.label}
-                  </p>
-                  <span className="text-[5px] lg:text-[6px] font-mono text-slate-600 tracking-tighter">ENCRYPT_PASS</span>
+              {/* --- LABEL TEKS (TANPA GARIS BAWAH) --- */}
+              <div className="mt-4 text-center">
+                <p className="text-[9px] lg:text-[11px] font-black text-white/60 uppercase tracking-[0.3em] group-hover:text-cyan-400 transition-colors duration-300">
+                  {node.label}
+                </p>
+                {/* Indikator Status titik kecil */}
+                <div className="flex items-center justify-center gap-1.5 mt-1">
+                  <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[6px] lg:text-[8px] font-mono text-slate-600 tracking-widest uppercase">Encrypted</span>
                 </div>
-
-                {/* Neon Bottom Line */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-cyan-400 transition-all duration-500 group-hover:w-[80%] group-hover:shadow-[0_0_10px_#22d3ee]" />
               </div>
             </motion.div>
           ))}
@@ -806,7 +796,7 @@ export default function CyberLandingDark() {
 
            </div>
         </section>
-        
+
         <SectionDivider />
 
 {/* --- HALAMAN 2: PILAR STRATEGIS (DIBUAT LEBAR) --- */}
