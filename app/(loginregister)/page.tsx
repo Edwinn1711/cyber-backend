@@ -785,23 +785,63 @@ export default function CyberLandingDark() {
       </main>
 
       {/* 4. HUD HOLOGRAPHIC MODALS (PROFIL & LAYANAN) */}
-      <CyberModal isOpen={activeModal === 'PROFIL'} onClose={() => setActiveModal(null)} title="Identity // Profil Sekolah">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 text-left">
-          <div className="space-y-6">
-            <h3 className="text-2xl font-black text-cyan-400 uppercase tracking-wider">Visi Kedaulatan Digital</h3>
-            <p className="text-slate-400 leading-relaxed font-medium">Membangun ekosistem pendidikan yang tangguh siber melalui integrasi teknologi pertahanan siber terkini untuk masa depan belajar yang aman.</p>
-            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl">
-              <h4 className="text-fuchsia-400 font-bold mb-3 uppercase text-xs tracking-[0.3em]">Misi Operasional</h4>
-              <ul className="text-xs text-slate-500 space-y-3 font-mono">
-                <li>[PROTECT] Database warga sekolah secara end-to-end.</li>
-                <li>[MONITOR] Implementasi firewall perbatasan 24/7.</li>
-                <li>[EDUCATE] Literasi kesadaran siber bagi seluruh siswa.</li>
-              </ul>
-            </div>
+      <CyberModal 
+        isOpen={activeModal === 'PROFIL'} 
+        onClose={() => setActiveModal(null)} 
+        title="IDENTITY COMMAND CENTRE"
+      >
+        <div className="space-y-12 text-left">
+          {/* --- HEADER DESKRIPSI PLATFORM --- */}
+          <div className="relative p-8 rounded-[2.5rem] bg-cyan-500/5 border border-cyan-500/10 overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10"><BrainCircuit size={120} /></div>
+            <h3 className="text-2xl lg:text-3xl font-black text-white uppercase tracking-wider mb-4">
+              Visi Kedaulatan <span className="text-cyan-400">Digital</span>
+            </h3>
+            <p className="text-slate-400 text-sm lg:text-base leading-relaxed max-w-3xl relative z-10">
+              Platform ini dirancang secara eksklusif untuk membangun benteng pertahanan siber di lingkungan pendidikan. Mengintegrasikan teknologi pemantauan real-time dan enkripsi tingkat tinggi untuk menjamin kedaulatan data masa depan.
+            </p>
           </div>
-          <div className="rounded-[2.5rem] overflow-hidden border border-cyan-500/20 bg-black/40 relative aspect-video flex items-center justify-center">
-             <BrainCircuit size={100} className="text-cyan-400 opacity-10 absolute" />
-             <img src="/bg/cyber1.jpg" className="w-full h-full object-cover opacity-40 mix-blend-overlay" />
+
+          {/* --- THE ARCHITECT TRIO (3 PENGEMBANG) --- */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-4 mb-8">
+               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+               <span className="text-[10px] font-black tracking-[0.5em] text-fuchsia-500 uppercase">System Architects</span>
+               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { name: "Devin Edwin", role: "Security Engineer", stack: "Backend & Infra", col: "cyan" },
+                { name: "Lead Architect", role: "UI/UX Designer", stack: "Digital Experience", col: "fuchsia" },
+                { name: "Core Developer", role: "Fullstack Dev", stack: "Logic & Encryption", col: "blue" }
+              ].map((member, i) => (
+                <div key={i} className="group relative p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-white/20 transition-all duration-500 overflow-hidden">
+                  {/* Efek Pendaran Belakang */}
+                  <div className={`absolute -top-20 -left-20 w-40 h-40 blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity ${member.col === 'cyan' ? 'bg-cyan-500' : member.col === 'fuchsia' ? 'bg-fuchsia-500' : 'bg-blue-500'}`} />
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                        <User size={20} className={member.col === 'cyan' ? 'text-cyan-400' : member.col === 'fuchsia' ? 'text-fuchsia-400' : 'text-blue-400'} />
+                      </div>
+                      <span className="text-[8px] font-mono text-slate-500 tracking-widest uppercase">ID: 00{i+1}_CORE</span>
+                    </div>
+                    
+                    <h4 className="text-lg font-black text-white uppercase tracking-widest mb-1 group-hover:text-cyan-400 transition-colors">{member.name}</h4>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">{member.role}</p>
+                    
+                    <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                       <span className="text-[8px] font-mono text-slate-600">{member.stack}</span>
+                       <div className="flex gap-1">
+                          <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                          <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse delay-75" />
+                       </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </CyberModal>
