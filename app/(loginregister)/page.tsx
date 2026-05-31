@@ -635,19 +635,22 @@ export default function CyberLandingDark() {
 
   const scrollToSection = (id: string, label: string) => {
     setActiveSection(label);
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 80; 
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
+    if (isMobileMenuOpen) setIsMobileMenuOpen(false);
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
+    // Gunakan setTimeout kecil untuk memastikan state menu mobile sudah tertutup sebelum scroll
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        const offset = 80; // Tinggi header
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 10);
   };
 
   return (
@@ -766,14 +769,10 @@ export default function CyberLandingDark() {
         <SectionDivider />
 
         {/* --- HALAMAN 2: PILAR STRATEGIS (ID: pilar) --- */}
-        <section id="pilar" className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
-           <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-indigo-900/10 via-fuchsia-900/5 to-transparent blur-[120px] pointer-events-none" />
-           <CyberDecoration className="top-10 right-10 opacity-10" />
-           <div className="max-w-[1600px] mx-auto px-6 lg:px-16 relative z-10 w-full text-center">
-             <div className="mb-20 lg:mb-28">
-               <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6">
-                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500">Pilar Strategis</span> Kami
-               </h2>
+        <section id="pilar">
+           <div className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
+             <div className="max-w-[1600px] mx-auto px-6 lg:px-16 relative z-10 w-full text-center">
+               <h2 className="text-3xl lg:text-5xl font-black text-white uppercase mb-16"><span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Pilar Strategis</span> Kami</h2>
                <p className="text-slate-500 max-w-3xl mx-auto text-sm lg:text-base font-medium opacity-80">Membangun fondasi keamanan siber yang kokoh melalui tiga pilar utama infrastruktur dan edukasi.</p>
              </div>
              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
