@@ -533,7 +533,7 @@ export default function CyberLandingDark() {
   const [className, setClassName] = useState('X MIPA 1');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  
+  const [activeSection, setActiveSection] = useState('Beranda');
 
   // 3D Mouse Hover Effect
   const mouseX = useMotionValue(0);
@@ -613,6 +613,22 @@ export default function CyberLandingDark() {
       setTimeout(() => setStatus('idle'), 3000);
     }
   };
+  const scrollToSection = (id: string, label: string) => {
+    setActiveSection(label);
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 100; // Jarak agar tidak tertutup header
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-cyan-500/30 relative">
@@ -635,18 +651,31 @@ export default function CyberLandingDark() {
              </div>
           </div>
 
-          {/* Menu yang tersisa: Beranda, Profil, Layanan */}
+          {/* AREA TENGAH: NAVIGASI (DIPERBAIKI SEJAJAR & BERFUNGSI) */}
           <nav className="hidden lg:flex flex-1 justify-center items-center gap-12 h-full">
              {[ 
-               { icon: Home, label: 'Beranda', active: true }, 
-               { icon: Info, label: 'Profil' }, 
-               { icon: HelpCircle, label: 'Layanan' } 
+               { icon: Home, label: 'Beranda', id: 'hero' }, 
+               { icon: Info, label: 'Profil', id: 'pilar' }, 
+               { icon: HelpCircle, label: 'Layanan', id: 'infra' } 
              ].map((item, idx) => (
-               <div key={idx} className="relative flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black cursor-pointer transition-colors text-slate-500 hover:text-white group h-full">
-                  <item.icon size={15} className="group-hover:text-fuchsia-400" />
-                  {item.label}
-                  {item.active && <div className="absolute bottom-0 w-full h-[2px] bg-fuchsia-500 shadow-[0_0_10px_#d946ef]" />}
-               </div>
+               <button 
+                  key={idx} 
+                  onClick={() => scrollToSection(item.id, item.label)}
+                  className="relative flex flex-col items-center justify-center h-full group outline-none"
+               >
+                  <div className={`flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${activeSection === item.label ? 'text-fuchsia-400' : 'text-slate-500 group-hover:text-white'}`}>
+                    <item.icon size={16} className={activeSection === item.label ? "text-fuchsia-500" : "text-slate-600 group-hover:text-fuchsia-400"} />
+                    {item.label}
+                  </div>
+                  
+                  {/* GARIS BAWAH: Sekarang sejajar sempurna dengan lebar tombol */}
+                  {activeSection === item.label && (
+                    <motion.div 
+                      layoutId="nav-underline"
+                      className="absolute bottom-0 w-full h-[3px] bg-fuchsia-500 rounded-t-full shadow-[0_-2px_10px_#d946ef]" 
+                    />
+                  )}
+               </button>
              ))}
           </nav>
 
