@@ -396,67 +396,86 @@ const CyberClosingSection = () => (
   </section>
 );
 
-// --- SECTION 8: ULTIMATE HUD FOOTER (DATA UPDATED) ---
-const CyberFooterLuxury = () => (
-  <footer className="relative w-full bg-[#020108] pt-20 pb-8 overflow-hidden">
-    <div className="max-w-[1400px] mx-auto px-6 lg:px-16">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20">
+
+const CyberFooterLuxury = ({ onScroll }: { onScroll: (id: string, label: string) => void }) => {
+  // Data Link yang dihubungkan dengan ID Section
+  const quickLinks = [
+    { name: "BERANDA", id: "hero" },
+    { name: "PROFIL", id: "pilar" },
+    { name: "SOP SIBER", id: "protocol" }, // Menuju Section 6 (Protokol)
+    { name: "LAYANAN", id: "infra" }     // Menuju Section 5 (Infrastruktur)
+  ];
+
+  return (
+    <footer className="relative w-full bg-[#020108] pt-20 pb-8 overflow-hidden">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-16">
         
-        {/* Branding Area */}
-        <div className="col-span-2 md:col-span-1 space-y-6">
-          <div className="flex items-center gap-3">
-            <ShieldCheck size={28} className="text-fuchsia-500" />
-            <h3 className="font-black text-white text-xl tracking-tighter uppercase">CYBER<span className="text-fuchsia-500">READINESS</span></h3>
+        {/* Newsletter Section */}
+        <div className="flex flex-col lg:flex-row justify-between items-center pb-16 mb-16 border-b border-white/5 gap-8">
+          <div className="text-left">
+            <h4 className="text-white font-black text-xs tracking-[0.3em] uppercase mb-2">SYSTEM UPDATE SUBSCRIBE</h4>
+            <p className="text-slate-500 text-[10px] font-medium flex items-center gap-2">
+              <Mail size={12} className="text-cyan-400" /> Dapatkan laporan intelijen siber terbaru.
+            </p>
           </div>
-          <p className="text-slate-500 text-xs font-medium leading-relaxed">Sistem Pertahanan Digital Sekolah Terintegrasi. Mengamankan masa depan pendidikan melalui teknologi siber terdepan.</p>
-          <div className="flex items-center gap-2 text-cyan-400 font-mono text-[10px] tracking-widest uppercase">
-            <Activity size={12} /> ALL SYSTEMS OPERATIONAL
+          <div className="relative w-full lg:w-[400px]">
+            <input type="email" placeholder="ENTER EMAIL ADDRESS..." className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-6 pr-16 text-[10px] font-mono text-cyan-400 outline-none" />
+            <button className="absolute right-2 top-2 bottom-2 px-4 bg-cyan-500 text-black rounded-lg"><Send size={14} /></button>
           </div>
         </div>
 
-        {/* Quick Links (Clickable) */}
-        <div className="space-y-6">
-          <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><Globe size={12}/> QUICK LINKS</h5>
-          <ul className="space-y-3">
-            {["BERANDA", "PROFIL", "SOP SIBER", "LAYANAN"].map((link, j) => (
-              <li key={j} className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors tracking-widest uppercase">{link}</li>
-            ))}
-          </ul>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+          <div className="col-span-2 md:col-span-1 space-y-6">
+            <div className="flex items-center gap-3">
+              <ShieldCheck size={28} className="text-fuchsia-500" />
+              <h3 className="font-black text-white text-lg tracking-tighter uppercase">CYBER<span className="text-fuchsia-500">READINESS</span></h3>
+            </div>
+            <p className="text-slate-500 text-[11px] leading-relaxed font-medium">Pusat pertahanan digital sekolah terintegrasi.</p>
+          </div>
+
+          {/* PERBAIKAN: QUICK LINKS BERFUNGSI */}
+          <div className="space-y-6">
+            <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><Globe size={12}/> QUICK LINKS</h5>
+            <ul className="space-y-3">
+              {quickLinks.map((link, j) => (
+                <li 
+                  key={j} 
+                  onClick={() => onScroll(link.id, link.name)}
+                  className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors tracking-widest uppercase"
+                >
+                  {link.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-6">
+            <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><Phone size={12}/> CONTACT US</h5>
+            <ul className="space-y-3">
+              <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer">devinedwinsiahaan171105@gmail.com</li>
+              <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer">08887537736</li>
+            </ul>
+          </div>
+
+          <div className="space-y-6">
+            <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><MapPin size={12}/> LOCATION</h5>
+            <ul className="space-y-3 text-slate-500 text-[10px] font-bold tracking-widest uppercase">
+              <li>INSTITUT TEKNOLOGI DEL</li>
+              <li>LAGUBOTI, INDONESIA</li>
+            </ul>
+          </div>
         </div>
 
-        {/* Contact Us (Updated Data) */}
-        <div className="space-y-6">
-          <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><Phone size={12}/> CONTACT US</h5>
-          <ul className="space-y-3">
-            <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors tracking-widest">devinedwinsiahaan171105@gmail.com</li>
-            <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors tracking-widest">08887537736</li>
-            <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors tracking-widest uppercase">HELP CENTER</li>
-          </ul>
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex gap-6">
+            {[Facebook, Twitter, Youtube, Instagram].map((Icon, i) => (<Icon key={i} size={16} className="text-slate-600 hover:text-cyan-400 cursor-pointer transition-all" />))}
+          </div>
+          <p className="text-slate-700 text-[8px] font-mono tracking-[0.5em] uppercase">© 2026 CYBER READINESS // DEFENDING DIGITAL EDUCATION</p>
         </div>
-
-        {/* Location (Updated Data) */}
-        <div className="space-y-6">
-          <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><MapPin size={12}/> LOCATION</h5>
-          <ul className="space-y-3">
-            <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 transition-colors tracking-widest uppercase">INSTITUT TEKNOLOGI DEL</li>
-            <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 transition-colors tracking-widest uppercase">LAGUBOTI, INDONESIA</li>
-          </ul>
-        </div>
-
       </div>
-
-      {/* Bottom Bar */}
-      <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-        <div className="flex gap-6">
-          {[Facebook, Twitter, Youtube, Instagram].map((Icon, i) => (
-            <Icon key={i} size={16} className="text-slate-600 hover:text-cyan-400 cursor-pointer transition-all" />
-          ))}
-        </div>
-        <p className="text-slate-700 text-[8px] font-mono tracking-[0.5em] uppercase">© 2026 CYBER READINESS // DEFENDING DIGITAL EDUCATION</p>
-      </div>
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};
 const TECH_ICONS = [
   { id: "c1", icon: CreditCard, label: "CARD SEC", col: "text-cyan-400" },
   { id: "c2", icon: ShieldAlert, label: "PHISH HOOK", col: "text-red-400" },
@@ -809,7 +828,7 @@ export default function CyberLandingDark() {
         <CyberClosingSection />
 
         {/* --- HALAMAN 8: FOOTER LUXURY --- */}
-        <CyberFooterLuxury />
+        <CyberFooterLuxury onScroll={scrollToSection} />
 
       </main>
 
