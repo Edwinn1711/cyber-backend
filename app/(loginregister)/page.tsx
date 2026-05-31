@@ -825,8 +825,8 @@ export default function CyberLandingDark() {
         </div>
       </CyberModal>
 
-      {/* --- REVISED ULTRA LUXURY LOGIN MODAL (DEWA VERSION) --- */}
-      <AnimatePresence>
+{/* --- ULTRA-SMOOTH HOLOGRAPHIC PORTAL (DEWA VERSION) --- */}
+<AnimatePresence>
         {isLoginOpen && (
           <motion.div 
             initial={{ opacity: 0 }} 
@@ -835,118 +835,119 @@ export default function CyberLandingDark() {
             className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl"
           >
             <motion.div
-              initial={{ scale: 0.9, y: 30, rotateX: 10 }}
-              animate={{ scale: 1, y: 0, rotateX: 0 }}
+              layout // Kunci untuk animasi perubahan ukuran kontainer yang smooth
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className={`relative w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} bg-[#0a0a0f]/80 border border-white/10 rounded-[3rem] p-10 shadow-[0_0_100px_rgba(217,70,239,0.1)] overflow-hidden`}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="relative w-full max-w-sm bg-[#0a0a0f]/80 border border-white/10 rounded-[3rem] p-10 shadow-[0_0_100px_rgba(217,70,239,0.1)] overflow-hidden"
             >
-              {/* Garis Scanner di bagian atas */}
+              {/* Top Scanner Line */}
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-indigo-500 shadow-[0_0_15px_#d946ef]" />
 
-              {/* Tombol Close */}
               <button 
                 onClick={() => setIsLoginOpen(false)}
-                className="absolute top-6 right-6 p-2 bg-white/5 text-slate-400 rounded-full hover:bg-white/10 hover:text-white transition-all"
+                className="absolute top-6 right-6 p-2 bg-white/5 text-slate-400 rounded-full hover:bg-white/10 hover:text-white transition-all z-50"
               >
                 <X size={18} />
               </button>
 
-              {/* Logo Neon Tengah */}
               <div className="mx-auto w-14 h-14 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(217,70,239,0.2)]">
                 <ShieldCheck className="text-fuchsia-400" size={28} />
               </div>
 
-              {/* Judul Portal */}
               <div className="mb-8 text-center">
                 <h2 className="text-2xl font-black text-white tracking-[0.2em] uppercase">
-                  PORTAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-violet-500">AKSES</span>
+                  PORTAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-violet-500 animate-gradient-x">AKSES</span>
                 </h2>
                 <p className="text-[9px] font-bold text-slate-500 tracking-[0.4em] uppercase mt-1">Otentikasi Identitas Jaringan</p>
               </div>
 
-              {/* TAB SWITCHER MEWAH */}
+              {/* TABS DENGAN ANIMASI GESER HALUS */}
               <div className="flex border-b border-white/5 mb-8 relative">
                 <button 
                   type="button" 
                   onClick={() => { setActiveTab('LOGIN'); setErrorMessage(''); }} 
-                  className={`flex-1 pb-3 text-[10px] font-black tracking-widest transition-colors ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+                  className={`flex-1 pb-3 text-[10px] font-black tracking-widest transition-colors z-10 ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600'}`}
                 >
                   MASUK
                 </button>
                 <button 
                   type="button" 
                   onClick={() => { setActiveTab('REGISTER'); setErrorMessage(''); }} 
-                  className={`flex-1 pb-3 text-[10px] font-black tracking-widest transition-colors ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+                  className={`flex-1 pb-3 text-[10px] font-black tracking-widest transition-colors z-10 ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600'}`}
                 >
                   DAFTAR
                 </button>
-                {/* Indikator geser */}
+                {/* Indikator geser (Shared Layout) */}
                 <motion.div 
+                  layoutId="activeTab"
                   className="absolute bottom-0 h-[2px] w-1/2 bg-fuchsia-500 shadow-[0_0_10px_#d946ef]"
-                  animate={{ x: activeTab === 'LOGIN' ? '0%' : '100%' }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  style={{ left: activeTab === 'LOGIN' ? '0%' : '50%' }}
                 />
               </div>
 
               <form onSubmit={handleAuthenticate} className="space-y-5">
-                {/* Input Nama Pengguna */}
-                <div className="relative group">
-                  <User size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-cyan-400 transition-colors" />
-                  <input 
-                    type="text" 
-                    placeholder="NAMA PENGGUNA" 
-                    value={username} 
-                    onChange={(e) => setUsername(e.target.value)} 
-                    className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-xs text-white outline-none focus:border-cyan-500/50 transition-all placeholder:text-slate-700" 
-                  />
+                {/* Field yang selalu ada (Username & Password) */}
+                <div className="space-y-4">
+                  <div className="relative group">
+                    <User size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-cyan-400 transition-colors" />
+                    <input 
+                      type="text" 
+                      placeholder="NAMA PENGGUNA" 
+                      value={username} 
+                      onChange={(e) => setUsername(e.target.value)} 
+                      className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-xs text-white outline-none focus:border-cyan-500/50 transition-all" 
+                    />
+                  </div>
+                  <div className="relative group">
+                    <Lock size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors" />
+                    <input 
+                      type="password" 
+                      placeholder="KATA SANDI" 
+                      value={password} 
+                      onChange={(e) => setPassword(e.target.value)} 
+                      className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-xs text-white outline-none focus:border-fuchsia-500/50 transition-all" 
+                    />
+                  </div>
                 </div>
 
-                {/* Input Kata Sandi */}
-                <div className="relative group">
-                  <Lock size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors" />
-                  <input 
-                    type="password" 
-                    placeholder="KATA SANDI" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-xs text-white outline-none focus:border-fuchsia-500/50 transition-all placeholder:text-slate-700" 
-                  />
-                </div>
-
-                {/* Form Tambahan untuk Register */}
-                {activeTab === 'REGISTER' && (
-                  <motion.div 
-                    initial={{ height: 0, opacity: 0 }} 
-                    animate={{ height: 'auto', opacity: 1 }} 
-                    className="space-y-4 pt-2"
-                  >
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="relative">
-                        <MapPin size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600" />
-                        <input type="text" placeholder="ASAL" value={asal} onChange={(e) => setAsal(e.target.value)} className="w-full bg-black/40 border border-white/5 rounded-2xl py-3.5 pl-10 pr-4 text-[10px] text-white outline-none focus:border-cyan-500/30" />
+                {/* ANIMASI PEMUNCULAN FIELD REGISTER (SANGAT SMOOTH) */}
+                <AnimatePresence initial={false}>
+                  {activeTab === 'REGISTER' && (
+                    <motion.div 
+                      key="register-fields"
+                      initial={{ height: 0, opacity: 0, y: -10 }} 
+                      animate={{ height: 'auto', opacity: 1, y: 0 }} 
+                      exit={{ height: 0, opacity: 0, y: -10 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      className="overflow-hidden space-y-4"
+                    >
+                      <div className="relative group">
+                        <MapPin size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-cyan-400 transition-colors" />
+                        <input type="text" placeholder="ASAL / KOTA" value={asal} onChange={(e) => setAsal(e.target.value)} className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-[10px] text-white outline-none focus:border-cyan-500/30" />
                       </div>
-                      <div className="relative">
-                        <Calendar size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600" />
-                        <input type="date" value={tanggalLahir} onChange={(e) => setTanggalLahir(e.target.value)} style={{ colorScheme: 'dark' }} className="w-full bg-black/40 border border-white/5 rounded-2xl py-3.5 pl-10 pr-4 text-[10px] text-white outline-none focus:border-cyan-500/30" />
+                      <div className="relative group">
+                        <Calendar size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-cyan-400 transition-colors" />
+                        <input type="date" value={tanggalLahir} onChange={(e) => setTanggalLahir(e.target.value)} style={{ colorScheme: 'dark' }} className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-[10px] text-white outline-none focus:border-cyan-500/30" />
                       </div>
-                    </div>
-                  </motion.div>
-                )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-                {/* Error Message */}
                 {status === 'error' && (
-                  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold">
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold">
                     <AlertTriangle size={14} /> {errorMessage}
                   </motion.div>
                 )}
 
-                {/* Tombol Submit Glow */}
                 <button 
                   type="submit" 
                   disabled={status === 'loading'}
                   className={`w-full py-4 rounded-2xl font-black text-[11px] tracking-[0.3em] uppercase shadow-lg transition-all active:scale-95 flex items-center justify-center gap-3 ${status === 'success' ? 'bg-emerald-500 shadow-emerald-500/20' : 'bg-fuchsia-600 hover:bg-fuchsia-500 shadow-fuchsia-500/20'}`}
                 >
-                   {status === 'loading' ? 'MENYINKRONKAN...' : status === 'success' ? 'AKSES DITERIMA' : 'OTENTIKASI SISTEM'} 
+                   {status === 'loading' ? 'MENYINKRONKAN...' : status === 'success' ? 'BERHASIL' : 'OTENTIKASI SISTEM'} 
                    <Zap size={14} className={status === 'loading' ? 'animate-spin' : ''} />
                 </button>
               </form>
