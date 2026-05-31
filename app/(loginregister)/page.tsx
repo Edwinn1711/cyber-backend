@@ -825,20 +825,129 @@ export default function CyberLandingDark() {
         </div>
       </CyberModal>
 
-      {/* 5. MODAL LOGIN */}
+      {/* --- REVISED ULTRA LUXURY LOGIN MODAL (DEWA VERSION) --- */}
       <AnimatePresence>
         {isLoginOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
-            <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} className={`relative w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} bg-[#0a0a0f]/95 border border-white/10 rounded-[2.5rem] p-10 shadow-2xl overflow-hidden`}>
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500" />
-              <button onClick={() => setIsLoginOpen(false)} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-white transition-all"><X size={16} /></button>
-              <div className="mx-auto w-12 h-12 border border-fuchsia-500/50 rounded-2xl flex items-center justify-center mb-6 shadow-xl"><ShieldCheck className="text-fuchsia-400" size={24} /></div>
-              <div className="mb-8 text-center"><h2 className="text-2xl font-black text-white uppercase mb-1">PORTAL <span className="text-fuchsia-500">AKSES</span></h2><p className="text-[9px] font-bold text-slate-500 tracking-widest">Otentikasi Identitas Jaringan</p></div>
-              <form onSubmit={handleAuthenticate} className="space-y-4 pt-4">
-                <input type="text" placeholder="NAMA PENGGUNA" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-6 text-xs text-white outline-none focus:border-fuchsia-500" />
-                <input type="password" placeholder="KATA SANDI" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-6 text-xs text-white outline-none focus:border-fuchsia-500" />
-                <button type="submit" disabled={status === 'loading'} className={`w-full py-4 rounded-2xl font-black text-xs uppercase shadow-lg transition-all ${status === 'success' ? 'bg-emerald-500' : 'bg-fuchsia-600 hover:bg-fuchsia-500'}`}>
-                   {status === 'loading' ? 'VERIFIKASI...' : status === 'success' ? 'BERHASIL' : 'OTENTIKASI'} <Zap size={14} className="inline ml-2" />
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 30, rotateX: 10 }}
+              animate={{ scale: 1, y: 0, rotateX: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className={`relative w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} bg-[#0a0a0f]/80 border border-white/10 rounded-[3rem] p-10 shadow-[0_0_100px_rgba(217,70,239,0.1)] overflow-hidden`}
+            >
+              {/* Garis Scanner di bagian atas */}
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-indigo-500 shadow-[0_0_15px_#d946ef]" />
+
+              {/* Tombol Close */}
+              <button 
+                onClick={() => setIsLoginOpen(false)}
+                className="absolute top-6 right-6 p-2 bg-white/5 text-slate-400 rounded-full hover:bg-white/10 hover:text-white transition-all"
+              >
+                <X size={18} />
+              </button>
+
+              {/* Logo Neon Tengah */}
+              <div className="mx-auto w-14 h-14 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(217,70,239,0.2)]">
+                <ShieldCheck className="text-fuchsia-400" size={28} />
+              </div>
+
+              {/* Judul Portal */}
+              <div className="mb-8 text-center">
+                <h2 className="text-2xl font-black text-white tracking-[0.2em] uppercase">
+                  PORTAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-violet-500">AKSES</span>
+                </h2>
+                <p className="text-[9px] font-bold text-slate-500 tracking-[0.4em] uppercase mt-1">Otentikasi Identitas Jaringan</p>
+              </div>
+
+              {/* TAB SWITCHER MEWAH */}
+              <div className="flex border-b border-white/5 mb-8 relative">
+                <button 
+                  type="button" 
+                  onClick={() => { setActiveTab('LOGIN'); setErrorMessage(''); }} 
+                  className={`flex-1 pb-3 text-[10px] font-black tracking-widest transition-colors ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+                >
+                  MASUK
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => { setActiveTab('REGISTER'); setErrorMessage(''); }} 
+                  className={`flex-1 pb-3 text-[10px] font-black tracking-widest transition-colors ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600 hover:text-slate-400'}`}
+                >
+                  DAFTAR
+                </button>
+                {/* Indikator geser */}
+                <motion.div 
+                  className="absolute bottom-0 h-[2px] w-1/2 bg-fuchsia-500 shadow-[0_0_10px_#d946ef]"
+                  animate={{ x: activeTab === 'LOGIN' ? '0%' : '100%' }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+              </div>
+
+              <form onSubmit={handleAuthenticate} className="space-y-5">
+                {/* Input Nama Pengguna */}
+                <div className="relative group">
+                  <User size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-cyan-400 transition-colors" />
+                  <input 
+                    type="text" 
+                    placeholder="NAMA PENGGUNA" 
+                    value={username} 
+                    onChange={(e) => setUsername(e.target.value)} 
+                    className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-xs text-white outline-none focus:border-cyan-500/50 transition-all placeholder:text-slate-700" 
+                  />
+                </div>
+
+                {/* Input Kata Sandi */}
+                <div className="relative group">
+                  <Lock size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors" />
+                  <input 
+                    type="password" 
+                    placeholder="KATA SANDI" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-xs text-white outline-none focus:border-fuchsia-500/50 transition-all placeholder:text-slate-700" 
+                  />
+                </div>
+
+                {/* Form Tambahan untuk Register */}
+                {activeTab === 'REGISTER' && (
+                  <motion.div 
+                    initial={{ height: 0, opacity: 0 }} 
+                    animate={{ height: 'auto', opacity: 1 }} 
+                    className="space-y-4 pt-2"
+                  >
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="relative">
+                        <MapPin size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600" />
+                        <input type="text" placeholder="ASAL" value={asal} onChange={(e) => setAsal(e.target.value)} className="w-full bg-black/40 border border-white/5 rounded-2xl py-3.5 pl-10 pr-4 text-[10px] text-white outline-none focus:border-cyan-500/30" />
+                      </div>
+                      <div className="relative">
+                        <Calendar size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600" />
+                        <input type="date" value={tanggalLahir} onChange={(e) => setTanggalLahir(e.target.value)} style={{ colorScheme: 'dark' }} className="w-full bg-black/40 border border-white/5 rounded-2xl py-3.5 pl-10 pr-4 text-[10px] text-white outline-none focus:border-cyan-500/30" />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Error Message */}
+                {status === 'error' && (
+                  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold">
+                    <AlertTriangle size={14} /> {errorMessage}
+                  </motion.div>
+                )}
+
+                {/* Tombol Submit Glow */}
+                <button 
+                  type="submit" 
+                  disabled={status === 'loading'}
+                  className={`w-full py-4 rounded-2xl font-black text-[11px] tracking-[0.3em] uppercase shadow-lg transition-all active:scale-95 flex items-center justify-center gap-3 ${status === 'success' ? 'bg-emerald-500 shadow-emerald-500/20' : 'bg-fuchsia-600 hover:bg-fuchsia-500 shadow-fuchsia-500/20'}`}
+                >
+                   {status === 'loading' ? 'MENYINKRONKAN...' : status === 'success' ? 'AKSES DITERIMA' : 'OTENTIKASI SISTEM'} 
+                   <Zap size={14} className={status === 'loading' ? 'animate-spin' : ''} />
                 </button>
               </form>
             </motion.div>
