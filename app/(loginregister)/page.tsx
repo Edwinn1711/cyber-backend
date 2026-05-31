@@ -535,13 +535,42 @@ const CyberHiveMarquee = () => {
   );
 };
 
+const CyberModal = ({ isOpen, onClose, title, children }: { isOpen: boolean, onClose: () => void, title: string, children: React.ReactNode }) => (
+  <AnimatePresence>
+    {isOpen && (
+      <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 lg:p-10">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-black/90 backdrop-blur-xl" />
+        <motion.div 
+          initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }}
+          className="relative w-full max-w-5xl max-h-[85vh] bg-[#050811]/90 border border-cyan-500/20 rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(34,211,238,0.1)] flex flex-col"
+        >
+          <div className="absolute top-0 left-0 w-full h-1 bg-cyan-400/30 animate-scanner z-50" />
+          <div className="flex justify-between items-center p-8 border-b border-white/5 relative z-10 bg-black/20">
+            <div className="flex items-center gap-4">
+              <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]" />
+              <h2 className="text-2xl lg:text-3xl font-black text-white uppercase tracking-widest">{title}</h2>
+            </div>
+            <button onClick={onClose} className="p-3 bg-white/5 rounded-2xl text-slate-400 hover:text-white transition-all"><X size={24} /></button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-8 lg:p-12 relative z-10 custom-scrollbar">{children}</div>
+          <div className="p-6 border-t border-white/5 text-center bg-black/20">
+            <p className="text-[10px] font-mono text-slate-500 tracking-[0.5em] uppercase">Security Protocol // Access Authorized</p>
+          </div>
+        </motion.div>
+      </div>
+    )}
+  </AnimatePresence>
+);
+
 export default function CyberLandingDark() {
   const router = useRouter();
   const [bgIdx, setBgIdx] = useState(0);
   const [isLoginOpen, setIsLoginOpen] = useState(false); 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
-  
-  // State Form Login
+  const [activeSection, setActiveSection] = useState('Beranda');
+  const [activeModal, setActiveModal] = useState<'PROFIL' | 'LAYANAN' | null>(null); // State Modal Baru
+
+  // State Form & Mouse (Sama seperti sebelumnya)
   const [activeTab, setActiveTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -550,37 +579,28 @@ export default function CyberLandingDark() {
   const [className, setClassName] = useState('X MIPA 1');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  const [activeSection, setActiveSection] = useState('Beranda');
 
-  // 3D Mouse Hover Effect
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [20, -20]), { stiffness: 400, damping: 30 });
   const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-20, 20]), { stiffness: 400, damping: 30 });
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set((e.clientX / window.innerWidth) - 0.5);
-      mouseY.set((e.clientY / window.innerHeight) - 0.5);
-    };
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        mouseX.set((e.touches[0].clientX / window.innerWidth) - 0.5);
-        mouseY.set((e.touches[0].clientY / window.innerHeight) - 0.5);
-      }
-    };
+    const handleMouseMove = (e: MouseEvent) => { mouseX.set((e.clientX / window.innerWidth) - 0.5); mouseY.set((e.clientY / window.innerHeight) - 0.5); };
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("touchmove", handleTouchMove, { passive: true });
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("touchmove", handleTouchMove);
-    };
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
   useEffect(() => {
     const interval = setInterval(() => setBgIdx(p => (p + 1) % CYBER_ASSETS.length), 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const scrollToSection = (id: string, label: string) => {
+    setActiveSection(label);
+    const element = document.getElementById(id);
+    if (element) window.scrollTo({ top: element.offsetTop - 80, behavior: 'smooth' });
+  };
 
   const handleAuthenticate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -631,24 +651,6 @@ export default function CyberLandingDark() {
     }
   };
 
-  const scrollToSection = (id: string, label: string) => {
-    setActiveSection(label);
-    const element = document.getElementById(id);
-    
-    if (isMobileMenuOpen) setIsMobileMenuOpen(false);
-
-    if (element) {
-      const headerOffset = 90; // Jarak agar judul tidak tertutup header
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
-  };
-
   return (
     <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-cyan-500/30 relative">
       
@@ -656,10 +658,11 @@ export default function CyberLandingDark() {
       <PersistentUniverse bgIdx={bgIdx} />
       <UltraGodTierParticleSystem />
 
-      {/* 2. HEADER NAVBAR (NAVIGASI AKTIF & RAMPING) */}
+      {/* 2. HEADER NAVBAR (DENGAN LOGIKA MODAL & SCROLL) */}
       <header className="fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 h-20 lg:h-24 flex items-center justify-between">
           
+          {/* LOGO AREA */}
           <div className="flex items-center gap-3 lg:gap-4 shrink-0 relative z-[110]">
              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(217,70,239,0.3)]">
                 <ShieldCheck size={24} className="text-fuchsia-400" />
@@ -670,26 +673,29 @@ export default function CyberLandingDark() {
              </div>
           </div>
 
+          {/* DESKTOP MENU (KOMBINASI SCROLL & MODAL) */}
           <nav className="hidden lg:flex flex-1 justify-center items-center gap-12 h-full">
-             {[ 
-               { icon: Home, label: 'Beranda', id: 'hero' }, 
-               { icon: Info, label: 'Profil', id: 'pilar' }, 
-               { icon: HelpCircle, label: 'Layanan', id: 'infra' } 
-             ].map((item, idx) => (
-               <button 
-                  key={idx} 
-                  onClick={() => scrollToSection(item.id, item.label)}
-                  className="relative flex flex-col items-center justify-center h-full px-2 group outline-none"
-               >
-                  <div className={`flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${activeSection === item.label ? 'text-fuchsia-400' : 'text-slate-500 group-hover:text-white'}`}>
-                    <item.icon size={16} className={activeSection === item.label ? "text-fuchsia-500" : "text-slate-600 group-hover:text-fuchsia-400"} />
-                    {item.label}
-                  </div>
-                  {activeSection === item.label && (
-                    <motion.div layoutId="nav-underline" className="absolute bottom-0 left-0 right-0 h-[3px] bg-fuchsia-500 rounded-t-full shadow-[0_-2px_10px_#d946ef]" />
-                  )}
-               </button>
-             ))}
+             <button 
+                onClick={() => scrollToSection('hero', 'Beranda')}
+                className={`relative flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black transition-all ${activeSection === 'Beranda' ? 'text-fuchsia-400' : 'text-slate-500 hover:text-white'}`}
+             >
+                <Home size={16} /> Beranda
+                {activeSection === 'Beranda' && <motion.div layoutId="nav-underline" className="absolute -bottom-8 left-0 right-0 h-[3px] bg-fuchsia-500 rounded-t-full shadow-[0_-2px_10px_#d946ef]" />}
+             </button>
+
+             <button 
+                onClick={() => setActiveModal('PROFIL')}
+                className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 hover:text-white transition-all"
+             >
+                <Info size={16} /> Profil
+             </button>
+
+             <button 
+                onClick={() => setActiveModal('LAYANAN')}
+                className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 hover:text-white transition-all"
+             >
+                <HelpCircle size={16} /> Layanan
+             </button>
           </nav>
 
           <div className="flex items-center gap-4 relative z-[110]">
@@ -702,153 +708,135 @@ export default function CyberLandingDark() {
           </div>
         </div>
 
+        {/* MOBILE MENU */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="absolute top-full left-0 w-full bg-[#05050a]/98 backdrop-blur-2xl border-b border-white/10 py-10 px-6 lg:hidden flex flex-col gap-6 shadow-2xl">
-               {[ { icon: Home, label: 'Beranda', id: 'hero' }, { icon: Info, label: 'Profil', id: 'pilar' }, { icon: HelpCircle, label: 'Layanan', id: 'infra' } ].map((item, idx) => (
-                 <div key={idx} onClick={() => { scrollToSection(item.id, item.label); setIsMobileMenuOpen(false); }} className="flex items-center gap-5 p-5 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold tracking-widest text-xs uppercase hover:text-fuchsia-400 transition-all">
-                   <item.icon size={20} /> {item.label}
-                 </div>
-               ))}
+               <div onClick={() => { scrollToSection('hero', 'Beranda'); setIsMobileMenuOpen(false); }} className="flex items-center gap-5 p-5 rounded-2xl bg-white/5 text-slate-300 font-bold text-xs uppercase hover:text-fuchsia-400 transition-all"><Home size={20} /> Beranda</div>
+               <div onClick={() => { setActiveModal('PROFIL'); setIsMobileMenuOpen(false); }} className="flex items-center gap-5 p-5 rounded-2xl bg-white/5 text-slate-300 font-bold text-xs uppercase hover:text-fuchsia-400 transition-all"><Info size={20} /> Profil</div>
+               <div onClick={() => { setActiveModal('LAYANAN'); setIsMobileMenuOpen(false); }} className="flex items-center gap-5 p-5 rounded-2xl bg-white/5 text-slate-300 font-bold text-xs uppercase hover:text-fuchsia-400 transition-all"><HelpCircle size={20} /> Layanan</div>
             </motion.div>
           )}
         </AnimatePresence>
       </header>
 
-      {/* 3. KONTEN UTAMA DENGAN ID NAVIGASI */}
+      {/* 3. KONTEN UTAMA */}
       <main className="relative z-10 w-full pt-24 lg:pt-44">
         
-        {/* --- HALAMAN 1: HERO (ID: hero) --- */}
+        {/* --- HALAMAN 1: HERO --- */}
         <section id="hero" className="relative min-h-[90vh] lg:min-h-[calc(100vh-120px)] flex items-center justify-center w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-12 lg:py-0">
-           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-10 lg:gap-24 items-center w-full">
-              
-              {/* Bagian Widget (Atas di HP) */}
-              <div className="relative w-full flex flex-col items-center justify-center order-1 lg:order-2 lg:pt-0 gap-1 lg:gap-6">
-                 <div className="relative" style={{ perspective: 2000 }}>
-                    <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} className="relative w-[240px] h-[300px] sm:w-[280px] sm:h-[350px] lg:w-[350px] lg:h-[440px] bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl rounded-[2.5rem] lg:rounded-[3.5rem] p-1 shadow-2xl border border-white/10 flex flex-col items-center justify-center group/card">
-                       <div className="relative flex items-center justify-center mb-6 lg:mb-8" style={{ transform: "translateZ(60px)" }}>
-                          <div className="absolute w-32 h-32 lg:w-44 lg:h-44 border border-cyan-500/20 rounded-full animate-[spin_20s_linear_infinite]" />
-                          <div className="w-16 h-16 lg:w-24 lg:h-24 bg-black border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.2)]">
-                             <ShieldCheck size={36} className="lg:size-12 text-cyan-400 drop-shadow-[0_0_8px_#22d3ee]" />
-                          </div>
-                       </div>
-                       <div className="text-center" style={{ transform: "translateZ(40px)" }}>
-                          <h3 className="text-lg lg:text-xl font-black text-white tracking-[0.1em] uppercase">Security <span className="text-cyan-400">System</span></h3>
-                       </div>
-                       <div className="absolute -bottom-4 lg:-bottom-6 px-8 py-3 bg-black border border-white/5 text-white rounded-xl text-[7px] lg:text-[9px] font-black tracking-[0.4em]" style={{ transform: "translateZ(70px)" }}>ENCRYPTED 2026</div>
-                    </motion.div>
-                 </div>
-                 <div className="w-full max-w-[100vw]"><CyberHiveMarquee /></div>
+          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-10 lg:gap-24 items-center w-full">
+            
+            {/* Widget Area (Atas di HP) */}
+            <div className="relative w-full flex flex-col items-center justify-center order-1 lg:order-2 lg:pt-0 gap-1 lg:gap-6">
+              <div className="relative" style={{ perspective: 2000 }}>
+                <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} className="relative w-[240px] h-[300px] sm:w-[280px] sm:h-[350px] lg:w-[350px] lg:h-[440px] bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl rounded-[2.5rem] lg:rounded-[3.5rem] p-1 shadow-2xl border border-white/10 flex flex-col items-center justify-center group/card">
+                  <div className="relative flex items-center justify-center mb-6 lg:mb-8" style={{ transform: "translateZ(60px)" }}>
+                    <div className="absolute w-32 h-32 lg:w-44 lg:h-44 border border-cyan-500/20 rounded-full animate-[spin_20s_linear_infinite]" />
+                    <div className="w-16 h-16 lg:w-24 lg:h-24 bg-black border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-xl">
+                      <ShieldCheck size={36} className="text-cyan-400 drop-shadow-[0_0_8px_#22d3ee]" />
+                    </div>
+                  </div>
+                  <div className="text-center" style={{ transform: "translateZ(40px)" }}>
+                    <h3 className="text-lg lg:text-xl font-black text-white uppercase tracking-[0.1em]">Security <span className="text-cyan-400">System</span></h3>
+                    <p className="text-[8px] lg:text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] mt-1">Cyber Security Active</p>
+                  </div>
+                  <div className="absolute -bottom-4 lg:-bottom-6 px-8 py-3 bg-black border border-white/5 text-white rounded-xl text-[7px] lg:text-[9px] font-black tracking-[0.4em]" style={{ transform: "translateZ(70px)" }}>ENCRYPTED 2026</div>
+                </motion.div>
               </div>
+              <div className="w-full max-w-[100vw]"><CyberHiveMarquee /></div>
+            </div>
 
-              {/* Bagian Teks (Bawah di HP) */}
-              <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 lg:space-y-10 w-full order-2 lg:order-1 pt-2 lg:pt-0">
-                 <div className="inline-flex items-center gap-3 px-4 py-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-full text-[9px] lg:text-[10px] font-black tracking-[0.4em] uppercase backdrop-blur-md">
-                   <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]"/> SECURE PROTOCOL ACTIVE
-                 </div>
-                 <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black text-white tracking-tighter leading-[1.1] uppercase">Kesiapan Siber <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-fuchsia-500 to-cyan-400 animate-gradient-x">Sekolah 2026.</span></h2>
-                 <p className="text-sm lg:text-lg font-medium text-slate-400 leading-relaxed max-w-xl opacity-80">Platform kesiapan digital sekolah yang mengintegrasikan keamanan tingkat tinggi dengan infrastruktur modern.</p>
-                 <div className="w-full flex justify-center lg:justify-start">
-                   <button onClick={() => setIsLoginOpen(true)} className="group relative w-full sm:w-auto px-10 py-5 bg-white text-black rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all hover:bg-cyan-400 hover:text-white shadow-xl flex items-center justify-center gap-3">
-                      Mulai Evaluasi <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform"/>
-                   </button>
-                 </div>
-                 <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-5 opacity-40">
-                    {[ Shield, Server, Network, Fingerprint ].map((Icon, i) => (
-                      <div key={i} className="w-10 h-10 rounded-xl border border-white/5 bg-white/5 flex items-center justify-center text-slate-400"><Icon size={18} /></div>
-                    ))}
-                 </div>
+            {/* Teks Area (Bawah di HP) */}
+            <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 lg:space-y-10 w-full order-2 lg:order-1 pt-2 lg:pt-0">
+              <div className="inline-flex items-center gap-3 px-4 py-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-full text-[9px] lg:text-[10px] font-black tracking-[0.4em] uppercase backdrop-blur-md">
+                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]"/> SECURE PROTOCOL ACTIVE
               </div>
-           </div>
+              <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black text-white tracking-tighter leading-[1.1] uppercase">Kesiapan Siber <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-fuchsia-500 to-cyan-400 animate-gradient-x">Sekolah 2026.</span></h2>
+              <p className="text-sm lg:text-lg font-medium text-slate-400 leading-relaxed max-w-xl opacity-80">Platform kesiapan digital sekolah yang mengintegrasikan keamanan tingkat tinggi dengan infrastruktur modern.</p>
+              <div className="w-full flex justify-center lg:justify-start">
+                <button onClick={() => setIsLoginOpen(true)} className="group relative w-full sm:w-auto px-10 py-5 bg-white text-black rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all hover:bg-cyan-400 hover:text-white shadow-xl flex items-center justify-center gap-3">
+                  Mulai Evaluasi <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform"/>
+                </button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <SectionDivider />
 
-{/* --- HALAMAN 2: PILAR STRATEGIS (ID: pilar - TUJUAN MENU PROFIL) --- */}
-<section id="pilar" className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
-           <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-indigo-900/10 via-fuchsia-900/5 to-transparent blur-[120px] pointer-events-none" />
-           <div className="max-w-[1600px] mx-auto px-6 lg:px-16 relative z-10 w-full text-center">
-             <div className="mb-20 lg:mb-28">
-               <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6">
-                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Pilar Strategis</span> Kami
-               </h2>
-               <p className="text-slate-500 max-w-3xl mx-auto text-sm lg:text-base font-medium opacity-80">Membangun fondasi keamanan siber yang kokoh melalui tiga pilar utama.</p>
-             </div>
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-               {[
-                 { t: "Infrastruktur", i: Server, c: "text-cyan-400", d: "Membangun arsitektur jaringan sekolah yang terpusat dan tahan serangan." },
-                 { t: "Keamanan", i: ShieldAlert, c: "text-fuchsia-400", d: "Menerapkan protokol enkripsi pemantauan real-time." },
-                 { t: "Literasi", i: BrainCircuit, c: "text-emerald-400", d: "Meningkatkan kesadaran keamanan data pribadi." }
-               ].map((item, i) => (
-                 <div key={i} className="group relative bg-[#08070d]/80 border border-white/5 p-12 lg:p-16 rounded-[3rem] hover:border-white/20 transition-all duration-700 hover:-translate-y-2 shadow-2xl">
-                   <div className="w-16 h-16 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 mx-auto shadow-xl"><item.i size={32} className={`${item.c}`} /></div>
-                   <h3 className="text-xl lg:text-2xl font-black text-white mb-4 uppercase">{item.t}</h3>
-                   <p className="text-sm text-slate-400 leading-relaxed">{item.d}</p>
-                 </div>
-               ))}
-             </div>
-           </div>
-        </section>
-
-        <SectionDivider />
-
-        {/* --- HALAMAN 3: VISI MISI --- */}
+        {/* --- HALAMAN LAINNYA --- */}
         <VisiMisiSection bgIdx={bgIdx} />
-
         <SectionDivider />
-
-        {/* --- HALAMAN 4: METRIK STATISTIK --- */}
         <SecurityStatsSection />
-
         <SectionDivider />
-
-        {/* --- HALAMAN 5: INFRASTRUKTUR (ID: infra) --- */}
-        <section id="infra">
-           <CyberInfrastructureSection />
-        </section>
-
+        <CyberInfrastructureSection />
         <SectionDivider />
-
-        {/* --- HALAMAN 6: PROTOKOL KESIAPAN --- */}
-        <section id="protocol">
-           <ReadinessProtocolSection />
-        </section>
-
+        <ReadinessProtocolSection />
         <SectionDivider />
-
-        {/* --- HALAMAN 7: CLOSING FINALE --- */}
         <CyberClosingSection />
 
-        {/* --- HALAMAN 8: FOOTER LUXURY (DATA KONTAK UPDATED) --- */}
-        <CyberFooterLuxury onScroll={scrollToSection} />
-
+        {/* FOOTER (DENGAN LOGIKA MODAL) */}
+        <CyberFooterLuxury onScroll={(id, label) => {
+           if (label === 'PROFIL') setActiveModal('PROFIL');
+           else if (label === 'LAYANAN') setActiveModal('LAYANAN');
+           else scrollToSection(id, label);
+        }} />
       </main>
 
-      {/* 4. MODAL LOGIN (OTENTIKASI LENGKAP) */}
+      {/* 4. HUD HOLOGRAPHIC MODALS (PROFIL & LAYANAN) */}
+      <CyberModal isOpen={activeModal === 'PROFIL'} onClose={() => setActiveModal(null)} title="Identity // Profil Sekolah">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 text-left">
+          <div className="space-y-6">
+            <h3 className="text-2xl font-black text-cyan-400 uppercase tracking-wider">Visi Kedaulatan Digital</h3>
+            <p className="text-slate-400 leading-relaxed font-medium">Membangun ekosistem pendidikan yang tangguh siber melalui integrasi teknologi pertahanan siber terkini untuk masa depan belajar yang aman.</p>
+            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl">
+              <h4 className="text-fuchsia-400 font-bold mb-3 uppercase text-xs tracking-[0.3em]">Misi Operasional</h4>
+              <ul className="text-xs text-slate-500 space-y-3 font-mono">
+                <li>[PROTECT] Database warga sekolah secara end-to-end.</li>
+                <li>[MONITOR] Implementasi firewall perbatasan 24/7.</li>
+                <li>[EDUCATE] Literasi kesadaran siber bagi seluruh siswa.</li>
+              </ul>
+            </div>
+          </div>
+          <div className="rounded-[2.5rem] overflow-hidden border border-cyan-500/20 bg-black/40 relative aspect-video flex items-center justify-center">
+             <BrainCircuit size={100} className="text-cyan-400 opacity-10 absolute" />
+             <img src="/bg/cyber1.jpg" className="w-full h-full object-cover opacity-40 mix-blend-overlay" />
+          </div>
+        </div>
+      </CyberModal>
+
+      <CyberModal isOpen={activeModal === 'LAYANAN'} onClose={() => setActiveModal(null)} title="Services // Protokol Layanan">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+          {[
+            { t: "Traffic Filter", i: ShieldAlert, d: "Monitoring masuk-keluar data jaringan" },
+            { t: "IDS / IPS", i: Activity, d: "Deteksi intrusi siber otomatis" },
+            { t: "Data Backup", i: Cpu, d: "Redundansi data mingguan terenkripsi" },
+            { t: "Encryption", i: Lock, d: "Sistem keamanan AES-256 Bit" },
+            { t: "Auth 2FA", i: Fingerprint, d: "Identitas digital ganda yang aman" },
+            { t: "Audit System", i: ScanLine, d: "Laporan bulanan kesehatan sistem" }
+          ].map((item, i) => (
+            <div key={i} className="p-6 bg-white/[0.03] border border-white/5 rounded-3xl hover:border-cyan-400/40 transition-all group">
+              <item.i className="text-cyan-400 mb-4 group-hover:scale-110 transition-transform" size={24} />
+              <h4 className="text-white font-black text-xs uppercase mb-2 tracking-widest">{item.t}</h4>
+              <p className="text-[10px] text-slate-500 leading-relaxed">{item.d}</p>
+            </div>
+          ))}
+        </div>
+      </CyberModal>
+
+      {/* 5. MODAL LOGIN */}
       <AnimatePresence>
         {isLoginOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
             <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} className={`relative w-full ${activeTab === 'REGISTER' ? 'max-w-[450px]' : 'max-w-sm'} bg-[#0a0a0f]/95 border border-white/10 rounded-[2.5rem] p-10 shadow-2xl overflow-hidden`}>
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500" />
               <button onClick={() => setIsLoginOpen(false)} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-white transition-all"><X size={16} /></button>
               <div className="mx-auto w-12 h-12 border border-fuchsia-500/50 rounded-2xl flex items-center justify-center mb-6 shadow-xl"><ShieldCheck className="text-fuchsia-400" size={24} /></div>
               <div className="mb-8 text-center"><h2 className="text-2xl font-black text-white uppercase mb-1">PORTAL <span className="text-fuchsia-500">AKSES</span></h2><p className="text-[9px] font-bold text-slate-500 tracking-widest">Otentikasi Identitas Jaringan</p></div>
-              <div className="flex border-b border-white/10 mb-8 relative">
-                <button type="button" onClick={() => setActiveTab('LOGIN')} className={`flex-1 pb-3 text-[10px] font-black tracking-widest ${activeTab === 'LOGIN' ? 'text-fuchsia-400' : 'text-slate-600'}`}>MASUK</button>
-                <button type="button" onClick={() => setActiveTab('REGISTER')} className={`flex-1 pb-3 text-[10px] font-black tracking-widest ${activeTab === 'REGISTER' ? 'text-fuchsia-400' : 'text-slate-600'}`}>DAFTAR</button>
-                <div className={`absolute bottom-0 h-[2px] w-1/2 bg-fuchsia-500 transition-transform duration-300 ${activeTab === 'LOGIN' ? 'translate-x-0' : 'translate-x-full'}`} />
-              </div>
-              <form onSubmit={handleAuthenticate} className="space-y-4">
-                <div className="relative"><User size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500" /><input type="text" placeholder="NAMA PENGGUNA" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-xs text-white outline-none focus:border-fuchsia-500" /></div>
-                <div className="relative"><Lock size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500" /><input type="password" placeholder="KATA SANDI" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-xs text-white outline-none focus:border-fuchsia-500" /></div>
-                {activeTab === 'REGISTER' && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} className="space-y-4 pt-2">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="relative"><MapPin size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" /><input type="text" placeholder="ASAL" value={asal} onChange={(e) => setAsal(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-10 pr-4 text-[10px] text-white outline-none focus:border-fuchsia-500" /></div>
-                      <div className="relative"><Calendar size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" /><input type="date" value={tanggalLahir} onChange={(e) => setTanggalLahir(e.target.value)} style={{ colorScheme: 'dark' }} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-10 pr-4 text-[10px] text-white outline-none focus:border-fuchsia-500" /></div>
-                    </div>
-                  </motion.div>
-                )}
+              <form onSubmit={handleAuthenticate} className="space-y-4 pt-4">
+                <input type="text" placeholder="NAMA PENGGUNA" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-6 text-xs text-white outline-none focus:border-fuchsia-500" />
+                <input type="password" placeholder="KATA SANDI" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-6 text-xs text-white outline-none focus:border-fuchsia-500" />
                 <button type="submit" disabled={status === 'loading'} className={`w-full py-4 rounded-2xl font-black text-xs uppercase shadow-lg transition-all ${status === 'success' ? 'bg-emerald-500' : 'bg-fuchsia-600 hover:bg-fuchsia-500'}`}>
                    {status === 'loading' ? 'VERIFIKASI...' : status === 'success' ? 'BERHASIL' : 'OTENTIKASI'} <Zap size={14} className="inline ml-2" />
                 </button>
@@ -871,3 +859,4 @@ export default function CyberLandingDark() {
 
     </div>
   );
+  
