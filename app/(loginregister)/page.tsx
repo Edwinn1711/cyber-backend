@@ -396,49 +396,67 @@ const CyberClosingSection = () => (
   </section>
 );
 
-// --- SECTION 8: ULTIMATE HUD FOOTER (TIPIS & MEWAH) ---
+// --- SECTION 8: ULTIMATE HUD FOOTER (DATA UPDATED) ---
 const CyberFooterLuxury = () => (
   <footer className="relative w-full bg-[#020108] pt-20 pb-8 overflow-hidden">
     <div className="max-w-[1400px] mx-auto px-6 lg:px-16">
-      <div className="flex flex-col lg:flex-row justify-between items-center pb-16 mb-16 border-b border-white/5 gap-8">
-        <div className="text-left">
-          <h4 className="text-white font-black text-xs tracking-[0.3em] uppercase mb-2">SYSTEM UPDATE SUBSCRIBE</h4>
-          <p className="text-slate-500 text-[10px] font-medium flex items-center gap-2"><Mail size={12} className="text-cyan-400" /> Dapatkan laporan intelijen siber terbaru langsung ke email Anda.</p>
-        </div>
-        <div className="relative w-full lg:w-[400px]">
-          <input type="email" placeholder="ENTER EMAIL ADDRESS..." className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-6 pr-16 text-[10px] font-mono text-cyan-400 outline-none" />
-          <button className="absolute right-2 top-2 bottom-2 px-4 bg-cyan-500 text-black rounded-lg transition-all"><Send size={14} /></button>
-        </div>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20">
+        
+        {/* Branding Area */}
         <div className="col-span-2 md:col-span-1 space-y-6">
           <div className="flex items-center gap-3">
-            <ShieldCheck size={24} className="text-fuchsia-500" />
-            <h3 className="font-black text-white text-lg tracking-tighter uppercase">CYBER<span className="text-fuchsia-500">READINESS</span></h3>
+            <ShieldCheck size={28} className="text-fuchsia-500" />
+            <h3 className="font-black text-white text-xl tracking-tighter uppercase">CYBER<span className="text-fuchsia-500">READINESS</span></h3>
           </div>
-          <p className="text-slate-500 text-[11px] leading-relaxed font-medium">Pusat komando pertahanan digital sekolah terintegrasi.</p>
+          <p className="text-slate-500 text-xs font-medium leading-relaxed">Sistem Pertahanan Digital Sekolah Terintegrasi. Mengamankan masa depan pendidikan melalui teknologi siber terdepan.</p>
+          <div className="flex items-center gap-2 text-cyan-400 font-mono text-[10px] tracking-widest uppercase">
+            <Activity size={12} /> ALL SYSTEMS OPERATIONAL
+          </div>
         </div>
-        {[
-          { t: "QUICK LINKS", l: ["BERANDA", "PROFIL", "SOP SIBER"], i: Globe },
-          { t: "CONTACT US", l: ["support@cyber.edu", "HELP CENTER"], i: Phone },
-          { t: "LOCATION", l: ["TECH DISTRICT ST 26", "JAKARTA INDONESIA"], i: MapPin }
-        ].map((item, i) => (
-          <div key={i} className="space-y-6">
-            <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><item.i size={12}/> {item.t}</h5>
-            <ul className="space-y-3">
-              {item.l.map((link, j) => (<li key={j} className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 transition-colors tracking-widest cursor-pointer uppercase">{link}</li>))}
-            </ul>
-          </div>
-        ))}
+
+        {/* Quick Links (Clickable) */}
+        <div className="space-y-6">
+          <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><Globe size={12}/> QUICK LINKS</h5>
+          <ul className="space-y-3">
+            {["BERANDA", "PROFIL", "SOP SIBER", "LAYANAN"].map((link, j) => (
+              <li key={j} className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors tracking-widest uppercase">{link}</li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Contact Us (Updated Data) */}
+        <div className="space-y-6">
+          <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><Phone size={12}/> CONTACT US</h5>
+          <ul className="space-y-3">
+            <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors tracking-widest">devinedwinsiahaan171105@gmail.com</li>
+            <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors tracking-widest">08887537736</li>
+            <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors tracking-widest uppercase">HELP CENTER</li>
+          </ul>
+        </div>
+
+        {/* Location (Updated Data) */}
+        <div className="space-y-6">
+          <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><MapPin size={12}/> LOCATION</h5>
+          <ul className="space-y-3">
+            <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 transition-colors tracking-widest uppercase">INSTITUT TEKNOLOGI DEL</li>
+            <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 transition-colors tracking-widest uppercase">LAGUBOTI, INDONESIA</li>
+          </ul>
+        </div>
+
       </div>
-      <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="flex gap-6">{[Facebook, Twitter, Youtube, Instagram].map((Icon, i) => (<Icon key={i} size={16} className="text-slate-600 hover:text-cyan-400 cursor-pointer transition-all" />))}</div>
-        <p className="text-slate-700 text-[8px] font-mono tracking-[0.5em] uppercase">© 2026 CYBER READINESS // ALL SYSTEMS OPERATIONAL</p>
+
+      {/* Bottom Bar */}
+      <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="flex gap-6">
+          {[Facebook, Twitter, Youtube, Instagram].map((Icon, i) => (
+            <Icon key={i} size={16} className="text-slate-600 hover:text-cyan-400 cursor-pointer transition-all" />
+          ))}
+        </div>
+        <p className="text-slate-700 text-[8px] font-mono tracking-[0.5em] uppercase">© 2026 CYBER READINESS // DEFENDING DIGITAL EDUCATION</p>
       </div>
     </div>
   </footer>
 );
-
 const TECH_ICONS = [
   { id: "c1", icon: CreditCard, label: "CARD SEC", col: "text-cyan-400" },
   { id: "c2", icon: ShieldAlert, label: "PHISH HOOK", col: "text-red-400" },
@@ -603,8 +621,8 @@ export default function CyberLandingDark() {
       <PersistentUniverse bgIdx={bgIdx} />
       <UltraGodTierParticleSystem />
 
-      {/* 2. HEADER NAVBAR (RESPONSIF) */}
-      <header className="fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
+{/* 2. HEADER NAVBAR (VERSI RAMPING) */}
+<header className="fixed top-0 left-0 right-0 z-[100] w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl shadow-md">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 h-20 lg:h-24 flex items-center justify-between">
           
           <div className="flex items-center gap-3 lg:gap-4 shrink-0 relative z-[110]">
@@ -617,13 +635,11 @@ export default function CyberLandingDark() {
              </div>
           </div>
 
-          <nav className="hidden lg:flex flex-1 justify-center items-center gap-8 xl:gap-12 h-full">
+          {/* Menu yang tersisa: Beranda, Profil, Layanan */}
+          <nav className="hidden lg:flex flex-1 justify-center items-center gap-12 h-full">
              {[ 
                { icon: Home, label: 'Beranda', active: true }, 
                { icon: Info, label: 'Profil' }, 
-               { icon: LayoutGrid, label: 'Organisasi' }, 
-               { icon: FileText, label: 'Berita' }, 
-               { icon: Megaphone, label: 'Pengumuman' }, 
                { icon: HelpCircle, label: 'Layanan' } 
              ].map((item, idx) => (
                <div key={idx} className="relative flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black cursor-pointer transition-colors text-slate-500 hover:text-white group h-full">
@@ -638,16 +654,22 @@ export default function CyberLandingDark() {
             <button onClick={() => setIsLoginOpen(true)} className="flex items-center gap-2 px-5 py-2.5 lg:px-8 lg:py-3.5 bg-fuchsia-600 text-white rounded-full font-black text-[10px] lg:text-[11px] tracking-[0.2em] uppercase hover:bg-fuchsia-500 transition-all shadow-lg">
                <User size={16} /> <span className="hidden sm:inline">LOGIN</span>
             </button>
+            {/* Hamburger untuk HP */}
             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden p-2.5 bg-white/5 border border-white/10 rounded-xl text-white">
               {isMobileMenuOpen ? <X size={24} /> : <LayoutGrid size={24} />}
             </button>
           </div>
         </div>
 
+        {/* Menu Mobile juga disesuaikan */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="absolute top-full left-0 w-full bg-[#05050a]/95 backdrop-blur-2xl border-b border-white/10 py-8 px-6 lg:hidden flex flex-col gap-6 shadow-2xl">
-               {[ { icon: Home, label: 'Beranda' }, { icon: Info, label: 'Profil' }, { icon: LayoutGrid, label: 'Organisasi' }, { icon: FileText, label: 'Berita' }, { icon: Megaphone, label: 'Pengumuman' }, { icon: HelpCircle, label: 'Layanan' } ].map((item, idx) => (
+               {[ 
+                 { icon: Home, label: 'Beranda' }, 
+                 { icon: Info, label: 'Profil' }, 
+                 { icon: HelpCircle, label: 'Layanan' } 
+               ].map((item, idx) => (
                  <div key={idx} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 text-slate-300 font-bold tracking-widest text-xs uppercase hover:text-fuchsia-400 transition-all">
                    <item.icon size={18} /> {item.label}
                  </div>
