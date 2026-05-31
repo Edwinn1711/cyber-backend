@@ -579,6 +579,7 @@ export default function CyberLandingDark() {
   const [className, setClassName] = useState('X MIPA 1');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [inspectedArchitect, setInspectedArchitect] = useState<string | null>(null);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -787,61 +788,110 @@ export default function CyberLandingDark() {
       {/* 4. HUD HOLOGRAPHIC MODALS (PROFIL & LAYANAN) */}
       <CyberModal 
         isOpen={activeModal === 'PROFIL'} 
-        onClose={() => setActiveModal(null)} 
+        onClose={() => { setActiveModal(null); setInspectedArchitect(null); }} 
         title="IDENTITY COMMAND CENTRE"
       >
-        <div className="space-y-12 text-left">
-          {/* --- HEADER DESKRIPSI PLATFORM --- */}
-          <div className="relative p-8 rounded-[2.5rem] bg-cyan-500/5 border border-cyan-500/10 overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-10"><BrainCircuit size={120} /></div>
-            <h3 className="text-2xl lg:text-3xl font-black text-white uppercase tracking-wider mb-4">
-              Visi Kedaulatan <span className="text-cyan-400">Digital</span>
-            </h3>
-            <p className="text-slate-400 text-sm lg:text-base leading-relaxed max-w-3xl relative z-10">
-              Platform ini dirancang secara eksklusif untuk membangun benteng pertahanan siber di lingkungan pendidikan. Mengintegrasikan teknologi pemantauan real-time dan enkripsi tingkat tinggi untuk menjamin kedaulatan data masa depan.
-            </p>
+        <div className="space-y-12">
+          {/* --- PLATFORM VISION HUD --- */}
+          <div className="relative p-10 rounded-[3rem] bg-gradient-to-br from-cyan-500/10 to-transparent border border-white/10 overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-20 transition-opacity duration-1000 rotate-12">
+              <BrainCircuit size={180} />
+            </div>
+            <div className="relative z-10 text-left">
+               <div className="flex items-center gap-3 mb-6">
+                  <div className="w-1.5 h-6 bg-cyan-400 rounded-full" />
+                  <h3 className="text-3xl font-black text-white uppercase tracking-tighter">Visi Kedaulatan <span className="text-cyan-400">Digital</span></h3>
+               </div>
+               <p className="text-slate-400 text-base lg:text-lg leading-relaxed max-w-4xl font-medium">
+                  Platform ini dibangun sebagai ekosistem pertahanan siber mandiri. Mengintegrasikan kontrol akses cerdas, pemantauan infrastruktur *real-time*, dan enkripsi data berlapis untuk menjamin keamanan total seluruh warga sekolah di era transformasi digital.
+               </p>
+            </div>
           </div>
 
-          {/* --- THE ARCHITECT TRIO (3 PENGEMBANG) --- */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-4 mb-8">
-               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-               <span className="text-[10px] font-black tracking-[0.5em] text-fuchsia-500 uppercase">System Architects</span>
-               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          {/* --- THE ARCHITECT TRIO SECTION --- */}
+          <div className="space-y-10">
+            <div className="flex items-center gap-6 justify-center">
+               <div className="h-px w-20 bg-gradient-to-r from-transparent to-white/20" />
+               <span className="text-[10px] font-black tracking-[0.8em] text-fuchsia-500 uppercase ml-4">Authorized Personnel Only</span>
+               <div className="h-px w-20 bg-gradient-to-l from-transparent to-white/20" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { name: "Devin Edwin", role: "Security Engineer", stack: "Backend & Infra", col: "cyan" },
-                { name: "Lead Architect", role: "UI/UX Designer", stack: "Digital Experience", col: "fuchsia" },
-                { name: "Core Developer", role: "Fullstack Dev", stack: "Logic & Encryption", col: "blue" }
+                { id: "001", name: "Devin Edwin", role: "Security Engineer", bio: "Spesialisasi dalam enkripsi database dan arsitektur server sekolah.", col: "cyan", skills: ["Python", "Networking", "Cryptography"] },
+                { id: "002", name: "Lead Designer", role: "UX Architect", bio: "Merancang antarmuka futuristik dengan fokus pada pengalaman pengguna siber.", col: "fuchsia", skills: ["Tailwind", "Framer", "Motion Design"] },
+                { id: "003", name: "Core Developer", role: "Logic Systems", bio: "Mengembangkan algoritma pemantauan real-time dan otomasi sistem keamanan.", col: "blue", skills: ["React", "Logic Flow", "API Integrator"] }
               ].map((member, i) => (
-                <div key={i} className="group relative p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-white/20 transition-all duration-500 overflow-hidden">
-                  {/* Efek Pendaran Belakang */}
-                  <div className={`absolute -top-20 -left-20 w-40 h-40 blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity ${member.col === 'cyan' ? 'bg-cyan-500' : member.col === 'fuchsia' ? 'bg-fuchsia-500' : 'bg-blue-500'}`} />
-                  
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-                        <User size={20} className={member.col === 'cyan' ? 'text-cyan-400' : member.col === 'fuchsia' ? 'text-fuchsia-400' : 'text-blue-400'} />
+                <motion.div 
+                  key={i}
+                  layout // Smooth transition saat data berubah
+                  onClick={() => setInspectedArchitect(inspectedArchitect === member.id ? null : member.id)}
+                  className={`group relative cursor-pointer p-1 rounded-[2.5rem] transition-all duration-500 ${inspectedArchitect === member.id ? 'ring-2 ring-fuchsia-500' : 'hover:scale-105'}`}
+                >
+                  <div className="relative bg-[#08070d] border border-white/5 p-8 rounded-[2.5rem] h-full flex flex-col items-center text-center overflow-hidden">
+                    
+                    {/* HOLOGRAPHIC AVATAR EFFECT */}
+                    <div className="relative w-24 h-24 mb-6">
+                      <div className={`absolute inset-0 rounded-full blur-2xl opacity-20 ${member.col === 'cyan' ? 'bg-cyan-400' : member.col === 'fuchsia' ? 'bg-fuchsia-400' : 'bg-blue-400'}`} />
+                      <div className="relative w-full h-full rounded-full border-2 border-white/10 p-1 flex items-center justify-center bg-black/50 overflow-hidden">
+                        <User size={40} className={member.col === 'cyan' ? 'text-cyan-400' : member.col === 'fuchsia' ? 'text-fuchsia-400' : 'text-blue-400'} />
+                        {/* Scan Line Effect on Avatar */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-transparent h-4 w-full animate-scanner" />
                       </div>
-                      <span className="text-[8px] font-mono text-slate-500 tracking-widest uppercase">ID: 00{i+1}_CORE</span>
                     </div>
-                    
-                    <h4 className="text-lg font-black text-white uppercase tracking-widest mb-1 group-hover:text-cyan-400 transition-colors">{member.name}</h4>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">{member.role}</p>
-                    
-                    <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                       <span className="text-[8px] font-mono text-slate-600">{member.stack}</span>
-                       <div className="flex gap-1">
-                          <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                          <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse delay-75" />
-                       </div>
-                    </div>
+
+                    <h4 className="text-xl font-black text-white uppercase tracking-widest">{member.name}</h4>
+                    <p className={`text-[10px] font-bold uppercase tracking-[0.3em] mt-1 ${member.col === 'cyan' ? 'text-cyan-500' : member.col === 'fuchsia' ? 'text-fuchsia-500' : 'text-blue-500'}`}>{member.role}</p>
+
+                    {/* EXPANDABLE DATA (TRANSISI SMOOTH BIODATA) */}
+                    <AnimatePresence>
+                      {inspectedArchitect === member.id && (
+                        <motion.div 
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="mt-6 pt-6 border-t border-white/10 w-full text-left"
+                        >
+                          <div className="space-y-4">
+                             <div>
+                                <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Bio_Data</p>
+                                <p className="text-xs text-slate-300 leading-relaxed font-medium">{member.bio}</p>
+                             </div>
+                             <div>
+                                <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Core_Skills</p>
+                                <div className="flex flex-wrap gap-2">
+                                   {member.skills.map((s, idx) => (
+                                     <span key={idx} className="px-2 py-1 rounded bg-white/5 border border-white/5 text-[8px] font-mono text-white/60">{s}</span>
+                                   ))}
+                                </div>
+                             </div>
+                             <div className="flex justify-between items-center pt-4">
+                                <span className="text-[8px] font-mono text-fuchsia-500">ID: {member.id}_SECURED</span>
+                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
+                             </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Hint click */}
+                    {!inspectedArchitect && (
+                      <p className="mt-6 text-[8px] font-black text-slate-600 uppercase tracking-[0.4em] animate-pulse">Click to inspect</p>
+                    )}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
+          </div>
+
+          {/* --- FOOTER MODAL --- */}
+          <div className="pt-10 flex flex-col items-center gap-4 border-t border-white/5">
+             <p className="text-[9px] font-mono text-slate-600 tracking-[0.5em] uppercase">Security Protocol // Authenticated Platform Data</p>
+             <div className="flex gap-4">
+                {[Facebook, Twitter, Instagram].map((Icon, i) => (
+                  <Icon key={i} size={14} className="text-slate-700 hover:text-cyan-400 transition-colors cursor-pointer" />
+                ))}
+             </div>
           </div>
         </div>
       </CyberModal>
