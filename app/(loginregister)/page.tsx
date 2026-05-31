@@ -156,9 +156,7 @@ const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   ];
 
   return (
-    // Penyesuaian: py-16 di mobile, py-24 di desktop. min-h-fit di mobile agar tidak bolong.
-    <section className="relative w-full min-h-fit lg:min-h-screen flex flex-col items-center justify-center py-16 lg:py-24 bg-[#020108] border-t border-white/5 overflow-hidden">
-      
+    <section id="visi-misi" className="relative w-full min-h-screen flex flex-col items-center justify-center py-20 bg-[#020108] border-t border-white/5 overflow-hidden">      
       {/* BACKGROUND SINKRON */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
@@ -635,22 +633,20 @@ export default function CyberLandingDark() {
 
   const scrollToSection = (id: string, label: string) => {
     setActiveSection(label);
+    const element = document.getElementById(id);
+    
     if (isMobileMenuOpen) setIsMobileMenuOpen(false);
 
-    // Gunakan setTimeout kecil untuk memastikan state menu mobile sudah tertutup sebelum scroll
-    setTimeout(() => {
-      const element = document.getElementById(id);
-      if (element) {
-        const offset = 80; // Tinggi header
-        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = elementPosition - offset;
+    if (element) {
+      const headerOffset = 90; // Jarak agar judul tidak tertutup header
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
-    }, 10);
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
   };
 
   return (
@@ -768,23 +764,26 @@ export default function CyberLandingDark() {
 
         <SectionDivider />
 
-        {/* --- HALAMAN 2: PILAR STRATEGIS (ID: pilar) --- */}
-        <section id="pilar">
-           <div className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
-             <div className="max-w-[1600px] mx-auto px-6 lg:px-16 relative z-10 w-full text-center">
-               <h2 className="text-3xl lg:text-5xl font-black text-white uppercase mb-16"><span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Pilar Strategis</span> Kami</h2>
-               <p className="text-slate-500 max-w-3xl mx-auto text-sm lg:text-base font-medium opacity-80">Membangun fondasi keamanan siber yang kokoh melalui tiga pilar utama infrastruktur dan edukasi.</p>
+{/* --- HALAMAN 2: PILAR STRATEGIS (ID: pilar - TUJUAN MENU PROFIL) --- */}
+<section id="pilar" className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
+           <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-indigo-900/10 via-fuchsia-900/5 to-transparent blur-[120px] pointer-events-none" />
+           <div className="max-w-[1600px] mx-auto px-6 lg:px-16 relative z-10 w-full text-center">
+             <div className="mb-20 lg:mb-28">
+               <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6">
+                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500">Pilar Strategis</span> Kami
+               </h2>
+               <p className="text-slate-500 max-w-3xl mx-auto text-sm lg:text-base font-medium opacity-80">Membangun fondasi keamanan siber yang kokoh melalui tiga pilar utama.</p>
              </div>
              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
                {[
-                 { t: "Infrastruktur", i: Server, c: "text-cyan-400", d: "Membangun arsitektur jaringan sekolah yang terpusat dan tahan terhadap serangan siber." },
-                 { t: "Keamanan", i: ShieldAlert, c: "text-fuchsia-400", d: "Menerapkan protokol enkripsi dan pemantauan real-time untuk mendeteksi ancaman." },
-                 { t: "Literasi", i: BrainCircuit, c: "text-emerald-400", d: "Meningkatkan kesadaran sivitas akademika dalam menjaga keamanan data pribadi." }
+                 { t: "Infrastruktur", i: Server, c: "text-cyan-400", d: "Membangun arsitektur jaringan sekolah yang terpusat dan tahan serangan." },
+                 { t: "Keamanan", i: ShieldAlert, c: "text-fuchsia-400", d: "Menerapkan protokol enkripsi pemantauan real-time." },
+                 { t: "Literasi", i: BrainCircuit, c: "text-emerald-400", d: "Meningkatkan kesadaran keamanan data pribadi." }
                ].map((item, i) => (
                  <div key={i} className="group relative bg-[#08070d]/80 border border-white/5 p-12 lg:p-16 rounded-[3rem] hover:border-white/20 transition-all duration-700 hover:-translate-y-2 shadow-2xl">
-                   <div className="w-16 h-16 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 mx-auto shadow-xl group-hover:shadow-cyan-500/10"><item.i size={32} className={`${item.c} drop-shadow-[0_0_10px_currentColor]`} /></div>
-                   <h3 className="text-xl lg:text-2xl font-black text-white mb-4 uppercase tracking-widest">{item.t}</h3>
-                   <p className="text-sm text-slate-400 leading-relaxed font-medium">{item.d}</p>
+                   <div className="w-16 h-16 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 mx-auto shadow-xl"><item.i size={32} className={`${item.c}`} /></div>
+                   <h3 className="text-xl lg:text-2xl font-black text-white mb-4 uppercase">{item.t}</h3>
+                   <p className="text-sm text-slate-400 leading-relaxed">{item.d}</p>
                  </div>
                ))}
              </div>
