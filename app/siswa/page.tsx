@@ -21,12 +21,9 @@ const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
 const TACTICAL_DOMAINS = [
-  { id: "Social Engineering", title: "SOCIAL ENGINEERING", icon: Brain, color: "#d946ef", desc: "Psychological Defense Operations" },
-  { id: "Malware", title: "MALWARE ANALYSIS", icon: Bug, color: "#F87171", desc: "Malicious Code Detection" },
-  { id: "Phishing", title: "PHISHING DEFENSE", icon: MailWarning, color: "#818CF8", desc: "Credential Security Audit" },
-  { id: "Network", title: "NETWORK SECURITY", icon: Globe, color: "#34D399", desc: "Traffic Encryption Control" },
-  { id: "Privilege", title: "ACCESS CONTROL", icon: Lock, color: "#d8b4fe", desc: "Privilege Escalation Defense" },
-  { id: "Threat", title: "THREAT HUNTING", icon: RadarIcon, color: "#FB923C", desc: "Proactive Breach Search" },
+  { id: "Social Engineering", title: "SOCIAL ENGINEERING", icon: Brain, color: "#22d3ee", desc: "Psychological Defense Operations", sector: "SECTOR_01" },
+  { id: "Malware", title: "MALWARE ANALYSIS", icon: Bug, color: "#f472b6", desc: "Malicious Code Detection", sector: "SECTOR_02" },
+  { id: "Phishing", title: "PHISHING DEFENSE", icon: MailWarning, color: "#818cf8", desc: "Credential Security Audit", sector: "SECTOR_03" },
 ];
 
 // --- 0. HELPER: STATUS COLORS ---
@@ -257,7 +254,20 @@ export default function StudentPortal() {
             <Lightbulb size={18} className="group-hover:animate-pulse" /> {!isSidebarCollapsed && <span className="font-bold text-[10px] tracking-widest uppercase">FEEDBACK</span>}
           </button>
         </nav>
-        <div className="p-6 border-t border-white/10"><button onClick={() => router.push('/')} className="w-full flex items-center p-3 text-red-500 hover:bg-red-500/10 rounded-2xl gap-4 font-bold text-[10px] tracking-widest uppercase hover:bg-red-600 hover:text-white transition-all"><Power size={18} /> {!isSidebarCollapsed && "SHUTDOWN"}</button></div>
+        {/* --- AREA LOGOUT (REVISI: TANPA SHUTDOWN) --- */}
+        <div className="p-6 border-t border-white/5">
+          <button 
+            onClick={() => {
+              localStorage.removeItem('user'); // Menghapus data login
+              router.push('/'); // Kembali ke landing page
+            }} 
+            className="w-full flex items-center p-4 text-red-500 hover:bg-red-500/10 rounded-2xl gap-4 font-black text-[10px] tracking-[0.3em] transition-all uppercase group"
+          >
+            <Power size={18} className="group-hover:scale-110 group-hover:rotate-12 transition-transform" /> 
+            {!isSidebarCollapsed && "LOGOUT SESSION"}
+          </button>
+        </div>
+
       </motion.aside>
 
       <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
@@ -272,10 +282,32 @@ export default function StudentPortal() {
             {/* VIEW DASHBOARD */}
             {view === 'dashboard' && (
               <motion.div key="dash" variants={containerVariants} initial="hidden" animate="show" exit={{opacity:0, y:-10}} className="max-w-[1300px] mx-auto space-y-12">
-                <motion.div variants={itemVariants} className="text-center space-y-4 pt-4">
-                  <div className="text-fuchsia-400 font-black text-[11px] tracking-[0.6em] uppercase mb-2 flex items-center justify-center gap-3">{getGreeting()} OPERATIVE</div>
-                  <h1 className="text-4xl lg:text-6xl font-black text-white tracking-tighter leading-none uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">{getGreeting()}, <span className="text-fuchsia-500">{user.username}.</span></h1>
-                  <p className="text-slate-400 text-[11px] lg:text-[12px] font-bold tracking-[0.3em] uppercase max-w-xl mx-auto opacity-100">Cyber Readiness Index Protocol Gateway v2.1</p>
+                {/* --- WELCOME BANNER LUXURY (REVISI DEWA: NO V2.1 & NO UNDERSCORES) --- */}
+                <motion.div variants={itemVariants} className="relative p-10 lg:p-20 rounded-[3.5rem] lg:rounded-[5rem] bg-gradient-to-br from-white/[0.04] via-transparent to-transparent border border-white/5 overflow-hidden shadow-2xl group mb-12">
+                   {/* Dekorasi Globe di Latar Belakang */}
+                   <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity duration-1000">
+                      <Globe size={300} className="text-white" />
+                   </div>
+                   
+                   <div className="relative z-10 space-y-8 text-left">
+                      <div className="inline-flex items-center gap-4 px-5 py-2 rounded-full bg-cyan-500/5 border border-cyan-500/15 text-cyan-400 text-[9px] font-black tracking-[0.5em] uppercase backdrop-blur-md">
+                         <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
+                         Authentication Confirmed
+                      </div>
+                      
+                      <h1 className="text-4xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-[0.95]">
+                         WELCOME, <br/>
+                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 animate-gradient-x">
+                           {user.username}
+                         </span>
+                      </h1>
+                      
+                      <p className="text-slate-400 text-[10px] lg:text-[13px] font-bold tracking-[0.4em] uppercase opacity-80 leading-relaxed max-w-xl">
+                         Integrated Cyber Readiness Control Interface
+                      </p>
+                      
+                      <div className="h-px w-full max-w-md bg-gradient-to-r from-white/10 to-transparent" />
+                   </div>
                 </motion.div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -333,38 +365,81 @@ export default function StudentPortal() {
               </motion.div>
             )}
 
-            {/* VIEW ASSESSMENT (DEEP BLACK GLASS) */}
-            {view === 'assessment' && (
-              <motion.div key="assess-hub" variants={containerVariants} initial="hidden" animate="show" exit={{opacity:0, scale:0.9}} className="max-w-6xl mx-auto space-y-12">
-                <motion.div variants={itemVariants} className="text-center space-y-4 pt-6"><h2 className="text-5xl font-black text-white tracking-widest uppercase leading-none drop-shadow-2xl">Target Modules.</h2><p className="text-fuchsia-400 text-[11px] font-black tracking-[0.6em] uppercase text-center">Select strategic sector for diagnostic protocol</p></motion.div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-20">
-                  {TACTICAL_DOMAINS.map((domain, i) => {
-                    const done = history.some(h => String(h.domain_id).toLowerCase().includes(domain.id.split(' ')[0].toLowerCase()));
-                    return (
-                      <motion.div 
-                        key={i} variants={itemVariants} whileHover={{ y: -8, scale: 1.02 }} onClick={() => { setSelectedDomain(domain.id); setView('briefing'); }} 
-                        className={`bg-black/80 backdrop-blur-2xl border ${done ? 'border-fuchsia-500/50 shadow-[0_0_30px_rgba(217,70,239,0.15)]' : 'border-white/10 hover:border-white/20'} p-8 rounded-[2.5rem] cursor-pointer group transition-all duration-300 shadow-2xl relative overflow-hidden`}
-                      >
-                        <div className={`absolute inset-0 bg-gradient-to-br from-${domain.color.replace('#', '')}/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500`} style={{ background: `linear-gradient(to bottom right, ${domain.color}15, transparent)` }} />
-                        
-                        <div className="flex justify-between items-start mb-8 relative z-10">
-                          <div className="w-14 h-14 rounded-[1.2rem] flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:shadow-xl transition-all" style={{ backgroundColor: `${domain.color}10`, border: `1px solid ${domain.color}30` }}>
-                             <domain.icon size={26} style={{ color: domain.color }} />
-                          </div>
-                          {done && <div className="bg-fuchsia-600/20 px-3 py-1.5 rounded-full border border-fuchsia-500/30 shadow-lg"><span className="text-[9px] font-black text-fuchsia-400 tracking-widest uppercase">Verified</span></div>}
+{/* VIEW ASSESSMENT (ULTRA LUXURY HUD VERSION) */}
+{view === 'assessment' && (
+              <motion.div key="assess-hub" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="max-w-[1500px] mx-auto space-y-16 py-10">
+                
+                {/* Header Section */}
+                <div className="text-center space-y-6 relative">
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-cyan-500/5 blur-[120px] pointer-events-none" />
+                  <motion.div initial={{ y: -20 }} animate={{ y: 0 }} className="inline-flex items-center gap-4 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-[10px] font-black tracking-[0.6em] uppercase backdrop-blur-xl">
+                    <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]" />
+                    Tactical Mission Selection
+                  </motion.div>
+                  <h2 className="text-5xl lg:text-7xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-2xl">
+                    TARGET <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 animate-gradient-x">MODULES.</span>
+                  </h2>
+                </div>
+
+                {/* Grid 3 Kartu Dewa */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14 pb-20">
+                  {TACTICAL_DOMAINS.map((domain, i) => (
+                    <motion.div 
+                      key={i}
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1, type: "spring", stiffness: 100 }}
+                      whileHover={{ y: -15, scale: 1.02 }}
+                      onClick={() => { setSelectedDomain(domain.id); setView('briefing'); }}
+                      className="group relative bg-[#050811]/40 backdrop-blur-3xl border border-white/5 p-12 rounded-[4rem] cursor-pointer overflow-hidden transition-all duration-700 shadow-2xl hover:border-cyan-500/30"
+                    >
+                      {/* --- HOLOGRAPHIC BACKGROUND ELEMENTS --- */}
+                      <div className="absolute inset-0 bg-grid-static opacity-[0.03] group-hover:opacity-[0.08] transition-opacity" />
+                      <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[100px] opacity-0 group-hover:opacity-20 transition-opacity duration-700" style={{ backgroundColor: domain.color }} />
+                      
+                      {/* Laser Scanner Line (Horizontal) */}
+                      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-20" />
+
+                      {/* Content HUD */}
+                      <div className="relative z-10 flex flex-col h-full">
+                        <div className="flex justify-between items-start mb-12">
+                           <div className="space-y-1">
+                              <p className="text-[8px] font-mono text-slate-600 tracking-[0.3em]">{domain.sector}</p>
+                              <div className="flex items-center gap-2">
+                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                 <span className="text-[7px] font-black text-emerald-400 tracking-widest uppercase">Operational</span>
+                              </div>
+                           </div>
+                           <div className="w-16 h-16 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-black group-hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] group-hover:scale-110">
+                              <domain.icon size={32} style={{ color: domain.color }} className="drop-shadow-[0_0_10px_currentColor]" />
+                           </div>
                         </div>
-                        
-                        <h3 className="text-xl font-black text-white mb-3 uppercase tracking-tighter leading-none relative z-10 group-hover:text-fuchsia-100 transition-colors">{domain.title}</h3>
-                        <p className="text-[10px] text-slate-400 font-bold tracking-widest uppercase mb-8 leading-relaxed opacity-90 relative z-10">{domain.desc}</p>
-                        
-                        <div className="mt-auto pt-6 border-t border-white/10 flex justify-end items-center relative z-10">
-                           <span className="text-[10px] font-black tracking-[0.4em] text-slate-500 group-hover:text-fuchsia-400 group-hover:translate-x-2 transition-all uppercase">
-                             INITIALIZE <ArrowRight size={14} className="inline ml-3" />
-                           </span>
+
+                        <div className="space-y-4">
+                           <h3 className="text-3xl font-black text-white leading-none tracking-tighter uppercase group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-500 transition-all duration-500">
+                             {domain.title.split(' ')[0]} <br/> {domain.title.split(' ')[1] || ""}
+                           </h3>
+                           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] leading-relaxed">
+                             {domain.desc}
+                           </p>
                         </div>
-                      </motion.div>
-                    );
-                  })}
+
+                        {/* INITIALIZE BUTTON HUD */}
+                        <div className="mt-16 pt-8 border-t border-white/5 flex items-center justify-between group-hover:border-white/10 transition-colors">
+                           <div className="flex flex-col">
+                              <span className="text-[7px] font-mono text-slate-700 tracking-widest uppercase">Auth_Level</span>
+                              <span className="text-[9px] font-black text-white tracking-widest">ENCRYPTED</span>
+                           </div>
+                           <div className="flex items-center gap-4 text-cyan-400 group-hover:text-white transition-colors">
+                              <span className="text-[10px] font-black tracking-[0.4em] uppercase">Initialize</span>
+                              <div className="w-8 h-8 rounded-full border border-cyan-500/20 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-black transition-all">
+                                 <ChevronRight size={16} />
+                              </div>
+                           </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
               </motion.div>
             )}
@@ -391,27 +466,105 @@ export default function StudentPortal() {
         </main>
       </div>
 
-      {/* --- MODAL SYSTEM FEEDBACK --- */}
-      <AnimatePresence>
+{/* --- MODAL NEXUS INTELLIGENCE (ULTRA LUXURY HUD) --- */}
+<AnimatePresence>
         {appFeedbackModal && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-[#020108]/96 backdrop-blur-[50px]">
-             <div className="absolute w-[600px] h-[600px] bg-fuchsia-600/10 rounded-full blur-[140px] -z-10 animate-pulse" />
-             <motion.div initial={{ scale: 0.9, y: 40, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.9, y: 20, opacity: 0 }} transition={{ type: 'spring', damping: 25 }} className="w-full max-w-2xl bg-black/90 border border-white/10 rounded-[3rem] p-12 shadow-[0_0_80px_rgba(217,70,239,0.2)] relative overflow-hidden backdrop-blur-3xl">
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-indigo-600" />
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-black/95 backdrop-blur-[40px]"
+          >
+             {/* Efek Cahaya Latar Ambient */}
+             <div className="absolute w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
+             
+             <motion.div 
+                initial={{ scale: 0.9, y: 30, opacity: 0 }} 
+                animate={{ scale: 1, y: 0, opacity: 1 }} 
+                exit={{ scale: 0.9, y: 20, opacity: 0 }} 
+                className="w-full max-w-2xl bg-[#050811]/60 border border-white/10 rounded-[3.5rem] p-10 lg:p-12 shadow-[0_0_100px_rgba(0,0,0,1)] relative overflow-hidden"
+             >
+                {/* Scanner Top Line */}
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse" />
+
+                {/* Header Modal */}
                 <div className="flex justify-between items-start mb-12 relative z-10">
                    <div className="flex items-center gap-6">
-                      <div className="w-14 h-14 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-2xl flex items-center justify-center text-white shadow-[0_0_30px_rgba(217,70,239,0.5)] border border-white/10"><Zap size={24} className="fill-current" /></div>
-                      <div><h2 className="text-3xl font-black text-white uppercase tracking-tighter">PREMIUM FEEDBACK</h2><p className="text-slate-500 text-[9px] font-black uppercase tracking-[0.5em] mt-2">TRANSMITTING TO: devinedwinsiahaan171105@gmail.com</p></div>
+                      <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.2)] transition-transform group-hover:scale-110">
+                         <Zap size={28} className="fill-current" />
+                      </div>
+                      <div className="text-left">
+                         <h2 className="text-2xl lg:text-3xl font-black text-white uppercase tracking-[0.2em] leading-none">NEXUS INTELLIGENCE</h2>
+                         <div className="flex items-center gap-2 mt-3 text-slate-500 font-mono text-[10px] tracking-widest">
+                            <span className="opacity-50 uppercase">Transmitting To:</span>
+                            <span className="text-cyan-500/80 lowercase font-bold">devinedwinsiahaan171105@gmail.com</span>
+                         </div>
+                      </div>
                    </div>
-                   <button onClick={() => setAppFeedbackModal(false)} className="p-3 bg-white/5 rounded-xl text-slate-500 hover:bg-red-500/20 hover:text-red-400 border border-white/5 transition-all"><X size={20}/></button>
+                   <button 
+                     onClick={() => setAppFeedbackModal(false)} 
+                     className="p-3 bg-white/5 rounded-2xl text-slate-500 hover:text-white transition-all border border-white/5"
+                   >
+                      <X size={20}/>
+                   </button>
                 </div>
-                <div className="space-y-8 relative z-10">
-                   <div>
-                      <label className="text-[10px] font-black text-fuchsia-400 uppercase tracking-widest mb-3 flex items-center gap-3"><Hexagon size={12}/> SELECT COMMAND CATEGORY</label>
-                      <select value={appFeedbackForm.category} onChange={(e) => setAppFeedbackForm({...appFeedbackForm, category: e.target.value})} className="w-full bg-black border border-white/10 rounded-[1.5rem] p-5 text-[11px] font-black text-white uppercase outline-none focus:border-fuchsia-500 appearance-none cursor-pointer"><option value="AI ENHANCEMENT">🤖 AI SYSTEM</option><option value="UI/UX MODERNIZATION">🎨 UI / UX</option><option value="SECURITY EXPANSION">🛡️ SECURITY</option><option value="REAL-TIME ANALYTICS">📊 ANALYTICS</option><option value="SYSTEM PERFORMANCE">⚡ PERFORMANCE</option><option value="MOBILE INTEGRATION">📱 MOBILE</option><option value="BUG REPORT">⚠️ BUG REPORT</option><option value="OTHER">🌐 OTHER</option></select>
+
+                {/* Form Content */}
+                <div className="space-y-10 relative z-10 text-left">
+                   {/* Kategori Command */}
+                   <div className="space-y-4">
+                      <label className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.4em] flex items-center gap-3">
+                         <Hexagon size={12} className="animate-spin" style={{ animationDuration: '4s' }}/> Select Command Category
+                      </label>
+                      <div className="relative group">
+                         <select 
+                            value={appFeedbackForm.category} 
+                            onChange={(e) => setAppFeedbackForm({...appFeedbackForm, category: e.target.value})} 
+                            className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-[11px] font-black text-white uppercase outline-none focus:border-cyan-500/50 appearance-none cursor-pointer transition-all shadow-inner group-hover:border-white/20"
+                         >
+                            <option value="AI ENHANCEMENT">AI System Upgrade</option>
+                            <option value="UI/UX MODERNIZATION">UI UX Refinement</option>
+                            <option value="SECURITY EXPANSION">Security Protocol</option>
+                            <option value="SYSTEM PERFORMANCE">Core Performance</option>
+                            <option value="BUG REPORT">Critical Bug Report</option>
+                         </select>
+                      </div>
                    </div>
-                   <textarea value={appFeedbackForm.message} onChange={(e) => setAppFeedbackForm({...appFeedbackForm, message: e.target.value})} placeholder="INPUT RECOMMENDATIONS..." className="w-full h-40 bg-black border border-white/10 rounded-[2rem] p-6 text-[12px] font-bold text-white focus:border-fuchsia-500 outline-none resize-none placeholder:text-slate-800 transition-all shadow-inner" />
-                   <button onClick={submitAppFeedback} disabled={isSendingFeedback} className="w-full py-5 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-[1.5rem] font-black text-[11px] tracking-[0.5em] uppercase hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-5 shadow-2xl disabled:opacity-50">{isSendingFeedback ? "TRANSMITTING DATA..." : "EXECUTE TRANSMISSION"} <Send size={18}/></button>
+
+                   {/* Input Rekomendasi */}
+                   <div className="space-y-4">
+                      <label className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.4em] flex items-center gap-3">
+                         <Terminal size={12}/> Input Data Recommendation
+                      </label>
+                      <textarea 
+                         value={appFeedbackForm.message} 
+                         onChange={(e) => setAppFeedbackForm({...appFeedbackForm, message: e.target.value})} 
+                         placeholder="TYPE YOUR INTELLIGENCE REPORT HERE..." 
+                         className="w-full h-44 bg-black/40 border border-white/10 rounded-[2.5rem] p-8 text-[13px] font-medium text-white placeholder:text-slate-800 outline-none focus:border-cyan-500/50 transition-all shadow-inner resize-none" 
+                      />
+                   </div>
+
+                   {/* Execute Button */}
+                   <div className="pt-4">
+                      <button 
+                         onClick={submitAppFeedback} 
+                         disabled={isSendingFeedback} 
+                         className="w-full py-6 bg-white text-black rounded-3xl font-black text-[11px] tracking-[0.6em] uppercase hover:bg-cyan-400 hover:text-white transition-all duration-500 flex items-center justify-center gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group disabled:opacity-50"
+                      >
+                         {isSendingFeedback ? "ENCRYPTING DATA..." : "EXECUTE TRANSMISSION"} 
+                         <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"/>
+                      </button>
+                   </div>
+                </div>
+
+                {/* Bottom Bar HUD */}
+                <div className="mt-12 flex justify-between items-center opacity-30">
+                   <div className="flex gap-2">
+                      {[...Array(4)].map((_, i) => (
+                        <div key={i} className="w-1 h-1 bg-cyan-500 rounded-full animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
+                      ))}
+                   </div>
+                   <span className="text-[7px] font-mono text-slate-500 tracking-[0.8em] uppercase">Secured Uplink Channel Enabled</span>
                 </div>
              </motion.div>
           </motion.div>
