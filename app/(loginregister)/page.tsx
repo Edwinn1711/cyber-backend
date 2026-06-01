@@ -909,16 +909,34 @@ export default function CyberLandingDark() {
                   className={`group relative cursor-pointer p-1 rounded-[2.5rem] transition-all duration-500 ${inspectedArchitect === member.id ? 'ring-2 ring-cyan-500 shadow-[0_0_30px_rgba(34,211,238,0.2)]' : 'hover:scale-105'}`}
                 >
                   <div className="relative bg-[#08070d] border border-white/5 p-8 rounded-[2.5rem] h-full flex flex-col items-center text-center overflow-hidden">
-                    <div className="relative w-28 h-28 mb-6">
-                      <div className={`absolute inset-0 rounded-full blur-2xl opacity-20 ${member.col === 'cyan' ? 'bg-cyan-400' : member.col === 'fuchsia' ? 'bg-fuchsia-400' : 'bg-violet-400'}`} />
-                      <div className="relative w-full h-full rounded-full border-2 border-white/10 p-1 bg-black/50 overflow-hidden">
+                    {/* --- HOLOGRAPHIC AVATAR ENGINE (FIXED: FULL CIRCLE) --- */}
+                    <div className="relative w-32 h-32 mb-8">
+                      {/* Aura Pendaran Cahaya Luar */}
+                      <div className={`absolute inset-0 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 ${member.col === 'cyan' ? 'bg-cyan-500' : 'bg-fuchsia-500'}`} />
+                      
+                      {/* Frame Lingkaran Utama - overflow-hidden adalah kunci */}
+                      <div className="relative w-full h-full rounded-full border-2 border-white/20 bg-[#050505] overflow-hidden flex items-center justify-center shadow-2xl">
                         {member.image ? (
-                          <img src={member.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt={member.name} />
+                          <img 
+                            src={member.image} 
+                            alt={member.name} 
+                            // scale-[1.4] memastikan gambar penuh menutupi seluruh lingkaran
+                            // object-cover memastikan gambar tidak gepeng
+                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 brightness-90 group-hover:brightness-110 transition-all duration-700 scale-[1.4] group-hover:scale-[1.2]" 
+                          />
                         ) : (
-                          <User size={40} className={member.col === 'cyan' ? 'text-cyan-400' : member.col === 'fuchsia' ? 'text-fuchsia-400' : 'text-violet-400'} />
+                          <User size={48} className={member.col === 'cyan' ? 'text-cyan-400' : 'text-fuchsia-400'} />
                         )}
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-transparent h-6 w-full animate-scanner pointer-events-none" />
+
+                        {/* Efek Garis Scanner Laser HUD */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-400/30 to-transparent h-[20%] w-full animate-scanner pointer-events-none" />
+                        
+                        {/* Overlay Grid Teknis Transparan */}
+                        <div className="absolute inset-0 bg-grid-static opacity-[0.08] mix-blend-overlay pointer-events-none" />
                       </div>
+
+                      {/* Spinning Ring HUD (Dekoratif Luar) */}
+                      <div className={`absolute inset-[-12px] rounded-full border border-dashed border-cyan-500/20 animate-[spin_25s_linear_infinite] group-hover:border-cyan-500/50`} />
                     </div>
                     <h4 className="text-xl font-black text-white uppercase tracking-widest">{member.name}</h4>
                     <p className={`text-[10px] font-bold uppercase tracking-[0.3em] mt-1 ${member.col === 'cyan' ? 'text-cyan-400' : member.col === 'fuchsia' ? 'text-fuchsia-400' : 'text-violet-400'}`}>{member.role}</p>
