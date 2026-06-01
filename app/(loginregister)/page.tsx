@@ -785,36 +785,50 @@ export default function CyberLandingDark() {
         }} />
       </main>
 
-{/* --- MODAL PROFIL (THE TRINITY ARCHITECTS - DEWA VERSION) --- */}
+{/* --- MODAL TENTANG KAMI (REVISI TOTAL: DEWA VERSION) --- */}
 <CyberModal 
         isOpen={activeModal === 'PROFIL'} 
         onClose={() => { setActiveModal(null); setInspectedArchitect(null); }} 
-        title="CENTRAL IDENTITY DATABASE"
+        title="COMMAND CENTRE TENTANG KAMI"
       >
         <div className="space-y-12 text-left">
           
-          {/* --- PLATFORM VISION HUD --- */}
-          <div className="relative p-8 lg:p-10 rounded-[3rem] bg-gradient-to-br from-cyan-500/10 to-transparent border border-white/10 overflow-hidden group shadow-2xl">
+          {/* --- PENJELASAN MENDALAM PLATFORM --- */}
+          <div className="relative p-8 lg:p-12 rounded-[3rem] bg-gradient-to-br from-cyan-500/10 via-transparent to-fuchsia-500/10 border border-white/10 overflow-hidden group shadow-2xl">
             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-20 transition-opacity duration-1000 rotate-12">
-              <ShieldCheck size={180} />
+              <ShieldCheck size={200} />
             </div>
-            <div className="relative z-10">
-               <div className="flex items-center gap-3 mb-6">
-                  <div className="w-1.5 h-8 bg-fuchsia-500 shadow-[0_0_15px_#d946ef]" />
-                  <h3 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tighter">Visi Kedaulatan <span className="text-fuchsia-500">Platform</span></h3>
+            
+            <div className="relative z-10 space-y-6">
+               <div className="flex items-center gap-4 mb-2">
+                  <div className="w-1.5 h-10 bg-gradient-to-b from-cyan-400 to-fuchsia-500 rounded-full shadow-[0_0_15px_#22d3ee]" />
+                  <h3 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tighter">
+                    Mengenal Platform <span className="text-cyan-400">Cyber Readiness</span>
+                  </h3>
                </div>
-               <p className="text-slate-400 text-base lg:text-lg leading-relaxed max-w-4xl font-medium">
-                  Platform Cyber Readiness ini dikembangkan secara kolektif oleh tim ahli untuk menguji, memantau, dan mengamankan kedaulatan data digital sekolah melalui protokol enkripsi termutakhir.
-               </p>
+
+               <div className="space-y-6 text-slate-300 text-sm lg:text-base leading-relaxed font-medium">
+                  <p>
+                    <span className="text-cyan-400 font-bold">Cyber Readiness</span> adalah platform keamanan siber komprehensif yang dirancang khusus untuk memperkuat ekosistem digital di lingkungan pendidikan sekolah menengah. Platform ini hadir sebagai solusi cerdas atas pesatnya transformasi digital di dunia pendidikan yang seringkali tidak dibarengi dengan sistem perlindungan data yang mumpuni, membuat sekolah rentan terhadap eksploitasi pihak luar.
+                  </p>
+                  
+                  <p>
+                    Platform ini dikembangkan karena adanya kesadaran akan meningkatnya ancaman serangan siber global seperti pencurian identitas, peretasan database akademik, serta serangan ransomware yang dapat melumpuhkan seluruh kegiatan belajar mengajar. Kami melihat bahwa sekolah menyimpan aset yang sangat berharga yaitu data generasi masa depan, dan aset tersebut harus dilindungi dengan standar keamanan setara industri militer.
+                  </p>
+
+                  <p>
+                    Tujuan utama kami adalah membangun kedaulatan digital sekolah yang mandiri, tangguh, dan tak tertembus. Kami berkomitmen untuk memastikan bahwa setiap data pribadi siswa, guru, dan staf tersimpan dalam lingkungan terenkripsi tingkat tinggi. Selain menyediakan alat pemantauan infrastruktur secara real time, platform ini juga berfungsi sebagai pusat edukasi untuk menanamkan budaya kewaspadaan digital bagi seluruh warga sekolah demi terciptanya lingkungan belajar yang cerdas, aman, dan terlindungi.
+                  </p>
+               </div>
             </div>
           </div>
 
-          {/* --- THE TRIO SECTION --- */}
+          {/* --- TIM PENGEMBANG (THE ARCHITECT TRIO) --- */}
           <div className="space-y-10">
             <div className="flex items-center gap-6 justify-center">
-               <div className="h-px w-full max-w-[100px] bg-gradient-to-r from-transparent to-white/20" />
-               <span className="text-[10px] font-black tracking-[0.8em] text-cyan-400 uppercase">Authorized Personnel</span>
-               <div className="h-px w-full max-w-[100px] bg-gradient-to-l from-transparent to-white/20" />
+               <div className="h-px w-full max-w-[150px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+               <span className="text-[10px] font-black tracking-[0.8em] text-fuchsia-500 uppercase whitespace-nowrap">Authorized Personnel</span>
+               <div className="h-px w-full max-w-[150px] bg-gradient-to-l from-transparent via-white/20 to-transparent" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -823,35 +837,32 @@ export default function CyberLandingDark() {
                   id: "001", 
                   name: "Ester Sinaga", 
                   role: "Project Manager", 
-                  image: null, 
-                  bio: "Memegang kendali penuh atas manajemen proyek dan strategi implementasi sistem keamanan.", 
+                  bio: "Bertanggung jawab atas manajemen strategis, koordinasi tim, dan memastikan setiap protokol operasional berjalan sesuai standar keamanan.", 
                   col: "fuchsia", 
-                  details: { nid: "EST-9920", status: "Commander", sector: "Strategic Ops" } 
+                  details: { "ID Personel": "EST 9920", "Status": "Commander", "Sektor": "Strategic Ops" } 
                 },
                 { 
                   id: "002", 
                   name: "Devin Siahaan", 
                   role: "Web Developer", 
                   image: "/bg/devin.jpeg", 
-                  bio: "Lead Developer & Infrastructure Architect. Spesialisasi dalam sistem enkripsi dan integrasi database siber.", 
+                  bio: "Lead Developer dan Arsitek Infrastruktur. Spesialis dalam pengembangan sistem enkripsi database dan integrasi kontrol panel siber.", 
                   col: "cyan", 
                   details: { 
-                    full: "Devin Edwin Frederico Siahaan",
-                    nik: "1271211711050003",
-                    nisn: "9015005904",
-                    origin: "Medan, 17 Nov 2005",
-                    blood: "Type O",
-                    email: "devin1711edwin@gmail.com"
+                    "Nama Lengkap": "Devin Edwin Frederico Siahaan",
+                    "NISN": "9015005904",
+                    "Asal": "Medan, 17 Nov 2005",
+                    "Gol Darah": "Tipe O",
+                    "Email": "devin1711edwin@gmail.com"
                   } 
                 },
                 { 
                   id: "003", 
                   name: "Iren Sitinjak", 
                   role: "Intelligence Architect", 
-                  image: null, 
-                  bio: "Bertanggung jawab atas arsitektur data intelijen dan analisis pengalaman pengguna digital.", 
+                  bio: "Ahli dalam analisis data intelijen dan perancangan antarmuka pengguna untuk memastikan pengalaman navigasi yang intuitif dan aman.", 
                   col: "violet", 
-                  details: { nid: "IRN-7712", status: "Chief Analyst", sector: "User Intelligence" } 
+                  details: { "ID Personel": "IRN 7712", "Status": "Chief Analyst", "Sektor": "User Intelligence" } 
                 }
               ].map((member, i) => (
                 <motion.div 
@@ -861,8 +872,6 @@ export default function CyberLandingDark() {
                   className={`group relative cursor-pointer p-1 rounded-[2.5rem] transition-all duration-500 ${inspectedArchitect === member.id ? 'ring-2 ring-cyan-500 shadow-[0_0_30px_rgba(34,211,238,0.2)]' : 'hover:scale-105'}`}
                 >
                   <div className="relative bg-[#08070d] border border-white/5 p-8 rounded-[2.5rem] h-full flex flex-col items-center text-center overflow-hidden">
-                    
-                    {/* AVATAR ENGINE */}
                     <div className="relative w-28 h-28 mb-6">
                       <div className={`absolute inset-0 rounded-full blur-2xl opacity-20 ${member.col === 'cyan' ? 'bg-cyan-400' : member.col === 'fuchsia' ? 'bg-fuchsia-400' : 'bg-violet-400'}`} />
                       <div className="relative w-full h-full rounded-full border-2 border-white/10 p-1 bg-black/50 overflow-hidden">
@@ -874,48 +883,41 @@ export default function CyberLandingDark() {
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-transparent h-6 w-full animate-scanner pointer-events-none" />
                       </div>
                     </div>
-
                     <h4 className="text-xl font-black text-white uppercase tracking-widest">{member.name}</h4>
                     <p className={`text-[10px] font-bold uppercase tracking-[0.3em] mt-1 ${member.col === 'cyan' ? 'text-cyan-400' : member.col === 'fuchsia' ? 'text-fuchsia-400' : 'text-violet-400'}`}>{member.role}</p>
 
-                    {/* EXPANDABLE DATA (TRANSISI DEWA) */}
                     <AnimatePresence>
                       {inspectedArchitect === member.id && (
                         <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="mt-6 pt-6 border-t border-white/10 w-full text-left">
                           <p className="text-[11px] text-slate-400 leading-relaxed font-medium mb-6 italic">"{member.bio}"</p>
-                          
-                          <div className="space-y-3 bg-white/5 p-5 rounded-2xl border border-white/5 font-mono text-[9px] relative overflow-hidden">
-                             {/* Data-data dari gambar diaplikasikan disini untuk Devin */}
+                          <div className="space-y-3 bg-white/5 p-5 rounded-2xl border border-white/5 font-mono text-[9px]">
                              {Object.entries(member.details).map(([key, val], idx) => (
                                <div key={idx} className="flex justify-between border-b border-white/5 pb-2">
                                   <span className="text-slate-500 uppercase">{key}:</span>
                                   <span className="text-white font-bold">{val}</span>
                                </div>
                              ))}
-                             <div className="absolute bottom-0 right-0 p-1 opacity-20"><Zap size={40} /></div>
                           </div>
-                          
-                          <div className="mt-6 flex justify-between items-center">
-                             <span className="text-[8px] font-black text-emerald-500 tracking-widest">ENCRYPTED_ID_00{member.id}</span>
+                          <div className="mt-6 flex justify-between items-center px-1">
+                             <span className="text-[8px] font-black text-emerald-500 tracking-widest uppercase">Akses Terverifikasi</span>
                              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
                           </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
-
-                    {!inspectedArchitect && <p className="mt-6 text-[8px] font-black text-slate-600 uppercase tracking-[0.4em] animate-pulse">Scan Personnel</p>}
+                    {!inspectedArchitect && <p className="mt-6 text-[8px] font-black text-slate-600 uppercase tracking-[0.4em] animate-pulse">Klik Untuk Info Detail</p>}
                   </div>
                 </motion.div>
               ))}
             </div>
           </div>
 
-          {/* FOOTER MODAL */}
-          <div className="pt-10 border-t border-white/5 flex flex-col items-center gap-4 text-center">
-             <p className="text-[9px] font-mono text-slate-600 tracking-[0.5em] uppercase">Security Protocol Authorized Data Transmission</p>
-             <div className="flex gap-6">
+          {/* --- FOOTER MODAL --- */}
+          <div className="pt-10 border-t border-white/5 flex flex-col items-center gap-6 text-center">
+             <p className="text-[9px] font-mono text-slate-600 tracking-[0.5em] uppercase">Protokol Keamanan Platform Transmisi Data Terenkripsi</p>
+             <div className="flex gap-8">
                 {[Facebook, Twitter, Instagram].map((Icon, i) => (
-                  <Icon key={i} size={16} className="text-slate-700 hover:text-cyan-400 transition-all cursor-pointer" />
+                  <Icon key={i} size={18} className="text-slate-700 hover:text-cyan-400 transition-all cursor-pointer hover:scale-125" />
                 ))}
              </div>
           </div>
