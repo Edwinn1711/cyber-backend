@@ -785,65 +785,71 @@ export default function CyberLandingDark() {
         }} />
       </main>
 
-      {/* 4. HUD HOLOGRAPHIC MODALS (PROFIL & LAYANAN) */}
-      <CyberModal 
+{/* --- MODAL PROFIL (THE ARCHITECT TRIO - DEWA VERSION) --- */}
+<CyberModal 
         isOpen={activeModal === 'PROFIL'} 
         onClose={() => { setActiveModal(null); setInspectedArchitect(null); }} 
         title="IDENTITY COMMAND CENTRE"
       >
-        <div className="space-y-12">
+        <div className="space-y-12 text-left">
+          
           {/* --- PLATFORM VISION HUD --- */}
-          <div className="relative p-10 rounded-[3rem] bg-gradient-to-br from-cyan-500/10 to-transparent border border-white/10 overflow-hidden group">
+          <div className="relative p-8 lg:p-10 rounded-[3rem] bg-gradient-to-br from-cyan-500/10 to-transparent border border-white/10 overflow-hidden group">
             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-20 transition-opacity duration-1000 rotate-12">
               <BrainCircuit size={180} />
             </div>
-            <div className="relative z-10 text-left">
-               <div className="flex items-center gap-3 mb-6">
-                  <div className="w-1.5 h-6 bg-cyan-400 rounded-full" />
-                  <h3 className="text-3xl font-black text-white uppercase tracking-tighter">Visi Kedaulatan <span className="text-cyan-400">Digital</span></h3>
+            <div className="relative z-10">
+               <div className="flex items-center gap-4 mb-6">
+                  <div className="w-1.5 h-8 bg-cyan-400 shadow-[0_0_15px_#22d3ee]" />
+                  <h3 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tighter">Visi Kedaulatan <span className="text-cyan-400">Digital</span></h3>
                </div>
                <p className="text-slate-400 text-base lg:text-lg leading-relaxed max-w-4xl font-medium">
-                  Platform ini dibangun sebagai ekosistem pertahanan siber mandiri. Mengintegrasikan kontrol akses cerdas, pemantauan infrastruktur *real-time*, dan enkripsi data berlapis untuk menjamin keamanan total seluruh warga sekolah di era transformasi digital.
+                  Platform ini dibangun sebagai ekosistem pertahanan siber mandiri. Mengintegrasikan kontrol akses cerdas, pemantauan infrastruktur real-time, dan enkripsi data berlapis untuk menjamin keamanan total seluruh warga sekolah di era transformasi digital.
                </p>
             </div>
           </div>
 
-          {/* --- THE ARCHITECT TRIO SECTION --- */}
+          {/* --- THE ARCHITECT TRIO --- */}
           <div className="space-y-10">
             <div className="flex items-center gap-6 justify-center">
-               <div className="h-px w-20 bg-gradient-to-r from-transparent to-white/20" />
-               <span className="text-[10px] font-black tracking-[0.8em] text-fuchsia-500 uppercase ml-4">Authorized Personnel Only</span>
-               <div className="h-px w-20 bg-gradient-to-l from-transparent to-white/20" />
+               <div className="h-px w-full max-w-[100px] bg-gradient-to-r from-transparent to-white/20" />
+               <span className="text-[10px] font-black tracking-[0.8em] text-fuchsia-500 uppercase">Authorized Architects</span>
+               <div className="h-px w-full max-w-[100px] bg-gradient-to-l from-transparent to-white/20" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { id: "001", name: "Devin Edwin", role: "Security Engineer", bio: "Spesialisasi dalam enkripsi database dan arsitektur server sekolah.", col: "cyan", skills: ["Python", "Networking", "Cryptography"] },
-                { id: "002", name: "Lead Designer", role: "UX Architect", bio: "Merancang antarmuka futuristik dengan fokus pada pengalaman pengguna siber.", col: "fuchsia", skills: ["Tailwind", "Framer", "Motion Design"] },
-                { id: "003", name: "Core Developer", role: "Logic Systems", bio: "Mengembangkan algoritma pemantauan real-time dan otomasi sistem keamanan.", col: "blue", skills: ["React", "Logic Flow", "API Integrator"] }
+                { id: "001", name: "Devin Edwin", role: "Security Engineer", image: "/bg/devin.jpeg", bio: "Lead Architect. Spesialisasi dalam enkripsi database dan penguatan arsitektur server sekolah.", col: "cyan", skills: ["Networking", "Cryptography", "Infra"] },
+                { id: "002", name: "Lead Designer", role: "UI/UX Architect", bio: "Merancang antarmuka futuristik dengan fokus pada pengalaman pengguna siber dan interaksi visual.", col: "fuchsia", skills: ["HUD Design", "Framer", "UI Logic"] },
+                { id: "003", name: "Core Developer", role: "Logic Systems", bio: "Mengembangkan algoritma pemantauan real-time dan integrasi otomasi sistem keamanan pusat.", col: "blue", skills: ["React", "API Security", "Backend"] }
               ].map((member, i) => (
                 <motion.div 
                   key={i}
-                  layout // Smooth transition saat data berubah
+                  layout
                   onClick={() => setInspectedArchitect(inspectedArchitect === member.id ? null : member.id)}
-                  className={`group relative cursor-pointer p-1 rounded-[2.5rem] transition-all duration-500 ${inspectedArchitect === member.id ? 'ring-2 ring-fuchsia-500' : 'hover:scale-105'}`}
+                  className={`group relative cursor-pointer p-1 rounded-[2.5rem] transition-all duration-500 ${inspectedArchitect === member.id ? 'ring-2 ring-cyan-500 shadow-[0_0_30px_rgba(34,211,238,0.2)]' : 'hover:scale-105'}`}
                 >
                   <div className="relative bg-[#08070d] border border-white/5 p-8 rounded-[2.5rem] h-full flex flex-col items-center text-center overflow-hidden">
                     
-                    {/* HOLOGRAPHIC AVATAR EFFECT */}
-                    <div className="relative w-24 h-24 mb-6">
+                    {/* HOLOGRAPHIC AVATAR ENGINE */}
+                    <div className="relative w-28 h-28 mb-6">
                       <div className={`absolute inset-0 rounded-full blur-2xl opacity-20 ${member.col === 'cyan' ? 'bg-cyan-400' : member.col === 'fuchsia' ? 'bg-fuchsia-400' : 'bg-blue-400'}`} />
-                      <div className="relative w-full h-full rounded-full border-2 border-white/10 p-1 flex items-center justify-center bg-black/50 overflow-hidden">
-                        <User size={40} className={member.col === 'cyan' ? 'text-cyan-400' : member.col === 'fuchsia' ? 'text-fuchsia-400' : 'text-blue-400'} />
-                        {/* Scan Line Effect on Avatar */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-transparent h-4 w-full animate-scanner" />
+                      <div className="relative w-full h-full rounded-full border-2 border-white/10 p-1 bg-black/50 overflow-hidden">
+                        <img 
+                          src={member.image || "/bg/cyber1.jpg"} 
+                          className="w-full h-full object-cover grayscale group-hover:grayscale-0 brightness-75 group-hover:brightness-110 transition-all duration-700" 
+                        />
+                        {/* Scan Line Effect */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-transparent h-6 w-full animate-scanner pointer-events-none" />
                       </div>
+                      {/* Spinning HUD Ring */}
+                      <div className={`absolute inset-[-8px] rounded-full border border-dashed border-white/10 animate-[spin_20s_linear_infinite] group-hover:border-cyan-500/50`} />
                     </div>
 
                     <h4 className="text-xl font-black text-white uppercase tracking-widest">{member.name}</h4>
-                    <p className={`text-[10px] font-bold uppercase tracking-[0.3em] mt-1 ${member.col === 'cyan' ? 'text-cyan-500' : member.col === 'fuchsia' ? 'text-fuchsia-500' : 'text-blue-500'}`}>{member.role}</p>
+                    <p className={`text-[10px] font-bold uppercase tracking-[0.3em] mt-1 ${member.col === 'cyan' ? 'text-cyan-400' : 'text-fuchsia-400'}`}>{member.role}</p>
 
-                    {/* EXPANDABLE DATA (TRANSISI SMOOTH BIODATA) */}
+                    {/* EXPANDABLE DATA (TRANSISI SUPER SMOOTH) */}
                     <AnimatePresence>
                       {inspectedArchitect === member.id && (
                         <motion.div 
@@ -852,44 +858,33 @@ export default function CyberLandingDark() {
                           exit={{ height: 0, opacity: 0 }}
                           className="mt-6 pt-6 border-t border-white/10 w-full text-left"
                         >
-                          <div className="space-y-4">
-                             <div>
-                                <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Bio_Data</p>
-                                <p className="text-xs text-slate-300 leading-relaxed font-medium">{member.bio}</p>
-                             </div>
-                             <div>
-                                <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Core_Skills</p>
-                                <div className="flex flex-wrap gap-2">
-                                   {member.skills.map((s, idx) => (
-                                     <span key={idx} className="px-2 py-1 rounded bg-white/5 border border-white/5 text-[8px] font-mono text-white/60">{s}</span>
-                                   ))}
-                                </div>
-                             </div>
-                             <div className="flex justify-between items-center pt-4">
-                                <span className="text-[8px] font-mono text-fuchsia-500">ID: {member.id}_SECURED</span>
-                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
-                             </div>
+                          <p className="text-xs text-slate-400 leading-relaxed font-medium mb-4">{member.bio}</p>
+                          <div className="flex flex-wrap gap-2 mb-4">
+                             {member.skills.map((s, idx) => (
+                               <span key={idx} className="px-2 py-0.5 rounded bg-white/5 border border-white/5 text-[8px] font-mono text-white/50">{s}</span>
+                             ))}
+                          </div>
+                          <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                             <span className="text-[8px] font-mono text-cyan-400">AUTH_LEVEL: ACCESS_GRANTED</span>
+                             <CheckCircle2 size={12} className="text-emerald-500 animate-pulse" />
                           </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
 
-                    {/* Hint click */}
-                    {!inspectedArchitect && (
-                      <p className="mt-6 text-[8px] font-black text-slate-600 uppercase tracking-[0.4em] animate-pulse">Click to inspect</p>
-                    )}
+                    {!inspectedArchitect && <p className="mt-6 text-[8px] font-black text-slate-600 uppercase tracking-[0.4em] animate-pulse">Click to Inspect</p>}
                   </div>
                 </motion.div>
               ))}
             </div>
           </div>
 
-          {/* --- FOOTER MODAL --- */}
-          <div className="pt-10 flex flex-col items-center gap-4 border-t border-white/5">
+          {/* FOOTER MODAL CLEAN */}
+          <div className="pt-10 border-t border-white/5 flex flex-col items-center gap-4 text-center">
              <p className="text-[9px] font-mono text-slate-600 tracking-[0.5em] uppercase">Security Protocol // Authenticated Platform Data</p>
-             <div className="flex gap-4">
+             <div className="flex gap-6">
                 {[Facebook, Twitter, Instagram].map((Icon, i) => (
-                  <Icon key={i} size={14} className="text-slate-700 hover:text-cyan-400 transition-colors cursor-pointer" />
+                  <Icon key={i} size={16} className="text-slate-700 hover:text-cyan-400 transition-all cursor-pointer" />
                 ))}
              </div>
           </div>
