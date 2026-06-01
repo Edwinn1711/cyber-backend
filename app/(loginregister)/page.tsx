@@ -399,7 +399,7 @@ const CyberFooterLuxury = ({ onScroll }: { onScroll: (id: string, label: string)
   // Data Link yang dihubungkan dengan ID Section
   const quickLinks = [
     { name: "BERANDA", id: "hero" },
-    { name: "PROFIL", id: "pilar" },
+    { name: "TENTANG KAMIL", id: "pilar" },
     { name: "SOP SIBER", id: "protocol" }, // Menuju Section 6 (Protokol)
     { name: "LAYANAN", id: "infra" }     // Menuju Section 5 (Infrastruktur)
   ];
@@ -568,7 +568,7 @@ export default function CyberLandingDark() {
   const [isLoginOpen, setIsLoginOpen] = useState(false); 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
   const [activeSection, setActiveSection] = useState('Beranda');
-  const [activeModal, setActiveModal] = useState<'PROFIL' | 'LAYANAN' | null>(null); // State Modal Baru
+  const [activeModal, setActiveModal] = useState<'TENTANG KAMI' | 'LAYANAN' | null>(null); // State Modal Baru
 
   // State Form & Mouse (Sama seperti sebelumnya)
   const [activeTab, setActiveTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
@@ -685,10 +685,10 @@ export default function CyberLandingDark() {
              </button>
 
              <button 
-                onClick={() => setActiveModal('PROFIL')}
+                onClick={() => setActiveModal('TENTANG KAMI')}
                 className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 hover:text-white transition-all"
              >
-                <Info size={16} /> Profil
+                <Info size={16} /> TENTANG KAMI
              </button>
 
              <button 
@@ -714,7 +714,7 @@ export default function CyberLandingDark() {
           {isMobileMenuOpen && (
             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="absolute top-full left-0 w-full bg-[#05050a]/98 backdrop-blur-2xl border-b border-white/10 py-10 px-6 lg:hidden flex flex-col gap-6 shadow-2xl">
                <div onClick={() => { scrollToSection('hero', 'Beranda'); setIsMobileMenuOpen(false); }} className="flex items-center gap-5 p-5 rounded-2xl bg-white/5 text-slate-300 font-bold text-xs uppercase hover:text-fuchsia-400 transition-all"><Home size={20} /> Beranda</div>
-               <div onClick={() => { setActiveModal('PROFIL'); setIsMobileMenuOpen(false); }} className="flex items-center gap-5 p-5 rounded-2xl bg-white/5 text-slate-300 font-bold text-xs uppercase hover:text-fuchsia-400 transition-all"><Info size={20} /> Profil</div>
+               <div onClick={() => { setActiveModal('TENTANG KAMI'); setIsMobileMenuOpen(false); }} className="flex items-center gap-5 p-5 rounded-2xl bg-white/5 text-slate-300 font-bold text-xs uppercase hover:text-fuchsia-400 transition-all"><Info size={20} /> Tentang Kami</div>
                <div onClick={() => { setActiveModal('LAYANAN'); setIsMobileMenuOpen(false); }} className="flex items-center gap-5 p-5 rounded-2xl bg-white/5 text-slate-300 font-bold text-xs uppercase hover:text-fuchsia-400 transition-all"><HelpCircle size={20} /> Layanan</div>
             </motion.div>
           )}
@@ -779,7 +779,7 @@ export default function CyberLandingDark() {
 
         {/* FOOTER (DENGAN LOGIKA MODAL) */}
         <CyberFooterLuxury onScroll={(id, label) => {
-           if (label === 'PROFIL') setActiveModal('PROFIL');
+           if (label === 'TENTANG KAMI') setActiveModal('TENTANG KAMI');
            else if (label === 'LAYANAN') setActiveModal('LAYANAN');
            else scrollToSection(id, label);
         }} />
@@ -787,7 +787,7 @@ export default function CyberLandingDark() {
 
 {/* --- MODAL TENTANG KAMI (REVISI TOTAL: DEWA VERSION) --- */}
 <CyberModal 
-        isOpen={activeModal === 'PROFIL'} 
+        isOpen={activeModal === 'TENTANG KAMI'} 
         onClose={() => { setActiveModal(null); setInspectedArchitect(null); }} 
         title="COMMAND CENTRE TENTANG KAMI"
       >
@@ -924,71 +924,89 @@ export default function CyberLandingDark() {
         </div>
       </CyberModal>
 
-{/* --- MODAL LAYANAN (REVISI TOTAL: ULTRA LUXURY HUD) --- */}
-<CyberModal 
+      <CyberModal 
         isOpen={activeModal === 'LAYANAN'} 
         onClose={() => setActiveModal(null)} 
         title="SERVICE INFRASTRUCTURE PROTOCOL"
       >
         <div className="space-y-10 text-left">
-          {/* --- HEADER RINGKASAN --- */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/10 relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            <div className="relative z-10">
-              <h3 className="text-xl lg:text-2xl font-black text-white uppercase tracking-widest mb-2">Sistem Operasional Aktif</h3>
-              <p className="text-slate-400 text-xs lg:text-sm font-medium">Seluruh protokol layanan berjalan di bawah pengawasan sistem enkripsi terpusat.</p>
-            </div>
-            <div className="relative z-10 px-6 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black tracking-[0.3em] animate-pulse">
-              ALL SYSTEMS GO
+          
+          {/* --- HEADER STATUS (Pusat Komando) --- */}
+          <div className="relative p-8 lg:p-10 rounded-[3rem] bg-[#0a0c1a] border border-cyan-500/20 overflow-hidden shadow-2xl">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent animate-scanner" />
+            
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 relative z-10">
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                   <h3 className="text-2xl lg:text-3xl font-black text-white uppercase tracking-tighter">Sistem Operasional Aktif</h3>
+                </div>
+                <p className="text-slate-500 text-sm lg:text-base max-w-2xl font-medium">Seluruh protokol layanan berjalan di bawah pengawasan sistem enkripsi terpusat untuk menjamin integritas data sekolah secara real time.</p>
+              </div>
+              <div className="flex flex-col items-end gap-2">
+                 <div className="px-6 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.3em]">
+                    SECURE NODE ACTIVE
+                 </div>
+                 <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">Network Load: 12.4ms</span>
+              </div>
             </div>
           </div>
 
-          {/* --- GRID LAYANAN (6 KOTAK MEWAH) --- */}
+          {/* --- GRID LAYANAN (6 NODES DEWA) --- */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {[
-              { t: "Traffic Filter", i: ShieldAlert, d: "Monitoring masuk keluar data jaringan", col: "text-cyan-400" },
-              { t: "IDS & IPS", i: Activity, d: "Deteksi intrusi siber otomatis", col: "text-fuchsia-400" },
-              { t: "Data Backup", i: Cpu, d: "Redundansi data mingguan terenkripsi", col: "text-blue-400" },
-              { icon: Lock, t: "Encryption", d: "Sistem keamanan AES-256 Bit", col: "text-emerald-400" },
-              { icon: Fingerprint, t: "Auth 2FA", d: "Identitas digital ganda yang aman", col: "text-indigo-400" },
-              { icon: ScanLine, t: "Audit System", d: "Laporan kesehatan sistem berkala", col: "text-rose-400" }
+              { t: "Traffic Filter", i: ShieldAlert, d: "Penyaringan trafik masuk dan keluar jaringan secara otomatis.", col: "cyan" },
+              { t: "IDS and IPS", i: Activity, d: "Sistem deteksi dan pencegahan intrusi siber tingkat tinggi.", col: "fuchsia" },
+              { t: "Data Backup", i: Cpu, d: "Sistem redundansi data mingguan di server lokal terenkripsi.", col: "blue" },
+              { t: "Encryption", i: Lock, d: "Penguncian data sensitif menggunakan standar algoritma AES 256.", col: "emerald" },
+              { t: "Auth 2FA", i: Fingerprint, d: "Otentikasi identitas digital ganda untuk akses personil.", col: "indigo" },
+              { t: "Audit System", i: ScanLine, d: "Laporan kesehatan dan pemindaian sistem secara berkala.", col: "rose" }
             ].map((item, i) => (
               <div 
                 key={i} 
-                className="group relative bg-[#08070d] border border-white/5 p-8 rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:border-cyan-500/30 hover:-translate-y-2 shadow-2xl"
+                className="group relative bg-gradient-to-b from-[#0d111a] to-[#050811] border border-white/5 p-10 rounded-[3rem] transition-all duration-500 hover:border-cyan-500/30 hover:-translate-y-2 shadow-2xl overflow-hidden"
               >
-                {/* Efek Scanner Laser Vertikal */}
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400/40 opacity-0 group-hover:opacity-100 group-hover:animate-scanner z-20" />
+                {/* Visual HUD Micro-elements */}
+                <div className="absolute top-8 right-10 text-[9px] font-mono text-slate-700 uppercase tracking-widest group-hover:text-cyan-500/40 transition-colors">
+                  Node 0{i+1}
+                </div>
                 
-                {/* Background Tech Pattern */}
-                <div className="absolute inset-0 bg-grid-static opacity-[0.02] group-hover:opacity-[0.05] transition-opacity" />
-                
-                {/* Icon dengan Glow */}
-                <div className="relative z-10 w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                  {item.i ? <item.i className={`${item.col} drop-shadow-[0_0_8px_currentColor]`} size={28} /> : <item.icon className={`${item.col} drop-shadow-[0_0_8px_currentColor]`} size={28} />}
+                {/* Ikon dengan Container HUD */}
+                <div className="relative w-16 h-16 mb-8 flex items-center justify-center">
+                  <div className={`absolute inset-0 rounded-2xl rotate-45 border border-white/5 group-hover:rotate-90 group-hover:border-cyan-500/30 transition-all duration-700`} />
+                  <item.i className={item.col === 'cyan' ? 'text-cyan-400' : item.col === 'fuchsia' ? 'text-fuchsia-400' : item.col === 'blue' ? 'text-blue-400' : item.col === 'emerald' ? 'text-emerald-400' : item.col === 'indigo' ? 'text-indigo-400' : 'text-rose-400'} size={32} />
                 </div>
 
-                <div className="relative z-10 space-y-2">
-                  <h4 className="text-white font-black text-lg uppercase tracking-wider group-hover:text-cyan-400 transition-colors">{item.t}</h4>
-                  <p className="text-slate-500 text-[11px] leading-relaxed font-medium">{item.d}</p>
+                <div className="space-y-3 relative z-10">
+                  <h4 className="text-xl font-black text-white uppercase tracking-widest group-hover:text-cyan-400 transition-colors">{item.t}</h4>
+                  <p className="text-slate-500 text-xs lg:text-[13px] leading-relaxed font-medium">
+                    {item.d}
+                  </p>
                 </div>
 
-                {/* Micro-data HUD detail */}
-                <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
-                   <span className="text-[8px] font-mono text-slate-500">PROTO_ID: 0{i+1}</span>
-                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                {/* Status Bar Kecil di bawah tiap card */}
+                <div className="mt-8 flex items-center gap-3">
+                   <div className="flex-1 h-[1px] bg-white/5 relative overflow-hidden">
+                      <motion.div 
+                        initial={{ x: "-100%" }}
+                        animate={{ x: "100%" }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: i * 0.5 }}
+                        className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent"
+                      />
+                   </div>
+                   <span className="text-[8px] font-mono text-slate-600">ONLINE</span>
                 </div>
               </div>
             ))}
           </div>
-          
-          {/* --- FOOTER MODAL (TANPA GARIS MIRING) --- */}
-          <div className="pt-8 border-t border-white/5 flex flex-col items-center gap-4 text-center">
-             <p className="text-[9px] font-mono text-slate-600 tracking-[0.5em] uppercase">Security Protocol Access Authorized</p>
+
+          {/* --- FOOTER MODAL (CLEAN) --- */}
+          <div className="pt-6 border-t border-white/5 flex justify-center">
+             <p className="text-[9px] font-mono text-slate-600 tracking-[0.6em] uppercase">Security Protocol Access Authorized Without Interruption</p>
           </div>
         </div>
       </CyberModal>
-
+      
 {/* --- ULTRA-SMOOTH HOLOGRAPHIC PORTAL (DEWA VERSION) --- */}
 <AnimatePresence>
         {isLoginOpen && (
