@@ -554,7 +554,7 @@ const CyberModal = ({ isOpen, onClose, title, children }: { isOpen: boolean, onC
           </div>
           <div className="flex-1 overflow-y-auto p-8 lg:p-12 relative z-10 custom-scrollbar">{children}</div>
           <div className="p-6 border-t border-white/5 text-center bg-black/20">
-            <p className="text-[10px] font-mono text-slate-500 tracking-[0.5em] uppercase">Security Protocol // Access Authorized</p>
+          <p className="text-[10px] font-mono text-slate-500 tracking-[0.5em] uppercase">Security Protocol Access Authorized</p>
           </div>
         </motion.div>
       </div>
@@ -924,22 +924,68 @@ export default function CyberLandingDark() {
         </div>
       </CyberModal>
 
-      <CyberModal isOpen={activeModal === 'LAYANAN'} onClose={() => setActiveModal(null)} title="Services // Protokol Layanan">
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-          {[
-            { t: "Traffic Filter", i: ShieldAlert, d: "Monitoring masuk-keluar data jaringan" },
-            { t: "IDS / IPS", i: Activity, d: "Deteksi intrusi siber otomatis" },
-            { t: "Data Backup", i: Cpu, d: "Redundansi data mingguan terenkripsi" },
-            { t: "Encryption", i: Lock, d: "Sistem keamanan AES-256 Bit" },
-            { t: "Auth 2FA", i: Fingerprint, d: "Identitas digital ganda yang aman" },
-            { t: "Audit System", i: ScanLine, d: "Laporan bulanan kesehatan sistem" }
-          ].map((item, i) => (
-            <div key={i} className="p-6 bg-white/[0.03] border border-white/5 rounded-3xl hover:border-cyan-400/40 transition-all group">
-              <item.i className="text-cyan-400 mb-4 group-hover:scale-110 transition-transform" size={24} />
-              <h4 className="text-white font-black text-xs uppercase mb-2 tracking-widest">{item.t}</h4>
-              <p className="text-[10px] text-slate-500 leading-relaxed">{item.d}</p>
+{/* --- MODAL LAYANAN (REVISI TOTAL: ULTRA LUXURY HUD) --- */}
+<CyberModal 
+        isOpen={activeModal === 'LAYANAN'} 
+        onClose={() => setActiveModal(null)} 
+        title="SERVICE INFRASTRUCTURE PROTOCOL"
+      >
+        <div className="space-y-10 text-left">
+          {/* --- HEADER RINGKASAN --- */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/10 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="relative z-10">
+              <h3 className="text-xl lg:text-2xl font-black text-white uppercase tracking-widest mb-2">Sistem Operasional Aktif</h3>
+              <p className="text-slate-400 text-xs lg:text-sm font-medium">Seluruh protokol layanan berjalan di bawah pengawasan sistem enkripsi terpusat.</p>
             </div>
-          ))}
+            <div className="relative z-10 px-6 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black tracking-[0.3em] animate-pulse">
+              ALL SYSTEMS GO
+            </div>
+          </div>
+
+          {/* --- GRID LAYANAN (6 KOTAK MEWAH) --- */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {[
+              { t: "Traffic Filter", i: ShieldAlert, d: "Monitoring masuk keluar data jaringan", col: "text-cyan-400" },
+              { t: "IDS & IPS", i: Activity, d: "Deteksi intrusi siber otomatis", col: "text-fuchsia-400" },
+              { t: "Data Backup", i: Cpu, d: "Redundansi data mingguan terenkripsi", col: "text-blue-400" },
+              { icon: Lock, t: "Encryption", d: "Sistem keamanan AES-256 Bit", col: "text-emerald-400" },
+              { icon: Fingerprint, t: "Auth 2FA", d: "Identitas digital ganda yang aman", col: "text-indigo-400" },
+              { icon: ScanLine, t: "Audit System", d: "Laporan kesehatan sistem berkala", col: "text-rose-400" }
+            ].map((item, i) => (
+              <div 
+                key={i} 
+                className="group relative bg-[#08070d] border border-white/5 p-8 rounded-[2.5rem] overflow-hidden transition-all duration-500 hover:border-cyan-500/30 hover:-translate-y-2 shadow-2xl"
+              >
+                {/* Efek Scanner Laser Vertikal */}
+                <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400/40 opacity-0 group-hover:opacity-100 group-hover:animate-scanner z-20" />
+                
+                {/* Background Tech Pattern */}
+                <div className="absolute inset-0 bg-grid-static opacity-[0.02] group-hover:opacity-[0.05] transition-opacity" />
+                
+                {/* Icon dengan Glow */}
+                <div className="relative z-10 w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                  {item.i ? <item.i className={`${item.col} drop-shadow-[0_0_8px_currentColor]`} size={28} /> : <item.icon className={`${item.col} drop-shadow-[0_0_8px_currentColor]`} size={28} />}
+                </div>
+
+                <div className="relative z-10 space-y-2">
+                  <h4 className="text-white font-black text-lg uppercase tracking-wider group-hover:text-cyan-400 transition-colors">{item.t}</h4>
+                  <p className="text-slate-500 text-[11px] leading-relaxed font-medium">{item.d}</p>
+                </div>
+
+                {/* Micro-data HUD detail */}
+                <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
+                   <span className="text-[8px] font-mono text-slate-500">PROTO_ID: 0{i+1}</span>
+                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* --- FOOTER MODAL (TANPA GARIS MIRING) --- */}
+          <div className="pt-8 border-t border-white/5 flex flex-col items-center gap-4 text-center">
+             <p className="text-[9px] font-mono text-slate-600 tracking-[0.5em] uppercase">Security Protocol Access Authorized</p>
+          </div>
         </div>
       </CyberModal>
 
