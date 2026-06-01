@@ -399,49 +399,51 @@ export default function StudentPortal() {
                       {/* Laser Beam Scanner (Vertical) */}
                       <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-20" />
 
-                      {/* Content HUD */}
-                      <div className="relative z-10 flex flex-col h-full">
-                        <div className="flex justify-between items-start mb-16">
-                           <div className="space-y-2">
-                              <p className="text-[10px] font-mono text-slate-500 tracking-[0.4em] uppercase">{domain.label}</p>
-                              <div className="flex items-center gap-2">
-                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
-                                 <span className="text-[8px] font-black text-emerald-400 tracking-[0.5em] uppercase">SYSTEM ONLINE</span>
-                              </div>
-                           </div>
-                           {/* Icon with Ring Orbit */}
-                           <div className="relative">
-                              <div className="absolute inset-0 rounded-full border border-white/5 scale-150 animate-ping opacity-0 group-hover:opacity-20" />
-                              <div className="w-16 h-16 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-700 group-hover:bg-black group-hover:rotate-12 group-hover:scale-110">
-                                 <domain.icon size={32} style={{ color: domain.color }} className="drop-shadow-[0_0_12px_currentColor]" />
-                              </div>
-                           </div>
-                        </div>
+{/* --- CONTENT HUD --- */}
+<div className="relative z-10 flex flex-col h-full">
+                          <div className="flex justify-between items-start mb-12">
+                             <div className="space-y-1.5 text-left">
+                                <p className="text-[9px] font-mono text-slate-500 tracking-[0.3em] uppercase">{domain.label}</p>
+                                <div className="flex items-center gap-2">
+                                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
+                                   <span className="text-[8px] font-black text-emerald-400 tracking-[0.4em] uppercase">Status: Online</span>
+                                </div>
+                             </div>
+                             <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-black group-hover:scale-110 shadow-inner">
+                                <domain.icon size={26} style={{ color: domain.color }} className="drop-shadow-[0_0_10px_currentColor]" />
+                             </div>
+                          </div>
 
-                        <div className="space-y-6">
-                           <h3 className="text-4xl lg:text-5xl font-black text-white leading-[0.9] tracking-tighter uppercase group-hover:text-cyan-400 transition-colors duration-500">
-                             {domain.title.split(' ')[0]} <br/> 
-                             <span className="opacity-50">{domain.title.split(' ')[1] || ""}</span>
-                           </h3>
-                           <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.4em] leading-relaxed max-w-[80%]">
-                             {domain.desc}
-                           </p>
-                        </div>
+                          <div className="space-y-4 text-left">
+                             {/* UKURAN JUDUL DIPERPAS: text-3xl */}
+                             <h3 className="text-2xl lg:text-3xl font-black text-white leading-none tracking-tighter uppercase group-hover:text-cyan-400 transition-colors duration-500">
+                               {domain.title.split(' ')[0]} <br/> 
+                               <span className="opacity-40">{domain.title.split(' ')[1] || ""}</span>
+                             </h3>
+                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] leading-relaxed max-w-[90%]">
+                               {domain.desc}
+                             </p>
+                          </div>
 
-                        {/* INITIALIZE BUTTON HUD (REVISI TANPA UNDERSCORE) */}
-                        <div className="mt-20 pt-10 border-t border-white/5 flex items-center justify-between group-hover:border-white/10 transition-colors">
-                           <div className="flex flex-col">
-                              <span className="text-[8px] font-mono text-slate-700 tracking-[0.5em] uppercase">ACCESS LEVEL</span>
-                              <span className="text-[10px] font-black text-white tracking-[0.3em] uppercase">ENCRYPTED</span>
-                           </div>
-                           <div className="flex items-center gap-5 text-cyan-400 group-hover:text-white transition-all duration-500">
-                              <span className="text-[11px] font-black tracking-[0.5em] uppercase">INITIALIZE</span>
-                              <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-black transition-all">
-                                 <ArrowRight size={18} />
-                              </div>
-                           </div>
+                          {/* --- FOOTER CARD (PERBAIKAN: SEJAJAR & SLEEK) --- */}
+                          <div className="mt-auto pt-8 border-t border-white/5 flex items-end justify-between w-full group/btn">
+                             {/* Sisi Kiri: Info Enkripsi */}
+                             <div className="space-y-1 text-left">
+                                <p className="text-[8px] font-mono text-slate-600 tracking-[0.2em] uppercase">Clearance Level</p>
+                                <p className="text-[11px] font-black text-white tracking-[0.3em] uppercase">ENCRYPTED</p>
+                             </div>
+
+                             {/* Sisi Kanan: Tombol Action (Sejajar Sempurna) */}
+                             <div className="flex items-center gap-4 transition-all duration-500 group-hover/btn:translate-x-1">
+                                <span className="text-[9px] font-black text-cyan-400 tracking-[0.5em] uppercase group-hover/btn:text-white transition-colors">
+                                   INITIALIZE
+                                </span>
+                                <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-white/[0.03] group-hover/btn:bg-cyan-500 group-hover/btn:text-black transition-all duration-500 shadow-xl">
+                                   <ArrowRight size={16} />
+                                </div>
+                             </div>
+                          </div>
                         </div>
-                      </div>
                     </motion.div>
                   ))}
                 </div>
