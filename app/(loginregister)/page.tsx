@@ -396,42 +396,53 @@ const CyberClosingSection = () => (
 
 
 const CyberFooterLuxury = ({ onScroll }: { onScroll: (id: string, label: string) => void }) => {
-  // Data Link yang dihubungkan dengan ID Section
   const quickLinks = [
     { name: "BERANDA", id: "hero" },
-    { name: "TENTANG KAMIL", id: "pilar" },
-    { name: "SOP SIBER", id: "protocol" }, // Menuju Section 6 (Protokol)
-    { name: "LAYANAN", id: "infra" }     // Menuju Section 5 (Infrastruktur)
+    { name: "PROFIL", id: "pilar" },
+    { name: "SOP SIBER", id: "protocol" },
+    { name: "LAYANAN", id: "infra" }
   ];
 
   return (
-    <footer className="relative w-full bg-[#020108] pt-20 pb-8 overflow-hidden">
+    <footer className="relative w-full bg-[#020108] pt-20 pb-10 overflow-hidden border-t border-white/5">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-16">
         
-        {/* Newsletter Section */}
+        {/* --- 1. NEWSLETTER HUD SECTION --- */}
         <div className="flex flex-col lg:flex-row justify-between items-center pb-16 mb-16 border-b border-white/5 gap-8">
           <div className="text-left">
             <h4 className="text-white font-black text-xs tracking-[0.3em] uppercase mb-2">SYSTEM UPDATE SUBSCRIBE</h4>
             <p className="text-slate-500 text-[10px] font-medium flex items-center gap-2">
-              <Mail size={12} className="text-cyan-400" /> Dapatkan laporan intelijen siber terbaru.
+              <Mail size={12} className="text-cyan-400" /> Dapatkan laporan intelijen siber terbaru langsung ke email Anda.
             </p>
           </div>
           <div className="relative w-full lg:w-[400px]">
-            <input type="email" placeholder="ENTER EMAIL ADDRESS..." className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-6 pr-16 text-[10px] font-mono text-cyan-400 outline-none" />
-            <button className="absolute right-2 top-2 bottom-2 px-4 bg-cyan-500 text-black rounded-lg"><Send size={14} /></button>
+            <input 
+              type="email" 
+              placeholder="ENTER EMAIL ADDRESS..." 
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-6 pr-16 text-[10px] font-mono text-cyan-400 focus:border-cyan-500/50 outline-none transition-all"
+            />
+            <button className="absolute right-2 top-2 bottom-2 px-4 bg-cyan-500 text-black rounded-lg hover:bg-white transition-all">
+              <Send size={14} />
+            </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+        {/* --- 2. MAIN FOOTER CONTENT --- */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20 text-left">
+          
+          {/* Branding Area */}
           <div className="col-span-2 md:col-span-1 space-y-6">
             <div className="flex items-center gap-3">
               <ShieldCheck size={28} className="text-fuchsia-500" />
-              <h3 className="font-black text-white text-lg tracking-tighter uppercase">CYBER<span className="text-fuchsia-500">READINESS</span></h3>
+              <h3 className="font-black text-white text-xl tracking-tighter uppercase leading-none">CYBER<span className="text-fuchsia-500">READINESS</span></h3>
             </div>
-            <p className="text-slate-500 text-[11px] leading-relaxed font-medium">Pusat pertahanan digital sekolah terintegrasi.</p>
+            <p className="text-slate-500 text-[11px] leading-relaxed font-medium">Pusat pertahanan digital sekolah terintegrasi. Mengamankan kedaulatan digital pendidikan Indonesia.</p>
+            <div className="flex items-center gap-2 text-cyan-400 font-mono text-[9px] tracking-widest uppercase">
+              <Activity size={12} /> ALL SYSTEMS OPERATIONAL
+            </div>
           </div>
 
-          {/* PERBAIKAN: QUICK LINKS BERFUNGSI */}
+          {/* Quick Links */}
           <div className="space-y-6">
             <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><Globe size={12}/> QUICK LINKS</h5>
             <ul className="space-y-3">
@@ -447,33 +458,59 @@ const CyberFooterLuxury = ({ onScroll }: { onScroll: (id: string, label: string)
             </ul>
           </div>
 
+          {/* Contact Us */}
           <div className="space-y-6">
             <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><Phone size={12}/> CONTACT US</h5>
             <ul className="space-y-3">
-              <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer">devinedwinsiahaan171105@gmail.com</li>
-              <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer">08887537736</li>
+              <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors break-all">devinedwinsiahaan171105@gmail.com</li>
+              <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors">08887537736</li>
+              <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors uppercase">HELP CENTER</li>
             </ul>
           </div>
 
+          {/* Location (CLICKABLE MAPS) */}
           <div className="space-y-6">
-            <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><MapPin size={12}/> LOCATION</h5>
-            <ul className="space-y-3 text-slate-500 text-[10px] font-bold tracking-widest uppercase">
-              <li>INSTITUT TEKNOLOGI DEL</li>
-              <li>LAGUBOTI, INDONESIA</li>
-            </ul>
+            <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2">
+              <MapPin size={12}/> LOCATION
+            </h5>
+            <div className="relative group">
+              <a 
+                href="https://www.google.com/maps/search/?api=1&query=Institut+Teknologi+Del+Laguboti" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block space-y-2 outline-none"
+              >
+                <div className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 transition-all duration-300 tracking-widest uppercase flex flex-col gap-1">
+                  <span className="group-hover:translate-x-1 transition-transform duration-500">INSTITUT TEKNOLOGI DEL</span>
+                  <span className="text-slate-600 text-[9px] group-hover:text-cyan-500/70 group-hover:translate-x-2 transition-all duration-700">LAGUBOTI, INDONESIA</span>
+                </div>
+                <div className="w-0 group-hover:w-full h-[1px] bg-gradient-to-r from-cyan-500/50 via-cyan-500/10 to-transparent transition-all duration-500" />
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2">
+                   <div className="w-1 h-1 rounded-full bg-cyan-500 animate-pulse" />
+                   <span className="text-[7px] font-mono text-cyan-600 tracking-widest uppercase">Open in maps</span>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+        {/* --- 3. BOTTOM BAR (SOCIALS & COPYRIGHT) --- */}
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex gap-6">
-            {[Facebook, Twitter, Youtube, Instagram].map((Icon, i) => (<Icon key={i} size={16} className="text-slate-600 hover:text-cyan-400 cursor-pointer transition-all" />))}
+            {[Facebook, Twitter, Youtube, Instagram].map((Icon, i) => (
+              <Icon key={i} size={16} className="text-slate-600 hover:text-cyan-400 cursor-pointer transition-all hover:scale-125" />
+            ))}
           </div>
-          <p className="text-slate-700 text-[8px] font-mono tracking-[0.5em] uppercase">© 2026 CYBER READINESS // DEFENDING DIGITAL EDUCATION</p>
+          <p className="text-slate-700 text-[8px] font-mono tracking-[0.5em] uppercase">
+            © 2026 CYBER READINESS DEFENDING DIGITAL EDUCATION
+          </p>
         </div>
+
       </div>
     </footer>
   );
 };
+
 const TECH_ICONS = [
   { id: "c1", icon: CreditCard, label: "CARD SEC", col: "text-cyan-400" },
   { id: "c2", icon: ShieldAlert, label: "PHISH HOOK", col: "text-red-400" },
@@ -1006,7 +1043,7 @@ export default function CyberLandingDark() {
           </div>
         </div>
       </CyberModal>
-      
+
 {/* --- ULTRA-SMOOTH HOLOGRAPHIC PORTAL (DEWA VERSION) --- */}
 <AnimatePresence>
         {isLoginOpen && (
