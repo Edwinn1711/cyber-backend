@@ -297,7 +297,7 @@ export default function StudentPortal() {
             );
           })}
         </nav>
-        
+
         {/* --- AREA LOGOUT (REVISI: TANPA SHUTDOWN) --- */}
         <div className="p-6 border-t border-white/5">
           <button 
@@ -409,85 +409,106 @@ export default function StudentPortal() {
               </motion.div>
             )}
 
-{/* VIEW ASSESSMENT (ULTRA-LUXURY HOLOGRAPHIC INTERFACE) */}
-{view === 'assessment' && (
-              <motion.div key="assess-hub" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="max-w-[1600px] mx-auto space-y-16 py-12">
+{/* VIEW ASSESSMENT (REVISI: ULTRA-SMOOTH PHYSICS HUD) */}
+            {view === 'assessment' && (
+              <motion.div 
+                key="assess-hub" 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }} 
+                className="max-w-[1600px] mx-auto space-y-20 py-12"
+              >
                 
                 {/* Header Page */}
-                <div className="text-center space-y-4 relative">
+                <div className="text-center space-y-6 relative">
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-cyan-500/5 blur-[120px] pointer-events-none" />
-                  <motion.div initial={{ y: -20 }} animate={{ y: 0 }} className="inline-flex items-center gap-4 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-[10px] font-black tracking-[0.5em] uppercase backdrop-blur-xl">
+                  <motion.div 
+                    initial={{ y: -20, opacity: 0 }} 
+                    animate={{ y: 0, opacity: 1 }} 
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    className="inline-flex items-center gap-4 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-[10px] font-black tracking-[0.6em] uppercase backdrop-blur-xl"
+                  >
                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]" />
-                    Operational Target Modules
+                    Tactical Deployment Hub
                   </motion.div>
-                  <h2 className="text-4xl lg:text-7xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-2xl">
+                  <h2 className="text-5xl lg:text-8xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-2xl">
                     TARGET <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 animate-gradient-x">DOMAINS.</span>
                   </h2>
                 </div>
 
                 {/* Grid 3 Kartu Dewa */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 pb-32">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14 pb-32">
                   {TACTICAL_DOMAINS.map((domain, i) => (
                     <motion.div 
                       key={i}
                       initial={{ opacity: 0, y: 40 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1, type: "spring", stiffness: 100 }}
-                      whileHover={{ y: -15, scale: 1.02 }}
+                      // SPRING PHYSICS: Rahasia agar tidak kaku/lengket
+                      transition={{ 
+                        type: "spring", 
+                        stiffness: 400, // Sangat responsif
+                        damping: 30,    // Mencegah goyangan berlebih
+                        mass: 1, 
+                        delay: i * 0.1 
+                      }}
+                      // HOVER INTERACTION: Super Snappy
+                      whileHover={{ 
+                        y: -20, 
+                        scale: 1.02,
+                        transition: { type: "spring", stiffness: 500, damping: 25 } 
+                      }}
                       onClick={() => { setSelectedDomain(domain.id); setView('briefing'); }}
-                      className="group relative bg-[#050811]/40 backdrop-blur-3xl border border-white/5 p-10 lg:p-12 rounded-[3.5rem] cursor-pointer overflow-hidden transition-all duration-700 shadow-2xl hover:border-cyan-500/30"
+                      className="group relative bg-[#050811]/40 backdrop-blur-3xl border border-white/5 p-12 rounded-[4rem] cursor-pointer overflow-hidden shadow-2xl hover:border-cyan-500/40"
+                      style={{ willChange: "transform" }} // Optimasi GPU agar tidak lag
                     >
-                      {/* --- BACKGROUND DECOR --- */}
-                      <div className="absolute inset-0 bg-grid-static opacity-[0.02] group-hover:opacity-[0.06] transition-opacity duration-700" />
+                      {/* --- HOLOGRAPHIC LAYERS --- */}
+                      <div className="absolute inset-0 bg-grid-static opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500" />
                       
                       {/* Laser Beam Scanner */}
-                      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-20" />
+                      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-20" />
 
+                      {/* Content HUD */}
                       <div className="relative z-10 flex flex-col h-full">
-                        {/* Status & Icon Row */}
-                        <div className="flex justify-between items-start mb-12">
-                           <div className="space-y-1.5 text-left">
-                              <p className="text-[9px] font-mono text-slate-500 tracking-[0.3em] uppercase">{domain.label}</p>
+                        <div className="flex justify-between items-start mb-16">
+                           <div className="space-y-2 text-left">
+                              <p className="text-[10px] font-mono text-slate-500 tracking-[0.4em] uppercase">{domain.label}</p>
                               <div className="flex items-center gap-2">
-                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
-                                 <span className="text-[8px] font-black text-emerald-400 tracking-[0.4em] uppercase">Status: Online</span>
+                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
+                                 <span className="text-[8px] font-black text-emerald-400 tracking-[0.5em] uppercase">SYSTEM ONLINE</span>
                               </div>
                            </div>
-                           <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-black group-hover:scale-110 group-hover:rotate-12 shadow-inner">
-                              <domain.icon size={26} style={{ color: domain.color }} className="drop-shadow-[0_0_10px_currentColor]" />
+                           <div className="w-16 h-16 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-black group-hover:rotate-12 group-hover:scale-110 shadow-inner">
+                              <domain.icon size={32} style={{ color: domain.color }} className="drop-shadow-[0_0_12px_currentColor]" />
                            </div>
                         </div>
 
-                        {/* Title Section (FIXED OVERFLOW) */}
-                        <div className="space-y-4 text-left flex-1">
-                           <h3 className="text-2xl lg:text-3xl font-black text-white leading-[0.9] tracking-tighter uppercase group-hover:text-cyan-400 transition-colors duration-500">
+                        <div className="space-y-6 text-left flex-1">
+                           <h3 className="text-3xl lg:text-4xl font-black text-white leading-[0.9] tracking-tighter uppercase group-hover:text-cyan-400 transition-colors duration-500">
                              {domain.title.split(' ')[0]} <br/> 
                              <span className="opacity-40">{domain.title.split(' ').slice(1).join(' ')}</span>
                            </h3>
-                           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] leading-relaxed max-w-[90%]">
+                           <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.3em] leading-relaxed max-w-[90%]">
                              {domain.desc}
                            </p>
                         </div>
 
-                        {/* Footer Card (PERBAIKAN SEJAJAR) */}
-                        <div className="mt-14 pt-8 border-t border-white/5 flex items-end justify-between w-full group/btn">
-                           <div className="space-y-1 text-left">
-                              <p className="text-[8px] font-mono text-slate-600 tracking-[0.2em] uppercase">Auth Level</p>
-                              <p className="text-[10px] font-black text-white tracking-[0.3em] uppercase">ENCRYPTED</p>
+                        {/* Footer Card - Rapi & Sejajar */}
+                        <div className="mt-20 pt-10 border-t border-white/5 flex items-end justify-between">
+                           <div className="flex flex-col text-left space-y-1">
+                              <span className="text-[8px] font-mono text-slate-700 tracking-[0.5em] uppercase">Access Level</span>
+                              <span className="text-[10px] font-black text-white tracking-[0.3em] uppercase">ENCRYPTED</span>
                            </div>
-                           <div className="flex items-center gap-4 transition-all duration-500 group-hover/btn:translate-x-1">
-                              <span className="text-[9px] font-black text-cyan-400 tracking-[0.5em] uppercase group-hover/btn:text-white transition-colors">
-                                 INITIALIZE
-                              </span>
-                              <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-white/[0.03] group-hover/btn:bg-cyan-500 group-hover/btn:text-black transition-all duration-500 shadow-xl">
-                                 <ArrowRight size={16} />
+                           <div className="flex items-center gap-5 text-cyan-400 group-hover:text-white transition-all duration-300">
+                              <span className="text-[11px] font-black tracking-[0.5em] uppercase">Initialize</span>
+                              <div className="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center bg-white/[0.03] group-hover:bg-cyan-500 group-hover:text-black transition-all duration-300 shadow-xl">
+                                 <ArrowRight size={18} />
                               </div>
                            </div>
                         </div>
                       </div>
 
                       {/* Hover Aura Background */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700 pointer-events-none" style={{ background: `radial-gradient(circle at 70% 30%, ${domain.color}, transparent 70%)` }} />
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none" style={{ background: `radial-gradient(circle at 70% 30%, ${domain.color}, transparent 70%)` }} />
                     </motion.div>
                   ))}
                 </div>
