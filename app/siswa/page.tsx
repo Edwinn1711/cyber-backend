@@ -236,6 +236,70 @@ export default function StudentPortal() {
 
   if (!isAuthorized) return null;
 
+
+  const CyberSentinel = () => {
+    return (
+      <div className="relative flex items-center justify-center h-[350px] lg:h-[450px] w-full select-none">
+        {/* --- AMBIENT HUD RINGS --- */}
+        <div className="absolute w-[300px] h-[300px] border border-cyan-500/5 rounded-full animate-[spin_20s_linear_infinite]" />
+        <div className="absolute w-[350px] h-[350px] border border-dashed border-fuchsia-500/10 rounded-full animate-[spin_30s_linear_infinite_reverse]" />
+        <div className="absolute w-64 h-64 bg-cyan-500/5 blur-[100px] rounded-full animate-pulse" />
+  
+        {/* --- MAIN ROBOT BODY --- */}
+        <motion.div 
+          animate={{ y: [0, -20, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="relative flex flex-col items-center z-10"
+        >
+          {/* 1. KEPALA (HEAD) */}
+          <motion.div 
+            animate={{ rotateZ: [-1, 1, -1] }}
+            transition={{ duration: 5, repeat: Infinity }}
+            className="relative w-16 h-20 bg-[#0a0a0f] border-2 border-cyan-400/40 rounded-t-3xl rounded-b-lg flex flex-col items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.2)] z-30"
+          >
+            <div className="flex gap-3 mb-2">
+              <div className="w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee] animate-pulse" />
+              <div className="w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee] animate-pulse" />
+            </div>
+            <div className="w-6 h-0.5 bg-cyan-500/30 rounded-full" />
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-0.5 h-4 bg-cyan-500/50" />
+            <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-cyan-400 rounded-full animate-ping" />
+          </motion.div>
+  
+          {/* 2. TUBUH (TORSO) */}
+          <div className="relative w-28 h-36 bg-[#0a0a0f] border-2 border-cyan-400/30 rounded-[2rem] -mt-1 flex flex-col items-center p-3 shadow-2xl z-20 overflow-hidden">
+             <div className="w-10 h-10 rounded-full border border-cyan-500/20 flex items-center justify-center my-2">
+                <div className="w-5 h-5 bg-cyan-500/20 rounded-full flex items-center justify-center animate-pulse">
+                   <Zap size={12} className="text-cyan-400 fill-current" />
+                </div>
+             </div>
+             <div className="space-y-1.5 w-full opacity-20">
+                <div className="h-0.5 w-full bg-cyan-400" />
+                <div className="h-0.5 w-full bg-cyan-400" />
+                <div className="h-0.5 w-full bg-cyan-400" />
+             </div>
+          </div>
+  
+          {/* 3. TANGAN (ARMS) */}
+          <motion.div animate={{ rotate: [-5, 5, -5] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="absolute -left-10 top-20 origin-top-right w-5 h-16 bg-[#0a0a0f] border border-cyan-400/20 rounded-full shadow-lg" />
+          <motion.div animate={{ rotate: [5, -5, 5] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="absolute -right-10 top-20 origin-top-left w-5 h-16 bg-[#0a0a0f] border border-cyan-400/20 rounded-full shadow-lg" />
+  
+          {/* 4. KAKI (LEGS - HOVER MODE) */}
+          <div className="flex gap-6 -mt-2">
+            <div className="w-6 h-16 bg-[#0a0a0f] border border-cyan-400/20 rounded-b-2xl shadow-xl flex flex-col items-center">
+               <div className="w-3 h-8 bg-gradient-to-b from-cyan-400/30 to-transparent blur-sm mt-1 animate-pulse" />
+            </div>
+            <div className="w-6 h-16 bg-[#0a0a0f] border border-cyan-400/20 rounded-b-2xl shadow-xl flex flex-col items-center">
+               <div className="w-3 h-8 bg-gradient-to-b from-cyan-400/30 to-transparent blur-sm mt-1 animate-pulse delay-75" />
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    );
+  };
+
+
+
   return (
     <div className="flex h-screen w-full text-slate-100 overflow-hidden font-sans selection:bg-fuchsia-500/30">
       <PersistentUniverse bgIdx={bgIdx} />
@@ -467,43 +531,56 @@ export default function StudentPortal() {
                       {/* Laser Beam Scanner */}
                       <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-20" />
 
-                      {/* Content HUD */}
-                      <div className="relative z-10 flex flex-col h-full">
-                        <div className="flex justify-between items-start mb-16">
+{/* --- CONTENT HUD --- */}
+<div className="relative z-10 flex flex-col h-full">
+                        {/* Top Header Card */}
+                        <div className="flex justify-between items-start mb-14">
                            <div className="space-y-2 text-left">
-                              <p className="text-[10px] font-mono text-slate-500 tracking-[0.4em] uppercase">{domain.label}</p>
                               <div className="flex items-center gap-2">
-                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
-                                 <span className="text-[8px] font-black text-emerald-400 tracking-[0.5em] uppercase">SYSTEM ONLINE</span>
+                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
+                                 <span className="text-[8px] font-black text-emerald-400 tracking-[0.4em] uppercase">Node Online</span>
                               </div>
+                              <p className="text-[10px] font-mono text-slate-500 tracking-[0.4em] uppercase">{domain.label}</p>
                            </div>
-                           <div className="w-16 h-16 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-black group-hover:rotate-12 group-hover:scale-110 shadow-inner">
-                              <domain.icon size={32} style={{ color: domain.color }} className="drop-shadow-[0_0_12px_currentColor]" />
+                           <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-black group-hover:scale-110 shadow-inner">
+                              <domain.icon size={26} style={{ color: domain.color }} className="drop-shadow-[0_0_12px_currentColor]" />
                            </div>
                         </div>
 
-                        <div className="space-y-6 text-left flex-1">
-                           <h3 className="text-3xl lg:text-4xl font-black text-white leading-[0.9] tracking-tighter uppercase group-hover:text-cyan-400 transition-colors duration-500">
+                        {/* Middle Title Section */}
+                        <div className="space-y-4 text-left flex-1">
+                           <h3 className="text-3xl lg:text-4xl font-black text-white leading-[0.95] tracking-tighter uppercase group-hover:text-cyan-400 transition-colors duration-500">
                              {domain.title.split(' ')[0]} <br/> 
-                             <span className="opacity-40">{domain.title.split(' ').slice(1).join(' ')}</span>
+                             <span className="opacity-30">{domain.title.split(' ').slice(1).join(' ')}</span>
                            </h3>
-                           <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.3em] leading-relaxed max-w-[90%]">
+                           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] leading-relaxed max-w-[90%]">
                              {domain.desc}
                            </p>
                         </div>
 
-                        {/* Footer Card - Rapi & Sejajar */}
-                        <div className="mt-20 pt-10 border-t border-white/5 flex items-end justify-between">
-                           <div className="flex flex-col text-left space-y-1">
-                              <span className="text-[8px] font-mono text-slate-700 tracking-[0.5em] uppercase">Access Level</span>
-                              <span className="text-[10px] font-black text-white tracking-[0.3em] uppercase">ENCRYPTED</span>
+                        {/* --- FOOTER CARD (REVISI: SANGAT RAPI & SEJAJAR) --- */}
+                        <div className="mt-14 pt-8 border-t border-white/5 flex items-end justify-between w-full group/btn">
+                           
+                           {/* Data Info Kiri */}
+                           <div className="flex flex-col space-y-2 text-left">
+                              <span className="text-[7px] font-mono text-slate-600 tracking-[0.5em] uppercase leading-none">Security Clearance</span>
+                              <div className="flex items-center gap-3">
+                                 <Lock size={10} className="text-cyan-500/50" />
+                                 <span className="text-[11px] font-black text-white tracking-[0.3em] uppercase leading-none">ENCRYPTED</span>
+                              </div>
                            </div>
-                           <div className="flex items-center gap-5 text-cyan-400 group-hover:text-white transition-all duration-300">
-                              <span className="text-[11px] font-black tracking-[0.5em] uppercase">Initialize</span>
-                              <div className="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center bg-white/[0.03] group-hover:bg-cyan-500 group-hover:text-black transition-all duration-300 shadow-xl">
+
+                           {/* Action Button Kanan (Satu Garis Lurus) */}
+                           <div className="flex items-center gap-5 transition-all duration-500 group-hover/btn:translate-x-1">
+                              <div className="flex flex-col items-end space-y-2">
+                                 <span className="text-[7px] font-mono text-slate-600 tracking-[0.5em] uppercase leading-none">Command</span>
+                                 <span className="text-[10px] font-black text-cyan-400 tracking-[0.4em] uppercase leading-none group-hover/btn:text-white transition-colors">INITIALIZE</span>
+                              </div>
+                              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-white/[0.02] group-hover/btn:bg-cyan-500 group-hover/btn:text-black transition-all duration-500 shadow-xl group-hover/btn:shadow-cyan-500/20">
                                  <ArrowRight size={18} />
                               </div>
                            </div>
+
                         </div>
                       </div>
 
@@ -524,12 +601,55 @@ export default function StudentPortal() {
               </motion.div>
             )}
 
-            {/* VIEW BRIEFING */}
+            {/* VIEW BRIEFING (REVISI TOTAL: CYBER SENTINEL DEWA) */}
             {view === 'briefing' && (
-              <motion.div key="briefing" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{opacity:0, scale:1.1}} className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[75vh]">
-                 <div className="mb-20"><RobotFace size={36} ringSize="w-56 h-56" coreSize="w-36 h-36" /></div>
-                 <motion.div className="flex flex-col items-center text-center space-y-8"><div className="px-6 py-2.5 rounded-full bg-emerald-500/10 border border-emerald-400/50 text-emerald-400 text-[11px] font-black tracking-[0.7em] uppercase shadow-[0_0_30px_rgba(52,211,153,0.2)] animate-pulse">Uplink Confirmed</div><h2 className="text-5xl lg:text-6xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-2xl text-center">Transmission Received.</h2><p className="text-[13px] font-black text-white leading-relaxed tracking-[0.2em] uppercase max-w-2xl opacity-100 mx-auto text-center">Halo <span className="text-fuchsia-400">{user.username}</span>, inisiasi kuis untuk topik <span className="text-fuchsia-400">{selectedDomain}</span> sekarang?</p></motion.div>
-                 <div className="flex flex-col lg:flex-row gap-8 mt-20 w-full lg:w-auto px-10 lg:px-0"><button onClick={() => setView('assessment')} className="w-full lg:w-auto px-14 py-5 border-2 border-white/10 text-slate-400 rounded-full font-black text-[11px] tracking-[0.5em] uppercase hover:border-white/30 hover:text-white transition-all">Cancel</button><button onClick={handleStartMissionClick} className="w-full lg:w-auto px-14 py-5 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-full font-black text-[11px] tracking-[0.5em] shadow-[0_20px_60px_rgba(217,70,239,0.5)] hover:scale-105 transition-all uppercase flex items-center justify-center gap-6">Execute Protocol <Zap size={20} /></button></div>
+              <motion.div 
+                key="briefing" 
+                initial={{ opacity: 0, scale: 0.95 }} 
+                animate={{ opacity: 1, scale: 1 }} 
+                exit={{opacity:0, scale:1.1}} 
+                className="w-full max-w-5xl mx-auto flex flex-col items-center justify-center min-h-[85vh] py-10"
+              >
+                 {/* VISUAL ROBOT SENTINEL */}
+                 <div className="w-full mb-6">
+                    <CyberSentinel />
+                 </div>
+
+                 {/* TEXT CONTENT */}
+                 <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="flex flex-col items-center text-center space-y-8 relative z-10"
+                 >
+                    <div className="px-6 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/40 text-emerald-400 text-[10px] font-black tracking-[0.6em] uppercase shadow-[0_0_30px_rgba(52,211,153,0.15)] animate-pulse">
+                       Uplink Confirmed
+                    </div>
+                    
+                    <h2 className="text-5xl lg:text-7xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-2xl">
+                       TRANSMISSION <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 animate-gradient-x">RECEIVED.</span>
+                    </h2>
+                    
+                    <p className="text-[13px] font-bold text-white leading-relaxed tracking-[0.2em] uppercase max-w-2xl opacity-90 mx-auto">
+                       Halo Operative <span className="text-cyan-400">{user.username}</span>, sistem siap melakukan validasi pada domain <span className="text-fuchsia-400">{selectedDomain}</span>. Lanjutkan prosedur?
+                    </p>
+                 </motion.div>
+
+                 {/* BUTTONS */}
+                 <div className="flex flex-col sm:flex-row gap-6 mt-16 w-full lg:w-auto px-10">
+                    <button 
+                      onClick={() => setView('assessment')} 
+                      className="w-full lg:w-auto px-12 py-5 border-2 border-white/10 text-slate-500 rounded-full font-black text-[10px] tracking-[0.4em] uppercase hover:border-white/30 hover:text-white transition-all active:scale-95"
+                    >
+                       ABORT
+                    </button>
+                    <button 
+                      onClick={handleStartMissionClick} 
+                      className="w-full lg:w-auto px-14 py-5 bg-white text-black rounded-full font-black text-[10px] tracking-[0.4em] shadow-[0_20px_50px_rgba(255,255,255,0.2)] hover:bg-cyan-400 hover:text-white transition-all active:scale-95 uppercase flex items-center justify-center gap-4"
+                    >
+                       EXECUTE PROTOCOL <Zap size={16} />
+                    </button>
+                 </div>
               </motion.div>
             )}
 
