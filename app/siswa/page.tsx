@@ -247,16 +247,57 @@ export default function StudentPortal() {
           {!isSidebarCollapsed && <div className="flex flex-col"><span className="font-black text-white uppercase text-[11px] tracking-widest leading-none">CYBER READINESS</span><span className="font-bold text-fuchsia-500 text-[9px] tracking-widest mt-0.5 uppercase">INDEX</span></div>}
           <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-2 text-slate-400 hover:text-fuchsia-400 border border-white/5 rounded-lg transition-all">{isSidebarCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}</button>
         </div>
-        <nav className="flex-1 px-4 py-8 space-y-3">
-          {[ { id: 'dashboard', label: 'DASHBOARD', icon: LayoutGrid }, { id: 'assessment', label: 'ASSESSMENT', icon: Target }, { id: 'reports', label: 'REPORT', icon: FileText } ].map((item) => (
-            <button key={item.id} onClick={() => setView(item.id)} className={`w-full flex items-center p-3.5 rounded-2xl transition-all gap-4 ${view === item.id ? 'bg-fuchsia-600/15 text-fuchsia-400 border border-fuchsia-500/30 shadow-[0_0_15px_rgba(217,70,239,0.1)]' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}>
-              <item.icon size={18} /> {!isSidebarCollapsed && <span className="font-bold text-[10px] tracking-widest uppercase">{item.label}</span>}
-            </button>
-          ))}
-          <button onClick={() => setAppFeedbackModal(true)} className="w-full flex items-center p-3.5 rounded-2xl text-slate-500 hover:text-fuchsia-400 hover:bg-white/5 transition-all gap-4 group">
-            <Lightbulb size={18} className="group-hover:animate-pulse" /> {!isSidebarCollapsed && <span className="font-bold text-[10px] tracking-widest uppercase">FEEDBACK</span>}
-          </button>
+        <nav className="flex-1 px-4 py-10 space-y-2 relative">
+          {[
+            { id: 'dashboard', label: 'DASHBOARD', icon: LayoutGrid },
+            { id: 'assessment', label: 'ASSESSMENT', icon: Target },
+            { id: 'reports', label: 'REPORT', icon: FileText },
+            { id: 'feedback', label: 'FEEDBACK', icon: Lightbulb }
+          ].map((item) => {
+            const isActive = view === item.id;
+            
+            return (
+              <button 
+                key={item.id} 
+                onClick={() => setView(item.id)}
+                className={`w-full flex items-center p-4 rounded-2xl transition-colors duration-500 relative group outline-none`}
+              >
+                {/* 1. KAPSUL CAHAYA BERJALAN (INI KUNCI SMOOTH NYA) */}
+                {isActive && (
+                  <motion.div 
+                    layoutId="sidebar-active-pill"
+                    className="absolute inset-0 bg-gradient-to-r from-fuchsia-600/20 to-transparent border-l-4 border-fuchsia-500 rounded-2xl z-0"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+
+                {/* 2. KONTEN MENU (DI ATAS KAPSUL) */}
+                <div className="relative z-10 flex items-center gap-4 w-full">
+                  <item.icon 
+                    size={20} 
+                    className={`transition-all duration-500 ${isActive ? 'text-fuchsia-400 scale-110 drop-shadow-[0_0_8px_#d946ef]' : 'text-slate-500 group-hover:text-slate-300'}`} 
+                  />
+                  
+                  {!isSidebarCollapsed && (
+                    <span className={`font-black text-[10px] tracking-[0.3em] uppercase transition-all duration-500 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-300'}`}>
+                      {item.label}
+                    </span>
+                  )}
+
+                  {/* Indikator titik kecil di ujung kanan jika aktif */}
+                  {isActive && !isSidebarCollapsed && (
+                    <motion.div 
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="ml-auto w-1.5 h-1.5 rounded-full bg-fuchsia-500 shadow-[0_0_10px_#d946ef]"
+                    />
+                  )}
+                </div>
+              </button>
+            );
+          })}
         </nav>
+        
         {/* --- AREA LOGOUT (REVISI: TANPA SHUTDOWN) --- */}
         <div className="p-6 border-t border-white/5">
           <button 
