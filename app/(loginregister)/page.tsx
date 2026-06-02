@@ -874,10 +874,17 @@ export default function CyberLandingDark() {
                   id: "001", 
                   name: "Ester Sinaga", 
                   role: "Project Manager", 
-                  image: "/bg/ester.jpeg", // Path ke foto Ester
-                  bio: "Bertanggung jawab atas manajemen strategis, koordinasi tim, dan memastikan setiap protokol operasional berjalan sesuai standar keamanan.", 
+                  image: "/bg/ester.jpeg", 
+                  bio: "Lead Project Manager. Bertanggung jawab atas manajemen strategis, koordinasi sumber daya, dan memastikan setiap protokol operasional berjalan sesuai standar keamanan tertinggi.", 
                   col: "fuchsia", 
-                  details: { "ID Personel": "EST 9920", "Status": "Commander", "Sektor": "Strategic Ops" } 
+                  details: { 
+                    "Nama Lengkap": "Ester Satia Sinaga",
+                    "NIK": "1201036906060001",
+                    "NISN": "0069362666",
+                    "Lahir": "Sibolga, 29 Jun 2006",
+                    "Gol Darah": "Tipe O",
+                    "Email": "estersinaga2906@gmail.com"
+                  } 
                 },
                 { 
                   id: "002", 
