@@ -874,6 +874,7 @@ export default function CyberLandingDark() {
                   id: "001", 
                   name: "Ester Sinaga", 
                   role: "Project Manager", 
+                  image: "/bg/ester.jpeg", // Path ke foto Ester
                   bio: "Bertanggung jawab atas manajemen strategis, koordinasi tim, dan memastikan setiap protokol operasional berjalan sesuai standar keamanan.", 
                   col: "fuchsia", 
                   details: { "ID Personel": "EST 9920", "Status": "Commander", "Sektor": "Strategic Ops" } 
@@ -882,7 +883,7 @@ export default function CyberLandingDark() {
                   id: "002", 
                   name: "Devin Siahaan", 
                   role: "Web Developer", 
-                  image: "/bg/devin.jpeg", 
+                  image: "/bg/devin.jpeg", // Path ke foto Devin
                   bio: "Lead Developer dan Arsitek Infrastruktur. Spesialis dalam pengembangan sistem enkripsi database dan integrasi kontrol panel siber.", 
                   col: "cyan", 
                   details: { 
@@ -897,6 +898,7 @@ export default function CyberLandingDark() {
                   id: "003", 
                   name: "Iren Sitinjak", 
                   role: "Intelligence Architect", 
+                  image: "/bg/iren.jpeg", // Path ke foto Iren
                   bio: "Ahli dalam analisis data intelijen dan perancangan antarmuka pengguna untuk memastikan pengalaman navigasi yang intuitif dan aman.", 
                   col: "violet", 
                   details: { "ID Personel": "IRN 7712", "Status": "Chief Analyst", "Sektor": "User Intelligence" } 
@@ -908,36 +910,26 @@ export default function CyberLandingDark() {
                   onClick={() => setInspectedArchitect(inspectedArchitect === member.id ? null : member.id)}
                   className={`group relative cursor-pointer p-1 rounded-[2.5rem] transition-all duration-500 ${inspectedArchitect === member.id ? 'ring-2 ring-cyan-500 shadow-[0_0_30px_rgba(34,211,238,0.2)]' : 'hover:scale-105'}`}
                 >
-                  <div className="relative bg-[#08070d] border border-white/5 p-8 rounded-[2.5rem] h-full flex flex-col items-center text-center overflow-hidden">
-                    {/* --- HOLOGRAPHIC AVATAR ENGINE (FIXED: FULL CIRCLE) --- */}
-                    <div className="relative w-32 h-32 mb-8">
-                      {/* Aura Pendaran Cahaya Luar */}
-                      <div className={`absolute inset-0 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 ${member.col === 'cyan' ? 'bg-cyan-500' : 'bg-fuchsia-500'}`} />
-                      
-                      {/* Frame Lingkaran Utama - overflow-hidden adalah kunci */}
-                      <div className="relative w-full h-full rounded-full border-2 border-white/20 bg-[#050505] overflow-hidden flex items-center justify-center shadow-2xl">
+                  <div className="relative bg-[#08070d] border border-white/5 p-8 rounded-[2.5rem] h-full flex flex-col items-center text-center overflow-hidden shadow-inner">
+                    
+                    {/* HOLOGRAPHIC AVATAR ENGINE */}
+                    <div className="relative w-28 h-28 mb-6">
+                      <div className={`absolute inset-0 rounded-full blur-2xl opacity-20 ${member.col === 'cyan' ? 'bg-cyan-400' : member.col === 'fuchsia' ? 'bg-fuchsia-400' : 'bg-violet-400'}`} />
+                      <div className="relative w-full h-full rounded-full border-2 border-white/10 p-1 bg-black/50 overflow-hidden flex items-center justify-center">
                         {member.image ? (
                           <img 
                             src={member.image} 
-                            alt={member.name} 
-                            // scale-[1.4] memastikan gambar penuh menutupi seluruh lingkaran
-                            // object-cover memastikan gambar tidak gepeng
                             className="w-full h-full object-cover grayscale group-hover:grayscale-0 brightness-90 group-hover:brightness-110 transition-all duration-700 scale-[1.4] group-hover:scale-[1.2]" 
+                            alt={member.name}
                           />
                         ) : (
-                          <User size={48} className={member.col === 'cyan' ? 'text-cyan-400' : 'text-fuchsia-400'} />
+                          <User size={40} className={member.col === 'cyan' ? 'text-cyan-400' : member.col === 'fuchsia' ? 'text-fuchsia-400' : 'text-violet-400'} />
                         )}
-
-                        {/* Efek Garis Scanner Laser HUD */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-400/30 to-transparent h-[20%] w-full animate-scanner pointer-events-none" />
-                        
-                        {/* Overlay Grid Teknis Transparan */}
-                        <div className="absolute inset-0 bg-grid-static opacity-[0.08] mix-blend-overlay pointer-events-none" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-transparent h-6 w-full animate-scanner pointer-events-none" />
                       </div>
-
-                      {/* Spinning Ring HUD (Dekoratif Luar) */}
-                      <div className={`absolute inset-[-12px] rounded-full border border-dashed border-cyan-500/20 animate-[spin_25s_linear_infinite] group-hover:border-cyan-500/50`} />
+                      <div className={`absolute inset-[-8px] rounded-full border border-dashed border-white/10 animate-[spin_20s_linear_infinite] ${member.col === 'cyan' ? 'group-hover:border-cyan-500/50' : member.col === 'fuchsia' ? 'group-hover:border-fuchsia-500/50' : 'group-hover:border-violet-500/50'}`} />
                     </div>
+
                     <h4 className="text-xl font-black text-white uppercase tracking-widest">{member.name}</h4>
                     <p className={`text-[10px] font-bold uppercase tracking-[0.3em] mt-1 ${member.col === 'cyan' ? 'text-cyan-400' : member.col === 'fuchsia' ? 'text-fuchsia-400' : 'text-violet-400'}`}>{member.role}</p>
 
@@ -954,13 +946,12 @@ export default function CyberLandingDark() {
                              ))}
                           </div>
                           <div className="mt-6 flex justify-between items-center px-1">
-                             <span className="text-[8px] font-black text-emerald-500 tracking-widest uppercase">Akses Terverifikasi</span>
+                             <span className="text-[8px] font-black text-emerald-500 tracking-widest uppercase">Verified Personnel</span>
                              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
                           </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
-                    {!inspectedArchitect && <p className="mt-6 text-[8px] font-black text-slate-600 uppercase tracking-[0.4em] animate-pulse">Klik Untuk Info Detail</p>}
                   </div>
                 </motion.div>
               ))}
