@@ -173,9 +173,119 @@ const CyberBootSequence = ({ onComplete }: { onScroll?: any, onComplete: () => v
   );
 };
 
+const CyberCalculationFinale = ({ score, onFinish }: { score: number, onFinish: () => void }) => {
+  const [count, setCount] = useState(0);
+  const [status, setStatus] = useState("EXTRACTING_DATA_PACKETS");
+
+  useEffect(() => {
+    // 1. Animasi angka menghitung (Count Up)
+    const duration = 3000; // 3 detik
+    const start = 0;
+    const end = score;
+    let startTime: number;
+
+    const animateCount = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      setCount(Math.floor(progress * (end - start) + start));
+      if (progress < 1) requestAnimationFrame(animateCount);
+    };
+
+    requestAnimationFrame(animateCount);
+
+    // 2. Simulasi Teks Log Intelijen
+    const sequence = [
+      { t: 0, msg: "ANALYZING_TACTICAL_RESPONSES..." },
+      { t: 800, msg: "DECRYPTING_VULNERABILITY_INDEX..." },
+      { t: 1600, msg: "SYNCING_WITH_CENTRAL_COMMAND..." },
+      { t: 2400, msg: "GENERATING_INTELLIGENCE_REPORT..." },
+      { t: 3000, msg: "CALCULATION_COMPLETE" }
+    ];
+
+    sequence.forEach(step => {
+      setTimeout(() => setStatus(step.msg), step.t);
+    });
+
+    // Selesai dan pindah ke Report
+    setTimeout(onFinish, 4500);
+  }, [score, onFinish]);
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[40000] bg-[#020108] flex flex-col items-center justify-center font-mono overflow-hidden"
+    >
+      {/* Efek Garis Saraf (Neural Lines) */}
+      <div className="absolute inset-0 opacity-20">
+         {[...Array(10)].map((_, i) => (
+           <motion.div 
+             key={i}
+             animate={{ 
+               x: [-100, 100], 
+               opacity: [0, 1, 0],
+               scaleY: [1, 2, 1] 
+             }}
+             transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }}
+             className="absolute w-full h-px bg-cyan-500"
+             style={{ top: `${i * 10}%` }}
+           />
+         ))}
+      </div>
+
+      <div className="relative z-10 flex flex-col items-center space-y-12">
+        {/* Ring Pemuat Raksasa */}
+        <div className="relative w-64 h-64 flex items-center justify-center">
+           <svg className="w-full h-full rotate-[-90deg]">
+              <circle cx="128" cy="128" r="120" stroke="rgba(34, 211, 238, 0.05)" strokeWidth="4" fill="transparent" />
+              <motion.circle 
+                initial={{ strokeDasharray: "0 1000" }}
+                animate={{ strokeDasharray: "754 1000" }}
+                transition={{ duration: 3, ease: "easeInOut" }}
+                cx="128" cy="128" r="120" stroke="#22d3ee" strokeWidth="8" strokeLinecap="round" fill="transparent"
+                style={{ filter: 'drop-shadow(0 0 20px #22d3ee)' }}
+              />
+           </svg>
+           <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <motion.span 
+                key={count}
+                initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                className="text-8xl font-black text-white tracking-tighter"
+              >
+                {count}
+              </motion.span>
+              <span className="text-[10px] font-black text-cyan-400 tracking-[0.5em] mt-2">READINESS_LEVEL</span>
+           </div>
+        </div>
+
+        {/* Teks Status Terminal */}
+        <div className="text-center space-y-4">
+           <div className="flex items-center justify-center gap-4">
+              <div className="w-2 h-2 rounded-full bg-fuchsia-500 animate-ping" />
+              <p className="text-sm font-bold text-fuchsia-500 tracking-[0.3em] uppercase">{status}</p>
+           </div>
+           <div className="flex gap-1 justify-center">
+              {[...Array(20)].map((_, i) => (
+                <motion.div 
+                  key={i} 
+                  animate={{ opacity: [0.1, 1, 0.1] }} 
+                  transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.05 }}
+                  className="w-1 h-3 bg-cyan-500/30" 
+                />
+              ))}
+           </div>
+        </div>
+      </div>
+
+      {/* Overlay Scanline Glitch */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] pointer-events-none" />
+    </motion.div>
+  );
+};
+
 export default function StudentPortal() {
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isCalculating, setIsCalculating] = useState(false);
 
   // States
   const [view, setView] = useState('dashboard'); 
@@ -248,17 +358,37 @@ export default function StudentPortal() {
   };
 
   const executeUplink = async () => {
-    setLoading(true); setSubmitStatus('SYNCING...');
-    const formattedAnswers = Object.keys(ans).map(id => ({ id: parseInt(id), value: ans[parseInt(id) as any].score.toString(), text: ans[parseInt(id) as any].text }));
+    setLoading(true);
+    
+    // 1. Hitung skor (Contoh logika: rata-rata jawaban)
+    const totalQuestions = Object.keys(ans).length;
+    const totalScore = Object.values(ans).reduce((acc, curr) => acc + curr.score, 0);
+    const finalCalculatedScore = Math.round((totalScore / (totalQuestions * 10)) * 100);
+    
+    setScore(finalCalculatedScore);
+
+    // 2. TRIGGER LAYAR PERHITUNGAN DEWA
+    setIsCalculating(true); 
+
     try {
+      // Kirim ke database di background
       await fetch('https://cyber-backend-delta.vercel.app/siswa/submit', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: user.username, class_name: user.class_name, domain_id: selectedDomain, answers: formattedAnswers })
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: user.username,
+          class_name: user.class_name,
+          domain_id: selectedDomain,
+          score: finalCalculatedScore,
+          answers: Object.keys(ans).map(id => ({
+            id: parseInt(id),
+            value: ans[parseInt(id) as any].score.toString(),
+            text: ans[parseInt(id) as any].text
+          }))
+        })
       });
-      await fetchScores(user.username);
-    } finally {
-      setSubmitStatus('COMPLETE');
-      setTimeout(() => { setView('reports'); setAns({}); setCurrentStep(1); setLoading(false); setSubmitStatus('SUBMIT ASSESSMENT'); }, 1500);
+    } catch (e) {
+      console.error("Uplink Failed", e);
     }
   };
 
@@ -367,6 +497,17 @@ export default function StudentPortal() {
     <div className="flex h-screen w-full text-slate-100 overflow-hidden font-sans selection:bg-fuchsia-500/30">
       <PersistentUniverse bgIdx={bgIdx} />
       <ParticleBurstClickEffect />
+      <AnimatePresence>
+        {isCalculating && (
+          <CyberCalculationFinale 
+            score={score} 
+            onFinish={() => {
+              setIsCalculating(false);
+              setView('reports'); 
+            }} 
+          />
+        )}
+      </AnimatePresence>
 
       {/* --- SIDEBAR --- */}
       <motion.aside initial={false} animate={{ width: isSidebarCollapsed ? 80 : 250 }} className="h-screen bg-black/95 backdrop-blur-3xl border-r border-white/10 flex flex-col z-[100] transition-all duration-500 shadow-2xl">
