@@ -11,6 +11,48 @@ import {
   Facebook, Twitter, Youtube, Instagram, Send, Phone, Globe2
 } from 'lucide-react'
 
+const CyberIntelligenceLog = () => {
+  const [logs, setLogs] = useState<string[]>([]);
+  const messages = ["SCANNING_PORT_8080...", "ENCRYPTING_DATABASE...", "THREAT_BLOCKED...", "UPLINK_STABLE"];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const msg = messages[Math.floor(Math.random() * messages.length)];
+      const time = new Date().toLocaleTimeString('en-GB', { hour12: false });
+      setLogs(prev => [`[${time}] ${msg}`, ...prev].slice(0, 5));
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="fixed bottom-8 left-8 z-[9999] hidden lg:block pointer-events-none text-left">
+      <div className="bg-[#050811]/60 backdrop-blur-md border border-cyan-500/20 p-4 rounded-2xl w-[280px] shadow-2xl">
+        <div className="flex items-center gap-2 mb-3 border-b border-white/5 pb-2">
+          <Terminal size={12} className="text-cyan-400 animate-pulse" />
+          <span className="text-[8px] font-black text-white tracking-[0.3em] uppercase">Intelligence Live Log</span>
+        </div>
+        <div className="space-y-1.5 font-mono">
+          {logs.map((log, i) => (
+            <motion.p key={i} initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className={`text-[7px] tracking-widest ${i === 0 ? 'text-cyan-400' : 'text-slate-600'}`}>{log}</motion.p>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CyberMouseHUD = ({ mouseX, mouseY }: { mouseX: any, mouseY: any }) => (
+  <motion.div style={{ x: mouseX, y: mouseY, translateX: 20, translateY: 20 }} className="fixed top-0 left-0 z-[10000] pointer-events-none hidden lg:block">
+    <div className="relative">
+      <div className="absolute -top-5 -left-5 w-10 h-10 border border-cyan-500/30 rounded-full animate-spin" style={{ animationDuration: '6s' }} />
+      <div className="bg-black/40 backdrop-blur-sm border-l-2 border-cyan-500 p-2 ml-6 space-y-1 min-w-[100px] text-left">
+         <div className="flex justify-between items-center"><span className="text-[6px] font-mono text-cyan-400 uppercase tracking-tighter">Target_Lock</span><div className="w-1 h-1 rounded-full bg-cyan-400 animate-ping" /></div>
+         <div className="text-[7px] font-mono text-white/50 leading-none"><p>ID: <span className="text-cyan-400 uppercase">Operative_02</span></p><p>SEC: <span className="text-emerald-500">SAFE</span></p></div>
+      </div>
+    </div>
+  </motion.div>
+);
+
 // --- ASSET BACKGROUND ---
 const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg/cyber4.jpg", "/bg/cyber5.jpg"];
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
@@ -813,6 +855,8 @@ export default function CyberLandingDark() {
         <ReadinessProtocolSection />
         <SectionDivider />
         <CyberClosingSection />
+        <CyberMouseHUD mouseX={mouseX} mouseY={mouseY} />
+      <CyberIntelligenceLog />
 
         {/* FOOTER (DENGAN LOGIKA MODAL) */}
         <CyberFooterLuxury onScroll={(id, label) => {

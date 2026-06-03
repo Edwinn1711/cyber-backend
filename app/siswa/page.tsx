@@ -21,9 +21,9 @@ const CYBER_ASSETS = ["/bg/cyber1.jpg", "/bg/cyber2.jpg", "/bg/cyber3.jpg", "/bg
 const AVAILABLE_CLASSES = ["X MIPA 1", "X IPS 1", "XI TKJ 1", "XI RPL 1", "XII MIPA 2", "XII DKV 1"];
 
 const TACTICAL_DOMAINS = [
-  { id: "Social Engineering", title: "SOCIAL ENGINEERING", icon: Brain, color: "#22d3ee", desc: "Cyber Psychological Defense", label: "DOMAIN ALPHA" },
-  { id: "Malware", title: "MALWARE ANALYSIS", icon: Bug, color: "#f472b6", desc: "Neural Malware Scrutiny", label: "DOMAIN BRAVO" },
-  { id: "Phishing", title: "PHISHING DEFENSE", icon: MailWarning, color: "#818cf8", desc: "Credential Integrity Audit", label: "DOMAIN CHARLIE" },
+  { id: "Social Engineering", title: "SOCIAL ENGINEERING", icon: Brain, color: "#22d3ee", desc: "Cyber Psychological Defense Operations", label: "DOMAIN ALPHA" },
+  { id: "Malware", title: "MALWARE ANALYSIS", icon: Bug, color: "#f472b6", desc: "Neural Malware Scrutiny Protocol", label: "DOMAIN BRAVO" },
+  { id: "Phishing", title: "PHISHING DEFENSE", icon: MailWarning, color: "#818cf8", desc: "Credential Integrity Security Audit", label: "DOMAIN CHARLIE" },
 ];
 
 // --- 0. HELPER: STATUS COLORS ---
@@ -109,6 +109,69 @@ const RobotFace = ({ size = 24, ringSize = "w-40 h-40", coreSize = "w-24 h-24" }
 const containerVariants = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } } as any;
 const itemVariants = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } } } as any;
 const portalTransition = { initial: { opacity: 0, scale: 0.98, y: 15 }, animate: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, type: "spring" } }, exit: { opacity: 0, scale: 1.02 } } as any;
+
+const CyberBootSequence = ({ onComplete }: { onScroll?: any, onComplete: () => void }) => {
+  const [logs, setLogs] = useState<string[]>([]);
+  const bootTasks = [
+    "INITIALIZING_CORE_SYSTEM...",
+    "LOADING_ENCRYPTION_LAYER_AES256...",
+    "ESTABLISHING_NEURAL_UPLINK...",
+    "SCANNING_LOCAL_NETWORK_INFRASTRUCTURE...",
+    "AUTHORIZING_PERSONNEL_ACCESS...",
+    "ACCESS_GRANTED_BY_COMMAND_CENTRE",
+    "SYSTEM_READY_OPERATIVE_DEVIN"
+  ];
+
+  useEffect(() => {
+    let currentTask = 0;
+    const interval = setInterval(() => {
+      if (currentTask < bootTasks.length) {
+        setLogs(prev => [...prev, `> ${bootTasks[currentTask]}`]);
+        currentTask++;
+      } else {
+        clearInterval(interval);
+        setTimeout(onComplete, 1000);
+      }
+    }, 400);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <motion.div 
+      exit={{ opacity: 0, scale: 1.1 }}
+      className="fixed inset-0 z-[20000] bg-black flex flex-col items-center justify-center p-6 font-mono"
+    >
+      <div className="w-full max-w-md space-y-4">
+        <div className="flex items-center gap-4 mb-8">
+          <ShieldCheck size={40} className="text-cyan-400 animate-pulse" />
+          <div className="h-px flex-1 bg-cyan-500/20" />
+        </div>
+        <div className="space-y-2">
+          {logs.map((log, i) => (
+            <motion.p 
+              key={i} 
+              initial={{ opacity: 0, x: -10 }} 
+              animate={{ opacity: 1, x: 0 }} 
+              className={`text-xs tracking-[0.2em] ${i === logs.length - 1 ? 'text-cyan-400' : 'text-slate-600'}`}
+            >
+              {log}
+            </motion.p>
+          ))}
+        </div>
+        <div className="pt-10">
+           <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+              <motion.div 
+                initial={{ width: "0%" }} 
+                animate={{ width: "100%" }} 
+                transition={{ duration: 3 }}
+                className="h-full bg-cyan-500 shadow-[0_0_15px_#22d3ee]" 
+              />
+           </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 export default function StudentPortal() {
   const router = useRouter();
@@ -473,8 +536,8 @@ export default function StudentPortal() {
               </motion.div>
             )}
 
-{/* VIEW ASSESSMENT (REVISI: ULTRA-SMOOTH PHYSICS HUD) */}
-            {view === 'assessment' && (
+{/* VIEW ASSESSMENT (ULTRA-LUXURY HUD INTERFACE) */}
+{view === 'assessment' && (
               <motion.div 
                 key="assess-hub" 
                 initial={{ opacity: 0 }} 
@@ -490,7 +553,7 @@ export default function StudentPortal() {
                     initial={{ y: -20, opacity: 0 }} 
                     animate={{ y: 0, opacity: 1 }} 
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="inline-flex items-center gap-4 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-[10px] font-black tracking-[0.6em] uppercase backdrop-blur-xl"
+                    className="inline-flex items-center gap-4 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-[10px] font-black tracking-[0.5em] uppercase backdrop-blur-xl"
                   >
                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]" />
                     Tactical Deployment Hub
@@ -507,80 +570,55 @@ export default function StudentPortal() {
                       key={i}
                       initial={{ opacity: 0, y: 40 }}
                       animate={{ opacity: 1, y: 0 }}
-                      // SPRING PHYSICS: Rahasia agar tidak kaku/lengket
-                      transition={{ 
-                        type: "spring", 
-                        stiffness: 400, // Sangat responsif
-                        damping: 30,    // Mencegah goyangan berlebih
-                        mass: 1, 
-                        delay: i * 0.1 
-                      }}
-                      // HOVER INTERACTION: Super Snappy
-                      whileHover={{ 
-                        y: -20, 
-                        scale: 1.02,
-                        transition: { type: "spring", stiffness: 500, damping: 25 } 
-                      }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30, delay: i * 0.1 }}
+                      whileHover={{ y: -20, scale: 1.02 }}
                       onClick={() => { setSelectedDomain(domain.id); setView('briefing'); }}
-                      className="group relative bg-[#050811]/40 backdrop-blur-3xl border border-white/5 p-12 rounded-[4rem] cursor-pointer overflow-hidden shadow-2xl hover:border-cyan-500/40"
-                      style={{ willChange: "transform" }} // Optimasi GPU agar tidak lag
+                      className="group relative bg-[#050811]/40 backdrop-blur-3xl border border-white/5 p-12 rounded-[4rem] cursor-pointer overflow-hidden transition-all duration-700 shadow-2xl hover:border-cyan-500/40"
                     >
                       {/* --- HOLOGRAPHIC LAYERS --- */}
-                      <div className="absolute inset-0 bg-grid-static opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500" />
+                      <div className="absolute inset-0 bg-grid-static opacity-[0.02] group-hover:opacity-[0.06] transition-opacity duration-500" />
                       
                       {/* Laser Beam Scanner */}
                       <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-20" />
 
-{/* --- CONTENT HUD --- */}
-<div className="relative z-10 flex flex-col h-full">
-                        {/* Top Header Card */}
-                        <div className="flex justify-between items-start mb-14">
+                      {/* Content HUD */}
+                      <div className="relative z-10 flex flex-col h-full">
+                        <div className="flex justify-between items-start mb-16">
                            <div className="space-y-2 text-left">
-                              <div className="flex items-center gap-2">
-                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
-                                 <span className="text-[8px] font-black text-emerald-400 tracking-[0.4em] uppercase">Node Online</span>
-                              </div>
                               <p className="text-[10px] font-mono text-slate-500 tracking-[0.4em] uppercase">{domain.label}</p>
+                              <div className="flex items-center gap-2">
+                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
+                                 <span className="text-[8px] font-black text-emerald-400 tracking-[0.5em] uppercase">SYSTEM ONLINE</span>
+                              </div>
                            </div>
-                           <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-black group-hover:scale-110 shadow-inner">
-                              <domain.icon size={26} style={{ color: domain.color }} className="drop-shadow-[0_0_12px_currentColor]" />
+                           <div className="w-16 h-16 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-700 group-hover:bg-black group-hover:rotate-12 group-hover:scale-110 shadow-inner">
+                              <domain.icon size={32} style={{ color: domain.color }} className="drop-shadow-[0_0_12px_currentColor]" />
                            </div>
                         </div>
 
-                        {/* Middle Title Section */}
-                        <div className="space-y-4 text-left flex-1">
-                           <h3 className="text-3xl lg:text-4xl font-black text-white leading-[0.95] tracking-tighter uppercase group-hover:text-cyan-400 transition-colors duration-500">
+                        <div className="space-y-6 text-left flex-1">
+                           {/* PENYELESAIAN OVERFLOW: text-2xl lg:text-3xl & leading-tight */}
+                           <h3 className="text-2xl lg:text-3xl font-black text-white leading-tight tracking-tighter uppercase group-hover:text-cyan-400 transition-colors duration-500">
                              {domain.title.split(' ')[0]} <br/> 
-                             <span className="opacity-30">{domain.title.split(' ').slice(1).join(' ')}</span>
+                             <span className="opacity-40">{domain.title.split(' ').slice(1).join(' ')}</span>
                            </h3>
-                           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] leading-relaxed max-w-[90%]">
+                           <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.3em] leading-relaxed max-w-[90%]">
                              {domain.desc}
                            </p>
                         </div>
 
-                        {/* --- FOOTER CARD (REVISI: SANGAT RAPI & SEJAJAR) --- */}
-                        <div className="mt-14 pt-8 border-t border-white/5 flex items-end justify-between w-full group/btn">
-                           
-                           {/* Data Info Kiri */}
-                           <div className="flex flex-col space-y-2 text-left">
-                              <span className="text-[7px] font-mono text-slate-600 tracking-[0.5em] uppercase leading-none">Security Clearance</span>
-                              <div className="flex items-center gap-3">
-                                 <Lock size={10} className="text-cyan-500/50" />
-                                 <span className="text-[11px] font-black text-white tracking-[0.3em] uppercase leading-none">ENCRYPTED</span>
-                              </div>
+                        {/* Footer Card - Rapi & Tanpa Underscore */}
+                        <div className="mt-20 pt-10 border-t border-white/5 flex items-end justify-between">
+                           <div className="flex flex-col text-left space-y-1">
+                              <span className="text-[8px] font-mono text-slate-700 tracking-[0.5em] uppercase">Access Level</span>
+                              <span className="text-[10px] font-black text-white tracking-[0.3em] uppercase">ENCRYPTED</span>
                            </div>
-
-                           {/* Action Button Kanan (Satu Garis Lurus) */}
-                           <div className="flex items-center gap-5 transition-all duration-500 group-hover/btn:translate-x-1">
-                              <div className="flex flex-col items-end space-y-2">
-                                 <span className="text-[7px] font-mono text-slate-600 tracking-[0.5em] uppercase leading-none">Command</span>
-                                 <span className="text-[10px] font-black text-cyan-400 tracking-[0.4em] uppercase leading-none group-hover/btn:text-white transition-colors">INITIALIZE</span>
-                              </div>
-                              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-white/[0.02] group-hover/btn:bg-cyan-500 group-hover/btn:text-black transition-all duration-500 shadow-xl group-hover/btn:shadow-cyan-500/20">
+                           <div className="flex items-center gap-5 text-cyan-400 group-hover:text-white transition-all duration-300">
+                              <span className="text-[11px] font-black tracking-[0.5em] uppercase">Initialize</span>
+                              <div className="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center bg-white/[0.03] group-hover:bg-cyan-500 group-hover:text-black transition-all duration-300 shadow-xl">
                                  <ArrowRight size={18} />
                               </div>
                            </div>
-
                         </div>
                       </div>
 
@@ -591,7 +629,6 @@ export default function StudentPortal() {
                 </div>
               </motion.div>
             )}
-
             {/* VIEW MISSION */}
             {view === 'mission' && (
               <motion.div key="mission" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto space-y-12 pb-44 text-center lg:text-left">
