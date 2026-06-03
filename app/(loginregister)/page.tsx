@@ -14,9 +14,10 @@ import {
 
 const CyberIntelligenceHUD = () => {
   const [logs, setLogs] = useState<string[]>([]);
+  const [isMinimized, setIsMinimized] = useState(true);
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setProgress] = useState(0);
-  const [isMinimized, setIsMinimized] = useState(true); // DEFAULT: Sembunyi (Mewah)
+  
 
   const triggerGlobalScan = () => {
     setIsScanning(true);
@@ -39,72 +40,39 @@ const CyberIntelligenceHUD = () => {
     }, 500);
   };
 
-  return (
-    <div className="fixed bottom-8 left-8 z-[10000] hidden lg:block">
+ return (
+    <div className="fixed bottom-10 right-10 z-[1000] hidden lg:block pointer-events-auto">
       <AnimatePresence mode="wait">
         {isMinimized ? (
-          /* --- MODE SEMBUNYI (HANYA ICON RADAR) --- */
           <motion.button
-            key="minimized"
-            initial={{ scale: 0, rotate: -90 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0, rotate: 90 }}
+            key="min" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
             onClick={() => setIsMinimized(false)}
-            className="group relative w-16 h-16 bg-[#050811]/80 backdrop-blur-xl border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.2)] hover:border-cyan-400 transition-all"
+            className="w-12 h-12 bg-cyan-500/10 border border-cyan-500/30 rounded-full flex items-center justify-center shadow-2xl hover:bg-cyan-500/20 transition-all"
           >
-            <RadarIcon size={24} className="text-cyan-400 animate-pulse" />
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-black animate-ping" />
-            {/* Label Tooltip */}
-            <div className="absolute left-20 px-4 py-2 bg-black border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-               <p className="text-[10px] font-black text-white tracking-widest">OPEN COMMAND CENTER</p>
-            </div>
+            <Terminal size={18} className="text-cyan-400" />
           </motion.button>
         ) : (
-          /* --- MODE FULL HUD (DASHBOARD) --- */
           <motion.div
-            key="maximized"
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="relative p-6 bg-[#050811]/90 backdrop-blur-2xl border border-cyan-500/30 rounded-[2.5rem] w-[350px] shadow-2xl overflow-hidden"
+            key="max" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
+            className="p-5 bg-black/80 backdrop-blur-2xl border border-white/5 rounded-[2rem] w-[300px] shadow-2xl relative overflow-hidden"
           >
-            {/* Tombol Minimize */}
-            <button 
-              onClick={() => setIsMinimized(true)}
-              className="absolute top-5 right-6 text-slate-500 hover:text-white transition-colors"
-            >
-              <ChevronDown size={20} />
-            </button>
-
-            <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
-               <Terminal size={16} className="text-cyan-400" />
-               <span className="text-[10px] font-black text-white tracking-[0.4em] uppercase">Intelligence Terminal</span>
+            <div className="flex justify-between items-center mb-4 border-b border-white/5 pb-3">
+               <span className="text-[9px] font-black text-white tracking-widest uppercase">System Log</span>
+               <button onClick={() => setIsMinimized(true)} className="text-slate-600 hover:text-white"><X size={14}/></button>
             </div>
-
-            <div className="h-[100px] space-y-2 font-mono overflow-hidden mb-6">
-              {logs.length === 0 && <p className="text-slate-700 text-[9px] text-center mt-8 uppercase tracking-widest">Waiting for Uplink...</p>}
-              {logs.map((log, i) => (
-                <p key={i} className={`text-[8px] tracking-tighter ${i === 0 ? 'text-cyan-400' : 'text-slate-600'}`}>{log}</p>
-              ))}
+            <div className="h-[80px] space-y-2 font-mono overflow-hidden">
+               {logs.map((log, i) => (
+                 <p key={i} className={`text-[7px] ${i === 0 ? 'text-cyan-400' : 'text-slate-600'}`}>{log}</p>
+               ))}
             </div>
-
-            <button 
-              onClick={triggerGlobalScan}
-              disabled={isScanning}
-              className={`w-full py-4 rounded-2xl font-black text-[9px] tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 ${isScanning ? 'bg-white/5 text-slate-600' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500 hover:text-black shadow-xl'}`}
-            >
-              {isScanning ? 'SYSTEM SCANNING...' : 'Run Diagnostics'} 
-              <Zap size={14} className={isScanning ? 'animate-spin' : ''} />
-            </button>
-
-            {/* Efek Garis Scanner saat Scan Aktif */}
-            {isScanning && <div className="absolute inset-0 bg-cyan-400/5 animate-pulse"><div className="absolute top-0 w-full h-1 bg-cyan-400/50 blur-sm animate-scanner" /></div>}
           </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
 };
+
+
 const CyberMouseHUD = ({ mouseX, mouseY }: { mouseX: any, mouseY: any }) => (
   <motion.div style={{ x: mouseX, y: mouseY, translateX: 20, translateY: 20 }} className="fixed top-0 left-0 z-[10000] pointer-events-none hidden lg:block">
     <div className="relative">
@@ -714,20 +682,21 @@ const NeuralNetworkCanvas = () => {
 const CyberLensHUD = ({ mouseX, mouseY }: { mouseX: any, mouseY: any }) => {
   return (
     <motion.div 
-      style={{ x: mouseX, y: mouseY, translateX: 30, translateY: 30 }}
+      style={{ x: mouseX, y: mouseY, translateX: 40, translateY: 40 }}
       className="fixed top-0 left-0 z-[10000] pointer-events-none hidden lg:block"
     >
-      <div className="relative opacity-40 group-hover:opacity-100 transition-opacity duration-700">
-        {/* Lingkaran Bidik Kecil & Halus */}
-        <div className="absolute -top-3 -left-3 w-6 h-6 border border-cyan-500/30 rounded-full animate-spin" />
+      {/* Efek HUD yang sangat transparan agar tidak mengganggu pandangan */}
+      <div className="relative opacity-30 group-hover:opacity-100 transition-opacity duration-1000">
+        {/* Lingkaran Crosshair Halus */}
+        <div className="absolute -top-4 -left-4 w-8 h-8 border border-cyan-500/20 rounded-full animate-[spin_10s_linear_infinite]" />
         
-        {/* Box HUD Mungil (Gaya Gambar 2) */}
-        <div className="bg-black/20 backdrop-blur-sm border-l border-cyan-500/50 p-2 ml-4 space-y-1">
+        {/* Box Data Mungil ala Scouter */}
+        <div className="bg-black/10 backdrop-blur-[2px] border-l border-cyan-500/40 p-2 ml-4 space-y-1">
            <div className="flex items-center gap-2">
-              <div className="w-1 h-1 rounded-full bg-cyan-500 animate-ping" />
-              <span className="text-[6px] font-mono text-cyan-400 uppercase tracking-widest">Tracking</span>
+              <div className="w-1 h-1 rounded-full bg-cyan-500 shadow-[0_0_8px_cyan]" />
+              <span className="text-[6px] font-mono text-cyan-400 uppercase tracking-[0.2em]">Tracing</span>
            </div>
-           <p className="text-[7px] font-mono text-white/40">SEC: <span className="text-cyan-400">ACTIVE</span></p>
+           <p className="text-[7px] font-mono text-white/40">AUTH: <span className="text-cyan-400">LEVEL_1</span></p>
         </div>
       </div>
     </motion.div>
@@ -849,39 +818,38 @@ export default function CyberLandingDark() {
 
       <main className="relative z-10 w-full">
         
-{/* --- SECTION 1: HERO (REVISI: SKALA GAMBAR 2) --- */}
-<section id="hero" className="relative min-h-screen lg:min-h-[calc(100vh-120px)] flex items-center justify-center w-full max-w-[1450px] mx-auto px-6 lg:px-10 pt-20 pb-10 lg:py-0">
-          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-10 lg:gap-24 items-center w-full text-left">
+{/* --- SECTION 1: HERO (REVISI TOTAL: RAPI & TERATUR) --- */}
+<section id="hero" className="relative min-h-screen flex items-center justify-center pt-40 pb-20 px-10">
+          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-20 items-center w-full max-w-[1450px] mx-auto">
             
-            {/* SISI KANAN (DIPERPAS UKURANNYA) */}
-            <div className="relative w-full flex flex-col items-center justify-center order-1 lg:order-2 gap-4 lg:gap-8">
+            {/* SISI KANAN: WIDGET 3D (UKURAN KOMPAK) */}
+            <div className="relative w-full flex flex-col items-center justify-center order-1 lg:order-2 gap-8">
               <div className="relative" style={{ perspective: 2000 }}>
                 <motion.div 
                    style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} 
-                   className="relative w-[240px] h-[300px] sm:w-[280px] sm:h-[350px] lg:w-[350px] lg:h-[440px] bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl rounded-[2.5rem] p-1 shadow-2xl border border-white/10 flex flex-col items-center justify-center group/card transition-all duration-700 hover:border-cyan-500/30"
+                   className="relative w-[240px] h-[300px] sm:w-[280px] sm:h-[350px] lg:w-[350px] lg:h-[440px] bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl rounded-[2.5rem] border border-white/10 flex flex-col items-center justify-center group/card transition-all duration-700 hover:border-cyan-500/30 shadow-2xl"
                 >
-                  <div className="relative flex items-center justify-center mb-6 lg:mb-8" style={{ transform: "translateZ(60px)" }}>
-                    <div className="absolute w-32 h-32 lg:w-44 lg:h-44 border border-cyan-500/20 rounded-full animate-spin-slow" />
-                    <div className="w-16 h-16 lg:w-24 lg:h-24 bg-black border border-cyan-500/30 rounded-3xl flex items-center justify-center">
-                       <ShieldCheck size={36} className="text-cyan-400" />
+                  <div className="relative mb-8">
+                    <div className="absolute inset-0 rounded-full border border-cyan-500/20 animate-[spin_20s_linear_infinite]" />
+                    <div className="w-20 h-20 lg:w-28 lg:h-28 bg-black border border-cyan-500/30 rounded-3xl flex items-center justify-center">
+                       <ShieldCheck size={40} className="text-cyan-400" />
                     </div>
                   </div>
-                  <div className="text-center" style={{ transform: "translateZ(40px)" }}>
-                    <h3 className="text-lg lg:text-xl font-black text-white uppercase tracking-widest">Security <span className="text-cyan-400">Hub</span></h3>
-                  </div>
-                  <div className="absolute -bottom-4 lg:-bottom-6 px-8 py-3 bg-black border border-white/5 text-white rounded-xl text-[7px] lg:text-[9px] font-black uppercase" style={{ transform: "translateZ(70px)" }}>ENCRYPTED</div>
+                  <h3 className="text-lg lg:text-xl font-black text-white uppercase tracking-widest">Security <span className="text-cyan-400">Hub</span></h3>
+                  <div className="absolute -bottom-5 px-10 py-3 bg-black border border-white/10 text-white rounded-xl text-[8px] font-black uppercase shadow-2xl">ENCRYPTED</div>
                 </motion.div>
               </div>
-              <div className="w-full max-w-[100vw]"><CyberHiveMarquee /></div>
+              {/* MARQUEE LOGO (DIKECILKAN AGAR TIDAK PENUH) */}
+              <div className="w-full max-w-[400px] lg:max-w-full opacity-60"><CyberHiveMarquee /></div>
             </div>
 
-            {/* SISI KIRI (TIPOGRAFI ELEGAN) */}
-            <div className="flex flex-col items-center lg:items-start space-y-6 lg:space-y-8 w-full order-2 lg:order-1 pt-2 lg:pt-0">
-              <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 rounded-full text-[8px] lg:text-[9px] font-black tracking-[0.4em] uppercase backdrop-blur-md">
+            {/* SISI KIRI: TEKS (RATA KIRI & ELEGAN) */}
+            <div className="flex flex-col items-center lg:items-start space-y-8 w-full order-2 lg:order-1">
+              <div className="px-5 py-2 bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 rounded-full text-[9px] font-black tracking-[0.4em] uppercase backdrop-blur-md">
                  SECURE PROTOCOL ACTIVE
               </div>
               
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-[1.05] uppercase">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-[1.05] uppercase text-center lg:text-left">
                 KESIAPAN SIBER <br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-500 animate-gradient-x">
                    SEKOLAH 2026.
@@ -889,14 +857,12 @@ export default function CyberLandingDark() {
               </h2>
               
               <p className="text-xs lg:text-base font-medium text-slate-400 leading-relaxed max-w-xl opacity-70 text-center lg:text-left">
-                Platform kesiapan digital sekolah yang mengintegrasikan keamanan tingkat tinggi dengan infrastruktur modern untuk masa depan pendidikan.
+                Platform kesiapan digital sekolah yang mengintegrasikan keamanan tingkat tinggi dengan infrastruktur modern untuk kedaulatan data masa depan.
               </p>
 
-              <div className="w-full flex justify-center lg:justify-start">
-                 <button onClick={() => setIsLoginOpen(true)} className="px-10 py-4 bg-white text-black rounded-2xl font-black text-[10px] tracking-[0.2em] uppercase shadow-xl hover:bg-cyan-400 hover:text-white transition-all flex items-center justify-center gap-3 active:scale-95">
-                   MULAI EVALUASI <ArrowRight size={16} />
-                 </button>
-              </div>
+              <button onClick={() => setIsLoginOpen(true)} className="px-10 py-4 bg-white text-black rounded-2xl font-black text-[10px] tracking-[0.2em] uppercase shadow-xl hover:bg-cyan-400 hover:text-white transition-all flex items-center justify-center gap-3">
+                 MULAI EVALUASI <ArrowRight size={16} />
+              </button>
             </div>
 
           </div>
