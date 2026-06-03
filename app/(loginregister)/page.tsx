@@ -479,31 +479,31 @@ const CyberInfrastructureSection = () => {
           </h2>
         </div>
 
-        {/* --- GRID 6 KOTAK (REVISI: SEJAJAR SEMPURNA) --- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+{/* --- GRID 6 KOTAK (OPTIMASI SMOOTH MOBILE TAP) --- */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
           {sectors.map((s, i) => (
             <motion.div 
               key={i} 
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", stiffness: 400, damping: 30, delay: i * 0.05 }}
-              whileHover={{ y: -12, scale: 1.02 }}
-              className="group/card relative bg-[#050811]/60 backdrop-blur-2xl border border-white/5 p-10 rounded-[3rem] cursor-pointer overflow-hidden shadow-2xl hover:border-cyan-500/50 flex flex-col h-full"
-            >
-              {/* Efek Laser Scanner */}
-              <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400/60 opacity-0 group-hover:opacity-100 animate-scanner z-20" />
+              // SPRING PHYSICS: Rahasia agar di HP terasa membal dan smooth
+              transition={{ type: "spring", stiffness: 300, damping: 25, delay: i * 0.05 }}
               
-              {/* Decorative HUD Corners */}
-              <div className="absolute top-8 left-8 w-5 h-5 border-t-2 border-l-2 border-cyan-500/20 group-hover:border-cyan-400/60 transition-colors" />
-              <div className="absolute bottom-8 right-8 w-5 h-5 border-b-2 border-r-2 border-cyan-500/20 group-hover:border-cyan-400/60 transition-colors" />
-
-              {/* Icon Area */}
-              <div className="relative w-16 h-16 bg-cyan-950/40 border border-cyan-500/20 text-cyan-400 rounded-3xl flex items-center justify-center mb-8 mx-auto group-hover:scale-110 transition-transform duration-300">
+              // EFEK SAAT DISENTUH (MOBILE) & HOVER (LAPTOP)
+              whileHover={{ y: -10, scale: 1.02 }}
+              whileTap={{ scale: 0.98, y: -5 }} // Memberikan efek "naik" saat jari menekan layar
+              
+              className="group/card relative bg-[#050811]/60 backdrop-blur-2xl border border-white/5 p-10 rounded-[3rem] cursor-pointer overflow-hidden shadow-2xl flex flex-col h-full"
+            >
+              {/* Laser Scanner Line */}
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400/60 opacity-0 group-hover:opacity-100 group-hover:animate-scanner z-20" />
+              
+              {/* Ikon dengan Aura Neon */}
+              <div className="relative w-16 h-16 bg-cyan-950/40 border border-cyan-500/20 text-cyan-400 rounded-3xl flex items-center justify-center mb-8 mx-auto group-hover:scale-110 transition-all duration-300">
                 <s.icon size={30} className="drop-shadow-[0_0_8px_currentColor]" />
               </div>
               
-              {/* --- BAGIAN TENGAH (FLEX-1 MENDORONG FOOTER KE BAWAH) --- */}
-              <div className="space-y-3 flex-1">
+              <div className="space-y-3 flex-1 text-center">
                 <h3 className="text-xl font-black text-white uppercase tracking-widest group-hover:text-cyan-400 transition-colors">
                   {s.title}
                 </h3>
@@ -512,12 +512,10 @@ const CyberInfrastructureSection = () => {
                 </p>
               </div>
 
-              {/* --- FOOTER CARD (PASTI SEJAJAR SEMUA KOTAK) --- */}
-              <div className="mt-10 pt-6 border-t border-white/5 flex items-center justify-between opacity-40 group-hover:opacity-100 transition-all">
+              <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between opacity-40 group-hover:opacity-100 transition-all">
                 <span className="text-[9px] font-black text-cyan-400 tracking-[0.3em] uppercase">{s.tag}</span>
                 <div className="flex gap-1.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_#22d3ee]" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse delay-150" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
                 </div>
               </div>
             </motion.div>
@@ -1288,23 +1286,37 @@ export default function CyberLandingDark() {
           </div>
         </div>
 
-        {/* --- MOBILE OVERLAY (DEWA VERSION) --- */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div 
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="absolute top-full left-0 w-full bg-[#05050a]/95 backdrop-blur-3xl border-b border-white/10 py-10 px-8 lg:hidden flex flex-col gap-6 shadow-2xl overflow-hidden"
+              initial={{ opacity: 0, y: -20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              exit={{ opacity: 0, y: -20 }} 
+              className="absolute top-full left-0 w-full bg-[#05050a]/98 backdrop-blur-3xl py-10 px-6 lg:hidden flex flex-col gap-6 shadow-2xl overflow-hidden"
             >
-               {['Beranda', 'Profil', 'Layanan'].map((item, i) => (
+               {[ 
+                 { icon: Home, label: 'Beranda', id: 'hero' }, 
+                 { icon: Info, label: 'Tentang Kami', id: 'pilar' }, // NAMA DIGANTI AGAR BISA DIKLIK
+                 { icon: HelpCircle, label: 'Layanan', id: 'infra' } 
+               ].map((item, idx) => (
                  <div 
-                   key={item} 
-                   onClick={() => { if (item === 'Beranda') scrollToSection('hero', 'Beranda'); else setActiveModal(item.toUpperCase() as any); setIsMobileMenuOpen(false); }}
-                   className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5 text-slate-300 font-black text-xs tracking-[0.3em] uppercase hover:text-cyan-400 hover:bg-cyan-500/10 transition-all"
+                   key={idx} 
+                   onClick={() => { 
+                     if (idx === 0) {
+                        scrollToSection('hero', 'Beranda');
+                     } else {
+                        // Memanggil modal dengan kunci yang benar: TENTANG KAMI atau LAYANAN
+                        setActiveModal(item.label.toUpperCase() as any);
+                        setIsMobileMenuOpen(false); 
+                     }
+                   }} 
+                   className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5 text-slate-300 font-bold text-sm uppercase hover:text-cyan-400 transition-all active:scale-95"
                  >
-                   {item}
-                   <ChevronRight size={14} className="opacity-30" />
+                   <div className="flex items-center gap-4">
+                      <item.icon size={20} />
+                      {item.label}
+                   </div>
+                   <ChevronRight size={16} className="opacity-30" />
                  </div>
                ))}
             </motion.div>
