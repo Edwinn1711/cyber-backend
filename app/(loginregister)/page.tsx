@@ -18,33 +18,36 @@ const CyberIntelligenceHUD = () => {
   const [logs, setLogs] = useState<string[]>([]);
   const [isMinimized, setIsMinimized] = useState(true);
   const [isScanning, setIsScanning] = useState(false);
+  const [scanResult, setScanResult] = useState<string | null>(null);
 
-  // PESAN YANG MUDAH DIMERTI SEMUA ORANG
-  const liveMessages = [
-    "MENGAMANKAN DATA PRIBADI SISWA",
-    "KONEKSI AMAN TELAH TERPASANG",
-    "MEMANTAU LALU LINTAS JARINGAN",
-    "TIDAK ADA RISIKO DITEMUKAN",
-    "SISTEM STABIL DAN TERKENDALI",
-    "PERCOBAAN AKSES ASING DITOLAK",
-    "VALIDASI ATURAN KEAMANAN SIBER",
-    "MEMBERSIHKAN JEJAK DIGITAL",
-    "ENKRIPSI DATA BERHASIL AKTIF"
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const randomMsg = liveMessages[Math.floor(Math.random() * liveMessages.length)];
-      const time = new Date().toLocaleTimeString('id-ID', { hour12: false });
-      setLogs(prev => [`[${time}] ${randomMsg}`, ...prev].slice(0, 6));
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
+  // Fungsi untuk memicu urutan pengecekan sistem yang nyata
   const triggerDeepScan = () => {
     setIsScanning(true);
-    // Logika animasi scan tetap sama
-    setTimeout(() => setIsScanning(false), 3000);
+    setScanResult(null);
+    setLogs([]); // Bersihkan log lama untuk fokus ke pengecekan
+
+    const checkSequence = [
+      "MEMULAI ANALISIS INTEGRITAS DATABASE...",
+      "MEMINDAI TITIK AKSES JARINGAN SEKOLAH...",
+      "VERIFIKASI PROTOKOL ENKRIPSI AES-256...",
+      "PENGECEKAN FIREWALL BERLAPIS...",
+      "MEMERIKSA KERENTANAN SISTEM...",
+      "SINKRONISASI DATA KE PUSAT KOMANDO...",
+      "ANALISIS SELESAI: SISTEM TERVERIFIKASI AMAN"
+    ];
+
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < checkSequence.length) {
+        const time = new Date().toLocaleTimeString('id-ID', { hour12: false });
+        setLogs(prev => [`[${time}] ${checkSequence[i]}`, ...prev]);
+        i++;
+      } else {
+        clearInterval(interval);
+        setIsScanning(false);
+        setScanResult("SISTEM 100% TERLINDUNGI"); // Hasil Analisis Akhir
+      }
+    }, 600); // Kecepatan log saat pengecekan
   };
 
   return (
@@ -57,40 +60,72 @@ const CyberIntelligenceHUD = () => {
             className="group relative w-14 h-14 bg-cyan-500/10 backdrop-blur-xl border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-2xl hover:border-cyan-400 transition-all"
           >
             <div className="absolute inset-0 rounded-2xl border border-cyan-500/20 animate-ping" />
-            <Terminal size={20} className="text-cyan-400" />
-            <div className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_8px_#10b981]" />
+            <Activity size={20} className="text-cyan-400" />
+            <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-black" />
           </motion.button>
         ) : (
           <motion.div
             key="max" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
-            className="relative w-[320px] bg-[#050811]/95 backdrop-blur-3xl border border-cyan-500/20 rounded-[2.5rem] p-6 shadow-[0_0_80px_rgba(0,0,0,1)] overflow-hidden"
+            className="relative w-[340px] bg-[#050811]/95 backdrop-blur-3xl border border-cyan-500/20 rounded-[2.5rem] p-6 shadow-[0_0_100px_rgba(0,0,0,1)] overflow-hidden"
           >
+            {/* Header */}
             <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
                <div className="flex items-center gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_cyan]" />
-                  <span className="text-[10px] font-black text-white tracking-widest uppercase">Monitor Keamanan</span>
+                  <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_cyan]" />
+                  <span className="text-[10px] font-black text-white tracking-[0.3em] uppercase">Monitor Keamanan</span>
                </div>
                <button onClick={() => setIsMinimized(true)} className="text-slate-500 hover:text-white transition-colors">
-                  <ChevronDown size={18} />
+                  <ChevronDown size={20} />
                </button>
             </div>
 
-            <div className="h-[120px] space-y-2 font-mono overflow-hidden mb-6">
+            {/* Log Stream Area */}
+            <div className="h-[150px] space-y-2 font-mono overflow-y-auto no-scrollbar mb-6">
+              {logs.length === 0 && !isScanning && (
+                <p className="text-slate-700 text-[9px] text-center mt-12 uppercase tracking-widest">Sistem Standby...</p>
+              )}
               {logs.map((log, i) => (
-                <p key={i} className={`text-[8px] tracking-tight ${i === 0 ? 'text-cyan-400 font-bold' : 'text-slate-600'}`}>{log}</p>
+                <motion.p 
+                  key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+                  className={`text-[8px] tracking-tight leading-none ${i === 0 ? 'text-cyan-400 font-bold' : 'text-slate-600'}`}
+                >
+                  {log}
+                </motion.p>
               ))}
             </div>
+
+            {/* Hasil Analisis (MUNCUL SETELAH SCAN) */}
+            <AnimatePresence>
+              {scanResult && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }} 
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center gap-4 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                >
+                  <ShieldCheck size={24} className="text-emerald-400" />
+                  <div className="text-left">
+                    <p className="text-[7px] font-mono text-emerald-500/50 uppercase tracking-widest">Laporan Akhir:</p>
+                    <p className="text-[10px] font-black text-emerald-400 uppercase tracking-wider">{scanResult}</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <button 
               onClick={triggerDeepScan}
               disabled={isScanning}
-              className={`w-full py-3.5 rounded-2xl font-black text-[9px] tracking-[0.2em] uppercase transition-all flex items-center justify-center gap-3 ${isScanning ? 'bg-white/5 text-slate-700' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500 hover:text-black shadow-xl'}`}
+              className={`w-full py-4 rounded-2xl font-black text-[9px] tracking-[0.2em] uppercase transition-all flex items-center justify-center gap-3 ${isScanning ? 'bg-white/5 text-slate-500 cursor-not-allowed' : 'bg-cyan-500 text-black shadow-[0_0_30px_rgba(34,211,238,0.3)] hover:scale-[1.02]'}`}
             >
-              {isScanning ? 'SEDANG MEMINDAI...' : 'Cek Kesehatan Sistem'} 
-              <Zap size={12} className={isScanning ? 'animate-spin' : ''} />
+              {isScanning ? 'MENGANALISIS DATA...' : 'Cek Kesehatan Sistem'} 
+              <Zap size={14} className={isScanning ? 'animate-spin' : ''} />
             </button>
 
-            {isScanning && <div className="absolute inset-0 bg-cyan-400/5 animate-pulse"><div className="absolute top-0 w-full h-1 bg-cyan-400 shadow-[0_0_20px_cyan] animate-scanner" /></div>}
+            {/* Laser Line Overlay */}
+            {isScanning && (
+              <div className="absolute inset-0 pointer-events-none">
+                 <div className="absolute top-0 left-0 w-full h-1 bg-cyan-400 shadow-[0_0_20px_cyan] animate-scanner z-50" />
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
