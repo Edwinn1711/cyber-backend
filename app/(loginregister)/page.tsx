@@ -239,7 +239,7 @@ const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
           key={bgIdx} 
           src={CYBER_ASSETS[bgIdx]} 
           initial={{ opacity: 0, scale: 1.05 }} 
-          animate={{ opacity: 0.35, scale: 1 }} 
+          animate={{ opacity: 0.4, scale: 1 }} 
           exit={{ opacity: 0 }} 
           transition={{ duration: 2, ease: "easeInOut" }} 
           className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-lighten" 
@@ -989,13 +989,13 @@ const CyberModal = ({ isOpen, onClose, title, children }: { isOpen: boolean, onC
 );
 
 
-// --- 1. CYBER GRID ENGINE (ANTI-LAG & ULTRA SMOOTH) ---
 const CyberGridEngine = () => (
-  <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-black">
-    {/* Lantai Digital 3D yang Bergerak Cepat */}
+  // bg-black dihapus agar gambar di bawahnya kelihatan
+  <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    {/* Lantai Digital 3D */}
     <div className="absolute inset-0" style={{ perspective: '1000px' }}>
       <div 
-        className="absolute inset-0 opacity-[0.15]"
+        className="absolute inset-0 opacity-[0.2]" // Opacity grid dinaikkan dikit biar tegas
         style={{
           backgroundImage: `linear-gradient(to right, #22d3ee 1px, transparent 1px), linear-gradient(to bottom, #22d3ee 1px, transparent 1px)`,
           backgroundSize: '80px 80px',
@@ -1006,21 +1006,18 @@ const CyberGridEngine = () => (
       />
     </div>
 
-    {/* Hujan Data (Digital Rain) - Efek Wah yang Ringan */}
-    <div className="absolute inset-0 flex justify-around opacity-20">
+    {/* Hujan Data (Data Rain) */}
+    <div className="absolute inset-0 flex justify-around opacity-30">
       {[...Array(10)].map((_, i) => (
         <motion.div
           key={i}
           initial={{ y: "-100%", opacity: 0 }}
           animate={{ y: "100%", opacity: [0, 1, 0] }}
           transition={{ duration: Math.random() * 2 + 1, repeat: Infinity, ease: "linear", delay: i * 0.5 }}
-          className="w-[1px] h-[30vh] bg-gradient-to-b from-transparent via-fuchsia-500 to-transparent"
+          className="w-[1px] h-[30vh] bg-gradient-to-b from-transparent via-cyan-400 to-transparent"
         />
       ))}
     </div>
-
-    {/* Ambient Glows */}
-    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,transparent_20%,#000000_100%)]" />
   </div>
 );
 
@@ -1148,9 +1145,10 @@ export default function CyberLandingDark() {
     <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-cyan-500/30 relative">
       <PersistentUniverse bgIdx={bgIdx} />
       <CyberGridEngine />
-      <UltraGodTierParticleSystem />
+
       <CyberLensHUD mouseX={mouseX} mouseY={mouseY} />
       <CyberIntelligenceHUD user={user} />
+      <UltraGodTierParticleSystem />
 
 {/* --- ULTIMATE HOLOGRAPHIC HEADER (DEWA VERSION) --- */}
 <header className="fixed top-0 left-0 right-0 z-[1000] w-full">
