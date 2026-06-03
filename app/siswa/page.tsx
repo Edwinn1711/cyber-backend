@@ -431,136 +431,121 @@ export default function StudentPortal() {
 
 
   const CyberSentinel = ({ username = "OPERATIVE" }) => {
-    const [message, setMessage] = useState("SISTEM_AKTIF: SIAP_MENERIMA_PERINTAH");
+    const [message, setMessage] = useState("SYSTEM_READY");
+    const [isJumping, setIsJumping] = useState(false);
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
   
-    useEffect(() => {
-      const messages = [
-        `GREETINGS, ${username.toUpperCase()}`,
-        "SCANNING_VULNERABILITIES...",
-        "UPLINK_STABLE: ENCRYPTION_ACTIVE",
-        "SISTEM_SIAP_DIJALANKAN",
-        "DATABASE_TERPROTEKSI_PENUH"
-      ];
-      let i = 0;
-      const interval = setInterval(() => {
-        setMessage(messages[i]);
-        i = (i + 1) % messages.length;
-      }, 4000);
+    // Fisika Pegas (Spring) agar gerakan tidak patah-patah/kejang
+    const springConfig = { stiffness: 150, damping: 20 };
+    const dx = useSpring(useTransform(mouseX, [-0.5, 0.5], [-40, 40]), springConfig);
+    const dy = useSpring(useTransform(mouseY, [-0.5, 0.5], [-30, 30]), springConfig);
   
+    useEffect(() => {
       const handleMove = (e: MouseEvent) => {
         mouseX.set((e.clientX / window.innerWidth) - 0.5);
         mouseY.set((e.clientY / window.innerHeight) - 0.5);
       };
       window.addEventListener("mousemove", handleMove);
-      return () => { clearInterval(interval); window.removeEventListener("mousemove", handleMove); };
-    }, [username]);
+      return () => window.removeEventListener("mousemove", handleMove);
+    }, []);
   
-    const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), { stiffness: 100, damping: 20 });
-    const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 100, damping: 20 });
+    const triggerJump = () => {
+      setIsJumping(true);
+      setMessage("ACTION: PULSE_JUMP");
+      setTimeout(() => {
+        setIsJumping(false);
+        setMessage("SYSTEM_STABLE");
+      }, 1000);
+    };
   
     return (
-      <div className="relative flex items-center justify-center h-[500px] w-full select-none" style={{ perspective: '1500px' }}>
+      <div className="relative flex items-center justify-center h-[350px] w-full select-none" style={{ perspective: '1000px' }}>
         
-        {/* 1. HOLOGRAPHIC SPEECH BUBBLE (Dewa Speaking Effect) */}
-        <AnimatePresence mode="wait">
-          <motion.div 
-            key={message}
-            initial={{ opacity: 0, y: 20, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.8 }}
-            className="absolute -top-10 left-1/2 -translate-x-1/2 z-50 bg-cyan-500/10 backdrop-blur-xl border border-cyan-400/40 px-6 py-3 rounded-2xl shadow-[0_0_30px_rgba(34,211,238,0.2)]"
-          >
-            <div className="flex items-center gap-3">
-               <MessageSquare size={14} className="text-cyan-400 animate-pulse" />
-               <span className="text-[10px] font-mono text-cyan-400 font-bold tracking-widest whitespace-nowrap uppercase">
-                 {message}
-               </span>
-            </div>
-            {/* Panah gelembung */}
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[#050811] border-r border-b border-cyan-400/40 rotate-45" />
-          </motion.div>
-        </AnimatePresence>
-  
-        {/* 2. BODY CONTAINER (FOLLOWS MOUSE) */}
-        <motion.div 
-          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className="relative flex flex-col items-center"
-        >
-          {/* --- KEPALA (HEAD) --- */}
+        {/* --- SPEECH BUBBLE HUD --- */}
+        <div className="absolute -top-12 z-50">
           <motion.div 
             animate={{ y: [0, -5, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="relative w-24 h-28 bg-[#0a0a0f] border-2 border-cyan-400 rounded-t-[3rem] rounded-b-2xl flex flex-col items-center justify-center shadow-[0_0_40px_rgba(34,211,238,0.3)] z-30"
+            transition={{ duration: 2, repeat: Infinity }}
+            className="bg-cyan-500/10 backdrop-blur-xl border border-cyan-400/30 px-5 py-2 rounded-full shadow-[0_0_20px_rgba(34,211,238,0.2)]"
           >
-            {/* Eyes with Blinking */}
-            <div className="flex gap-5 mb-2">
-              {[1, 2].map((i) => (
-                <motion.div 
-                  key={i}
-                  animate={{ scaleY: [1, 1, 0.1, 1, 1] }} 
-                  transition={{ duration: 4, repeat: Infinity, times: [0, 0.8, 0.85, 0.9, 1] }}
-                  className="w-4 h-4 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" 
-                />
-              ))}
-            </div>
-            <div className="w-12 h-1 bg-cyan-500/20 rounded-full mt-4" />
+            <p className="text-[9px] font-mono text-cyan-400 font-black tracking-widest uppercase flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-ping" />
+              {message}
+            </p>
           </motion.div>
+        </div>
   
-          {/* --- TUBUH (TORSO) --- */}
+        {/* --- ROBOT BODY --- */}
+        <motion.div 
+          style={{ x: dx, y: dy }}
+          onClick={triggerJump}
+          animate={isJumping ? { y: [0, -60, 0], scale: [1, 1.1, 1] } : {}}
+          className="relative flex flex-col items-center cursor-pointer"
+        >
+          
+          {/* 1. KEPALA (ORB HEAD) */}
           <motion.div 
-            animate={{ scale: [1, 1.02, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="relative w-44 h-56 bg-[#0a0a0f] border-2 border-cyan-400 rounded-[4rem] -mt-2 flex flex-col items-center p-8 shadow-2xl z-20 overflow-hidden"
+            animate={{ rotate: [-2, 2, -2] }}
+            transition={{ duration: 4, repeat: Infinity }}
+            className="w-16 h-16 bg-[#050811] border-2 border-cyan-400/60 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.4)] z-30"
           >
-             {/* REAKTOR TENGAH */}
-             <div className="relative w-20 h-20 rounded-full border-2 border-cyan-500/20 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full border border-dashed border-cyan-400/30 animate-[spin_10s_linear_infinite]" />
-                <motion.div 
-                  animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.7, 0.3] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="w-10 h-10 bg-cyan-500/20 rounded-full blur-md" 
-                />
-                <Zap size={28} className="text-cyan-400 fill-current relative z-10 drop-shadow-[0_0_10px_#22d3ee]" />
-             </div>
-             {/* Circuit Lines */}
-             <div className="mt-10 space-y-3 w-full opacity-20">
-                <div className="h-0.5 w-full bg-cyan-400" />
-                <div className="h-0.5 w-full bg-cyan-400" />
-             </div>
+            <div className="flex gap-3">
+               <motion.div 
+                 animate={{ scaleY: [1, 1, 0, 1, 1] }} 
+                 transition={{ duration: 4, repeat: Infinity, times: [0, 0.8, 0.82, 0.9, 1] }}
+                 className="w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" 
+               />
+               <motion.div 
+                 animate={{ scaleY: [1, 1, 0, 1, 1] }} 
+                 transition={{ duration: 4, repeat: Infinity, times: [0, 0.8, 0.82, 0.9, 1] }}
+                 className="w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" 
+               />
+            </div>
+            {/* Virtual Visor Glow */}
+            <div className="absolute inset-0 bg-cyan-500/5 rounded-full blur-md animate-pulse" />
           </motion.div>
   
-          {/* --- TANGAN (ARMS) --- */}
-          <motion.div animate={{ rotate: [-10, 10, -10] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} className="absolute -left-14 top-32 origin-top-right w-8 h-28 bg-[#0a0a0f] border border-cyan-400/50 rounded-full shadow-lg" />
-          <motion.div animate={{ rotate: [10, -10, 10] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} className="absolute -right-14 top-32 origin-top-left w-8 h-28 bg-[#0a0a0f] border border-cyan-400/50 rounded-full shadow-lg" />
+          {/* 2. TUBUH (CENTRAL CORE) */}
+          <div className="relative w-24 h-32 bg-[#050811]/90 border border-cyan-400/40 rounded-[2.5rem] mt-2 flex items-center justify-center shadow-2xl z-20 overflow-hidden">
+             {/* REAKTOR TENGAH */}
+             <div className="relative w-12 h-12 rounded-full border border-white/5 flex items-center justify-center">
+                <div className="absolute inset-0 rounded-full border border-dashed border-cyan-400/30 animate-[spin_10s_linear_infinite]" />
+                <Zap size={20} className="text-cyan-400 animate-pulse" />
+             </div>
+             {/* Moving Pattern */}
+             <div className="absolute inset-0 bg-hud-grid opacity-5" />
+          </div>
   
-          {/* --- KAKI (LEGS WITH PLASMA THRUSTERS) --- */}
-          <div className="flex gap-16 -mt-6">
+          {/* 3. TANGAN MELAYANG (FLOATING HANDS) */}
+          <motion.div 
+            animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -left-10 top-20 w-4 h-12 bg-cyan-400/20 border border-cyan-400/40 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.1)]"
+          />
+          <motion.div 
+            animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -right-10 top-20 w-4 h-12 bg-cyan-400/20 border border-cyan-400/40 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.1)]"
+          />
+  
+          {/* 4. KAKI PLASMA (MINI THRUSTERS) */}
+          <div className="flex gap-10 -mt-4">
             {[0, 1].map((i) => (
-              <motion.div 
-                key={i}
-                animate={{ scaleY: [1, 0.9, 1] }}
-                transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
-                className="flex flex-col items-center"
-              >
-                <div className="w-10 h-28 bg-[#0a0a0f] border border-cyan-400/40 rounded-b-[3rem] shadow-xl" />
-                {/* PLASMA ENGINE */}
+              <div key={i} className="flex flex-col items-center">
+                <div className="w-6 h-12 bg-[#050811] border border-cyan-400/40 rounded-b-xl shadow-xl" />
                 <motion.div 
-                  animate={{ 
-                    height: [20, 60, 20],
-                    opacity: [0.4, 0.8, 0.4]
-                  }}
-                  transition={{ duration: 0.15, repeat: Infinity }}
-                  className="w-6 bg-gradient-to-b from-cyan-400 via-blue-500/50 to-transparent blur-md rounded-full mt-1"
+                  animate={{ height: [15, 40, 15], opacity: [0.3, 0.8, 0.3] }}
+                  transition={{ duration: 0.2, repeat: Infinity }}
+                  className="w-4 bg-gradient-to-b from-cyan-400/50 to-transparent blur-md rounded-full mt-1"
                 />
-              </motion.div>
+              </div>
             ))}
           </div>
         </motion.div>
   
-        {/* --- HUD DECORATION --- */}
-        <div className="absolute w-[500px] h-[500px] border border-cyan-500/5 rounded-full animate-[spin_40s_linear_infinite] pointer-events-none" />
+        {/* --- AMBIENT DECORATION --- */}
+        <div className="absolute w-[300px] h-[300px] border border-cyan-500/5 rounded-full animate-[spin_30s_linear_infinite] pointer-events-none" />
       </div>
     );
   };
