@@ -9,7 +9,9 @@ import {
   BrainCircuit, ShieldAlert, Cpu, Star, Target, Activity,
   CreditCard, Globe, Key, Bug, Mail, Cloud, Search, Terminal, Eye,
   Facebook, Twitter, Youtube, Instagram, Send, Phone, Globe2,
-  Radar as RadarIcon, ChevronDown, MessageSquare, MousePointer2, Binary, ShieldQuestion
+  Radar as RadarIcon, ChevronDown, MessageSquare, MousePointer2, Binary, 
+  ShieldQuestion, Radio, RefreshCw, 
+  ChevronRight, ChevronLeft, ArrowLeft // <--- TAMBAHKAN TIGA INI AGAR SEMPURNA
 } from 'lucide-react'
 
 const CyberIntelligenceHUD = () => {
@@ -210,182 +212,350 @@ const CyberDecoration = ({ className = "" }: { className?: string }) => (
 
 const VisiMisiSection = ({ bgIdx }: { bgIdx: number }) => {
   const [hovered, setHovered] = useState<string | null>(null);
+
   const data = [
-    { id: "visi", icon: Star, title: "VISI KEDAULATAN", desc: "Membangun ekosistem pendidikan yang tangguh siber melalui integrasi teknologi pertahanan terkini." },
-    { id: "misi", icon: Target, title: "MISI OPERASIONAL", desc: "Menyelenggarakan infrastruktur digital terproteksi dan membekali siswa dengan kompetensi siber." }
+    { 
+      id: "visi", 
+      icon: Star, 
+      title: "VISI KEDAULATAN", 
+      desc: "Menjadi ekosistem pendidikan menengah yang tangguh siber, unggul dalam inovasi digital, serta mampu menjadi pelopor keamanan data nasional." 
+    },
+    { 
+      id: "misi", 
+      icon: Target, 
+      title: "MISI OPERASIONAL", 
+      desc: "Menyelenggarakan infrastruktur digital terproteksi, membekali siswa dengan kompetensi siber, dan menanamkan budaya kewaspadaan digital." 
+    }
   ];
+
   return (
-    <section className="relative w-full min-h-[85vh] flex flex-col items-center justify-center py-20 bg-black border-t border-white/5 overflow-hidden">
+    <section id="visi-misi" className="relative w-full min-h-[85vh] flex flex-col items-center justify-center py-20 bg-[#020108] border-b border-white/5 overflow-hidden">
+      
+      {/* --- BACKGROUND SINKRON (OPACITY DIKALIBRASI) --- */}
       <div className="absolute inset-0 z-0">
-        <motion.img key={bgIdx} src={CYBER_ASSETS[bgIdx]} animate={{ opacity: 0.3 }} transition={{ duration: 2 }} className="w-full h-full object-cover mix-blend-lighten" />
-        <div className="absolute inset-0 bg-black/70" />
+        <AnimatePresence mode="wait">
+          <motion.img 
+            key={bgIdx} src={CYBER_ASSETS[bgIdx]} initial={{ opacity: 0 }}
+            animate={{ opacity: 0.3 }} exit={{ opacity: 0 }} transition={{ duration: 2 }}
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-lighten"
+          />
+        </AnimatePresence>
+        <div className="absolute inset-0 bg-black/60 pointer-events-none" />
       </div>
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 w-full text-center">
-        <div className="mb-14">
-          <h2 className="text-2xl lg:text-4xl font-black text-white uppercase tracking-tighter mb-4">MEMBANGUN KEDAULATAN <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 animate-gradient-x">DIGITAL SEKOLAH</span></h2>
-          <p className="text-slate-400 max-w-xl mx-auto text-xs lg:text-sm font-medium opacity-70">Integrasi infrastruktur siber aman demi lingkungan belajar terlindungi.</p>
+
+      {/* Dekorasi Pengisi Area Kosong */}
+      <CyberDecoration className="-bottom-32 -right-32 rotate-45 opacity-10" />
+
+      {/* Kontainer Padat 1280px */}
+      <div className="relative z-10 max-w-[1280px] mx-auto px-6 lg:px-10 w-full text-center">
+        
+        {/* Header (Ukuran Pas & Rapi) */}
+        <div className="mb-16 lg:mb-20">
+          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+            Membangun Kedaulatan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-500 animate-gradient-x">Digital Sekolah</span>
+          </h2>
+          <p className="text-slate-400 max-w-2xl mx-auto text-xs lg:text-sm font-medium opacity-80 leading-relaxed">
+            Integrasi infrastruktur siber aman demi mewujudkan lingkungan belajar yang terlindungi dan cerdas.
+          </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10" onMouseLeave={() => setHovered(null)}>
+
+        {/* Grid 2 Kartu (Mewah & Padat) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12" onMouseLeave={() => setHovered(null)}>
           {data.map((item) => (
-            <div key={item.id} onMouseEnter={() => setHovered(item.id)} className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 p-10 lg:p-14 rounded-[2.5rem] text-left transition-all duration-500 ${hovered && hovered !== item.id ? 'blur-sm opacity-50' : 'scale-100'} ${hovered === item.id ? 'border-cyan-500/50 shadow-2xl' : ''}`}>
-              <div className="w-12 h-12 bg-cyan-500/10 text-cyan-400 flex items-center justify-center rounded-2xl mb-8"><item.icon size={24} /></div>
-              <h3 className="text-xl lg:text-2xl font-black text-white mb-4 uppercase tracking-widest">{item.title}</h3>
-              <p className="text-slate-400 text-xs lg:text-sm leading-relaxed">{item.desc}</p>
-            </div>
+            <motion.div 
+              key={item.id}
+              onMouseEnter={() => setHovered(item.id)}
+              className={`
+                group relative bg-[#0a0a0f]/80 backdrop-blur-2xl border border-white/5 p-10 lg:p-14 rounded-[3rem] text-left transition-all duration-500
+                ${hovered && hovered !== item.id ? 'blur-sm scale-[0.98] opacity-40' : 'scale-100 opacity-100'}
+                ${hovered === item.id ? 'border-cyan-500/40 shadow-[0_0_50px_rgba(34,211,238,0.15)] -translate-y-2' : ''}
+              `}
+            >
+              {/* HUD Details */}
+              <div className="absolute top-8 right-10 text-[8px] font-mono text-slate-700 tracking-[0.4em] uppercase group-hover:text-cyan-500/50 transition-colors">
+                Directive 0{item.id === 'visi' ? '1' : '2'}
+              </div>
+
+              <div className="w-14 h-14 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-2xl flex items-center justify-center mb-8 shadow-xl group-hover:scale-110 transition-transform">
+                <item.icon size={28} />
+              </div>
+              
+              <h3 className="text-xl lg:text-2xl font-black text-white mb-4 uppercase tracking-widest group-hover:text-cyan-400 transition-colors">
+                {item.title}
+              </h3>
+              <p className="text-slate-400 text-sm lg:text-base leading-relaxed font-medium">
+                {item.desc}
+              </p>
+
+              {/* Status Bar HUD */}
+              <div className="mt-10 flex items-center gap-3 opacity-30 group-hover:opacity-100 transition-opacity">
+                 <div className="flex-1 h-[1px] bg-white/10 relative overflow-hidden">
+                    <motion.div 
+                      animate={{ x: ["-100%", "100%"] }} 
+                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                      className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-cyan-400 to-transparent" 
+                    />
+                 </div>
+                 <span className="text-[7px] font-mono tracking-widest text-slate-500">AUTHORIZED</span>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
     </section>
   );
-}
+};
 
-const SecurityStatsSection = () => (
-  <section className="relative w-full min-h-[80vh] flex flex-col items-center justify-center py-20 bg-[#030208] border-b border-white/5 overflow-hidden text-center">
-    <div className="max-w-[1400px] mx-auto px-6 lg:px-12 w-full">
-      <h2 className="text-2xl lg:text-4xl font-black text-white uppercase tracking-tighter mb-20">METRIK KETAHANAN <span className="text-fuchsia-500">DIGITAL</span></h2>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-        {[ {l: "Data Terlindungi", v: "99.9%", c: "text-emerald-400"}, {l: "Ancaman Terblokir", v: "1,240", c: "text-fuchsia-400"}, {l: "Siswa Terliterasi", v: "850+", c: "text-blue-400"}, {l: "Uptime Sistem", v: "24/7", c: "text-cyan-400"} ].map((s, i) => (
-          <div key={i} className="bg-[#0a0a0f]/60 backdrop-blur-xl p-8 lg:p-10 rounded-[2.5rem] border border-white/5 group shadow-2xl transition-all">
-            <div className={`text-4xl lg:text-6xl font-black mb-2 transition-transform group-hover:scale-105 ${s.c}`}>{s.v}</div>
-            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{s.l}</div>
-          </div>
-        ))}
+const SecurityStatsSection = () => {
+  const stats = [
+    { label: "Data Terlindungi", value: "99.9%", color: "text-emerald-400", sub: "Protokol Enkripsi AES-256" },
+    { label: "Ancaman Terblokir", value: "1,240", color: "text-fuchsia-400", sub: "Deteksi Intrusi Otomatis" },
+    { label: "Siswa Terliterasi", value: "850+", color: "text-blue-400", sub: "Sertifikasi Keamanan Dasar" },
+    { label: "Uptime Sistem", value: "24/7", color: "text-cyan-400", sub: "Konektivitas Node Stabil" },
+  ];
+
+  return (
+    <section id="stats" className="relative w-full min-h-[85vh] flex flex-col items-center justify-center py-20 bg-[#030208] border-b border-white/5 overflow-hidden">
+      
+      {/* --- AMBIENT HUD LIGHTING --- */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-fuchsia-600/5 blur-[120px] rounded-full pointer-events-none" />
+      <CyberDecoration className="top-10 left-10 scale-50 opacity-10" />
+
+      {/* Kontainer Padat 1280px */}
+      <div className="relative z-10 max-w-[1280px] mx-auto px-6 lg:px-10 w-full text-center">
+        
+        {/* Header (Ukuran Pas & Rapi) */}
+        <div className="mb-20">
+          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6">
+            Metrik Ketahanan <span className="text-fuchsia-500">Digital</span>
+          </h2>
+          <p className="text-slate-500 max-w-2xl mx-auto text-xs lg:text-sm font-medium opacity-80 leading-relaxed uppercase tracking-widest">
+            Visualisasi Data Real-Time Infrastruktur Siber Sekolah
+          </p>
+        </div>
+
+        {/* Grid 4 Kolom (Mewah & Sangat Padat) */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+          {stats.map((s, i) => (
+            <motion.div 
+              key={i} 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="group relative bg-[#0a0a0f]/60 backdrop-blur-xl p-8 lg:p-10 rounded-[2.5rem] border border-white/5 hover:border-fuchsia-500/30 transition-all duration-700 shadow-2xl flex flex-col items-center justify-center overflow-hidden"
+            >
+              {/* Scanline Effect (Hanya muncul di kotak ini) */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-500/[0.02] to-transparent h-10 w-full animate-scanner opacity-0 group-hover:opacity-100" />
+              
+              {/* Angka Utama (Dewa Scale: Tidak pecah/overflow) */}
+              <div className={`text-4xl lg:text-6xl font-black mb-3 transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_15px_rgba(217,70,239,0.3)] ${s.color}`}>
+                {s.value}
+              </div>
+
+              {/* Label & Sub-info */}
+              <div className="space-y-1">
+                <p className="text-[10px] lg:text-[11px] font-black text-white uppercase tracking-widest group-hover:text-fuchsia-400 transition-colors">
+                  {s.label}
+                </p>
+                <p className="text-[7px] font-mono text-slate-600 uppercase tracking-widest">
+                  {s.sub}
+                </p>
+              </div>
+
+              {/* Indikator "Verified" HUD di pojok */}
+              <div className="absolute top-4 right-6 flex items-center gap-1.5 opacity-30 group-hover:opacity-100 transition-opacity">
+                 <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                 <span className="text-[6px] font-mono text-slate-500">LIVE</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 
 const CyberInfrastructureSection = () => {
   const sectors = [
-    { title: "Firewall", icon: ShieldAlert, desc: "Filtering trafik masuk-keluar jaringan sekolah." },
-    { title: "Monitoring", icon: Network, desc: "Pemantauan beban bandwidth tiap kelas." },
-    { title: "Server", icon: Server, desc: "Manajemen data akademik sekolah terenkripsi." },
-    { title: "IDS", icon: ScanLine, desc: "Mendeteksi akses ilegal atau upaya peretasan." },
-    { title: "Auth", icon: Fingerprint, desc: "Sistem login terintegrasi identitas digital." },
-    { title: "Backup", icon: Cpu, desc: "Redundansi data mingguan otomatis lokal." }
+    { title: "Firewall Node", icon: ShieldAlert, desc: "Penyaringan trafik masuk keluar jaringan secara real-time.", tag: "SECURE" },
+    { title: "Network Monitoring", icon: Network, desc: "Pemantauan beban bandwidth dan stabilitas koneksi tiap kelas.", tag: "STABLE" },
+    { title: "Server Hub", icon: Server, desc: "Manajemen data akademik di pangkalan data terenkripsi.", tag: "ENCRYPTED" },
+    { title: "IDS Detection", icon: ScanLine, desc: "Deteksi otomatis terhadap akses ilegal atau upaya peretasan.", tag: "ACTIVE" },
+    { title: "Identity Auth", icon: Fingerprint, desc: "Sistem login identitas digital dengan enkripsi ganda.", tag: "VERIFIED" },
+    { title: "Data Backup", icon: Cpu, desc: "Redundansi data mingguan otomatis di server lokal aman.", tag: "BACKED UP" }
   ];
 
   return (
-    <section className="relative w-full py-24 bg-black overflow-hidden border-b border-cyan-500/10">
+    <section id="infra" className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-black overflow-hidden border-b border-cyan-500/20 group/hacking">
       
-      {/* --- VIDEO BACKGROUND (DIBERSIHKAN) --- */}
+      {/* --- LAYER 1: VIDEO BACKGROUND (ASLI & TAJAM) --- */}
       <div className="absolute inset-0 z-0">
         <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60">
           <source src="/bg/hacking-bg.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#000000_100%)] opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_100%)] opacity-80" />
       </div>
 
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 w-full text-center">
-        <div className="mb-16">
-          {/* JUDUL DIKECILKAN: text-3xl lg:text-5xl */}
-          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-            MODUL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">PERTAHANAN</span> SIBER
+      {/* --- LAYER 2: NEURAL DECORATION --- */}
+      <CyberDecoration className="top-10 right-10 scale-150 opacity-20" />
+      <CyberDecoration className="bottom-10 left-10 scale-125 opacity-10 rotate-90" />
+
+      <div className="relative z-10 max-w-[1280px] mx-auto px-6 lg:px-10 w-full text-center">
+        
+        {/* HEADER SECTION */}
+        <div className="mb-20">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[10px] font-black tracking-[0.6em] uppercase mb-8 animate-pulse shadow-[0_0_20px_rgba(34,211,238,0.2)]"
+          >
+            <Radio size={14} /> LIVE INFRASTRUCTURE INTERFACE
+          </motion.div>
+          
+          <h2 className="text-4xl lg:text-7xl font-black text-white uppercase tracking-tighter mb-6 drop-shadow-[0_0_30px_rgba(34,211,238,0.5)]">
+            MODUL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 animate-gradient-x">PERTUMBUHAN</span> SIBER
           </h2>
-          <p className="text-slate-400 max-w-xl mx-auto text-sm">Sistem pemantauan operasional sekolah terintegrasi.</p>
+          <p className="text-slate-400 max-w-2xl mx-auto text-sm lg:text-base font-medium opacity-80 leading-relaxed uppercase tracking-widest">
+            Arsitektur Keamanan Jaringan Pendidikan Terintegrasi
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* --- GRID 6 KOTAK DEWA (3D HOLOGRAPHIC) --- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
           {sectors.map((s, i) => (
-            <div 
+            <motion.div 
               key={i} 
-              className="group/card relative bg-[#050811]/60 backdrop-blur-2xl border border-cyan-500/10 p-12 rounded-[2.5rem] hover:border-cyan-400/50 transition-all duration-700 hover:-translate-y-4 overflow-hidden shadow-2xl"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1, type: "spring", stiffness: 100 }}
+              whileHover={{ y: -15, scale: 1.02 }}
+              className="group/card relative bg-[#050811]/40 backdrop-blur-3xl border border-white/5 p-12 rounded-[3.5rem] cursor-pointer overflow-hidden transition-all duration-700 shadow-2xl hover:border-cyan-400/50"
             >
-              {/* 1. ANIMASI SCANNER (Laser Line) */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent animate-scanner opacity-0 group-hover/card:opacity-100" />
+              {/* Efek Laser Scanner (Animasi Wah) */}
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-20 shadow-[0_0_15px_#22d3ee]" />
               
-              {/* 2. DIGITAL PARTICLES (Internal Sparks) */}
-              <div className="absolute inset-0 z-0 opacity-0 group-hover/card:opacity-20 pointer-events-none">
-                {[...Array(5)].map((_, j) => (
-                  <motion.div
-                    key={j}
-                    animate={{ y: [0, -100], opacity: [0, 1, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: j * 0.4 }}
-                    className="absolute w-px h-10 bg-cyan-400"
-                    style={{ left: `${20 * j}%`, bottom: '-20px' }}
-                  />
-                ))}
+              {/* Detail Siku-Siku HUD */}
+              <div className="absolute top-8 left-8 w-6 h-6 border-t-2 border-l-2 border-cyan-500/20 group-hover:border-cyan-400/60 transition-colors" />
+              <div className="absolute bottom-8 right-8 w-6 h-6 border-b-2 border-r-2 border-cyan-500/20 group-hover:border-cyan-400/60 transition-colors" />
+
+              {/* Ikon Tengah dengan Glow */}
+              <div className="relative w-20 h-20 bg-cyan-950/30 border border-cyan-500/20 text-cyan-400 rounded-3xl flex items-center justify-center mb-10 mx-auto group-hover:shadow-[0_0_40px_rgba(34,211,238,0.4)] group-hover:scale-110 transition-all duration-500 shadow-inner">
+                <s.icon size={36} className="drop-shadow-[0_0_10px_currentColor]" />
+                {/* HUD Ring Berputar saat Hover */}
+                <div className="absolute inset-[-10px] rounded-full border border-dashed border-cyan-500/10 animate-[spin_10s_linear_infinite] opacity-0 group-hover:opacity-100" />
+              </div>
+              
+              <div className="space-y-4">
+                <h3 className="text-2xl font-black text-white uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors">
+                  {s.title}
+                </h3>
+                <p className="text-cyan-100/40 text-xs lg:text-[13px] leading-relaxed font-medium group-hover:text-cyan-100/70 transition-colors">
+                  {s.desc}
+                </p>
               </div>
 
-              {/* 3. DEKORASI SUDUT (Holographic Corners) */}
-              <div className="absolute top-6 left-6 w-6 h-6 border-t-2 border-l-2 border-cyan-500/20 group-hover/card:border-cyan-400 transition-colors" />
-              <div className="absolute bottom-6 right-6 w-6 h-6 border-b-2 border-r-2 border-cyan-500/20 group-hover/card:border-cyan-400 transition-colors" />
-              
-              {/* 4. RADAR PULSE ICON CONTAINER */}
-              <div className="relative w-20 h-20 mx-auto mb-10">
-                {/* Gelombang Radar */}
-                <div className="absolute inset-0 rounded-full bg-cyan-500/20 animate-ping opacity-0 group-hover/card:opacity-100" />
-                <div className="absolute inset-0 rounded-full border border-cyan-500/40 animate-pulse" />
-                
-                <div className="relative w-full h-full bg-cyan-950/30 border border-cyan-500/30 text-cyan-400 rounded-3xl flex items-center justify-center group-hover/card:shadow-[0_0_30px_rgba(34,211,238,0.5)] group-hover/card:scale-110 transition-all duration-500">
-                  <s.icon size={36} className="drop-shadow-[0_0_8px_#22d3ee]" />
+              {/* Footer Card: System Diagnostic Label (Tanpa Underscore) */}
+              <div className="mt-12 pt-6 border-t border-white/5 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-all">
+                <div className="flex flex-col items-start gap-1">
+                   <span className="text-[7px] font-mono text-slate-500 tracking-widest uppercase">Encryption Status</span>
+                   <span className="text-[9px] font-black text-cyan-400 tracking-widest">{s.tag}</span>
+                </div>
+                <div className="flex gap-1">
+                   <div className="w-1 h-1 rounded-full bg-cyan-500 animate-pulse" />
+                   <div className="w-1 h-1 rounded-full bg-cyan-500 animate-pulse delay-75" />
                 </div>
               </div>
-              
-              <h3 className="relative z-10 text-2xl font-black text-white mb-4 uppercase tracking-[0.2em] group-hover/card:text-cyan-400 transition-colors">{s.title}</h3>
-              <p className="relative z-10 text-cyan-100/40 text-sm leading-relaxed font-medium group-hover/card:text-cyan-100/80 transition-all">{s.desc}</p>
-
-              {/* 5. DATA FLOW BAR */}
-              <div className="mt-10 h-1.5 w-full bg-cyan-950/50 rounded-full overflow-hidden border border-white/5">
-                <motion.div 
-                  initial={{ x: "-100%" }}
-                  animate={{ x: "100%" }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-                  className="h-full w-1/3 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_15px_#22d3ee]" 
-                />
-              </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes scanner {
-          0% { top: 0; }
-          100% { top: 100%; }
-        }
-        .animate-scanner {
-          animation: scanner 3s linear infinite;
-        }
-      `}} />
     </section>
   );
 };
 
-// --- SECTION 6: READYNESS PROTOCOLS (8 GRID) ---
 const ReadinessProtocolSection = () => {
   const protocols = [
-    { num: "01", title: "IDENTIFIKASI", desc: "Pemetaan seluruh perangkat, akun, dan jaringan Wi-Fi sekolah untuk memantau potensi risiko.", icon: ScanLine, col: "text-cyan-400" },
-    { num: "02", title: "PROTEKSI", desc: "Penerapan password kuat, autentikasi ganda, firewall, dan enkripsi data warga sekolah.", icon: ShieldCheck, col: "text-blue-400" },
-    { num: "03", title: "DETEKSI", desc: "Pemantauan aktif sistem sekolah untuk mendeteksi malware, phishing, atau akses mencurigakan.", icon: Search, col: "text-emerald-400" },
-    { num: "04", title: "RESPON", desc: "Tindakan cepat isolasi perangkat terinfeksi dan pemulihan akses saat terjadi insiden siber.", icon: ShieldAlert, col: "text-red-400" },
-    { num: "05", title: "PEMULIHAN", desc: "Restorasi layanan sekolah melalui backup rutin agar KBM tetap berjalan normal.", icon: Cpu, col: "text-fuchsia-400" },
-    { num: "06", title: "EDUKASI", desc: "Pelatihan literasi digital bagi siswa dan staf untuk membangun budaya waspada siber.", icon: BrainCircuit, col: "text-violet-400" },
-    { num: "07", title: "KEBIJAKAN", desc: "Penyusunan aturan penggunaan internet dan perlindungan privasi data pribadi sekolah.", icon: FileText, col: "text-indigo-400" },
-    { num: "08", title: "EVALUASI", desc: "Peninjauan berkala sistem keamanan sekolah agar tetap efektif menghadapi ancaman baru.", icon: Activity, col: "text-orange-400" },
+    { num: "01", title: "IDENTIFIKASI", icon: ScanLine, col: "text-cyan-400", desc: "Pemetaan seluruh aset perangkat dan akun digital sekolah." },
+    { num: "02", title: "PROTEKSI", icon: ShieldCheck, col: "text-blue-400", desc: "Penerapan enkripsi dan firewall berlapis pada database." },
+    { num: "03", title: "DETEKSI", icon: Search, col: "text-emerald-400", desc: "Pemantauan aktif untuk mendeteksi malware dan phishing." },
+    { num: "04", title: "RESPON", icon: ShieldAlert, col: "text-red-400", desc: "Tindakan mitigasi instan saat terjadi insiden keamanan." },
+    { num: "05", title: "PEMULIHAN", icon: RefreshCw, col: "text-fuchsia-400", desc: "Restorasi layanan via backup rutin agar KBM tetap normal." },
+    { num: "06", title: "EDUKASI", icon: BrainCircuit, col: "text-violet-400", desc: "Pelatihan literasi siber untuk membangun budaya waspada." },
+    { num: "07", title: "KEBIJAKAN", icon: FileText, col: "text-indigo-400", desc: "Penyusunan aturan penggunaan perangkat dan data pribadi." },
+    { num: "08", title: "EVALUASI", icon: Activity, col: "text-orange-400", desc: "Audit sistem berkala agar efektif menghadapi ancaman baru." }
   ];
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-[#030208] border-b border-white/5 overflow-hidden">
-      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-16 w-full">
-        <div className="text-center mb-20">
-          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6">
-            PROTOKOL <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">KESIAPAN SIBER</span> SMA
+    <section id="protocol" className="relative w-full min-h-[90vh] flex flex-col items-center justify-center py-20 bg-[#030208] border-b border-white/5 overflow-hidden">
+      
+      {/* --- DEKORASI LATAR BELAKANG --- */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.03)_0%,transparent_70%)]" />
+        <CyberDecoration className="bottom-0 left-0 scale-75 opacity-5" />
+      </div>
+
+      {/* Kontainer Padat 1280px */}
+      <div className="relative z-10 max-w-[1280px] mx-auto px-6 lg:px-10 w-full text-center">
+        
+        {/* Header (Simetris 100%) */}
+        <div className="mb-20">
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="inline-block px-5 py-1.5 rounded-full bg-white/5 border border-white/10 text-[9px] font-black tracking-[0.6em] text-slate-400 uppercase mb-5"
+          >
+            Security Compliance Protocol
+          </motion.div>
+          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+            PROTOKOL <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-500 animate-gradient-x">KESIAPAN SIBER</span>
           </h2>
-          <p className="text-slate-500 max-w-2xl mx-auto text-sm lg:text-base font-medium">Standar operasional perlindungan data sekolah untuk ekosistem belajar yang aman.</p>
+          <p className="text-slate-500 max-w-2xl mx-auto text-xs lg:text-sm font-medium opacity-80 uppercase tracking-widest">
+            Standar Operasional Perlindungan Data Digital Sekolah
+          </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+
+        {/* --- GRID 8 KOTAK (KOMPAK & RAPI) --- */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {protocols.map((p, i) => (
-            <div key={i} className="group relative bg-[#0a0a0f]/40 backdrop-blur-xl border border-white/5 p-8 rounded-[2.5rem] hover:border-white/20 transition-all duration-500 flex flex-col items-start shadow-2xl">
-              <div className="w-full flex justify-between items-center mb-8">
-                <span className="text-2xl font-mono font-black text-white/10">{p.num}</span>
-                <div className={`w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5 ${p.col}`}><p.icon size={24} /></div>
+            <motion.div 
+              key={i} 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.05 }}
+              className="group relative bg-[#0a0a0f]/40 backdrop-blur-xl border border-white/5 p-6 lg:p-8 rounded-[2rem] hover:border-white/20 transition-all duration-500 flex flex-col items-start text-left shadow-2xl overflow-hidden"
+            >
+              {/* Nomor Seri Transparan (Efek Depth) */}
+              <span className="absolute -bottom-2 -right-2 text-6xl font-black text-white/[0.02] group-hover:text-white/[0.05] transition-colors pointer-events-none font-mono">
+                {p.num}
+              </span>
+
+              {/* Icon Row */}
+              <div className="w-full flex justify-between items-center mb-6">
+                <div className={`w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:scale-110 ${p.col}`}>
+                  <p.icon size={22} className="drop-shadow-[0_0_8px_currentColor]" />
+                </div>
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
               </div>
-              <h3 className="text-lg font-black text-white mb-4 uppercase tracking-widest">{p.title}</h3>
-              <p className="text-slate-500 text-xs lg:text-[13px] leading-relaxed font-medium">{p.desc}</p>
-            </div>
+
+              {/* Title & Desc */}
+              <h3 className="text-sm lg:text-base font-black text-white mb-2 tracking-widest uppercase group-hover:text-cyan-400 transition-colors">
+                {p.title}
+              </h3>
+              <p className="text-[10px] text-slate-500 leading-relaxed font-medium group-hover:text-slate-300 transition-colors">
+                {p.desc}
+              </p>
+
+              {/* Scanning Light (Footer Card) */}
+              <div className="mt-6 h-[1px] w-full bg-white/5 relative overflow-hidden">
+                <motion.div 
+                  animate={{ x: ["-100%", "100%"] }} 
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: i * 0.4 }}
+                  className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent" 
+                />
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -393,144 +563,287 @@ const ReadinessProtocolSection = () => {
   );
 };
 
-// --- SECTION 7: CYBER COMMAND FINALE (PENUTUP) ---
-const CyberClosingSection = () => (
-  <section className="relative w-full min-h-[60vh] flex items-center justify-center py-20 bg-black overflow-hidden border-b border-white/5">
-    <div className="absolute inset-0 z-0">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.08)_0%,transparent_70%)]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-cyan-500/10 rounded-full animate-[ping_10s_linear_infinite] opacity-20" />
-    </div>
-    <div className="relative z-10 max-w-[1400px] mx-auto px-6 text-center">
-      <div className="w-16 h-16 bg-cyan-500/10 border border-cyan-500/20 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl">
-        <Globe2 size={32} className="text-cyan-400 animate-pulse" />
+const CyberClosingSection = () => {
+  const [isScanning, setIsScanning] = useState(false);
+  const [isSecured, setIsSecured] = useState(false);
+
+  const startFinalScan = () => {
+    setIsScanning(true);
+    setTimeout(() => {
+      setIsScanning(false);
+      setIsSecured(true);
+      // Reset otomatis setelah 5 detik agar bisa dicoba pengunjung lain
+      setTimeout(() => setIsSecured(false), 5000);
+    }, 2800);
+  };
+
+  return (
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center bg-[#010103] overflow-hidden border-b border-white/5">
+      
+      {/* --- BACKGROUND HUD ELEMENTS --- */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.05)_0%,transparent_70%)]" />
+        {/* Orbital Rings */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] border border-cyan-500/5 rounded-full animate-[spin_80s_linear_infinite]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] border border-dashed border-fuchsia-500/10 rounded-full animate-[spin_50s_linear_infinite_reverse]" />
       </div>
-      <h2 className="text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-6">
-        PERTAHANAN SIBER <br/>
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 animate-gradient-x">DI TANGAN ANDA.</span>
-      </h2>
-      <p className="text-slate-400 max-w-xl mx-auto text-sm font-medium opacity-80 mb-10">Membangun masa depan digital sekolah yang cerdas dan tak tertembus.</p>
-      <button className="px-10 py-4 bg-white text-black rounded-full font-black text-[10px] tracking-[0.3em] uppercase hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all">AMANKAN SEKOLAH SEKARANG</button>
-    </div>
-  </section>
-);
+
+      <div className="relative z-10 max-w-[1280px] mx-auto px-6 text-center">
+        <AnimatePresence mode="wait">
+          {!isSecured ? (
+            <motion.div 
+              key="standby"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 1.1 }}
+              className="space-y-14"
+            >
+              {/* --- INTERACTIVE BIOMETRIC SCANNER --- */}
+              <div className="relative mx-auto w-44 h-44 lg:w-64 lg:h-64 flex items-center justify-center">
+                 {/* Energy Aura */}
+                 <div className="absolute inset-0 bg-cyan-500/10 blur-[80px] rounded-full animate-pulse" />
+                 
+                 <button 
+                   onClick={startFinalScan}
+                   disabled={isScanning}
+                   className={`relative z-10 w-full h-full rounded-full border-2 border-white/10 flex items-center justify-center bg-black/40 backdrop-blur-2xl transition-all duration-700 ${isScanning ? 'scale-90 border-cyan-400 shadow-[0_0_50px_rgba(34,211,238,0.3)]' : 'hover:scale-105 hover:border-cyan-400/50 shadow-2xl'}`}
+                 >
+                    {isScanning ? (
+                      <div className="flex flex-col items-center gap-4">
+                         <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
+                            <Zap size={40} className="text-cyan-400" />
+                         </motion.div>
+                         <span className="text-[10px] font-black text-cyan-400 tracking-[0.6em] animate-pulse uppercase">Encrypting</span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-5 group">
+                         <Fingerprint size={70} className="text-white/20 group-hover:text-cyan-400 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_#22d3ee]" />
+                         <span className="text-[9px] font-black text-slate-500 tracking-[0.5em] group-hover:text-white transition-colors">INITIALIZE LOCK</span>
+                      </div>
+                    )}
+
+                    {/* Scanning Laser Line */}
+                    {isScanning && (
+                      <motion.div 
+                        initial={{ top: "0%" }}
+                        animate={{ top: "100%" }}
+                        transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
+                        className="absolute left-0 w-full h-1 bg-cyan-400 shadow-[0_0_20px_#22d3ee] z-20"
+                      />
+                    )}
+                 </button>
+
+                 {/* Decorative HUD Corners Around Button */}
+                 <div className="absolute -inset-4 border-t-2 border-l-2 border-cyan-500/20 rounded-tl-3xl pointer-events-none" />
+                 <div className="absolute -inset-4 border-b-2 border-r-2 border-fuchsia-500/20 rounded-br-3xl pointer-events-none" />
+              </div>
+
+              <div className="space-y-6">
+                <h2 className="text-4xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none">
+                  KEDAULATAN DIGITAL <br/>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 animate-gradient-x">
+                    DI TANGAN ANDA.
+                  </span>
+                </h2>
+                <p className="text-slate-500 max-w-2xl mx-auto text-sm lg:text-base font-bold tracking-[0.3em] uppercase opacity-60">
+                   SENTUHAN AKHIR UNTUK MENGAMANKAN SELURUH DATA SEKOLAH
+                </p>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="secured"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex flex-col items-center space-y-10"
+            >
+               {/* --- THE SUCCESS EXPLOSION MOMENT --- */}
+               <div className="relative">
+                  <div className="absolute inset-0 bg-emerald-500/20 blur-[100px] rounded-full animate-pulse" />
+                  <div className="relative w-40 h-40 lg:w-56 lg:h-56 bg-emerald-500/10 border-4 border-emerald-400 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(16,185,129,0.5)] transition-all duration-1000">
+                     <ShieldCheck size={100} className="text-emerald-400 drop-shadow-[0_0_20px_#10b981]" />
+                  </div>
+                  {/* Floating particles on success */}
+                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute -inset-8 border border-dashed border-emerald-500/30 rounded-full" />
+               </div>
+               
+               <div className="text-center space-y-6">
+                  <h2 className="text-6xl lg:text-9xl font-black text-white uppercase tracking-tighter leading-none drop-shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+                    ACCESS GRANTED
+                  </h2>
+                  <div className="inline-flex items-center gap-4 px-8 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs lg:text-sm tracking-[0.5em] uppercase">
+                    SYSTEM STATUS: FULLY PROTECTED
+                  </div>
+               </div>
+
+               <div className="pt-12 grid grid-cols-1 md:grid-cols-3 gap-10">
+                  {[
+                    { t: "DATABASE SECURED", i: Lock },
+                    { t: "FIREWALL ACTIVE", i: Globe },
+                    { t: "NODES STABLE", i: Activity }
+                  ].map((item, i) => (
+                    <div key={i} className="flex flex-col items-center gap-3 group">
+                      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-emerald-400 border border-white/10 group-hover:bg-emerald-500 group-hover:text-black transition-all">
+                        <item.i size={20} />
+                      </div>
+                      <span className="text-[9px] font-black text-slate-500 tracking-[0.4em] uppercase group-hover:text-white transition-colors">{item.t}</span>
+                    </div>
+                  ))}
+               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </section>
+  );
+};
+
 
 
 const CyberFooterLuxury = ({ onScroll }: { onScroll: (id: string, label: string) => void }) => {
-  const quickLinks = [
-    { name: "BERANDA", id: "hero" },
-    { name: "PROFIL", id: "pilar" },
-    { name: "SOP SIBER", id: "protocol" },
-    { name: "LAYANAN", id: "infra" }
-  ];
-
   return (
-    <footer className="relative w-full bg-[#020108] pt-20 pb-10 overflow-hidden border-t border-white/5">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-16">
+    <footer className="relative w-full bg-[#010103] pt-24 pb-10 overflow-hidden border-t border-white/5">
+      {/* --- AMBIENT BACKGROUND ELEMENTS --- */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute bottom-0 left-0 w-full h-[300px] bg-[radial-gradient(circle_at_center,rgba(217,70,239,0.03)_0%,transparent_70%)]" />
+        {/* Efek Garis Data Mengalir Horizontal */}
+        <div className="absolute bottom-10 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent opacity-50" />
+      </div>
+
+      <div className="relative z-10 max-w-[1280px] mx-auto px-6 lg:px-10">
         
-        {/* --- 1. NEWSLETTER HUD SECTION --- */}
-        <div className="flex flex-col lg:flex-row justify-between items-center pb-16 mb-16 border-b border-white/5 gap-8">
-          <div className="text-left">
-            <h4 className="text-white font-black text-xs tracking-[0.3em] uppercase mb-2">SYSTEM UPDATE SUBSCRIBE</h4>
-            <p className="text-slate-500 text-[10px] font-medium flex items-center gap-2">
-              <Mail size={12} className="text-cyan-400" /> Dapatkan laporan intelijen siber terbaru langsung ke email Anda.
-            </p>
+        {/* --- TOP ROW: NEURAL UPLINK (NEWSLETTER HUD) --- */}
+        <div className="flex flex-col lg:flex-row justify-between items-center pb-20 mb-20 border-b border-white/5 gap-10">
+          <div className="text-center lg:text-left space-y-3">
+            <div className="flex items-center justify-center lg:justify-start gap-3">
+               <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]" />
+               <h4 className="text-white font-black text-xs tracking-[0.4em] uppercase">Neural Uplink Subscription</h4>
+            </div>
+            <p className="text-slate-500 text-[10px] lg:text-xs font-medium max-w-md">Sambungkan email Anda untuk menerima laporan intelijen keamanan siber dan pembaruan sistem secara berkala.</p>
           </div>
-          <div className="relative w-full lg:w-[400px]">
+          
+          <div className="relative w-full lg:w-[450px] group">
             <input 
               type="email" 
-              placeholder="ENTER EMAIL ADDRESS..." 
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-6 pr-16 text-[10px] font-mono text-cyan-400 focus:border-cyan-500/50 outline-none transition-all"
+              placeholder="ENTER SYSTEM EMAIL..." 
+              className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-5 pl-8 pr-20 text-[10px] font-mono text-cyan-400 focus:border-cyan-500/50 outline-none transition-all placeholder:text-slate-800 shadow-inner group-hover:border-white/20"
             />
-            <button className="absolute right-2 top-2 bottom-2 px-4 bg-cyan-500 text-black rounded-lg hover:bg-white transition-all">
-              <Send size={14} />
+            <button className="absolute right-2 top-2 bottom-2 px-6 bg-white text-black rounded-xl font-black text-[10px] tracking-widest hover:bg-cyan-500 hover:text-white transition-all flex items-center justify-center shadow-xl active:scale-95">
+              CONNECT
             </button>
           </div>
         </div>
 
-        {/* --- 2. MAIN FOOTER CONTENT --- */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20 text-left">
+        {/* --- MIDDLE ROW: DATA CLUSTERS --- */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 lg:gap-16 mb-24">
           
-          {/* Branding Area */}
-          <div className="col-span-2 md:col-span-1 space-y-6">
-            <div className="flex items-center gap-3">
-              <ShieldCheck size={28} className="text-fuchsia-500" />
-              <h3 className="font-black text-white text-xl tracking-tighter uppercase leading-none">CYBER<span className="text-fuchsia-500">READINESS</span></h3>
+          {/* Cluster 1: Branding (HUD Mode) */}
+          <div className="col-span-2 md:col-span-1 space-y-8">
+            <div className="flex items-center gap-4 group cursor-pointer" onClick={() => onScroll('hero', 'Beranda')}>
+              <div className="w-12 h-12 bg-fuchsia-600/10 border border-fuchsia-500/30 rounded-2xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-110">
+                <ShieldCheck size={28} className="text-fuchsia-500" />
+              </div>
+              <div className="text-left">
+                <h3 className="font-black text-white text-xl tracking-tighter uppercase leading-none">CYBER<span className="text-fuchsia-500">READINESS</span></h3>
+                <p className="text-[7px] font-mono text-slate-600 tracking-[0.3em] mt-1">SECURED PLATFORM</p>
+              </div>
             </div>
-            <p className="text-slate-500 text-[11px] leading-relaxed font-medium">Pusat pertahanan digital sekolah terintegrasi. Mengamankan kedaulatan digital pendidikan Indonesia.</p>
-            <div className="flex items-center gap-2 text-cyan-400 font-mono text-[9px] tracking-widest uppercase">
-              <Activity size={12} /> ALL SYSTEMS OPERATIONAL
+            <p className="text-slate-500 text-[11px] leading-relaxed font-medium">Pusat pertahanan digital pendidikan terintegrasi. Membangun kedaulatan data masa depan melalui protokol keamanan internasional.</p>
+            <div className="flex items-center gap-3 text-emerald-500 font-mono text-[9px] tracking-widest">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+              SYSTEMS ENCRYPTED AND OPERATIONAL
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="space-y-6">
-            <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><Globe size={12}/> QUICK LINKS</h5>
-            <ul className="space-y-3">
-              {quickLinks.map((link, j) => (
+          {/* Cluster 2: Quick Navigation */}
+          <div className="space-y-8">
+            <h5 className="text-white font-black text-[10px] tracking-[0.5em] uppercase opacity-30 flex items-center gap-2">
+              <Globe size={12} className="text-cyan-400" /> Navigation
+            </h5>
+            <ul className="space-y-4">
+              {[
+                { n: "Beranda Utama", i: "hero" },
+                { n: "Profil Platform", i: "pilar" },
+                { n: "Layanan Siber", i: "infra" },
+                { n: "Protokol SOP", i: "protocol" }
+              ].map((link, j) => (
                 <li 
                   key={j} 
-                  onClick={() => onScroll(link.id, link.name)}
-                  className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors tracking-widest uppercase"
+                  onClick={() => onScroll(link.i, link.n)}
+                  className="text-slate-500 text-[10px] font-bold hover:text-white cursor-pointer transition-all flex items-center gap-3 group/link"
                 >
-                  {link.name}
+                  <div className="w-0 group-hover/link:w-3 h-[1px] bg-cyan-400 transition-all" />
+                  {link.n.toUpperCase()}
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact Us */}
-          <div className="space-y-6">
-            <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2"><Phone size={12}/> CONTACT US</h5>
-            <ul className="space-y-3">
-              <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors break-all">devinedwinsiahaan171105@gmail.com</li>
-              <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors">08887537736</li>
-              <li className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 cursor-pointer transition-colors uppercase">HELP CENTER</li>
-            </ul>
+          {/* Cluster 3: Contact HUD */}
+          <div className="space-y-8 text-left">
+            <h5 className="text-white font-black text-[10px] tracking-[0.5em] uppercase opacity-30 flex items-center gap-2">
+              <Phone size={12} className="text-fuchsia-400" /> Connect
+            </h5>
+            <div className="space-y-6">
+               <div className="group cursor-pointer">
+                  <p className="text-[8px] font-mono text-slate-600 mb-1">MAIL</p>
+                  <p className="text-slate-400 text-[10px] font-bold lowercase group-hover:text-cyan-400 transition-colors">devinedwinsiahaan171105@gmail.com</p>
+               </div>
+               <div className="group cursor-pointer">
+                  <p className="text-[8px] font-mono text-slate-600 mb-1">WHATSAPP</p>
+                  <p className="text-slate-400 text-[10px] font-bold group-hover:text-fuchsia-400 transition-colors">08887537736</p>
+               </div>
+            </div>
           </div>
 
-          {/* Location (CLICKABLE MAPS) */}
-          <div className="space-y-6">
-            <h5 className="text-white font-black text-[10px] tracking-[0.4em] uppercase opacity-40 flex items-center gap-2">
-              <MapPin size={12}/> LOCATION
+          {/* Cluster 4: Location Target */}
+          <div className="space-y-8">
+            <h5 className="text-white font-black text-[10px] tracking-[0.5em] uppercase opacity-30 flex items-center gap-2">
+              <MapPin size={12} className="text-emerald-400" /> Target Node
             </h5>
             <div className="relative group">
               <a 
                 href="https://www.google.com/maps/search/?api=1&query=Institut+Teknologi+Del+Laguboti" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block space-y-2 outline-none"
+                target="_blank" rel="noopener noreferrer"
+                className="block p-5 bg-white/[0.02] border border-white/5 rounded-2xl hover:border-emerald-500/30 transition-all duration-500"
               >
-                <div className="text-slate-500 text-[10px] font-bold hover:text-cyan-400 transition-all duration-300 tracking-widest uppercase flex flex-col gap-1">
-                  <span className="group-hover:translate-x-1 transition-transform duration-500">INSTITUT TEKNOLOGI DEL</span>
-                  <span className="text-slate-600 text-[9px] group-hover:text-cyan-500/70 group-hover:translate-x-2 transition-all duration-700">LAGUBOTI, INDONESIA</span>
-                </div>
-                <div className="w-0 group-hover:w-full h-[1px] bg-gradient-to-r from-cyan-500/50 via-cyan-500/10 to-transparent transition-all duration-500" />
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2">
-                   <div className="w-1 h-1 rounded-full bg-cyan-500 animate-pulse" />
-                   <span className="text-[7px] font-mono text-cyan-600 tracking-widest uppercase">Open in maps</span>
+                <p className="text-white font-black text-[10px] tracking-widest mb-1">INSTITUT TEKNOLOGI DEL</p>
+                <p className="text-slate-600 text-[9px] font-bold">LAGUBOTI, INDONESIA</p>
+                {/* Micro Map Decoration */}
+                <div className="mt-4 flex justify-between items-center">
+                   <span className="text-[7px] font-mono text-emerald-500/50">COORD: 2.38° N, 99.14° E</span>
+                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 </div>
               </a>
             </div>
           </div>
+
         </div>
 
-        {/* --- 3. BOTTOM BAR (SOCIALS & COPYRIGHT) --- */}
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex gap-6">
+        {/* --- BOTTOM ROW: METADATA & SOCIALS --- */}
+        <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-10">
+          <div className="flex gap-8">
             {[Facebook, Twitter, Youtube, Instagram].map((Icon, i) => (
-              <Icon key={i} size={16} className="text-slate-600 hover:text-cyan-400 cursor-pointer transition-all hover:scale-125" />
+              <Icon 
+                key={i} 
+                size={18} 
+                className="text-slate-600 hover:text-white cursor-pointer transition-all hover:-translate-y-1" 
+              />
             ))}
           </div>
-          <p className="text-slate-700 text-[8px] font-mono tracking-[0.5em] uppercase">
-            © 2026 CYBER READINESS DEFENDING DIGITAL EDUCATION
-          </p>
+          
+          <div className="flex flex-col items-center md:items-end gap-2 text-center md:text-right">
+             <p className="text-slate-700 text-[8px] font-mono tracking-[0.4em] uppercase">
+                © 2026 CYBER READINESS INDEX
+             </p>
+             <p className="text-[7px] font-mono text-slate-800 tracking-[0.2em]">BUILT WITH PRECISION AT IT DEL</p>
+          </div>
         </div>
 
       </div>
     </footer>
   );
 };
-
 const TECH_ICONS = [
   { id: "c1", icon: CreditCard, label: "CARD SEC", col: "text-cyan-400" },
   { id: "c2", icon: ShieldAlert, label: "PHISH HOOK", col: "text-red-400" },
@@ -802,87 +1115,196 @@ export default function CyberLandingDark() {
       <CyberLensHUD mouseX={mouseX} mouseY={mouseY} />
       <CyberIntelligenceHUD />
 
-      {/* --- NAVBAR COMPACT --- */}
-      <header className="fixed top-0 left-0 right-0 z-[1000] w-full border-b border-white/5 bg-[#05050a]/80 backdrop-blur-xl h-20 flex items-center justify-between px-6 lg:px-12 shadow-2xl">
-        <div className="flex items-center gap-4">
-          <ShieldCheck size={22} className="text-cyan-400" />
-          <h1 className="font-black text-white text-base lg:text-lg tracking-[0.2em] uppercase">CYBER<span className="text-cyan-400">READINESS</span></h1>
+{/* --- ULTIMATE HOLOGRAPHIC HEADER (DEWA VERSION) --- */}
+<header className="fixed top-0 left-0 right-0 z-[1000] w-full">
+        {/* Progress Bar Tipis di Paling Atas */}
+        <div className="h-[2px] w-full bg-white/5 overflow-hidden">
+           <motion.div 
+             animate={{ x: ["-100%", "100%"] }} 
+             transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+             className="h-full w-1/3 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_10px_#22d3ee]" 
+           />
         </div>
-        <nav className="hidden lg:flex items-center gap-12">
-          {['Beranda', 'Profil', 'Layanan'].map((item) => (
-            <button key={item} onClick={() => item === 'Beranda' ? scrollToSection('hero', 'Beranda') : setActiveModal(item.toUpperCase() as any)} className={`text-[10px] font-black uppercase tracking-[0.4em] transition-all ${activeSection === item ? 'text-cyan-400' : 'text-slate-500 hover:text-white'}`}>{item}</button>
-          ))}
-        </nav>
-        <button onClick={() => setIsLoginOpen(true)} className="px-6 py-2.5 bg-white text-black rounded-full font-black text-[9px] tracking-[0.3em] uppercase hover:bg-cyan-400 hover:text-white transition-all">LOGIN</button>
+
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+          <div className="h-20 lg:h-24 bg-black/40 backdrop-blur-2xl border-x border-b border-white/5 rounded-b-[2.5rem] px-8 flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+            
+            {/* Ambient Glow di dalam Header */}
+            <div className="absolute top-0 left-1/4 w-32 h-32 bg-cyan-500/5 blur-[40px] rounded-full pointer-events-none" />
+
+            {/* --- SISI KIRI: LOGO BIOMETRIK --- */}
+            <div className="flex items-center gap-4 relative z-10 shrink-0">
+               <motion.div 
+                 whileHover={{ rotate: 180 }}
+                 className="w-10 h-10 lg:w-12 lg:h-12 bg-white/5 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(34,211,238,0.2)]"
+               >
+                  <ShieldCheck size={24} className="text-cyan-400 drop-shadow-[0_0_8px_cyan]" />
+               </motion.div>
+               <div className="text-left">
+                  <h1 className="font-black text-white text-base lg:text-lg tracking-[0.2em] uppercase leading-none">
+                    CYBER<span className="text-cyan-400">READINESS</span>
+                  </h1>
+                  <div className="flex items-center gap-2 mt-1.5">
+                     <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                     <span className="text-[7px] font-mono text-slate-500 tracking-[0.3em] uppercase">Security Level 01</span>
+                  </div>
+               </div>
+            </div>
+
+            {/* --- TENGAH: NAVIGATION HUD (MAGNETIC UNDERLINE) --- */}
+            <nav className="hidden lg:flex flex-1 justify-center items-center gap-16 h-full">
+               {[
+                 { label: 'Beranda', id: 'hero', icon: Home },
+                 { label: 'Profil', id: 'pilar', icon: Info },
+                 { label: 'Layanan', id: 'infra', icon: HelpCircle }
+               ].map((item) => {
+                 const isActive = activeSection === item.label;
+                 return (
+                   <button 
+                     key={item.label}
+                     onClick={() => item.id === 'hero' ? scrollToSection('hero', 'Beranda') : setActiveModal(item.label.toUpperCase() as any)}
+                     className="relative flex flex-col items-center justify-center h-full group outline-none"
+                   >
+                     <div className={`flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.4em] transition-all duration-500 ${isActive ? 'text-cyan-400' : 'text-slate-500 group-hover:text-white'}`}>
+                        <item.icon size={14} className={isActive ? "text-cyan-400 animate-pulse" : "opacity-40 group-hover:opacity-100"} />
+                        {item.label}
+                     </div>
+
+                     {/* Garis Bawah Meluncur Sehalus Sutra */}
+                     {isActive && (
+                       <motion.div 
+                         layoutId="nav-glow"
+                         className="absolute bottom-0 left-0 right-0 h-[3px] bg-cyan-400 rounded-t-full shadow-[0_-4px_15px_#22d3ee]"
+                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                       />
+                     )}
+                   </button>
+                 );
+               })}
+            </nav>
+
+            {/* --- SISI KANAN: AUTH & STATUS --- */}
+            <div className="flex items-center gap-6 relative z-10 shrink-0">
+               {/* Indikator Latency (Simulasi) */}
+               <div className="hidden xl:flex flex-col items-end gap-1 opacity-40">
+                  <span className="text-[6px] font-mono text-slate-400 uppercase tracking-widest">Latency</span>
+                  <span className="text-[8px] font-mono text-cyan-400 font-bold tracking-tighter">0.002 MS</span>
+               </div>
+
+               <div className="h-8 w-px bg-white/10 hidden sm:block" />
+
+               <button 
+                 onClick={() => setIsLoginOpen(true)}
+                 className="px-8 py-2.5 bg-white text-black rounded-full font-black text-[9px] tracking-[0.4em] uppercase transition-all hover:bg-cyan-400 hover:text-white hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] active:scale-95 shadow-xl"
+               >
+                 AUTHORIZE
+               </button>
+
+               {/* Mobile Toggle */}
+               <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden p-2 bg-white/5 rounded-xl text-white border border-white/10">
+                  <LayoutGrid size={20} />
+               </button>
+            </div>
+
+            {/* Decorative Corner HUD Marks */}
+            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/20" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/20" />
+          </div>
+        </div>
+
+        {/* --- MOBILE OVERLAY (DEWA VERSION) --- */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="absolute top-full left-0 w-full bg-[#05050a]/95 backdrop-blur-3xl border-b border-white/10 py-10 px-8 lg:hidden flex flex-col gap-6 shadow-2xl overflow-hidden"
+            >
+               {['Beranda', 'Profil', 'Layanan'].map((item, i) => (
+                 <div 
+                   key={item} 
+                   onClick={() => { if (item === 'Beranda') scrollToSection('hero', 'Beranda'); else setActiveModal(item.toUpperCase() as any); setIsMobileMenuOpen(false); }}
+                   className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5 text-slate-300 font-black text-xs tracking-[0.3em] uppercase hover:text-cyan-400 hover:bg-cyan-500/10 transition-all"
+                 >
+                   {item}
+                   <ChevronRight size={14} className="opacity-30" />
+                 </div>
+               ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       <main className="relative z-10 w-full">
         
-{/* --- SECTION 1: HERO (REVISI TOTAL: RAPI & TERATUR) --- */}
-<section id="hero" className="relative min-h-screen flex items-center justify-center pt-40 pb-20 px-10">
-          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-20 items-center w-full max-w-[1450px] mx-auto">
+{/* --- HALAMAN 1: HERO (REVISI: COMPACT & SOLID) --- */}
+<section id="hero" className="relative min-h-[85vh] flex items-center justify-center pt-28 pb-10 px-6 lg:px-10">
+          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center w-full max-w-[1280px] mx-auto text-left">
             
-            {/* SISI KANAN: WIDGET 3D (UKURAN KOMPAK) */}
-            <div className="relative w-full flex flex-col items-center justify-center order-1 lg:order-2 gap-8">
+            {/* Widget Area (Kanan) */}
+            <div className="relative w-full flex flex-col items-center justify-center order-1 lg:order-2 gap-4">
               <div className="relative" style={{ perspective: 2000 }}>
-                <motion.div 
-                   style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} 
-                   className="relative w-[240px] h-[300px] sm:w-[280px] sm:h-[350px] lg:w-[350px] lg:h-[440px] bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl rounded-[2.5rem] border border-white/10 flex flex-col items-center justify-center group/card transition-all duration-700 hover:border-cyan-500/30 shadow-2xl"
-                >
-                  <div className="relative mb-8">
-                    <div className="absolute inset-0 rounded-full border border-cyan-500/20 animate-[spin_20s_linear_infinite]" />
-                    <div className="w-20 h-20 lg:w-28 lg:h-28 bg-black border border-cyan-500/30 rounded-3xl flex items-center justify-center">
-                       <ShieldCheck size={40} className="text-cyan-400" />
-                    </div>
+                <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} className="relative w-[240px] h-[300px] sm:w-[280px] sm:h-[350px] lg:w-[320px] lg:h-[400px] bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl rounded-[2.5rem] p-1 shadow-2xl border border-white/10 flex flex-col items-center justify-center group/card">
+                  <div className="relative flex items-center justify-center mb-6" style={{ transform: "translateZ(60px)" }}>
+                    <div className="absolute w-32 h-32 lg:w-40 lg:h-40 border border-cyan-500/20 rounded-full animate-spin-slow" />
+                    <div className="w-16 h-16 lg:w-20 lg:h-20 bg-black border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-xl"><ShieldCheck size={32} className="text-cyan-400" /></div>
                   </div>
-                  <h3 className="text-lg lg:text-xl font-black text-white uppercase tracking-widest">Security <span className="text-cyan-400">Hub</span></h3>
-                  <div className="absolute -bottom-5 px-10 py-3 bg-black border border-white/10 text-white rounded-xl text-[8px] font-black uppercase shadow-2xl">ENCRYPTED</div>
+                  <h3 className="text-lg lg:text-xl font-black text-white uppercase tracking-widest">Security Hub</h3>
+                  <div className="absolute -bottom-4 px-8 py-3 bg-black border border-white/5 text-white rounded-xl text-[8px] lg:text-[10px] font-black uppercase">ENCRYPTED</div>
                 </motion.div>
               </div>
-              {/* MARQUEE LOGO (DIKECILKAN AGAR TIDAK PENUH) */}
-              <div className="w-full max-w-[400px] lg:max-w-full opacity-60"><CyberHiveMarquee /></div>
+              <div className="w-full max-w-[400px]"><CyberHiveMarquee /></div>
             </div>
 
-            {/* SISI KIRI: TEKS (RATA KIRI & ELEGAN) */}
-            <div className="flex flex-col items-center lg:items-start space-y-8 w-full order-2 lg:order-1">
-              <div className="px-5 py-2 bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 rounded-full text-[9px] font-black tracking-[0.4em] uppercase backdrop-blur-md">
-                 SECURE PROTOCOL ACTIVE
-              </div>
-              
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-[1.05] uppercase text-center lg:text-left">
-                KESIAPAN SIBER <br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-500 animate-gradient-x">
-                   SEKOLAH 2026.
-                </span>
-              </h2>
-              
-              <p className="text-xs lg:text-base font-medium text-slate-400 leading-relaxed max-w-xl opacity-70 text-center lg:text-left">
-                Platform kesiapan digital sekolah yang mengintegrasikan keamanan tingkat tinggi dengan infrastruktur modern untuk kedaulatan data masa depan.
-              </p>
-
-              <button onClick={() => setIsLoginOpen(true)} className="px-10 py-4 bg-white text-black rounded-2xl font-black text-[10px] tracking-[0.2em] uppercase shadow-xl hover:bg-cyan-400 hover:text-white transition-all flex items-center justify-center gap-3">
-                 MULAI EVALUASI <ArrowRight size={16} />
-              </button>
+            {/* Teks Area (Kiri) */}
+            <div className="flex flex-col items-center lg:items-start space-y-6 w-full order-2 lg:order-1 pt-4 lg:pt-0">
+              <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 rounded-full text-[8px] lg:text-[9px] font-black tracking-[0.4em] uppercase backdrop-blur-md">SECURE PROTOCOL ACTIVE</div>
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-[1.05] uppercase text-center lg:text-left">KESIAPAN SIBER <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-500 animate-gradient-x">SEKOLAH 2026.</span></h2>
+              <p className="text-sm lg:text-base font-medium text-slate-400 opacity-70 max-w-lg text-center lg:text-left leading-relaxed">Platform kesiapan digital sekolah yang mengintegrasikan keamanan tingkat tinggi dengan infrastruktur modern.</p>
+              <button onClick={() => setIsLoginOpen(true)} className="px-10 py-4 bg-white text-black rounded-2xl font-black text-[10px] tracking-[0.2em] uppercase shadow-xl hover:bg-cyan-400 hover:text-white transition-all flex items-center justify-center gap-3 active:scale-95">MULAI EVALUASI <ArrowRight size={16} /></button>
             </div>
 
           </div>
         </section>
 
-        <SectionDivider />
-        <section id="pilar" className="min-h-[90vh] flex flex-col items-center justify-center py-20 bg-[#030208] text-center px-10">
-          <div className="max-w-[1500px] mx-auto w-full">
-            <h2 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tighter mb-20 leading-none"><span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500">PILAR STRATEGIS</span> KAMI</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              {[ { t: "INFRASTRUKTUR", i: Server, c: "text-cyan-400" }, { t: "KEAMANAN", i: ShieldAlert, c: "text-fuchsia-400" }, { t: "LITERASI", i: BrainCircuit, c: "text-emerald-400" } ].map((item, i) => (
-                <div key={i} className="group bg-[#08070d] border border-white/5 p-12 lg:p-14 rounded-[3.5rem] hover:border-cyan-500/20 transition-all duration-700 hover:-translate-y-3 shadow-2xl flex flex-col items-center text-center">
-                  <div className="w-16 h-16 bg-black border border-white/10 rounded-full flex items-center justify-center mb-8 shadow-xl"><item.i size={32} className={item.c} /></div>
-                  <h3 className="text-lg lg:text-xl font-black text-white mb-4 uppercase tracking-[0.2em]">{item.t}</h3>
-                  <p className="text-slate-500 text-xs font-medium leading-relaxed max-w-[250px]">Manajemen aset digital sekolah dengan standar keamanan terenkripsi.</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <section id="pilar" className="relative w-full min-h-[85vh] flex flex-col items-center justify-center py-20 bg-[#030208] border-b border-white/5 overflow-hidden">
+     <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-indigo-900/10 via-transparent to-transparent blur-[100px] pointer-events-none" />
+     
+     {/* Kontainer Padat 1280px (max-w-7xl) */}
+     <div className="max-w-[1280px] mx-auto px-6 lg:px-10 relative z-10 w-full text-center">
+       <div className="mb-16 lg:mb-20">
+         <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 animate-gradient-x">Pilar Strategis</span> Kami
+         </h2>
+         <p className="text-slate-500 max-w-xl mx-auto text-xs lg:text-sm font-medium opacity-80 leading-relaxed">
+           Tiga pilar utama dalam membangun fondasi keamanan siber yang kokoh untuk ekosistem pendidikan masa depan.
+         </p>
+       </div>
+
+       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+         {[
+           { t: "Infrastruktur", i: Server, c: "text-cyan-400", d: "Arsitektur jaringan sekolah yang terpusat, tangguh, dan tahan terhadap gangguan siber." },
+           { t: "Keamanan", i: ShieldAlert, c: "text-fuchsia-400", d: "Protokol enkripsi berlapis dan pemantauan aktif untuk mendeteksi ancaman secara instan." },
+           { t: "Literasi", i: BrainCircuit, c: "text-emerald-400", d: "Meningkatkan kesadaran digital seluruh personel sekolah untuk menjaga kedaulatan data." }
+         ].map((item, i) => (
+           <motion.div key={i} className="group relative bg-[#08070d]/60 backdrop-blur-2xl border border-white/5 p-10 rounded-[2.5rem] hover:border-cyan-500/20 transition-all duration-700 hover:-translate-y-2 shadow-2xl flex flex-col items-center">
+             <div className="absolute top-6 left-6 w-4 h-4 border-t border-l border-white/10 group-hover:border-cyan-500/40 transition-colors" />
+             <div className="absolute bottom-6 right-6 w-4 h-4 border-b border-r border-white/10 group-hover:border-cyan-500/40 transition-colors" />
+             <div className="w-16 h-16 bg-black border border-white/10 rounded-2xl flex items-center justify-center mb-8 shadow-xl group-hover:shadow-cyan-500/5 transition-all">
+               <item.i size={30} className={`${item.c} drop-shadow-[0_0_8px_currentColor]`} />
+             </div>
+             <h3 className="text-lg lg:text-xl font-black text-white mb-3 uppercase tracking-widest group-hover:text-cyan-400 transition-colors">{item.t}</h3>
+             <p className="text-[11px] lg:text-xs text-slate-400 leading-relaxed font-medium opacity-80">{item.d}</p>
+             <div className="mt-8 pt-4 border-t border-white/5 w-full flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
+                <span className="text-[7px] font-mono tracking-widest text-slate-500 uppercase">System Ready</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+             </div>
+           </motion.div>
+         ))}
+       </div>
+     </div>
+  </section>
 
         <SectionDivider /><VisiMisiSection bgIdx={bgIdx} />
         <SectionDivider /><SecurityStatsSection />
