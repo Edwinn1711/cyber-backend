@@ -453,83 +453,75 @@ const CyberInfrastructureSection = () => {
   return (
     <section id="infra" className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-black overflow-hidden border-b border-cyan-500/20 group/hacking">
       
-      {/* --- LAYER 1: VIDEO BACKGROUND (ASLI & TAJAM) --- */}
+      {/* --- BACKGROUND VIDEO (TAJAM & SMOOTH) --- */}
       <div className="absolute inset-0 z-0">
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60">
+        <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60 pointer-events-none">
           <source src="/bg/hacking-bg.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_100%)] opacity-80" />
       </div>
 
-      {/* --- LAYER 2: NEURAL DECORATION --- */}
-      <CyberDecoration className="top-10 right-10 scale-150 opacity-20" />
-      <CyberDecoration className="bottom-10 left-10 scale-125 opacity-10 rotate-90" />
-
       <div className="relative z-10 max-w-[1280px] mx-auto px-6 lg:px-10 w-full text-center">
         
         {/* HEADER SECTION */}
-        <div className="mb-20">
+        <div className="mb-16">
           <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[10px] font-black tracking-[0.6em] uppercase mb-8 animate-pulse shadow-[0_0_20px_rgba(34,211,238,0.2)]"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[10px] font-black tracking-[0.5em] uppercase mb-8"
           >
-            <Radio size={14} /> LIVE INFRASTRUCTURE INTERFACE
+            <Radio size={14} className="animate-pulse" /> Live System Monitor
           </motion.div>
           
-          <h2 className="text-4xl lg:text-7xl font-black text-white uppercase tracking-tighter mb-6 drop-shadow-[0_0_30px_rgba(34,211,238,0.5)]">
-            MODUL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 animate-gradient-x">PERTUMBUHAN</span> SIBER
+          <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-4 drop-shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+            MODUL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 animate-gradient-x">PERTUMBUHAN</span> SIBER
           </h2>
-          <p className="text-slate-400 max-w-2xl mx-auto text-sm lg:text-base font-medium opacity-80 leading-relaxed uppercase tracking-widest">
-            Arsitektur Keamanan Jaringan Pendidikan Terintegrasi
-          </p>
         </div>
 
-        {/* --- GRID 6 KOTAK DEWA (3D HOLOGRAPHIC) --- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+        {/* --- GRID 6 KOTAK (OPTIMASI FISIKA PEGAS) --- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {sectors.map((s, i) => (
             <motion.div 
               key={i} 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, type: "spring", stiffness: 100 }}
-              whileHover={{ y: -15, scale: 1.02 }}
-              className="group/card relative bg-[#050811]/40 backdrop-blur-3xl border border-white/5 p-12 rounded-[3.5rem] cursor-pointer overflow-hidden transition-all duration-700 shadow-2xl hover:border-cyan-400/50"
+              // FISIKA PEGAS (SPRING): Kunci kelancaran Dewa
+              transition={{ 
+                type: "spring", 
+                stiffness: 400, // Sangat cepat merespons
+                damping: 30,    // Berhenti tanpa goyang berlebih
+                delay: i * 0.05 
+              }}
+              whileHover={{ 
+                y: -12, 
+                scale: 1.02,
+                transition: { type: "spring", stiffness: 500, damping: 25 } 
+              }}
+              className="group/card relative bg-[#050811]/60 backdrop-blur-2xl border border-white/5 p-10 rounded-[3rem] cursor-pointer overflow-hidden shadow-2xl hover:border-cyan-500/50"
+              style={{ willChange: "transform" }} // Optimasi GPU
             >
-              {/* Efek Laser Scanner (Animasi Wah) */}
-              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-20 shadow-[0_0_15px_#22d3ee]" />
+              {/* Scanner Laser (Dibuat sangat cepat & tipis) */}
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400/60 opacity-0 group-hover:opacity-100 animate-scanner z-20" />
               
-              {/* Detail Siku-Siku HUD */}
-              <div className="absolute top-8 left-8 w-6 h-6 border-t-2 border-l-2 border-cyan-500/20 group-hover:border-cyan-400/60 transition-colors" />
-              <div className="absolute bottom-8 right-8 w-6 h-6 border-b-2 border-r-2 border-cyan-500/20 group-hover:border-cyan-400/60 transition-colors" />
-
-              {/* Ikon Tengah dengan Glow */}
-              <div className="relative w-20 h-20 bg-cyan-950/30 border border-cyan-500/20 text-cyan-400 rounded-3xl flex items-center justify-center mb-10 mx-auto group-hover:shadow-[0_0_40px_rgba(34,211,238,0.4)] group-hover:scale-110 transition-all duration-500 shadow-inner">
-                <s.icon size={36} className="drop-shadow-[0_0_10px_currentColor]" />
-                {/* HUD Ring Berputar saat Hover */}
-                <div className="absolute inset-[-10px] rounded-full border border-dashed border-cyan-500/10 animate-[spin_10s_linear_infinite] opacity-0 group-hover:opacity-100" />
+              {/* Ikon dengan Aura Neon */}
+              <div className="relative w-16 h-16 bg-cyan-950/40 border border-cyan-500/20 text-cyan-400 rounded-3xl flex items-center justify-center mb-8 mx-auto group-hover:scale-110 transition-transform duration-300">
+                <s.icon size={30} className="drop-shadow-[0_0_8px_currentColor]" />
               </div>
               
-              <div className="space-y-4">
-                <h3 className="text-2xl font-black text-white uppercase tracking-[0.2em] group-hover:text-cyan-400 transition-colors">
+              <div className="space-y-3">
+                <h3 className="text-xl font-black text-white uppercase tracking-widest group-hover:text-cyan-400 transition-colors">
                   {s.title}
                 </h3>
-                <p className="text-cyan-100/40 text-xs lg:text-[13px] leading-relaxed font-medium group-hover:text-cyan-100/70 transition-colors">
+                <p className="text-slate-500 text-[11px] leading-relaxed font-medium">
                   {s.desc}
                 </p>
               </div>
 
-              {/* Footer Card: System Diagnostic Label (Tanpa Underscore) */}
-              <div className="mt-12 pt-6 border-t border-white/5 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-all">
-                <div className="flex flex-col items-start gap-1">
-                   <span className="text-[7px] font-mono text-slate-500 tracking-widest uppercase">Encryption Status</span>
-                   <span className="text-[9px] font-black text-cyan-400 tracking-widest">{s.tag}</span>
-                </div>
-                <div className="flex gap-1">
-                   <div className="w-1 h-1 rounded-full bg-cyan-500 animate-pulse" />
-                   <div className="w-1 h-1 rounded-full bg-cyan-500 animate-pulse delay-75" />
-                </div>
+              {/* Data Status HUD */}
+              <div className="mt-8 pt-4 border-t border-white/5 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
+                <span className="text-[7px] font-mono text-cyan-500 tracking-widest uppercase">{s.tag}</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
               </div>
             </motion.div>
           ))}
