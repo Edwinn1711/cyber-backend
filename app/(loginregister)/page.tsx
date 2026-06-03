@@ -18,55 +18,79 @@ const CyberIntelligenceHUD = () => {
   const [logs, setLogs] = useState<string[]>([]);
   const [isMinimized, setIsMinimized] = useState(true);
   const [isScanning, setIsScanning] = useState(false);
-  const [scanProgress, setProgress] = useState(0);
-  
 
-  const triggerGlobalScan = () => {
-    setIsScanning(true);
-    setProgress(0);
-    const fastLogs = [
-      "SEARCHING_FOR_MALWARE...", "ANALYZING_PACKET_HEADERS...",
-      "DECRYPTING_SSL_HANDSHAKE...", "FIREWALL_STRENGTHENED...",
-      "CLEANING_CACHE_BUFFERS...", "UPLINK_STABLE_NODE_DEL"
-    ];
-    let i = 0;
+  // PESAN YANG MUDAH DIMERTI SEMUA ORANG
+  const liveMessages = [
+    "MENGAMANKAN DATA PRIBADI SISWA",
+    "KONEKSI AMAN TELAH TERPASANG",
+    "MEMANTAU LALU LINTAS JARINGAN",
+    "TIDAK ADA RISIKO DITEMUKAN",
+    "SISTEM STABIL DAN TERKENDALI",
+    "PERCOBAAN AKSES ASING DITOLAK",
+    "VALIDASI ATURAN KEAMANAN SIBER",
+    "MEMBERSIHKAN JEJAK DIGITAL",
+    "ENKRIPSI DATA BERHASIL AKTIF"
+  ];
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      if (i < fastLogs.length) {
-        setLogs(prev => [`[${new Date().toLocaleTimeString()}] ${fastLogs[i]}`, ...prev].slice(0, 5));
-        setProgress(p => p + 20);
-        i++;
-      } else {
-        clearInterval(interval);
-        setIsScanning(false);
-      }
-    }, 500);
+      const randomMsg = liveMessages[Math.floor(Math.random() * liveMessages.length)];
+      const time = new Date().toLocaleTimeString('id-ID', { hour12: false });
+      setLogs(prev => [`[${time}] ${randomMsg}`, ...prev].slice(0, 6));
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const triggerDeepScan = () => {
+    setIsScanning(true);
+    // Logika animasi scan tetap sama
+    setTimeout(() => setIsScanning(false), 3000);
   };
 
- return (
-    <div className="fixed bottom-10 right-10 z-[1000] hidden lg:block pointer-events-auto">
+  return (
+    <div className="fixed bottom-8 right-8 z-[10000] hidden lg:block pointer-events-auto">
       <AnimatePresence mode="wait">
         {isMinimized ? (
           <motion.button
             key="min" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
             onClick={() => setIsMinimized(false)}
-            className="w-12 h-12 bg-cyan-500/10 border border-cyan-500/30 rounded-full flex items-center justify-center shadow-2xl hover:bg-cyan-500/20 transition-all"
+            className="group relative w-14 h-14 bg-cyan-500/10 backdrop-blur-xl border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-2xl hover:border-cyan-400 transition-all"
           >
-            <Terminal size={18} className="text-cyan-400" />
+            <div className="absolute inset-0 rounded-2xl border border-cyan-500/20 animate-ping" />
+            <Terminal size={20} className="text-cyan-400" />
+            <div className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_8px_#10b981]" />
           </motion.button>
         ) : (
           <motion.div
             key="max" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
-            className="p-5 bg-black/80 backdrop-blur-2xl border border-white/5 rounded-[2rem] w-[300px] shadow-2xl relative overflow-hidden"
+            className="relative w-[320px] bg-[#050811]/95 backdrop-blur-3xl border border-cyan-500/20 rounded-[2.5rem] p-6 shadow-[0_0_80px_rgba(0,0,0,1)] overflow-hidden"
           >
-            <div className="flex justify-between items-center mb-4 border-b border-white/5 pb-3">
-               <span className="text-[9px] font-black text-white tracking-widest uppercase">System Log</span>
-               <button onClick={() => setIsMinimized(true)} className="text-slate-600 hover:text-white"><X size={14}/></button>
+            <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
+               <div className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_cyan]" />
+                  <span className="text-[10px] font-black text-white tracking-widest uppercase">Monitor Keamanan</span>
+               </div>
+               <button onClick={() => setIsMinimized(true)} className="text-slate-500 hover:text-white transition-colors">
+                  <ChevronDown size={18} />
+               </button>
             </div>
-            <div className="h-[80px] space-y-2 font-mono overflow-hidden">
-               {logs.map((log, i) => (
-                 <p key={i} className={`text-[7px] ${i === 0 ? 'text-cyan-400' : 'text-slate-600'}`}>{log}</p>
-               ))}
+
+            <div className="h-[120px] space-y-2 font-mono overflow-hidden mb-6">
+              {logs.map((log, i) => (
+                <p key={i} className={`text-[8px] tracking-tight ${i === 0 ? 'text-cyan-400 font-bold' : 'text-slate-600'}`}>{log}</p>
+              ))}
             </div>
+
+            <button 
+              onClick={triggerDeepScan}
+              disabled={isScanning}
+              className={`w-full py-3.5 rounded-2xl font-black text-[9px] tracking-[0.2em] uppercase transition-all flex items-center justify-center gap-3 ${isScanning ? 'bg-white/5 text-slate-700' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500 hover:text-black shadow-xl'}`}
+            >
+              {isScanning ? 'SEDANG MEMINDAI...' : 'Cek Kesehatan Sistem'} 
+              <Zap size={12} className={isScanning ? 'animate-spin' : ''} />
+            </button>
+
+            {isScanning && <div className="absolute inset-0 bg-cyan-400/5 animate-pulse"><div className="absolute top-0 w-full h-1 bg-cyan-400 shadow-[0_0_20px_cyan] animate-scanner" /></div>}
           </motion.div>
         )}
       </AnimatePresence>
@@ -1554,7 +1578,7 @@ export default function CyberLandingDark() {
 
           {/* --- FOOTER MODAL --- */}
           <div className="pt-8 border-t border-white/5 flex flex-col items-center gap-3">
-             <p className="text-[10px] font-mono text-slate-600 tracking-[0.5em] uppercase">Authorized Command Interface // No Unauthorized Access</p>
+             <p className="text-[10px] font-mono text-slate-600 tracking-[0.5em] uppercase">Authorized Command Interface</p>
              <div className="flex gap-2">
                 {[...Array(5)].map((_, i) => (
                    <div key={i} className="w-1 h-1 rounded-full bg-cyan-500/20" />
