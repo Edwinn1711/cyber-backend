@@ -1085,85 +1085,87 @@ export default function CyberLandingDark() {
         </div>
       </CyberModal>
 
-      <CyberModal 
+{/* --- MODAL LAYANAN (REVISI TOTAL: CYBER OPS CENTRE) --- */}
+<CyberModal 
         isOpen={activeModal === 'LAYANAN'} 
         onClose={() => setActiveModal(null)} 
-        title="SERVICE INFRASTRUCTURE PROTOCOL"
+        title="PLATFORM CORE CAPABILITIES"
       >
         <div className="space-y-10 text-left">
           
-          {/* --- HEADER STATUS (Pusat Komando) --- */}
-          <div className="relative p-8 lg:p-10 rounded-[3rem] bg-[#0a0c1a] border border-cyan-500/20 overflow-hidden shadow-2xl">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent animate-scanner" />
+          {/* --- CENTRAL MONITORING HUD --- */}
+          <div className="relative p-8 lg:p-12 rounded-[3.5rem] bg-[#050811] border border-cyan-500/20 overflow-hidden shadow-[0_0_50px_rgba(6,182,212,0.1)] group">
+            {/* Laser Scan Animation */}
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-scanner z-20" />
             
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 relative z-10">
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                   <h3 className="text-2xl lg:text-3xl font-black text-white uppercase tracking-tighter">Sistem Operasional Aktif</h3>
+                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
+                   <h3 className="text-2xl lg:text-4xl font-black text-white uppercase tracking-tighter">Command Centre Readiness</h3>
                 </div>
-                <p className="text-slate-500 text-sm lg:text-base max-w-2xl font-medium">Seluruh protokol layanan berjalan di bawah pengawasan sistem enkripsi terpusat untuk menjamin integritas data sekolah secara real time.</p>
+                <p className="text-slate-400 text-sm lg:text-base max-w-2xl font-medium leading-relaxed">
+                  Platform ini beroperasi sebagai pusat validasi keamanan digital sekolah. Mengintegrasikan audit berkala dengan visualisasi intelijen untuk memastikan kedaulatan data institusi tetap terjaga.
+                </p>
               </div>
-              <div className="flex flex-col items-end gap-2">
-                 <div className="px-6 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.3em]">
-                    SECURE NODE ACTIVE
-                 </div>
-                 <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">Network Load: 12.4ms</span>
+              <div className="bg-cyan-500/5 border border-cyan-500/20 p-6 rounded-3xl text-right">
+                 <p className="text-[10px] font-black text-cyan-400 tracking-[0.4em] uppercase mb-1">Network Status</p>
+                 <span className="text-xl font-mono text-white font-bold tracking-tighter">SECURED_UPLINK</span>
               </div>
             </div>
           </div>
 
-          {/* --- GRID LAYANAN (6 NODES DEWA) --- */}
+          {/* --- GRID 6 PILAR LAYANAN (SANGAT MEWAH) --- */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {[
-              { t: "Traffic Filter", i: ShieldAlert, d: "Penyaringan trafik masuk dan keluar jaringan secara otomatis.", col: "cyan" },
-              { t: "IDS and IPS", i: Activity, d: "Sistem deteksi dan pencegahan intrusi siber tingkat tinggi.", col: "fuchsia" },
-              { t: "Data Backup", i: Cpu, d: "Sistem redundansi data mingguan di server lokal terenkripsi.", col: "blue" },
-              { t: "Encryption", i: Lock, d: "Penguncian data sensitif menggunakan standar algoritma AES 256.", col: "emerald" },
-              { t: "Auth 2FA", i: Fingerprint, d: "Otentikasi identitas digital ganda untuk akses personil.", col: "indigo" },
-              { t: "Audit System", i: ScanLine, d: "Laporan kesehatan dan pemindaian sistem secara berkala.", col: "rose" }
+              { t: "Assessment Center", i: Target, d: "Uji kesiapan personil melalui simulasi serangan siber nyata.", col: "cyan" },
+              { t: "Intelligence Hub", i: BrainCircuit, d: "Pusat informasi ancaman terbaru untuk literasi siber sekolah.", col: "fuchsia" },
+              { t: "Credential Guard", i: ShieldCheck, d: "Audit keamanan akun dan validasi identitas digital ganda.", col: "blue" },
+              { t: "Compliance Audit", i: FileText, d: "Penyusunan laporan standar operasional keamanan digital.", col: "emerald" },
+              { t: "Infrastructure Monitor", i: Server, d: "Pemantauan visual terhadap stabilitas node jaringan sekolah.", col: "indigo" },
+              { t: "Incident Response", i: ShieldAlert, d: "Protokol pelaporan dan mitigasi instan terhadap anomali data.", col: "rose" }
             ].map((item, i) => (
               <div 
                 key={i} 
-                className="group relative bg-gradient-to-b from-[#0d111a] to-[#050811] border border-white/5 p-10 rounded-[3rem] transition-all duration-500 hover:border-cyan-500/30 hover:-translate-y-2 shadow-2xl overflow-hidden"
+                className="group relative bg-gradient-to-br from-[#0a0c1a] to-[#020108] border border-white/5 p-10 rounded-[3rem] transition-all duration-700 hover:border-cyan-500/40 hover:-translate-y-2 shadow-2xl overflow-hidden"
               >
-                {/* Visual HUD Micro-elements */}
-                <div className="absolute top-8 right-10 text-[9px] font-mono text-slate-700 uppercase tracking-widest group-hover:text-cyan-500/40 transition-colors">
-                  Node 0{i+1}
-                </div>
+                {/* HUD Corner Accents */}
+                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 
-                {/* Ikon dengan Container HUD */}
+                {/* Ikon dengan Aura Neon */}
                 <div className="relative w-16 h-16 mb-8 flex items-center justify-center">
-                  <div className={`absolute inset-0 rounded-2xl rotate-45 border border-white/5 group-hover:rotate-90 group-hover:border-cyan-500/30 transition-all duration-700`} />
+                  <div className={`absolute inset-0 rounded-2xl bg-white/5 border border-white/10 group-hover:rotate-45 group-hover:border-cyan-500/30 transition-all duration-700`} />
                   <item.i className={item.col === 'cyan' ? 'text-cyan-400' : item.col === 'fuchsia' ? 'text-fuchsia-400' : item.col === 'blue' ? 'text-blue-400' : item.col === 'emerald' ? 'text-emerald-400' : item.col === 'indigo' ? 'text-indigo-400' : 'text-rose-400'} size={32} />
                 </div>
 
-                <div className="space-y-3 relative z-10">
-                  <h4 className="text-xl font-black text-white uppercase tracking-widest group-hover:text-cyan-400 transition-colors">{item.t}</h4>
-                  <p className="text-slate-500 text-xs lg:text-[13px] leading-relaxed font-medium">
+                <div className="space-y-4 relative z-10">
+                  <h4 className="text-xl font-black text-white uppercase tracking-widest leading-tight group-hover:text-cyan-400 transition-colors">{item.t}</h4>
+                  <p className="text-slate-500 text-[12px] leading-relaxed font-medium">
                     {item.d}
                   </p>
                 </div>
 
-                {/* Status Bar Kecil di bawah tiap card */}
-                <div className="mt-8 flex items-center gap-3">
-                   <div className="flex-1 h-[1px] bg-white/5 relative overflow-hidden">
-                      <motion.div 
-                        initial={{ x: "-100%" }}
-                        animate={{ x: "100%" }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: i * 0.5 }}
-                        className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent"
-                      />
-                   </div>
-                   <span className="text-[8px] font-mono text-slate-600">ONLINE</span>
+                {/* Progress Bar Simulasi */}
+                <div className="mt-10 h-[2px] w-full bg-white/5 relative overflow-hidden rounded-full">
+                   <motion.div 
+                     initial={{ x: "-100%" }}
+                     animate={{ x: "100%" }}
+                     transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: i * 0.3 }}
+                     className="absolute inset-0 w-1/3 bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent"
+                   />
                 </div>
               </div>
             ))}
           </div>
 
-          {/* --- FOOTER MODAL (CLEAN) --- */}
-          <div className="pt-6 border-t border-white/5 flex justify-center">
-             <p className="text-[9px] font-mono text-slate-600 tracking-[0.6em] uppercase">Security Protocol Access Authorized Without Interruption</p>
+          {/* --- FOOTER MODAL --- */}
+          <div className="pt-8 border-t border-white/5 flex flex-col items-center gap-3">
+             <p className="text-[10px] font-mono text-slate-600 tracking-[0.5em] uppercase">Authorized Command Interface // No Unauthorized Access</p>
+             <div className="flex gap-2">
+                {[...Array(5)].map((_, i) => (
+                   <div key={i} className="w-1 h-1 rounded-full bg-cyan-500/20" />
+                ))}
+             </div>
           </div>
         </div>
       </CyberModal>
