@@ -651,47 +651,52 @@ const CyberClosingSection = () => {
               </div>
             </motion.div>
           ) : (
-            <motion.div 
+<motion.div 
               key="secured"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="flex flex-col items-center space-y-10"
+              className="flex flex-col items-center space-y-12"
             >
-               {/* --- THE SUCCESS EXPLOSION MOMENT --- */}
+               {/* Icon Success - Ukuran disesuaikan */}
                <div className="relative">
-                  <div className="absolute inset-0 bg-emerald-500/20 blur-[100px] rounded-full animate-pulse" />
-                  <div className="relative w-40 h-40 lg:w-56 lg:h-56 bg-emerald-500/10 border-4 border-emerald-400 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(16,185,129,0.5)] transition-all duration-1000">
-                     <ShieldCheck size={100} className="text-emerald-400 drop-shadow-[0_0_20px_#10b981]" />
+                  <div className="absolute inset-0 bg-emerald-500/10 blur-[80px] rounded-full animate-pulse" />
+                  <div className="relative w-32 h-32 lg:w-40 lg:h-40 bg-emerald-500/5 border-2 border-emerald-400/50 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.2)] transition-all duration-1000">
+                     <ShieldCheck size={60} className="text-emerald-400 drop-shadow-[0_0_15px_#10b981]" />
                   </div>
-                  {/* Floating particles on success */}
-                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute -inset-8 border border-dashed border-emerald-500/30 rounded-full" />
+                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} className="absolute -inset-6 border border-dashed border-emerald-500/20 rounded-full" />
                </div>
                
                <div className="text-center space-y-6">
-                  <h2 className="text-6xl lg:text-9xl font-black text-white uppercase tracking-tighter leading-none drop-shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+                  {/* JUDUL DIKECILKAN: Dari 9xl ke 6xl (Desktop) dan 4xl (Mobile) */}
+                  <h2 className="text-4xl lg:text-6xl font-black text-white uppercase tracking-tighter leading-none drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
                     ACCESS GRANTED
                   </h2>
-                  <div className="inline-flex items-center gap-4 px-8 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs lg:text-sm tracking-[0.5em] uppercase">
+                  
+                  {/* Pill Status yang lebih ramping */}
+                  <div className="inline-flex items-center gap-3 px-6 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-500/20 text-emerald-400 font-mono text-[10px] lg:text-xs tracking-[0.4em] uppercase">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     SYSTEM STATUS: FULLY PROTECTED
                   </div>
                </div>
 
-               <div className="pt-12 grid grid-cols-1 md:grid-cols-3 gap-10">
+               {/* Grid Kecil di Bawah (Dibuat Lebih Halus) */}
+               <div className="pt-8 grid grid-cols-1 md:grid-cols-3 gap-12">
                   {[
                     { t: "DATABASE SECURED", i: Lock },
                     { t: "FIREWALL ACTIVE", i: Globe },
                     { t: "NODES STABLE", i: Activity }
                   ].map((item, i) => (
                     <div key={i} className="flex flex-col items-center gap-3 group">
-                      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-emerald-400 border border-white/10 group-hover:bg-emerald-500 group-hover:text-black transition-all">
-                        <item.i size={20} />
+                      <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-slate-500 border border-white/5 transition-all group-hover:text-emerald-400 group-hover:border-emerald-500/30">
+                        <item.i size={16} />
                       </div>
-                      <span className="text-[9px] font-black text-slate-500 tracking-[0.4em] uppercase group-hover:text-white transition-colors">{item.t}</span>
+                      <span className="text-[8px] font-black text-slate-600 tracking-[0.3em] uppercase group-hover:text-white transition-colors">{item.t}</span>
                     </div>
                   ))}
                </div>
             </motion.div>
           )}
+
         </AnimatePresence>
       </div>
     </section>
