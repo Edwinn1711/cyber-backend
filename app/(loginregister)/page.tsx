@@ -1151,30 +1151,37 @@ export default function CyberLandingDark() {
                </div>
             </div>
 
-            {/* --- TENGAH: NAVIGATION HUD (MAGNETIC UNDERLINE) --- */}
             <nav className="hidden lg:flex flex-1 justify-center items-center gap-16 h-full">
                {[
-                 { label: 'Beranda', id: 'hero', icon: Home },
-                 { label: 'Profil', id: 'pilar', icon: Info },
-                 { label: 'Layanan', id: 'infra', icon: HelpCircle }
+                 { label: 'Beranda', id: 'hero', icon: Home, type: 'scroll' },
+                 { label: 'Profil', id: 'pilar', icon: Info, type: 'modal' },
+                 { label: 'Layanan', id: 'infra', icon: HelpCircle, type: 'modal' }
                ].map((item) => {
                  const isActive = activeSection === item.label;
                  return (
                    <button 
                      key={item.label}
-                     onClick={() => item.id === 'hero' ? scrollToSection('hero', 'Beranda') : setActiveModal(item.label.toUpperCase() as any)}
+                     onClick={() => {
+                        setActiveSection(item.label); // INI AGAR GARIS MENGIKUTI
+                        if (item.type === 'scroll') {
+                           scrollToSection('hero', 'Beranda');
+                        } else {
+                           setActiveModal(item.label.toUpperCase() as any);
+                        }
+                     }}
                      className="relative flex flex-col items-center justify-center h-full group outline-none"
                    >
+                     {/* Label & Ikon */}
                      <div className={`flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.4em] transition-all duration-500 ${isActive ? 'text-cyan-400' : 'text-slate-500 group-hover:text-white'}`}>
                         <item.icon size={14} className={isActive ? "text-cyan-400 animate-pulse" : "opacity-40 group-hover:opacity-100"} />
                         {item.label}
                      </div>
 
-                     {/* Garis Bawah Meluncur Sehalus Sutra */}
+                     {/* GARIS BAWAH (NAV-GLOW) - MELUNCUR KE SEMUA TOMBOL */}
                      {isActive && (
                        <motion.div 
-                         layoutId="nav-glow"
-                         className="absolute bottom-0 left-0 right-0 h-[3px] bg-cyan-400 rounded-t-full shadow-[0_-4px_15px_#22d3ee]"
+                         layoutId="active-nav-glow" // ID unik agar Framer Motion tahu ini garis yang sama
+                         className="absolute bottom-0 left-0 right-0 h-[3px] bg-cyan-400 rounded-t-full shadow-[0_-4px_20px_#22d3ee]"
                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
                        />
                      )}
@@ -1197,7 +1204,7 @@ export default function CyberLandingDark() {
                  onClick={() => setIsLoginOpen(true)}
                  className="px-8 py-2.5 bg-white text-black rounded-full font-black text-[9px] tracking-[0.4em] uppercase transition-all hover:bg-cyan-400 hover:text-white hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] active:scale-95 shadow-xl"
                >
-                 AUTHORIZE
+                 LOGIN
                </button>
 
                {/* Mobile Toggle */}
