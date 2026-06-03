@@ -551,7 +551,7 @@ export default function StudentPortal() {
 
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-cyan-500/30 relative lg:[zoom:0.9] transform-gpu origin-top">
+    <div className="flex h-screen w-full text-slate-100 overflow-hidden font-sans selection:bg-fuchsia-500/30">
       <PersistentUniverse bgIdx={bgIdx} />
       <ParticleBurstClickEffect />
       <AnimatePresence>
