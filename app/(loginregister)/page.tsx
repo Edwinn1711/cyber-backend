@@ -1545,88 +1545,91 @@ export default function CyberLandingDark() {
         </div>
       </CyberModal>
 
-{/* --- MODAL LAYANAN (REVISI TOTAL: CYBER OPS CENTRE) --- */}
+{/* --- MODAL LAYANAN (REVISI TOTAL: CYBER CORE HUB - DEWA FINALE) --- */}
 <CyberModal 
         isOpen={activeModal === 'LAYANAN'} 
         onClose={() => setActiveModal(null)} 
-        title="PLATFORM CORE CAPABILITIES"
+        title="PLATFORM STRATEGIC CAPABILITIES"
       >
-        <div className="space-y-10 text-left">
+        <div className="flex flex-col lg:flex-row gap-12 items-center lg:items-stretch py-4">
           
-          {/* --- CENTRAL MONITORING HUD --- */}
-          <div className="relative p-8 lg:p-12 rounded-[3.5rem] bg-[#050811] border border-cyan-500/20 overflow-hidden shadow-[0_0_50px_rgba(6,182,212,0.1)] group">
-            {/* Laser Scan Animation */}
-            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-scanner z-20" />
-            
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 relative z-10">
-              <div className="space-y-3">
+          {/* --- SISI KIRI: THE CORE ENGINE (VISUAL UTAMA) --- */}
+          <div className="w-full lg:w-1/2 relative min-h-[300px] lg:min-h-[500px] bg-white/[0.02] border border-white/5 rounded-[4rem] flex items-center justify-center overflow-hidden shadow-2xl group">
+             {/* Animasi Background Saraf Digital di dalam Box */}
+             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.1)_0%,transparent_70%)]" />
+             <div className="absolute inset-0 bg-grid-static opacity-5" />
+             
+             {/* Lingkaran HUD Berputar Raksasa */}
+             <div className="relative">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 lg:w-72 lg:h-72 border border-cyan-500/20 rounded-full animate-[spin_30s_linear_infinite]" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 lg:w-64 lg:h-64 border border-dashed border-fuchsia-500/20 rounded-full animate-[spin_20s_linear_infinite_reverse]" />
+                
+                {/* Ikon Inti yang Bernapas */}
+                <motion.div 
+                  animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                  className="relative w-24 h-24 lg:w-32 lg:h-32 bg-black border-2 border-cyan-500/50 rounded-3xl flex items-center justify-center shadow-[0_0_50px_rgba(34,211,238,0.3)] z-10"
+                >
+                   <Cpu size={48} className="text-cyan-400 drop-shadow-[0_0_15px_#22d3ee]" />
+                </motion.div>
+             </div>
+
+             {/* Metadata HUD Label */}
+             <div className="absolute bottom-10 left-10 text-left space-y-1">
+                <p className="text-[10px] font-black text-white tracking-[0.4em] uppercase">Core Engine Status</p>
                 <div className="flex items-center gap-3">
-                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
-                   <h3 className="text-2xl lg:text-4xl font-black text-white uppercase tracking-tighter">Command Centre Readiness</h3>
+                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                   <span className="text-[8px] font-mono text-emerald-500 uppercase tracking-widest">Active and Stable</span>
                 </div>
-                <p className="text-slate-400 text-sm lg:text-base max-w-2xl font-medium leading-relaxed">
-                  Platform ini beroperasi sebagai pusat validasi keamanan digital sekolah. Mengintegrasikan audit berkala dengan visualisasi intelijen untuk memastikan kedaulatan data institusi tetap terjaga.
-                </p>
-              </div>
-              <div className="bg-cyan-500/5 border border-cyan-500/20 p-6 rounded-3xl text-right">
-                 <p className="text-[10px] font-black text-cyan-400 tracking-[0.4em] uppercase mb-1">Network Status</p>
-                 <span className="text-xl font-mono text-white font-bold tracking-tighter">SECURED_UPLINK</span>
-              </div>
+             </div>
+          </div>
+
+          {/* --- SISI KANAN: THE CAPABILITY LIST (SANGAT MEWAH) --- */}
+          <div className="w-full lg:w-1/2 flex flex-col justify-between py-4 space-y-6">
+            <div className="space-y-4 text-left px-4">
+              <h3 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-none">
+                MODUL <span className="text-cyan-400">OPERASI</span>
+              </h3>
+              <p className="text-slate-500 text-sm lg:text-base font-medium leading-relaxed">
+                Platform ini menyediakan rangkaian instrumen keamanan siber yang dirancang untuk perlindungan data institusi secara masif.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              {[
+                { t: "Assessment Center", i: Target, d: "Simulasi ancaman untuk menguji kesiapan sistem.", col: "text-cyan-400" },
+                { t: "Intelligence Hub", i: BrainCircuit, d: "Pusat edukasi dan informasi ancaman siber terbaru.", col: "text-fuchsia-400" },
+                { t: "Credential Guard", i: ShieldCheck, d: "Proteksi identitas digital seluruh warga sekolah.", col: "text-blue-400" },
+                { t: "Infrastructure Monitor", i: Server, d: "Pemantauan visual terhadap stabilitas jaringan.", col: "text-emerald-400" },
+                { t: "Incident Response", i: ShieldAlert, d: "Mitigasi instan terhadap anomali trafik jaringan.", col: "text-rose-400" }
+              ].map((item, i) => (
+                <motion.div 
+                  key={i}
+                  whileHover={{ x: 10 }}
+                  className="group flex items-center gap-6 p-6 rounded-3xl bg-white/[0.01] border border-white/5 hover:bg-white/[0.03] hover:border-cyan-500/20 transition-all duration-500 cursor-pointer"
+                >
+                  <div className={`w-12 h-12 rounded-2xl bg-black border border-white/10 flex items-center justify-center transition-all group-hover:shadow-[0_0_20px_rgba(34,211,238,0.1)] ${item.col}`}>
+                    <item.i size={24} />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <h4 className="text-sm lg:text-base font-black text-white uppercase tracking-widest mb-1 group-hover:text-cyan-400 transition-colors">{item.t}</h4>
+                    <p className="text-[10px] lg:text-[11px] text-slate-500 font-medium group-hover:text-slate-300 transition-colors">{item.d}</p>
+                  </div>
+                  <ChevronRight size={16} className="text-slate-700 group-hover:text-cyan-400 transition-all" />
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Footer List (Metadata) */}
+            <div className="flex justify-between items-center px-6 opacity-30">
+               <span className="text-[8px] font-mono tracking-[0.5em] text-slate-500 uppercase">Secure Line Established</span>
+               <div className="flex gap-1">
+                  <div className="w-1 h-1 bg-cyan-400 rounded-full" />
+                  <div className="w-1 h-1 bg-cyan-400 rounded-full opacity-50" />
+               </div>
             </div>
           </div>
 
-          {/* --- GRID 6 PILAR LAYANAN (SANGAT MEWAH) --- */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {[
-              { t: "Assessment Center", i: Target, d: "Uji kesiapan personil melalui simulasi serangan siber nyata.", col: "cyan" },
-              { t: "Intelligence Hub", i: BrainCircuit, d: "Pusat informasi ancaman terbaru untuk literasi siber sekolah.", col: "fuchsia" },
-              { t: "Credential Guard", i: ShieldCheck, d: "Audit keamanan akun dan validasi identitas digital ganda.", col: "blue" },
-              { t: "Compliance Audit", i: FileText, d: "Penyusunan laporan standar operasional keamanan digital.", col: "emerald" },
-              { t: "Infrastructure Monitor", i: Server, d: "Pemantauan visual terhadap stabilitas node jaringan sekolah.", col: "indigo" },
-              { t: "Incident Response", i: ShieldAlert, d: "Protokol pelaporan dan mitigasi instan terhadap anomali data.", col: "rose" }
-            ].map((item, i) => (
-              <div 
-                key={i} 
-                className="group relative bg-gradient-to-br from-[#0a0c1a] to-[#020108] border border-white/5 p-10 rounded-[3rem] transition-all duration-700 hover:border-cyan-500/40 hover:-translate-y-2 shadow-2xl overflow-hidden"
-              >
-                {/* HUD Corner Accents */}
-                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                
-                {/* Ikon dengan Aura Neon */}
-                <div className="relative w-16 h-16 mb-8 flex items-center justify-center">
-                  <div className={`absolute inset-0 rounded-2xl bg-white/5 border border-white/10 group-hover:rotate-45 group-hover:border-cyan-500/30 transition-all duration-700`} />
-                  <item.i className={item.col === 'cyan' ? 'text-cyan-400' : item.col === 'fuchsia' ? 'text-fuchsia-400' : item.col === 'blue' ? 'text-blue-400' : item.col === 'emerald' ? 'text-emerald-400' : item.col === 'indigo' ? 'text-indigo-400' : 'text-rose-400'} size={32} />
-                </div>
-
-                <div className="space-y-4 relative z-10">
-                  <h4 className="text-xl font-black text-white uppercase tracking-widest leading-tight group-hover:text-cyan-400 transition-colors">{item.t}</h4>
-                  <p className="text-slate-500 text-[12px] leading-relaxed font-medium">
-                    {item.d}
-                  </p>
-                </div>
-
-                {/* Progress Bar Simulasi */}
-                <div className="mt-10 h-[2px] w-full bg-white/5 relative overflow-hidden rounded-full">
-                   <motion.div 
-                     initial={{ x: "-100%" }}
-                     animate={{ x: "100%" }}
-                     transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: i * 0.3 }}
-                     className="absolute inset-0 w-1/3 bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent"
-                   />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* --- FOOTER MODAL --- */}
-          <div className="pt-8 border-t border-white/5 flex flex-col items-center gap-3">
-             <p className="text-[10px] font-mono text-slate-600 tracking-[0.5em] uppercase">Authorized Command Interface</p>
-             <div className="flex gap-2">
-                {[...Array(5)].map((_, i) => (
-                   <div key={i} className="w-1 h-1 rounded-full bg-cyan-500/20" />
-                ))}
-             </div>
-          </div>
         </div>
       </CyberModal>
 
