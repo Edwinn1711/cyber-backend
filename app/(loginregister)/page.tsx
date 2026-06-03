@@ -8,109 +8,103 @@ import {
   Home, Info, FileText, LayoutGrid, Megaphone, HelpCircle, X, ArrowRight, Zap,
   BrainCircuit, ShieldAlert, Cpu, Star, Target, Activity,
   CreditCard, Globe, Key, Bug, Mail, Cloud, Search, Terminal, Eye,
-  Facebook, Twitter, Youtube, Instagram, Send, Phone, Globe2
+  Facebook, Twitter, Youtube, Instagram, Send, Phone, Globe2,
+  Radar, ChevronDown 
 } from 'lucide-react'
 
 const CyberIntelligenceHUD = () => {
   const [logs, setLogs] = useState<string[]>([]);
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setProgress] = useState(0);
+  const [isMinimized, setIsMinimized] = useState(true); // DEFAULT: Sembunyi (Mewah)
 
   const triggerGlobalScan = () => {
     setIsScanning(true);
     setProgress(0);
-    // Simulasi aktivitas siber intensif
     const fastLogs = [
-      "SEARCHING_FOR_MALWARE_SIGNATURES...",
-      "ANALYZING_PACKET_HEADERS...",
-      "DECRYPTING_SSL_HANDSHAKE...",
-      "ISOLATING_SUSPICIOUS_NODE_7...",
-      "RE-ROUTING_TRAFFIC_TO_HONEYPOT...",
-      "FIREWALL_STRENGTHENED_AT_CORE",
-      "CLEANING_CACHE_BUFFERS...",
-      "SYNCING_WITH_CENTRAL_INTELLIGENCE"
+      "SEARCHING_FOR_MALWARE...", "ANALYZING_PACKET_HEADERS...",
+      "DECRYPTING_SSL_HANDSHAKE...", "FIREWALL_STRENGTHENED...",
+      "CLEANING_CACHE_BUFFERS...", "UPLINK_STABLE_NODE_DEL"
     ];
-    
     let i = 0;
     const interval = setInterval(() => {
       if (i < fastLogs.length) {
-        setLogs(prev => [`[${new Date().toLocaleTimeString()}] ${fastLogs[i]}`, ...prev].slice(0, 8));
-        setProgress(p => p + 12.5);
+        setLogs(prev => [`[${new Date().toLocaleTimeString()}] ${fastLogs[i]}`, ...prev].slice(0, 5));
+        setProgress(p => p + 20);
         i++;
       } else {
         clearInterval(interval);
         setIsScanning(false);
       }
-    }, 400);
+    }, 500);
   };
 
   return (
-    <div className="fixed bottom-8 left-8 z-[1000] hidden lg:block pointer-events-auto">
-      <div className="relative p-6 bg-[#050811]/80 backdrop-blur-3xl border border-cyan-500/30 rounded-[2.5rem] w-[350px] shadow-[0_0_50px_rgba(34,211,238,0.1)] overflow-hidden">
-        
-        {/* Neon Header */}
-        <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-          <div className="flex items-center gap-3">
-             <div className="w-2 h-2 rounded-full bg-cyan-500 animate-ping" />
-             <span className="text-[10px] font-black text-white tracking-[0.4em] uppercase">Tactical HUD</span>
-          </div>
-          <span className="text-[8px] font-mono text-cyan-500 opacity-50">UNIT: SVR_01</span>
-        </div>
-
-        {/* Live Log Display */}
-        <div className="h-[120px] space-y-2 font-mono overflow-hidden">
-          {logs.length === 0 && <p className="text-slate-700 text-[9px] animate-pulse uppercase tracking-widest text-center mt-10">Standby for Command...</p>}
-          {logs.map((log, i) => (
-            <motion.p 
-              key={i} 
-              initial={{ opacity: 0, x: -20 }} 
-              animate={{ opacity: 1, x: 0 }}
-              className={`text-[8px] tracking-tighter leading-tight ${i === 0 ? 'text-cyan-400 font-bold' : 'text-slate-600'}`}
+    <div className="fixed bottom-8 left-8 z-[10000] hidden lg:block">
+      <AnimatePresence mode="wait">
+        {isMinimized ? (
+          /* --- MODE SEMBUNYI (HANYA ICON RADAR) --- */
+          <motion.button
+            key="minimized"
+            initial={{ scale: 0, rotate: -90 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0, rotate: 90 }}
+            onClick={() => setIsMinimized(false)}
+            className="group relative w-16 h-16 bg-[#050811]/80 backdrop-blur-xl border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.2)] hover:border-cyan-400 transition-all"
+          >
+            <Radar size={24} className="text-cyan-400 animate-pulse" />
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-black animate-ping" />
+            {/* Label Tooltip */}
+            <div className="absolute left-20 px-4 py-2 bg-black border border-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+               <p className="text-[10px] font-black text-white tracking-widest">OPEN COMMAND CENTER</p>
+            </div>
+          </motion.button>
+        ) : (
+          /* --- MODE FULL HUD (DASHBOARD) --- */
+          <motion.div
+            key="maximized"
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.9 }}
+            className="relative p-6 bg-[#050811]/90 backdrop-blur-2xl border border-cyan-500/30 rounded-[2.5rem] w-[350px] shadow-2xl overflow-hidden"
+          >
+            {/* Tombol Minimize */}
+            <button 
+              onClick={() => setIsMinimized(true)}
+              className="absolute top-5 right-6 text-slate-500 hover:text-white transition-colors"
             >
-              {log}
-            </motion.p>
-          ))}
-        </div>
+              <ChevronDown size={20} />
+            </button>
 
-        {/* Progress Bar & Button */}
-        <div className="mt-6 space-y-4">
-           {isScanning && (
-             <div className="space-y-1">
-                <div className="flex justify-between text-[7px] font-mono text-cyan-500 mb-1">
-                   <span>SCANNING_PROGRESS</span>
-                   <span>{Math.round(scanProgress)}%</span>
-                </div>
-                <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                   <motion.div 
-                     animate={{ width: `${scanProgress}%` }}
-                     className="h-full bg-cyan-500 shadow-[0_0_10px_#22d3ee]" 
-                   />
-                </div>
-             </div>
-           )}
+            <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
+               <Terminal size={16} className="text-cyan-400" />
+               <span className="text-[10px] font-black text-white tracking-[0.4em] uppercase">Intelligence Terminal</span>
+            </div>
 
-           <button 
-             onClick={triggerGlobalScan}
-             disabled={isScanning}
-             className={`w-full py-3 rounded-xl font-black text-[9px] tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 ${isScanning ? 'bg-white/5 text-slate-600' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500 hover:text-black hover:shadow-[0_0_30px_rgba(34,211,238,0.4)]'}`}
-           >
-             {isScanning ? 'System Busy' : 'Initialize Deep Scan'} 
-             <Zap size={12} className={isScanning ? 'animate-spin' : ''} />
-           </button>
-        </div>
+            <div className="h-[100px] space-y-2 font-mono overflow-hidden mb-6">
+              {logs.length === 0 && <p className="text-slate-700 text-[9px] text-center mt-8 uppercase tracking-widest">Waiting for Uplink...</p>}
+              {logs.map((log, i) => (
+                <p key={i} className={`text-[8px] tracking-tighter ${i === 0 ? 'text-cyan-400' : 'text-slate-600'}`}>{log}</p>
+              ))}
+            </div>
 
-        {/* Scanner Line Overlay (Hanya muncul saat scan) */}
-        {isScanning && (
-          <div className="absolute inset-0 pointer-events-none">
-             <div className="w-full h-full bg-cyan-500/5 animate-pulse" />
-             <div className="absolute top-0 left-0 w-full h-1 bg-cyan-400/50 blur-sm animate-scanner" />
-          </div>
+            <button 
+              onClick={triggerGlobalScan}
+              disabled={isScanning}
+              className={`w-full py-4 rounded-2xl font-black text-[9px] tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 ${isScanning ? 'bg-white/5 text-slate-600' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500 hover:text-black shadow-xl'}`}
+            >
+              {isScanning ? 'SYSTEM SCANNING...' : 'Run Diagnostics'} 
+              <Zap size={14} className={isScanning ? 'animate-spin' : ''} />
+            </button>
+
+            {/* Efek Garis Scanner saat Scan Aktif */}
+            {isScanning && <div className="absolute inset-0 bg-cyan-400/5 animate-pulse"><div className="absolute top-0 w-full h-1 bg-cyan-400/50 blur-sm animate-scanner" /></div>}
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
     </div>
   );
 };
-
 const CyberMouseHUD = ({ mouseX, mouseY }: { mouseX: any, mouseY: any }) => (
   <motion.div style={{ x: mouseX, y: mouseY, translateX: 20, translateY: 20 }} className="fixed top-0 left-0 z-[10000] pointer-events-none hidden lg:block">
     <div className="relative">
