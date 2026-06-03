@@ -989,96 +989,64 @@ const CyberModal = ({ isOpen, onClose, title, children }: { isOpen: boolean, onC
 );
 
 
-// --- DEFINISI 1: NEURAL NETWORK (GARIS MENGEJAR MOUSE) ---
-const NeuralNetworkCanvas = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouse = useRef({ x: 0, y: 0 });
+// --- 1. CYBER GRID ENGINE (ANTI-LAG & ULTRA SMOOTH) ---
+const CyberGridEngine = () => (
+  <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-black">
+    {/* Lantai Digital 3D yang Bergerak Cepat */}
+    <div className="absolute inset-0" style={{ perspective: '1000px' }}>
+      <div 
+        className="absolute inset-0 opacity-[0.15]"
+        style={{
+          backgroundImage: `linear-gradient(to right, #22d3ee 1px, transparent 1px), linear-gradient(to bottom, #22d3ee 1px, transparent 1px)`,
+          backgroundSize: '80px 80px',
+          transform: 'rotateX(65deg) translateY(-20%)',
+          transformOrigin: 'top',
+          animation: 'grid-run 3s linear infinite'
+        }}
+      />
+    </div>
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    let particles: any[] = [];
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    class Particle {
-      x: number; y: number; vx: number; vy: number;
-      constructor() {
-        this.x = Math.random() * canvas!.width;
-        this.y = Math.random() * canvas!.height;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-      }
-      update() {
-        this.x += this.vx; this.y += this.vy;
-        if (this.x < 0 || this.x > canvas!.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas!.height) this.vy *= -1;
-        const dx = mouse.current.x - this.x;
-        const dy = mouse.current.y - this.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 200) { this.x += dx * 0.01; this.y += dy * 0.01; }
-      }
-    }
-    for (let i = 0; i < 60; i++) particles.push(new Particle());
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = "rgba(34, 211, 238, 0.15)";
-      ctx.lineWidth = 0.5;
-      particles.forEach((p, i) => {
-        p.update();
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = p.x - particles[j].x;
-          const dy = p.y - particles[j].y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          if (dist < 150) {
-            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
-          }
-        }
-      });
-      requestAnimationFrame(animate);
-    };
-    window.addEventListener('resize', resize);
-    window.addEventListener('mousemove', (e) => { mouse.current.x = e.clientX; mouse.current.y = e.clientY; });
-    resize(); animate();
-    return () => window.removeEventListener('resize', resize);
-  }, []);
-  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none opacity-40" />;
-};
+    {/* Hujan Data (Digital Rain) - Efek Wah yang Ringan */}
+    <div className="absolute inset-0 flex justify-around opacity-20">
+      {[...Array(10)].map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ y: "-100%", opacity: 0 }}
+          animate={{ y: "100%", opacity: [0, 1, 0] }}
+          transition={{ duration: Math.random() * 2 + 1, repeat: Infinity, ease: "linear", delay: i * 0.5 }}
+          className="w-[1px] h-[30vh] bg-gradient-to-b from-transparent via-fuchsia-500 to-transparent"
+        />
+      ))}
+    </div>
 
+    {/* Ambient Glows */}
+    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,transparent_20%,#000000_100%)]" />
+  </div>
+);
+
+// --- 2. CYBER TARGET LOCK (RESPON INSTAN & TAJAM) ---
 const CyberLensHUD = ({ mouseX, mouseY }: { mouseX: any, mouseY: any }) => {
+  // Menggunakan spring yang sangat kuat agar responnya instan (tidak lambat)
+  const springX = useSpring(mouseX, { stiffness: 1000, damping: 40 });
+  const springY = useSpring(mouseY, { stiffness: 1000, damping: 40 });
+
   return (
     <motion.div 
-      // translateX: -160 memindahkan HUD ke sisi KIRI kursor agar tidak menabrak widget
-      style={{ x: mouseX, y: mouseY, translateX: -160, translateY: 20 }}
+      style={{ x: springX, y: springY, translateX: -100, translateY: -100 }}
       className="fixed top-0 left-0 z-[10000] pointer-events-none hidden lg:block"
     >
-      <div className="relative opacity-40 group-hover:opacity-100 transition-opacity duration-700">
+      <div className="relative w-40 h-40 flex items-center justify-center">
+        {/* Sudut Target (Siku-siku Digital) */}
+        <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-400/50" />
+        <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-cyan-400/50" />
+        <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-cyan-400/50" />
+        <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-cyan-400/50" />
         
-        {/* Lingkaran Bidik Tipis di Sisi Kiri */}
-        <div className="absolute -top-3 -right-3 w-6 h-6 border border-cyan-500/20 rounded-full animate-pulse" />
-        
-        {/* Box HUD - Diarahkan ke kiri dengan perataan teks kanan */}
-        <div className="bg-black/10 backdrop-blur-[2px] border-r-2 border-cyan-500/50 p-2 mr-4 space-y-1 text-right">
-           <div className="flex items-center justify-end gap-2">
-              <span className="text-[6px] font-mono text-cyan-400 uppercase tracking-[0.2em]">System Analyzing</span>
-              <div className="w-1 h-1 rounded-full bg-cyan-500" />
-           </div>
-           
-           <div className="text-[7px] font-mono text-white/50 leading-none space-y-0.5">
-              <p>STATUS: <span className="text-cyan-400">VERIFIED</span></p>
-              <p>ACCESS: <span className="text-emerald-500">GRANTED</span></p>
-              <p>ENCRYPTION: <span className="text-fuchsia-400">ACTIVE</span></p>
-           </div>
-
-           {/* Dekorasi Garis Data Bawah */}
-           <div className="flex justify-end pt-1">
-              <div className="w-8 h-[1px] bg-white/10" />
-           </div>
+        {/* Detail Data Mungil (Rata Kiri, No Underscore) */}
+        <div className="text-[7px] font-mono text-cyan-400/60 uppercase tracking-widest text-left space-y-1">
+          <p>System Scanning</p>
+          <p>Status: Active</p>
         </div>
-
       </div>
     </motion.div>
   );
@@ -1179,7 +1147,7 @@ export default function CyberLandingDark() {
   return (
     <div className="flex flex-col min-h-screen w-full bg-black text-slate-200 overflow-x-hidden selection:bg-cyan-500/30 relative">
       <PersistentUniverse bgIdx={bgIdx} />
-      <NeuralNetworkCanvas />
+      <CyberGridEngine />
       <UltraGodTierParticleSystem />
       <CyberLensHUD mouseX={mouseX} mouseY={mouseY} />
       <CyberIntelligenceHUD user={user} />
@@ -1872,6 +1840,11 @@ export default function CyberLandingDark() {
 
         .perspective-2000 {
           perspective: 2000px;
+        }
+        
+        @keyframes grid-run {
+          0% { background-position: 0 0; }
+          100% { background-position: 0 80px; }
         }
       `}} />
 
