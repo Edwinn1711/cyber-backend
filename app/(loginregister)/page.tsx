@@ -1151,44 +1151,42 @@ export default function CyberLandingDark() {
                </div>
             </div>
 
-            <nav className="hidden lg:flex flex-1 justify-center items-center gap-16 h-full">
-               {[
-                 { label: 'Beranda', id: 'hero', icon: Home, type: 'scroll' },
-                 { label: 'Profil', id: 'pilar', icon: Info, type: 'modal' },
-                 { label: 'Layanan', id: 'infra', icon: HelpCircle, type: 'modal' }
-               ].map((item) => {
-                 const isActive = activeSection === item.label;
-                 return (
-                   <button 
-                     key={item.label}
-                     onClick={() => {
-                        setActiveSection(item.label); // INI AGAR GARIS MENGIKUTI
-                        if (item.type === 'scroll') {
-                           scrollToSection('hero', 'Beranda');
-                        } else {
-                           setActiveModal(item.label.toUpperCase() as any);
-                        }
-                     }}
-                     className="relative flex flex-col items-center justify-center h-full group outline-none"
-                   >
-                     {/* Label & Ikon */}
-                     <div className={`flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.4em] transition-all duration-500 ${isActive ? 'text-cyan-400' : 'text-slate-500 group-hover:text-white'}`}>
-                        <item.icon size={14} className={isActive ? "text-cyan-400 animate-pulse" : "opacity-40 group-hover:opacity-100"} />
-                        {item.label}
-                     </div>
-
-                     {/* GARIS BAWAH (NAV-GLOW) - MELUNCUR KE SEMUA TOMBOL */}
-                     {isActive && (
-                       <motion.div 
-                         layoutId="active-nav-glow" // ID unik agar Framer Motion tahu ini garis yang sama
-                         className="absolute bottom-0 left-0 right-0 h-[3px] bg-cyan-400 rounded-t-full shadow-[0_-4px_20px_#22d3ee]"
-                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                       />
-                     )}
-                   </button>
-                 );
-               })}
-            </nav>
+            <nav className="hidden lg:flex flex-1 justify-center items-center gap-12 h-full">
+             {[ 
+               { label: 'Beranda', id: 'hero', icon: Home, type: 'scroll' }, 
+               { label: 'Tentang Kami', id: 'pilar', icon: Info, type: 'modal' }, 
+               { label: 'Layanan', id: 'infra', icon: HelpCircle, type: 'modal' } 
+             ].map((item, idx) => {
+               const isActive = activeSection === item.label;
+               return (
+                 <button 
+                    key={idx} 
+                    onClick={() => {
+                      setActiveSection(item.label);
+                      if (item.type === 'scroll') {
+                        scrollToSection(item.id, item.label);
+                      } else {
+                        // SINKRONISASI: Menggunakan 'TENTANG KAMI' agar modal terbuka
+                        const modalKey = item.label.toUpperCase();
+                        setActiveModal(modalKey as any);
+                      }
+                    }}
+                    className="relative flex flex-col items-center justify-center h-full px-2 group outline-none"
+                 >
+                    <div className={`flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-black transition-all duration-300 ${isActive ? 'text-cyan-400' : 'text-slate-500 group-hover:text-white'}`}>
+                      <item.icon size={15} className={isActive ? "text-cyan-400 animate-pulse" : "opacity-40 group-hover:opacity-100"} />
+                      {item.label}
+                    </div>
+                    {isActive && (
+                      <motion.div 
+                        layoutId="nav-glow" 
+                        className="absolute bottom-0 left-0 right-0 h-[3px] bg-cyan-400 rounded-t-full shadow-[0_-2px_10px_#22d3ee]" 
+                      />
+                    )}
+                 </button>
+               )
+             })}
+          </nav>
 
             {/* --- SISI KANAN: AUTH & STATUS --- */}
             <div className="flex items-center gap-6 relative z-10 shrink-0">
