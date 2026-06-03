@@ -1056,22 +1056,34 @@ const NeuralNetworkCanvas = () => {
 const CyberLensHUD = ({ mouseX, mouseY }: { mouseX: any, mouseY: any }) => {
   return (
     <motion.div 
-      style={{ x: mouseX, y: mouseY, translateX: 40, translateY: 40 }}
+      // translateX: -160 memindahkan HUD ke sisi KIRI kursor agar tidak menabrak widget
+      style={{ x: mouseX, y: mouseY, translateX: -160, translateY: 20 }}
       className="fixed top-0 left-0 z-[10000] pointer-events-none hidden lg:block"
     >
-      {/* Efek HUD yang sangat transparan agar tidak mengganggu pandangan */}
-      <div className="relative opacity-30 group-hover:opacity-100 transition-opacity duration-1000">
-        {/* Lingkaran Crosshair Halus */}
-        <div className="absolute -top-4 -left-4 w-8 h-8 border border-cyan-500/20 rounded-full animate-[spin_10s_linear_infinite]" />
+      <div className="relative opacity-40 group-hover:opacity-100 transition-opacity duration-700">
         
-        {/* Box Data Mungil ala Scouter */}
-        <div className="bg-black/10 backdrop-blur-[2px] border-l border-cyan-500/40 p-2 ml-4 space-y-1">
-           <div className="flex items-center gap-2">
-              <div className="w-1 h-1 rounded-full bg-cyan-500 shadow-[0_0_8px_cyan]" />
-              <span className="text-[6px] font-mono text-cyan-400 uppercase tracking-[0.2em]">Tracing</span>
+        {/* Lingkaran Bidik Tipis di Sisi Kiri */}
+        <div className="absolute -top-3 -right-3 w-6 h-6 border border-cyan-500/20 rounded-full animate-pulse" />
+        
+        {/* Box HUD - Diarahkan ke kiri dengan perataan teks kanan */}
+        <div className="bg-black/10 backdrop-blur-[2px] border-r-2 border-cyan-500/50 p-2 mr-4 space-y-1 text-right">
+           <div className="flex items-center justify-end gap-2">
+              <span className="text-[6px] font-mono text-cyan-400 uppercase tracking-[0.2em]">System Analyzing</span>
+              <div className="w-1 h-1 rounded-full bg-cyan-500" />
            </div>
-           <p className="text-[7px] font-mono text-white/40">AUTH: <span className="text-cyan-400">LEVEL_1</span></p>
+           
+           <div className="text-[7px] font-mono text-white/50 leading-none space-y-0.5">
+              <p>STATUS: <span className="text-cyan-400">VERIFIED</span></p>
+              <p>ACCESS: <span className="text-emerald-500">GRANTED</span></p>
+              <p>ENCRYPTION: <span className="text-fuchsia-400">ACTIVE</span></p>
+           </div>
+
+           {/* Dekorasi Garis Data Bawah */}
+           <div className="flex justify-end pt-1">
+              <div className="w-8 h-[1px] bg-white/10" />
+           </div>
         </div>
+
       </div>
     </motion.div>
   );
