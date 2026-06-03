@@ -453,7 +453,7 @@ const CyberInfrastructureSection = () => {
   return (
     <section id="infra" className="relative w-full min-h-screen flex flex-col items-center justify-center py-24 bg-black overflow-hidden border-b border-cyan-500/20 group/hacking">
       
-      {/* --- BACKGROUND VIDEO (TAJAM & SMOOTH) --- */}
+      {/* --- BACKGROUND VIDEO (TAJAM) --- */}
       <div className="absolute inset-0 z-0">
         <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60 pointer-events-none">
           <source src="/bg/hacking-bg.mp4" type="video/mp4" />
@@ -465,7 +465,7 @@ const CyberInfrastructureSection = () => {
       <div className="relative z-10 max-w-[1280px] mx-auto px-6 lg:px-10 w-full text-center">
         
         {/* HEADER SECTION */}
-        <div className="mb-16">
+        <div className="mb-20">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -479,37 +479,31 @@ const CyberInfrastructureSection = () => {
           </h2>
         </div>
 
-        {/* --- GRID 6 KOTAK (OPTIMASI FISIKA PEGAS) --- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* --- GRID 6 KOTAK (REVISI: SEJAJAR SEMPURNA) --- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
           {sectors.map((s, i) => (
             <motion.div 
               key={i} 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              // FISIKA PEGAS (SPRING): Kunci kelancaran Dewa
-              transition={{ 
-                type: "spring", 
-                stiffness: 400, // Sangat cepat merespons
-                damping: 30,    // Berhenti tanpa goyang berlebih
-                delay: i * 0.05 
-              }}
-              whileHover={{ 
-                y: -12, 
-                scale: 1.02,
-                transition: { type: "spring", stiffness: 500, damping: 25 } 
-              }}
-              className="group/card relative bg-[#050811]/60 backdrop-blur-2xl border border-white/5 p-10 rounded-[3rem] cursor-pointer overflow-hidden shadow-2xl hover:border-cyan-500/50"
-              style={{ willChange: "transform" }} // Optimasi GPU
+              transition={{ type: "spring", stiffness: 400, damping: 30, delay: i * 0.05 }}
+              whileHover={{ y: -12, scale: 1.02 }}
+              className="group/card relative bg-[#050811]/60 backdrop-blur-2xl border border-white/5 p-10 rounded-[3rem] cursor-pointer overflow-hidden shadow-2xl hover:border-cyan-500/50 flex flex-col h-full"
             >
-              {/* Scanner Laser (Dibuat sangat cepat & tipis) */}
+              {/* Efek Laser Scanner */}
               <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400/60 opacity-0 group-hover:opacity-100 animate-scanner z-20" />
               
-              {/* Ikon dengan Aura Neon */}
+              {/* Decorative HUD Corners */}
+              <div className="absolute top-8 left-8 w-5 h-5 border-t-2 border-l-2 border-cyan-500/20 group-hover:border-cyan-400/60 transition-colors" />
+              <div className="absolute bottom-8 right-8 w-5 h-5 border-b-2 border-r-2 border-cyan-500/20 group-hover:border-cyan-400/60 transition-colors" />
+
+              {/* Icon Area */}
               <div className="relative w-16 h-16 bg-cyan-950/40 border border-cyan-500/20 text-cyan-400 rounded-3xl flex items-center justify-center mb-8 mx-auto group-hover:scale-110 transition-transform duration-300">
                 <s.icon size={30} className="drop-shadow-[0_0_8px_currentColor]" />
               </div>
               
-              <div className="space-y-3">
+              {/* --- BAGIAN TENGAH (FLEX-1 MENDORONG FOOTER KE BAWAH) --- */}
+              <div className="space-y-3 flex-1">
                 <h3 className="text-xl font-black text-white uppercase tracking-widest group-hover:text-cyan-400 transition-colors">
                   {s.title}
                 </h3>
@@ -518,10 +512,13 @@ const CyberInfrastructureSection = () => {
                 </p>
               </div>
 
-              {/* Data Status HUD */}
-              <div className="mt-8 pt-4 border-t border-white/5 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
-                <span className="text-[7px] font-mono text-cyan-500 tracking-widest uppercase">{s.tag}</span>
-                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+              {/* --- FOOTER CARD (PASTI SEJAJAR SEMUA KOTAK) --- */}
+              <div className="mt-10 pt-6 border-t border-white/5 flex items-center justify-between opacity-40 group-hover:opacity-100 transition-all">
+                <span className="text-[9px] font-black text-cyan-400 tracking-[0.3em] uppercase">{s.tag}</span>
+                <div className="flex gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_#22d3ee]" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse delay-150" />
+                </div>
               </div>
             </motion.div>
           ))}
