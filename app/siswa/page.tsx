@@ -648,185 +648,144 @@ export default function StudentPortal() {
         <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
           <AnimatePresence mode="wait">
             
-            {/* VIEW DASHBOARD */}
-            {/* --- VIEW DASHBOARD: THE EXHIBITION MASTERPIECE (ULTRA LUXURY) --- */}
+{/* --- VIEW DASHBOARD: THE ARCTIC COMMAND CENTER (WHITE LUXURY VERSION) --- */}
 {view === 'dashboard' && (
   <motion.div 
-    key="dash" 
+    key="dash-light" 
     variants={containerVariants} 
     initial="hidden" 
     animate="show" 
     exit={{opacity:0, y:-10}} 
     className="max-w-[1400px] mx-auto space-y-12 pb-20"
   >
-    {/* --- 1. THE GOD-TIER TACTICAL BANNER (UKURAN OPTIMAL) --- */}
+    {/* --- 1. THE PRISTINE GLASS WELCOME BANNER --- */}
     <motion.div 
       variants={itemVariants}
-      className="relative p-10 lg:p-14 rounded-[4rem] bg-[#020205]/90 backdrop-blur-3xl border border-cyan-500/20 overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.9)] group"
+      className="relative p-10 lg:p-14 rounded-[3.5rem] bg-white/70 backdrop-blur-3xl border border-white shadow-[0_40px_100px_rgba(0,0,0,0.05)] overflow-hidden group mb-12"
     >
-       {/* Background Tech Elements */}
-       <div className="absolute inset-0 bg-hud-grid opacity-[0.04] pointer-events-none" />
+       {/* High-Tech Background Decor (Light Grid) */}
+       <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:40px_40px] opacity-20 pointer-events-none" />
        
-       {/* Scanner Laser (Efek Menyapu) */}
+       {/* Light Scanner Laser (Ice Blue) */}
        <motion.div 
          animate={{ top: ['-100%', '200%'] }}
-         transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-         className="absolute left-0 w-full h-[80px] bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent pointer-events-none z-10"
+         transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+         className="absolute left-0 w-full h-[100px] bg-gradient-to-b from-transparent via-cyan-400/10 to-transparent pointer-events-none z-10"
        />
 
-       <div className="relative z-20 flex flex-col lg:flex-row justify-between items-center gap-10">
-          {/* SISI KIRI: IDENTITY & AUTH */}
-          <div className="flex flex-col items-center lg:items-start space-y-7 w-full lg:w-2/3">
-             
-             {/* Status Badge (Tanpa Underline/Italic) */}
+       {/* Ambient Soft Glows */}
+       <div className="absolute -top-24 -right-24 w-96 h-96 bg-cyan-400/10 blur-[100px] rounded-full" />
+       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-fuchsia-400/5 blur-[100px] rounded-full" />
+
+       <div className="relative z-20 flex flex-col lg:flex-row justify-between items-center gap-12">
+          {/* Identity Section */}
+          <div className="flex flex-col items-center lg:items-start space-y-8 w-full lg:w-2/3 text-left">
              <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                <div className="px-5 py-2 rounded-xl bg-cyan-500/10 border border-cyan-400/30 flex items-center gap-3 shadow-[0_0_20px_rgba(34,211,238,0.1)]">
-                   <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]" />
-                   <span className="text-[10px] font-black text-cyan-400 tracking-[0.5em] uppercase">Uplink Confirmed</span>
+                <div className="px-5 py-2 rounded-xl bg-cyan-500/10 border border-cyan-200 text-cyan-600 text-[10px] font-black tracking-[0.5em] uppercase shadow-sm">
+                   Neural Uplink Confirmed
                 </div>
-                <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
-                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest font-mono">CODE:</span>
-                   <span className="text-[10px] font-black text-white tracking-widest font-mono uppercase">SEC-A1</span>
+                <div className="px-4 py-2 rounded-xl bg-slate-100 border border-slate-200 flex items-center gap-3">
+                   <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest font-mono">ENCRYPTION:</span>
+                   <span className="text-[10px] font-black text-slate-900 tracking-widest font-mono">AES-256</span>
                 </div>
              </div>
 
-             {/* Judul Utama (Ukuran 6xl - Pas & Mewah) */}
-             <div className="space-y-1">
-                <h1 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-none">
-                   WELCOME,
+             <div className="space-y-2">
+                <h1 className="text-4xl lg:text-7xl font-black text-slate-900 uppercase tracking-tighter leading-none">
+                   WELCOME, <br/>
+                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 animate-gradient-x">
+                     {user.username}
+                   </span>
                 </h1>
-                <h2 className="text-4xl lg:text-7xl font-black uppercase tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 animate-gradient-x drop-shadow-[0_0_25px_rgba(34,211,238,0.4)]">
-                   {user.username}
-                </h2>
              </div>
 
-             {/* Sub-Header HUD (Garis Samping, Bukan Garis Bawah) */}
-             <div className="flex flex-col sm:flex-row items-center gap-10 w-full">
-                <div className="flex items-center gap-4 border-l-2 border-cyan-500/50 pl-6 h-10">
-                   <p className="text-slate-400 text-[10px] lg:text-[12px] font-black tracking-[0.4em] uppercase opacity-80 leading-none">
+             <div className="flex items-center gap-6">
+                <div className="h-10 border-l-2 border-cyan-500 pl-6 flex flex-col justify-center">
+                   <p className="text-slate-500 text-[11px] lg:text-[13px] font-black tracking-[0.4em] uppercase opacity-80">
                       Integrated Cyber Readiness Control
                    </p>
                 </div>
-                
-                {/* Data Readout Sibuk (Khas Film Sci-Fi) */}
-                <div className="flex gap-8">
-                   <div className="flex flex-col">
-                      <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">Latency</span>
-                      <span className="text-[11px] font-black text-emerald-400 font-mono">0.002MS</span>
-                   </div>
-                   <div className="flex flex-col">
-                      <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">Sector</span>
-                      <span className="text-[11px] font-black text-cyan-400 font-mono uppercase">{user.class_name || "ALPHA"}</span>
-                   </div>
+                <div className="flex gap-6">
+                   <div className="flex flex-col"><span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Latency</span><span className="text-[11px] font-black text-emerald-500 font-mono">0.002MS</span></div>
+                   <div className="flex flex-col"><span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Sector</span><span className="text-[11px] font-black text-cyan-600 font-mono uppercase">{user.class_name || "BETA"}</span></div>
                 </div>
              </div>
           </div>
 
-          {/* SISI KANAN: HOLOGRAPHIC SPHERE (THE WAH FACTOR) */}
+          {/* Right Side: Ice Sphere Hologram */}
           <div className="relative w-full lg:w-1/3 flex items-center justify-center">
-             <div className="relative w-64 h-64 lg:w-80 lg:h-80 flex items-center justify-center">
-                {/* Orbital Rings */}
-                <div className="absolute inset-0 border border-cyan-500/10 rounded-full animate-[spin_40s_linear_infinite]" />
-                <div className="absolute inset-8 border border-dashed border-white/5 rounded-full animate-[spin_20s_linear_infinite_reverse]" />
-                
-                {/* Globe Central dengan Glow */}
-                <div className="relative z-10 p-10 bg-black/40 rounded-full border border-white/10 backdrop-blur-2xl shadow-[inner_0_0_50px_rgba(34,211,238,0.1)] group-hover:scale-110 transition-transform duration-1000">
-                   <Globe size={110} className="text-white/5 group-hover:text-cyan-400 transition-colors duration-1000" />
-                   {/* Laser Dot Orbit */}
-                   <motion.div animate={{ rotate: 360 }} transition={{ duration: 5, repeat: Infinity, ease: "linear" }} className="absolute inset-0">
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
+             <div className="relative w-64 h-64 lg:w-80 lg:h-80 flex items-center justify-center group-hover:scale-105 transition-transform duration-1000">
+                <div className="absolute inset-0 border-2 border-dashed border-slate-200 rounded-full animate-[spin_40s_linear_infinite]" />
+                <div className="absolute inset-8 border border-cyan-100 rounded-full animate-[spin_25s_linear_infinite_reverse]" />
+                <div className="relative z-10 p-10 bg-white border border-white shadow-2xl rounded-full">
+                   <Globe size={110} className="text-slate-100 group-hover:text-cyan-500 transition-colors duration-1000" />
+                   <motion.div animate={{ rotate: 360 }} transition={{ duration: 6, repeat: Infinity, ease: "linear" }} className="absolute inset-0">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-cyan-500 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.5)]" />
                    </motion.div>
                 </div>
              </div>
           </div>
        </div>
 
-       {/* Tactical Corner HUD (Glow Solid) */}
-       <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-cyan-500/40 rounded-tl-[3rem]" />
-       <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-cyan-500/40 rounded-tr-[3rem]" />
-       <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-cyan-500/40 rounded-bl-[3rem]" />
-       <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-cyan-500/40 rounded-br-[3rem]" />
+       {/* Symmetrical Glass Corners */}
+       <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-cyan-500/20 rounded-tl-[3.5rem]" />
+       <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-cyan-500/20 rounded-tr-[3.5rem]" />
+       <div className="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-cyan-500/20 rounded-bl-[3.5rem]" />
+       <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-cyan-500/20 rounded-br-[3.5rem]" />
     </motion.div>
 
-    {/* --- 2. GRID CARDS (STATISTIK DEWA) --- */}
+    {/* --- 2. THE CRYSTAL GRID CARDS --- */}
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-       {/* Profile Card */}
-       <motion.div variants={itemVariants} className="bg-black/60 backdrop-blur-3xl border border-white/5 p-10 rounded-[3rem] flex flex-col items-center text-center hover:border-fuchsia-500/40 transition-all shadow-2xl group relative overflow-hidden">
-          <div className="w-20 h-20 bg-gradient-to-b from-fuchsia-600 to-indigo-900 rounded-[2rem] flex items-center justify-center text-white border border-white/10 mb-8 shadow-2xl transform group-hover:rotate-12 transition-all">
+       {/* Operative Info */}
+       <motion.div variants={itemVariants} className="bg-white/80 border border-white rounded-[3rem] p-10 flex flex-col items-center text-center shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.08)] transition-all group">
+          <div className="w-20 h-20 bg-slate-900 rounded-[2rem] flex items-center justify-center text-white shadow-xl group-hover:rotate-6 transition-transform">
             <Fingerprint size={40} />
           </div>
-          <h4 className="text-2xl font-black text-white tracking-widest uppercase">{user.username}</h4>
-          <p className="text-[10px] text-fuchsia-400 font-black tracking-[0.5em] uppercase mt-4">{user.class_name || "ALPHA SECTOR"}</p>
+          <h4 className="text-2xl font-black text-slate-900 tracking-widest uppercase mt-8">{user.username}</h4>
+          <p className="text-[10px] text-cyan-600 font-black tracking-[0.5em] uppercase mt-4">{user.class_name || "RESEARCH SECTOR"}</p>
        </motion.div>
 
-       {/* Score Card (Radial Gauge) */}
-       <motion.div variants={itemVariants} className="bg-black/60 backdrop-blur-3xl border border-white/5 p-10 rounded-[3rem] flex flex-col items-center justify-center hover:border-cyan-500/40 transition-all shadow-2xl group relative">
-          <div className="relative mb-6 transform group-hover:scale-105 transition-all">
+       {/* Score Circle (Light Theme) */}
+       <motion.div variants={itemVariants} className="bg-white/80 border border-white rounded-[3rem] p-10 flex flex-col items-center justify-center shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.08)] transition-all">
+          <div className="relative mb-6">
             <svg className="w-40 h-40 transform -rotate-90">
-              <circle cx="80" cy="80" r="72" stroke="rgba(255,255,255,0.03)" strokeWidth="8" fill="transparent" />
-              <motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score / 100) * 452} 1000` }} transition={{ duration: 2.5 }} cx="80" cy="80" r="72" stroke="#22d3ee" strokeWidth="8" strokeLinecap="round" fill="transparent" style={{ filter: 'drop-shadow(0 0 15px #22d3ee)' }} />
+              <circle cx="80" cy="80" r="72" stroke="#f1f5f9" strokeWidth="8" fill="transparent" />
+              <motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score / 100) * 452} 1000` }} transition={{ duration: 3 }} cx="80" cy="80" r="72" stroke="#0ea5e9" strokeWidth="8" strokeLinecap="round" fill="transparent" />
             </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center"><span className="text-5xl font-black text-white tracking-tighter">{score}</span><span className="text-[8px] font-black text-slate-500 uppercase">Score</span></div>
+            <div className="absolute inset-0 flex flex-col items-center justify-center"><span className="text-5xl font-black text-slate-900 tracking-tighter">{score}</span><span className="text-[8px] font-black text-slate-400 uppercase">Index Score</span></div>
           </div>
-          <div className="px-8 py-2 rounded-full border border-cyan-500/30 text-[10px] font-black tracking-[0.3em] uppercase bg-black/40 text-cyan-400">{getReadinessData(score).label}</div>
+          <div className="px-8 py-2 rounded-full border border-cyan-100 bg-cyan-50 text-[10px] font-black tracking-[0.3em] uppercase text-cyan-600">{getReadinessData(score).label}</div>
        </motion.div>
 
-       {/* Matrix Card */}
-       <motion.div variants={itemVariants} className="bg-black/60 backdrop-blur-3xl border border-white/5 p-10 rounded-[3rem] hover:border-indigo-500/40 transition-all shadow-2xl flex flex-col justify-between group">
-          <p className="text-[10px] font-black text-slate-500 tracking-[0.4em] mb-10 uppercase flex items-center gap-3"><Activity size={16} className="text-indigo-500"/> Analytical Matrix</p>
-          <div className="space-y-6 font-mono text-[10px] tracking-[0.1em] text-slate-300">
-            <div className="flex justify-between border-white/5"><span>HOST_GATEWAY</span><span className="text-fuchsia-400 font-black">STABLE</span></div>
-            <div className="flex justify-between border-white/5"><span>SECURITY_AUTH</span><span className="text-emerald-500 font-black">VERIFIED</span></div>
-            <div className="flex justify-between"><span>DATABASE</span><span className="text-white font-black opacity-80">SYNC</span></div>
+       {/* Matrix (Clean & Minimalist) */}
+       <motion.div variants={itemVariants} className="bg-white/80 border border-white rounded-[3rem] p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.08)] transition-all group">
+          <p className="text-[10px] font-black text-slate-400 tracking-[0.4em] mb-10 uppercase flex items-center gap-3"><Activity size={16} className="text-blue-500" /> Analytical Matrix</p>
+          <div className="space-y-6 font-mono text-[11px] tracking-widest text-slate-600">
+            <div className="flex justify-between border-b border-slate-100 pb-4"><span>HOST_SYSTEM</span><span className="text-slate-900 font-black">STABLE</span></div>
+            <div className="flex justify-between border-b border-slate-100 pb-4"><span>AUTH_SECURITY</span><span className="text-cyan-600 font-black">VERIFIED</span></div>
+            <div className="flex justify-between"><span>CLOUD_DATA</span><span className="text-slate-400 font-black">SYNC</span></div>
           </div>
        </motion.div>
     </div>
 
-    {/* --- COMPACT TACTICAL GATEWAY (UKURAN OPTIMAL & NYAMAN) --- */}
-<motion.div 
-  variants={itemVariants} 
-  className="lg:col-span-3 bg-[#050505]/80 backdrop-blur-3xl border border-white/10 p-6 lg:p-10 rounded-[2.5rem] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8 shadow-[0_30px_80px_rgba(0,0,0,0.8)] group hover:border-cyan-500/30 transition-all duration-700"
->
-   {/* Background HUD Layers (Tetap Wah tapi Halus) */}
-   <div className="absolute inset-0 bg-hud-grid opacity-[0.05] pointer-events-none" />
-   <div className="absolute -top-16 -left-16 w-48 h-48 bg-cyan-600/5 blur-[80px] rounded-full" />
-   
-   <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-8 z-10 text-center lg:text-left">
-      {/* Icon Container: Diperkecil dari 20 ke 14 */}
-      <div className="w-14 h-14 lg:w-16 lg:h-16 bg-black/80 rounded-2xl flex items-center justify-center shrink-0 border border-white/10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-2xl">
-         <BellRing size={24} className="text-cyan-400" />
-      </div>
+    {/* --- 3. THE LUXURY WHITE MISSION BUTTON --- */}
+    <motion.div 
+      variants={itemVariants} 
+      className="bg-slate-900 p-8 lg:p-12 rounded-[3.5rem] flex flex-col lg:flex-row items-center justify-between gap-10 shadow-2xl relative overflow-hidden group"
+    >
+       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:100%_4px] opacity-10" />
+       
+       <div className="flex flex-col lg:flex-row items-center gap-8 z-10 text-center lg:text-left">
+          <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20"><BellRing size={32} className="text-white animate-pulse" /></div>
+          <div className="space-y-2">
+             <div className="flex items-center justify-center lg:justify-start gap-4"><div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399] animate-ping" /><span className="text-[11px] font-black tracking-[0.5em] text-emerald-400 uppercase">Operational: Online</span></div>
+             <h3 className="text-2xl lg:text-3xl font-black text-white uppercase tracking-tight">Assessment Gateway.</h3>
+             <p className="text-[10px] font-black text-slate-400 tracking-[0.3em] uppercase opacity-70">Luncurkan protokol keamanan siber untuk memvalidasi identitas operasional Anda.</p>
+          </div>
+       </div>
 
-      <div className="space-y-2">
-         {/* Status Badge: Diperkecil teksnya */}
-         <div className="flex items-center justify-center lg:justify-start gap-3">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse" />
-            <span className="text-[9px] font-black tracking-[0.4em] text-emerald-400 uppercase">Operational Status: Online</span>
-         </div>
-         
-         {/* Judul: Diperkecil dari 4xl ke 2xl agar nyaman */}
-         <h3 className="text-xl lg:text-2xl font-black text-white uppercase tracking-tight leading-tight">
-            ASSESSMENT GATEWAY.
-         </h3>
-         
-         {/* Deskripsi: Ukuran 10px sangat pas untuk log sistem */}
-         <p className="text-[10px] font-black text-slate-500 tracking-[0.3em] max-w-lg uppercase opacity-80 leading-relaxed mx-auto lg:mx-0">
-            Luncurkan protokol penilaian keamanan siber untuk memvalidasi identitas operasional Anda secara real-time.
-         </p>
-      </div>
-   </div>
-
-   {/* Button: Diperkecil padding-nya agar tidak raksasa */}
-   <button 
-     onClick={handleStartMissionClick} 
-     className="w-full lg:w-auto px-10 py-4 bg-white text-black rounded-2xl font-black text-[10px] tracking-[0.5em] hover:bg-cyan-500 hover:text-white transition-all duration-500 shadow-xl flex items-center justify-center gap-4 uppercase z-10 active:scale-95"
-   >
-      START PROTOCOL <Zap size={18} />
-   </button>
-
-   {/* Subtle Scanline Overlay */}
-   <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.05)_50%)] bg-[length:100%_2px] pointer-events-none opacity-20" />
-</motion.div>
+       <button onClick={handleStartMissionClick} className="px-14 py-6 bg-white text-slate-900 rounded-[2.5rem] font-black text-[11px] tracking-[0.5em] hover:bg-cyan-500 hover:text-white transition-all duration-500 uppercase shadow-xl flex items-center gap-5">START PROTOCOL <Zap size={18} /></button>
+    </motion.div>
   </motion.div>
 )}
 
