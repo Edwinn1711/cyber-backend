@@ -604,6 +604,33 @@ const currentStepQs = useMemo(() => {
   if (!isAuthorized) return null;
 
 
+  const isStepComplete = useMemo(() => {
+    // Mengecek apakah semua soal di fase (step) saat ini sudah dijawab
+    return currentStepQs.length > 0 && currentStepQs.every(q => ans[q.id] !== undefined);
+  }, [currentStepQs, ans]);
+
+  // --- TARUH INI DI DALAM StudentPortal, DI ATAS RETURN ---
+const maxStep = useMemo(() => {
+  // 1. Jika data soal belum ada, anggap step maksimal adalah 0
+  if (!allQs || allQs.length === 0 || !selectedDomain) return 0;
+
+  // 2. Ambil soal yang hanya untuk domain yang sedang dikerjakan
+  const domainQs = allQs.filter(q => 
+    q.main_domain?.toLowerCase().trim() === selectedDomain.toLowerCase().trim()
+  );
+
+  if (domainQs.length === 0) return 0;
+
+  // 3. Cari angka paling tinggi dari properti 'type' (contoh: 'step3' -> ambil angka 3)
+  const steps = domainQs.map(q => {
+    const num = parseInt((q.type || "").replace(/\D/g, ''));
+    return isNaN(num) ? 0 : num;
+  });
+
+  // 4. Kembalikan angka tertinggi sebagai maxStep
+  return Math.max(...steps);
+}, [allQs, selectedDomain]);
+
   const CyberSentinel = ({ username = "OPERATIVE" }) => {
     const [message, setMessage] = useState("");
     const [fullMessage, setFullMessage] = useState("INITIALIZING...");
@@ -1236,57 +1263,88 @@ const currentStepQs = useMemo(() => {
   </motion.div>
 )}
 
-{view === 'mission' && (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto space-y-12 pb-44">
-    
-    {/* HEADER PHASE */}
-    <div className="border-b border-white/10 pb-8 space-y-2">
-       <h2 className="text-5xl font-black text-white uppercase tracking-tighter">PHASE 0{currentStep}</h2>
-       <p className="text-fuchsia-500 font-black tracking-widest text-[10px] uppercase">OPERATIONAL DOMAIN: {selectedDomain}</p>
-    </div>
+{/* --- 3. THE TACTICAL NAVIGATION DOCK (FLOATING & ALWAYS VISIBLE) --- */}
+<div className="fixed bottom-0 left-0 lg:left-[260px] right-0 z-[1000] p-6 lg:p-10 pointer-events-none">
+   <motion.div 
+     initial={{ y: 100, opacity: 0 }}
+     animate={{ y: 0, opacity: 1 }}
+     transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.5 }}
+     className="max-w-4xl mx-auto bg-[#050508]/80 backdrop-blur-3xl border border-white/10 p-5 lg:p-7 rounded-[2.5rem] shadow-[0_-20px_80px_rgba(0,0,0,0.8)] flex items-center justify-between gap-6 pointer-events-auto relative overflow-hidden"
+   >
+      {/* Laser Top Line Decor */}
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-fuchsia-500/40 to-transparent animate-pulse" />
 
-    {/* LOOPING SOAL: INI YANG BIKIN SOAL MUNCUL */}
-    <div className="space-y-10">
-      {currentStepQs.length > 0 ? (
-        currentStepQs.map((q) => (
-          <div key={q.id} className="p-10 rounded-[3rem] bg-black/60 border border-white/10 shadow-2xl relative overflow-hidden transition-all hover:border-fuchsia-500/40">
-             <div className="absolute top-0 left-0 w-2 h-full bg-fuchsia-600 shadow-[0_0_20px_#d946ef]" />
-             
-             {/* Teks Pertanyaan */}
-             <h4 className="text-2xl font-bold text-white leading-snug mb-10">
-                {q.text}
-             </h4>
+      {/* SISI KIRI: Real-time Phase Progress (Wah Factor) */}
+      <div className="hidden md:flex items-center gap-6 pl-4 border-r border-white/10 pr-8">
+         <div className="flex flex-col gap-1">
+            <span className="text-[7px] font-black text-slate-500 uppercase tracking-[0.4em]">Mission Progress</span>
+            <div className="flex items-center gap-3">
+               <span className="text-xl font-black text-white font-mono leading-none">0{currentStep}</span>
+               <div className="w-24 h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(currentStep / maxStep) * 100}%` }}
+                    className="h-full bg-gradient-to-r from-fuchsia-600 to-indigo-600 shadow-[0_0_12px_#d946ef]" 
+                  />
+               </div>
+               <span className="text-[9px] font-black text-slate-600 font-mono">0{maxStep}</span>
+            </div>
+         </div>
+      </div>
 
-             {/* Temukan bagian ini di dalam view === 'mission' */}
-<div className="grid grid-cols-1 gap-5">
-  {((q.options as any[]) || []).map((opt: any, i: number) => (
-    <button 
-      key={i} 
-      onClick={() => setAns({...ans, [q.id]: {score: opt.score, text: opt.text}})}
-      className={`group/opt p-8 rounded-[2.5rem] text-left transition-all border-2 text-[12px] font-black tracking-[0.1em] uppercase flex items-center justify-between gap-6 ${ans[q.id]?.text === opt.text ? 'bg-fuchsia-600/20 border-fuchsia-500 text-white shadow-[0_0_30px_rgba(217,70,239,0.2)]' : 'bg-white/5 border-white/5 text-slate-400 hover:border-white/20'}`}
-    >
-       <div className="flex items-center gap-8">
-          <div className={`w-6 h-6 rounded-full border-[3px] flex items-center justify-center shrink-0 transition-all ${ans[q.id]?.text === opt.text ? 'border-fuchsia-400 scale-110 shadow-[0_0_15px_#d946ef]' : 'border-slate-800'}`}>
-             {ans[q.id]?.text === opt.text && <div className="w-2.5 h-2.5 bg-fuchsia-400 rounded-full animate-pulse" />}
-          </div>
-          <span className="leading-relaxed">{opt.text}</span>
-       </div>
-       <ChevronRight size={18} className={`opacity-0 group-hover/opt:opacity-100 group-hover/opt:translate-x-2 transition-all ${ans[q.id]?.text === opt.text ? 'opacity-100 text-fuchsia-400' : ''}`} />
-    </button>
-  ))}
-</div>
-          </div>
-        ))
-      ) : (
-        // JIKA SOAL TIDAK DITEMUKAN / SEDANG LOADING
-        <div className="text-center py-20">
-           <div className="w-12 h-12 border-4 border-fuchsia-500 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
-           <p className="text-slate-500 font-black text-[10px] tracking-widest uppercase animate-pulse">Syncing Tactical Data Questions...</p>
-        </div>
-      )}
-    </div>
-  </motion.div>
+      {/* SISI KANAN: Action Controls */}
+      <div className="flex items-center gap-4 flex-1 justify-end">
+         
+         {/* Tombol Back (Hanya muncul jika di Phase > 1) */}
+         {currentStep > 1 && (
+           <button 
+             onClick={() => {
+                setCurrentStep(p => p - 1);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+             }}
+             className="px-8 py-4 bg-white/5 border border-white/10 text-slate-400 rounded-2xl font-black text-[9px] tracking-widest uppercase hover:text-white hover:bg-white/10 transition-all flex items-center gap-3 active:scale-95"
+           >
+              <ChevronLeft size={16} /> Back
+           </button>
+         )}
+
+{currentStep < maxStep ? (
+  <button 
+    disabled={!isStepComplete} // Tombol mati jika BELUM lengkap
+    onClick={() => {
+       setCurrentStep(p => p + 1);
+       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }} 
+    className={`group/next relative overflow-hidden px-10 py-4 lg:px-14 lg:py-5 rounded-2xl font-black text-[10px] lg:text-[11px] tracking-[0.4em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-fuchsia-600 text-white shadow-[0_0_40px_rgba(217,70,239,0.4)] hover:bg-fuchsia-500' : 'bg-white/5 text-slate-700 cursor-not-allowed opacity-40'}`}
+  >
+     <span className="relative z-10">Next Phase</span>
+     <ChevronRight size={18} className="relative z-10 group-hover/next:translate-x-1 transition-transform" />
+     {/* Flare Effect (The "Wah" Element) */}
+     {isStepComplete && (
+       <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:left-[100%] transition-all duration-1000" />
+     )}
+  </button>
+) : (
+  <button 
+    disabled={!isStepComplete || loading} 
+    onClick={executeUplink} 
+    className={`group/submit relative overflow-hidden px-10 py-4 lg:px-14 lg:py-5 rounded-2xl font-black text-[10px] lg:text-[11px] tracking-[0.4em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-fuchsia-500 text-white shadow-[0_0_50px_rgba(217,70,239,0.5)]' : 'bg-white/5 text-slate-700 cursor-not-allowed opacity-40'}`}
+  >
+     <span className="relative z-10">{loading ? "Synchronizing..." : "Submit Assessment"}</span>
+     <Zap size={20} className={`relative z-10 ${loading ? 'animate-spin' : 'group-hover/submit:rotate-12'} transition-transform`} />
+     {/* Flare Effect */}
+     {isStepComplete && (
+       <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:left-[100%] transition-all duration-1000" />
+     )}
+  </button>
 )}
+      </div>
+
+      {/* Tactical Corner HUD (Siku-siku mini) */}
+      <div className="absolute top-3 left-3 w-4 h-4 border-t border-l border-white/10 pointer-events-none" />
+      <div className="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-white/10 pointer-events-none" />
+   </motion.div>
+</div>
 
 {/* --- VIEW FEEDBACK: NEXUS INTELLIGENCE REPORT (COMPACT & ELITE) --- */}
 {view === 'feedback' && (
@@ -1373,93 +1431,110 @@ const currentStepQs = useMemo(() => {
   </motion.div>
 )}
 
-{/* --- VIEW ASSESSMENT: TACTICAL MISSION SELECTION (DOWNSIZED & ULTRA WAH) --- */}
+{/* --- VIEW ASSESSMENT: TACTICAL MISSION HUB (COMPACT ELITE VERSION) --- */}
 {view === 'assessment' && (
   <motion.div 
     key="assess-hub" 
     initial={{ opacity: 0, y: 20 }} 
     animate={{ opacity: 1, y: 0 }} 
-    exit={{ opacity: 0 }} 
-    className="max-w-[1200px] mx-auto space-y-12 py-8"
+    exit={{ opacity: 0, scale: 0.95 }} 
+    className="max-w-[1100px] mx-auto space-y-10 py-6"
   >
     
-    {/* 1. COMPACT HEADER SECTION */}
-    <div className="text-center space-y-4 relative">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-cyan-500/5 blur-[100px] pointer-events-none" />
+    {/* 1. COMPACT TACTICAL HEADER */}
+    <div className="text-center space-y-3 relative">
+      {/* Glow Ambient di belakang Judul */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-32 bg-cyan-500/10 blur-[80px] pointer-events-none" />
+      
       <motion.div 
         initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-        className="inline-flex items-center gap-3 px-5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-cyan-400 text-[8px] font-black tracking-[0.5em] uppercase backdrop-blur-xl"
+        className="inline-flex items-center gap-3 px-4 py-1.5 rounded-lg bg-[#0a0c14] border border-white/10 text-cyan-400 text-[8px] font-black tracking-[0.5em] uppercase shadow-2xl"
       >
-        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
-        Tactical Deployment Hub
+        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-ping shadow-[0_0_8px_#22d3ee]" />
+        Mission Deployment Sector
       </motion.div>
-      <h2 className="text-4xl lg:text-6xl font-black text-white tracking-tighter uppercase leading-none">
+
+      <h2 className="text-3xl lg:text-5xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
         TARGET <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 animate-gradient-x">DOMAINS</span>
       </h2>
     </div>
 
-    {/* 2. GRID MISSIONS (SMALLER, DENSER, MORE WAH) */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pb-20 px-4">
+    {/* 2. GRID MISSIONS (SLEEK & DENSE) */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pb-20 px-6">
       {TACTICAL_DOMAINS.map((domain, i) => (
         <motion.div 
           key={i}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.1 }}
-          whileHover={{ y: -10, scale: 1.02 }}
+          transition={{ delay: i * 0.1, type: "spring", stiffness: 300, damping: 25 }}
+          whileHover={{ y: -8, scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => { setSelectedDomain(domain.id); setView('briefing'); }}
-          className="group relative bg-[#050811]/40 backdrop-blur-3xl border border-white/5 p-8 rounded-[2.5rem] cursor-pointer overflow-hidden transition-all duration-500 shadow-2xl hover:border-cyan-500/40"
+          className="group relative bg-[#05060b]/80 backdrop-blur-3xl border border-white/5 p-7 rounded-[2.5rem] cursor-pointer overflow-hidden transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-cyan-500/40 hover:shadow-[0_0_40px_rgba(34,211,238,0.15)]"
         >
-          {/* --- HOLOGRAPHIC TECH LAYERS --- */}
-          <div className="absolute inset-0 bg-hud-grid opacity-[0.03] group-hover:opacity-[0.08] transition-opacity" />
+          {/* --- HOLOGRAPHIC LAYERS --- */}
+          <div className="absolute inset-0 bg-hud-grid opacity-[0.03] group-hover:opacity-[0.1] transition-opacity duration-700" />
           
-          {/* Laser Scanner Line (Horizontal) */}
-          <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400 shadow-[0_0_20px_#22d3ee] animate-scanner opacity-0 group-hover:opacity-100" />
+          {/* Garis Scanner Tipis yang Terus Berjalan */}
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400 shadow-[0_0_15px_#22d3ee] animate-scanner opacity-0 group-hover:opacity-100 z-20" />
 
-          {/* Crosshair Corners (Siku-siku Taktis) */}
-          <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-white/20 group-hover:border-cyan-500/50 transition-colors" />
-          <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-white/20 group-hover:border-cyan-500/50 transition-colors" />
+          {/* Siku-siku Digital di Pojok Kartu */}
+          <div className="absolute top-5 left-5 w-4 h-4 border-t-2 border-l-2 border-white/10 group-hover:border-cyan-500/50 transition-all duration-500" />
+          <div className="absolute bottom-5 right-5 w-4 h-4 border-b-2 border-r-2 border-white/10 group-hover:border-cyan-500/50 transition-all duration-500" />
 
-          {/* Content */}
-          <div className="relative z-10 flex flex-col h-full">
-            <div className="flex justify-between items-start mb-10">
+          {/* Isi Konten (Kompak) */}
+          <div className="relative z-10 flex flex-col h-full space-y-8">
+            <div className="flex justify-between items-start">
                <div className="space-y-1">
-                  <p className="text-[8px] font-black text-slate-500 tracking-[0.3em] uppercase">{domain.label}</p>
                   <div className="flex items-center gap-2">
                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
-                     <span className="text-[7px] font-black text-emerald-400 tracking-[0.3em] uppercase">LINK ACTIVE</span>
+                     <span className="text-[7px] font-black text-emerald-400 tracking-[0.4em] uppercase">LINK_SYNCED</span>
                   </div>
+                  <p className="text-[8px] font-black text-slate-600 tracking-[0.3em] uppercase">{domain.label}</p>
                </div>
-               <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-cyan-500 group-hover:text-black shadow-inner">
-                  <domain.icon size={22} className="group-hover:drop-shadow-[0_0_8px_white]" />
+               {/* Icon dengan Pendaran */}
+               <div className="relative">
+                  <div className="absolute inset-0 bg-white/5 blur-xl rounded-full scale-150 group-hover:bg-cyan-500/10 transition-colors" />
+                  <div className="relative w-11 h-11 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-black group-hover:scale-110 shadow-inner">
+                     <domain.icon size={20} className="group-hover:text-cyan-400 transition-colors" />
+                  </div>
                </div>
             </div>
 
-            <div className="space-y-4 flex-1">
-               <h3 className="text-xl lg:text-2xl font-black text-white leading-tight tracking-tighter uppercase group-hover:text-cyan-400 transition-colors">
+            <div className="space-y-3">
+               <h3 className="text-lg lg:text-xl font-black text-white leading-none tracking-tighter uppercase group-hover:text-cyan-400 transition-colors duration-500">
                  {domain.title}
                </h3>
-               <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] leading-relaxed opacity-80">
+               {/* Deskripsi - Ukuran diperkecil agar elegan */}
+               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.15em] leading-relaxed opacity-70 group-hover:opacity-100 transition-opacity">
                  {domain.desc}
                </p>
             </div>
 
-            {/* Micro-Data Readout (Detail Wah) */}
-            <div className="mt-10 pt-6 border-t border-white/5 flex justify-between items-center opacity-20 group-hover:opacity-100 transition-all duration-700">
-               <div className="flex flex-col gap-1">
-                  <span className="text-[6px] font-black text-slate-600 uppercase tracking-widest">Protocol Index</span>
-                  <span className="text-[9px] font-black text-white font-mono uppercase">SEC ALPHA 01</span>
+            {/* Footer Kartu (Micro Data) */}
+            <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+               <div className="flex flex-col">
+                  <span className="text-[6px] font-mono text-slate-700 uppercase tracking-widest">Protocol Index</span>
+                  <span className="text-[9px] font-black text-white font-mono uppercase tracking-widest">SEC_A1</span>
                </div>
-               <div className="flex items-center gap-3">
-                  <span className="text-[9px] font-black text-cyan-400 tracking-widest uppercase">Select</span>
-                  <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:bg-cyan-500 group-hover:text-black transition-all shadow-lg">
+               <div className="flex items-center gap-3 text-cyan-400 group-hover:text-white transition-all duration-300">
+                  <span className="text-[9px] font-black tracking-[0.5em] uppercase">INIT</span>
+                  <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:bg-cyan-500 group-hover:text-black transition-all shadow-xl">
                      <ArrowRight size={14} />
                   </div>
                </div>
             </div>
           </div>
+
+          {/* Efek Flare yang bergerak saat di-hover */}
+          <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/[0.03] to-transparent skew-x-[-25deg] group-hover:left-[100%] transition-all duration-1000 ease-in-out pointer-events-none" />
         </motion.div>
       ))}
+    </div>
+
+    {/* Metadata Footer Hub (Kecil di bawah) */}
+    <div className="flex justify-center items-center gap-10 opacity-20 pointer-events-none">
+       <span className="text-[7px] font-mono text-slate-500 tracking-[1em] uppercase">Secure Deployment Channel Enabled</span>
     </div>
   </motion.div>
 )}
