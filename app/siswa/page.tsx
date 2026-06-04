@@ -412,12 +412,6 @@ const NeonCursor = () => {
   );
 };
 
-const CRTOverlay = () => (
-  <div className="pointer-events-none fixed inset-0 z-[99998] opacity-[0.03]">
-    <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]" />
-  </div>
-);
-
 // TEMPELKAN INI DI ATAS BARIS 422 (DI LUAR StudentPortal)
 const CyberSentinel = ({ username = "OPERATIVE" }) => {
   const [message, setMessage] = useState("");
@@ -492,34 +486,11 @@ const CyberSentinel = ({ username = "OPERATIVE" }) => {
   );
 };
 
-export default function StudentPortal() {
-  const router = useRouter();
-
-  // 1. Semua useState
-  const [mounted, setMounted] = useState(false);
-  const [bootDone, setBootDone] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isCalculating, setIsCalculating] = useState(false);
-  const [theme, setTheme] = useState('dark');
-
-  const [view, setView] = useState('dashboard'); 
-  const [currentStep, setCurrentStep] = useState(1); 
-  const [selectedDomain, setSelectedDomain] = useState("SOCIAL ENGINEERING");
-  const [allQs, setAllQs] = useState<any[]>([]);
-  const [ans, setAns] = useState<Record<number, {score: number, text: string}>>({});
-  const [score, setScore] = useState(0);
-  const [history, setHistory] = useState<any[]>([]);
-  const [user, setUser] = useState({ username: 'STUDENT', class_name: '', tanggal_lahir: '' });
-  const [loading, setLoading] = useState(false);
-  const [bgIdx, setBgIdx] = useState(0);
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState('SUBMIT ASSESSMENT');
-  const [detailModal, setDetailModal] = useState<any>(null);
-  const [showClassSelector, setShowClassSelector] = useState(false);
-  const [appFeedbackModal, setAppFeedbackModal] = useState(false);
-  const [appFeedbackForm, setAppFeedbackForm] = useState({ category: 'AI ENHANCEMENT', message: '' });
-  const [isSendingFeedback, setIsSendingFeedback] = useState(false);
+const CRTOverlay = () => (
+  <div className="pointer-events-none fixed inset-0 z-[99998] opacity-[0.03]">
+    <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]" />
+  </div>
+);
 
 
   export default function StudentPortal() {
@@ -678,9 +649,13 @@ export default function StudentPortal() {
     if (!mounted) return <div className="bg-black h-screen w-full" />;
     if (!isAuthorized) return null;
     if (!bootDone) {
-      return <AnimatePresence><CyberBootSequence onComplete={() => setBootDone(true)} /></AnimatePresence>;
+      return (
+        <AnimatePresence>
+          <CyberBootSequence onComplete={() => setBootDone(true)} />
+        </AnimatePresence>
+      );
     }
-  
+    
     // --- 6. RENDER UTAMA ---
     return (
       <div className="flex h-screen w-full bg-[#020105] text-slate-100 overflow-hidden font-sans relative selection:bg-cyan-500/30">
