@@ -317,38 +317,39 @@ const SmoothAnimatedText = ({ text }: { text: string }) => {
 };
 
 const CyberLetterReveal = ({ text, className }: { text: string, className: string }) => {
-  const letters = Array.from(text);
-
-  // Tambahkan ': any' agar TypeScript tidak cerewet saat build di Vercel
-  const container: any = {
+  // Jika teks kosong, jangan biarkan kosong total biar tidak nampak hancur
+  const content = text || "OPERATIVE"; 
+  const letters = Array.from(content);
+  
+  const container = {
     hidden: { opacity: 0 },
-    visible: (i = 1) => ({
+    visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.03, delayChildren: 0.05 * i },
-    }),
+      transition: { staggerChildren: 0.03, delayChildren: 0.2 },
+    },
   };
 
-  // Tambahkan ': any' di sini juga untuk memperbaiki error 'AnimationGeneratorType'
-  const child: any = {
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      filter: "blur(0px)", 
-      transition: { 
-        type: "spring", 
-        damping: 12, 
-        stiffness: 200 
-      } 
+  const child = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: { type: "spring", damping: 12, stiffness: 200 },
     },
-    hidden: { 
-      opacity: 0, 
-      y: 15, 
-      filter: "blur(8px)" 
+    hidden: {
+      opacity: 0,
+      y: 15,
+      filter: "blur(10px)",
     },
   };
 
   return (
-    <motion.div variants={container} initial="hidden" animate="visible" className={`flex flex-wrap ${className}`}>
+    <motion.div 
+      variants={container} 
+      initial="hidden" 
+      animate="visible" 
+      className={`flex flex-wrap ${className}`}
+    >
       {letters.map((letter, index) => (
         <motion.span variants={child} key={index}>
           {letter === " " ? "\u00A0" : letter}
@@ -778,23 +779,33 @@ export default function StudentPortal() {
           </div>
           
           <div className="space-y-4 relative">
-            <div className="h-8 lg:h-12 overflow-hidden">
-               <CyberLetterReveal 
-                 text="WELCOME," 
-                 className="text-2xl lg:text-4xl font-black text-white uppercase tracking-[0.3em] opacity-30" 
-               />
-            </div>
+  {/* TEKS WELCOME - Selalu nampak */}
+  <div className="h-8 lg:h-12 overflow-hidden">
+     <CyberLetterReveal 
+       text="WELCOME," 
+       className="text-2xl lg:text-4xl font-black text-white uppercase tracking-[0.3em] opacity-30" 
+     />
+  </div>
 
+            {/* TEKS USERNAME - Versi Anti-Gagal */}
             <div className="relative">
               <div className="text-5xl lg:text-9xl font-black uppercase tracking-tighter leading-none relative z-10">
-                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 animate-gradient-x bg-[length:200%_200%] drop-shadow-[0_0_20px_rgba(34,211,238,0.4)]">
+                {/* Kita pakai warna putih dulu sebagai dasar, lalu kita timpa gradient */}
+                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">
                     <CyberLetterReveal text={user.username} className="" />
-                 </span>
+                </span>
               </div>
-              <motion.div animate={{ opacity: [0.1, 0.3, 0.1], scale: [1, 1.02, 1] }} transition={{ duration: 5, repeat: Infinity }} className="absolute inset-0 z-0 blur-[40px] pointer-events-none select-none">
-                <span className="text-5xl lg:text-8xl font-black uppercase tracking-tighter leading-none text-cyan-500/20">{user.username}</span>
+
+              {/* EFEK GLOW DI BELAKANG (Agar meskipun gradient gagal, teks tetap nampak bayangannya) */}
+              <motion.div 
+                animate={{ opacity: [0.2, 0.4, 0.2] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="absolute inset-0 z-0 blur-[50px] pointer-events-none"
+              >
+                <span className="text-5xl lg:text-9xl font-black uppercase tracking-tighter text-cyan-500/20">
+                  {user.username || "OPERATIVE"}
+                </span>
               </motion.div>
-              <motion.div animate={{ left: ["-100%", "200%"] }} transition={{ duration: 3, repeat: Infinity, repeatDelay: 5 }} className="absolute top-0 bottom-0 w-40 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] z-20 pointer-events-none" />
             </div>
           </div>
           
@@ -1195,6 +1206,21 @@ export default function StudentPortal() {
         color-scheme: ${theme === 'dark' ? 'dark' : 'light'};
         }
         
+        .bg-clip-text {
+          -webkit-background-clip: text;
+          background-clip: text;
+        }
+
+        /* Pastikan animasi gradient-x terdaftar */
+        @keyframes gradient-x {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-x {
+          background-size: 200% 200%;
+          animation: gradient-x 5s ease infinite;
+        }
       `}} />
     </div>
   );
