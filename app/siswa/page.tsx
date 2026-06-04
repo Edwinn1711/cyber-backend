@@ -396,9 +396,11 @@ const CyberContinuousDecryption = ({ text }: { text: string }) => {
 
 export default function StudentPortal() {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [theme, setTheme] = useState('dark');
+  
 
 
   // States
@@ -421,25 +423,78 @@ export default function StudentPortal() {
   const [appFeedbackForm, setAppFeedbackForm] = useState({ category: 'AI ENHANCEMENT', message: '' });
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
-  // --- TARUH INI DI DALAM StudentPortal, DI ATAS RETURN ---
+
+// --- 1. FUNGSI AMBIL SKOR (DEFINISIKAN DULU) ---
+const fetchScores = useCallback(async (username: string) => {
+  try {
+    const res = await fetch(`https://cyber-backend-delta.vercel.app/siswa/scores/${username}`);
+    const data = await res.json();
+    if (Array.isArray(data) && data.length > 0) {
+      // Menghitung rata-rata skor secara real-time
+      const total = data.reduce((acc, curr: any) => acc + curr.score, 0);
+      setScore(Math.round(total / data.length));
+      setHistory(data);
+    }
+  } catch (e) { 
+    console.error("Gagal sinkronisasi skor:", e); 
+  }
+}, []);
+
+// --- 2. EFFECT UTAMA: OTENTIKASI & MOUNTED ---
+useEffect(() => {
+  // Menghilangkan layar putih
+  setMounted(true); 
+
+  const saved = localStorage.getItem('user');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      setUser(parsed);
+      setIsAuthorized(true);
+      // Memanggil fetchScores yang sudah didefinisikan di atas
+      if (parsed.username) fetchScores(parsed.username);
+    } catch (e) {
+      console.error("Data sesi korup");
+      router.push('/');
+    }
+  } else {
+    router.push('/');
+  }
+}, [router, fetchScores]);
+
+// --- 3. EFFECT AMBIL SOAL (SAAT SUDAH LOGGED IN) ---
+useEffect(() => {
+  if (isAuthorized) {
+    fetch('https://cyber-backend-delta.vercel.app/questions')
+      .then(res => res.json())
+      .then((data: any[]) => {
+        const cleanData = data.map((q: any) => ({
+          ...q,
+          // Parsing pilihan jawaban secara aman
+          options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
+        }));
+        setAllQs(cleanData);
+      })
+      .catch(err => console.error("Uplink Error:", err));
+  }
+}, [isAuthorized]);
+
+// --- 4. DATA RADAR (VISUALISASI DEWA LEVEL) ---
 const radarData = useMemo(() => {
-  // Daftar sektor yang akan ditampilkan di grafik radar (Tampilan Premium)
+  // Label yang sangat keren dan profesional untuk pameran
   const sectors = [
-    { key: "Social", label: "SOCIAL" },
-    { key: "Malware", label: "MALWARE" },
-    { key: "Phishing", label: "PHISHING" },
-    { key: "Network", label: "NETWORK" },
-    { key: "Threat", label: "THREAT" },
-    { key: "Access", label: "ACCESS" }
+    { key: "Social", label: "PSYCHOLOGICAL" },
+    { key: "Malware", label: "NEURAL VIRUS" },
+    { key: "Phishing", label: "CREDENTIAL" },
+    { key: "Network", label: "INFRASTRUCTURE" },
+    { key: "Threat", label: "INTEL" },
+    { key: "Access", label: "PERIMETER" }
   ];
 
   return sectors.map(s => {
-    // Mencari skor terakhir dari history untuk tiap sektor
-    // history dicheck apakah ada isinya agar tidak error (fallback ke 0)
     const entry = (history || []).find((h: any) => 
       String(h.domain_id || "").toLowerCase().includes(s.key.toLowerCase())
     );
-    
     return { 
       subject: s.label, 
       A: entry ? entry.score : 0, 
@@ -448,40 +503,13 @@ const radarData = useMemo(() => {
   });
 }, [history]);
 
-  // Greeting Logic
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "GOOD MORNING";
-    if (hour < 17) return "GOOD AFTERNOON";
-    return "GOOD EVENING";
-  };
-
-  const fetchScores = useCallback(async (username: string) => {
-    try {
-      const res = await fetch(`https://cyber-backend-delta.vercel.app/siswa/scores/${username}`);
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        setScore(Math.round(data.reduce((acc, curr: any) => acc + curr.score, 0) / data.length));
-        setHistory(data);
-      }
-    } catch (e) { console.error(e); }
-  }, []);
-
-  useEffect(() => {
-    if (isAuthorized) {
-      fetch('https://cyber-backend-delta.vercel.app/questions')
-        .then(res => res.json())
-        .then((data: any[]) => { // Beri tipe : any[] agar 'q' tidak merah
-          const cleanData = data.map((q: any) => ({
-            ...q,
-            // Pastikan parsing JSON aman
-            options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
-          }));
-          setAllQs(cleanData);
-        })
-        .catch(err => console.error("Uplink Error:", err));
-    }
-  }, [isAuthorized]);
+// --- 5. GREETING LOGIC ---
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour < 12) return "SELAMAT PAGI";
+  if (hour < 17) return "SELAMAT SIANG";
+  return "SELAMAT MALAM";
+};
 
   const handleStartMissionClick = () => {
     if (!user.class_name || user.class_name === "UNASSIGNED") {
