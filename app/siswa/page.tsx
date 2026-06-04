@@ -782,19 +782,51 @@ export default function StudentPortal() {
        </motion.div>
     </div>
 
-    {/* --- 3. BROADCAST GATEWAY (CTA) --- */}
-    <motion.div variants={itemVariants} className="lg:col-span-3 bg-gradient-to-br from-black to-[#050505] border border-white/10 p-10 lg:p-14 rounded-[4rem] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-12 shadow-[0_40px_100px_rgba(0,0,0,0.8)] group hover:border-cyan-400/40 transition-all duration-700">
-       <div className="absolute inset-0 bg-hud-grid opacity-10" />
-       <div className="flex flex-col lg:flex-row items-center gap-10 z-10 text-center lg:text-left">
-          <div className="w-20 h-20 bg-black/80 rounded-[2rem] flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-2xl shadow-cyan-500/10"><BellRing size={36} className="text-cyan-400" /></div>
-          <div className="space-y-3">
-             <div className="flex items-center justify-center lg:justify-start gap-4"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981] animate-ping" /><span className="text-[11px] font-black tracking-[0.6em] text-emerald-400 uppercase">Mission Status: Online</span></div>
-             <h3 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tighter leading-tight">Assessment Gateway.</h3>
-             <p className="text-[11px] font-black text-slate-500 tracking-[0.4em] max-w-xl uppercase opacity-90 leading-relaxed mx-auto lg:mx-0">Luncurkan protokol penilaian keamanan siber untuk memvalidasi identitas operasional Anda.</p>
-          </div>
-       </div>
-       <button onClick={handleStartMissionClick} className="w-full lg:w-auto px-16 py-8 bg-white text-black rounded-[2.5rem] font-black text-[12px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-500 shadow-2xl flex items-center justify-center gap-6 uppercase z-10">START PROTOCOL <Zap size={22} /></button>
-    </motion.div>
+    {/* --- COMPACT TACTICAL GATEWAY (UKURAN OPTIMAL & NYAMAN) --- */}
+<motion.div 
+  variants={itemVariants} 
+  className="lg:col-span-3 bg-[#050505]/80 backdrop-blur-3xl border border-white/10 p-6 lg:p-10 rounded-[2.5rem] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8 shadow-[0_30px_80px_rgba(0,0,0,0.8)] group hover:border-cyan-500/30 transition-all duration-700"
+>
+   {/* Background HUD Layers (Tetap Wah tapi Halus) */}
+   <div className="absolute inset-0 bg-hud-grid opacity-[0.05] pointer-events-none" />
+   <div className="absolute -top-16 -left-16 w-48 h-48 bg-cyan-600/5 blur-[80px] rounded-full" />
+   
+   <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-8 z-10 text-center lg:text-left">
+      {/* Icon Container: Diperkecil dari 20 ke 14 */}
+      <div className="w-14 h-14 lg:w-16 lg:h-16 bg-black/80 rounded-2xl flex items-center justify-center shrink-0 border border-white/10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-2xl">
+         <BellRing size={24} className="text-cyan-400" />
+      </div>
+
+      <div className="space-y-2">
+         {/* Status Badge: Diperkecil teksnya */}
+         <div className="flex items-center justify-center lg:justify-start gap-3">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse" />
+            <span className="text-[9px] font-black tracking-[0.4em] text-emerald-400 uppercase">Operational Status: Online</span>
+         </div>
+         
+         {/* Judul: Diperkecil dari 4xl ke 2xl agar nyaman */}
+         <h3 className="text-xl lg:text-2xl font-black text-white uppercase tracking-tight leading-tight">
+            ASSESSMENT GATEWAY.
+         </h3>
+         
+         {/* Deskripsi: Ukuran 10px sangat pas untuk log sistem */}
+         <p className="text-[10px] font-black text-slate-500 tracking-[0.3em] max-w-lg uppercase opacity-80 leading-relaxed mx-auto lg:mx-0">
+            Luncurkan protokol penilaian keamanan siber untuk memvalidasi identitas operasional Anda secara real-time.
+         </p>
+      </div>
+   </div>
+
+   {/* Button: Diperkecil padding-nya agar tidak raksasa */}
+   <button 
+     onClick={handleStartMissionClick} 
+     className="w-full lg:w-auto px-10 py-4 bg-white text-black rounded-2xl font-black text-[10px] tracking-[0.5em] hover:bg-cyan-500 hover:text-white transition-all duration-500 shadow-xl flex items-center justify-center gap-4 uppercase z-10 active:scale-95"
+   >
+      START PROTOCOL <Zap size={18} />
+   </button>
+
+   {/* Subtle Scanline Overlay */}
+   <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.05)_50%)] bg-[length:100%_2px] pointer-events-none opacity-20" />
+</motion.div>
   </motion.div>
 )}
 
