@@ -396,14 +396,13 @@ const CyberContinuousDecryption = ({ text }: { text: string }) => {
 
 export default function StudentPortal() {
   const router = useRouter();
+
+  // 1. Semua useState
   const [mounted, setMounted] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [theme, setTheme] = useState('dark');
-  
 
-
-  // States
   const [view, setView] = useState('dashboard'); 
   const [currentStep, setCurrentStep] = useState(1); 
   const [selectedDomain, setSelectedDomain] = useState("SOCIAL ENGINEERING");
@@ -424,7 +423,7 @@ export default function StudentPortal() {
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
 
-// --- 1. FUNGSI AMBIL SKOR (DEFINISIKAN DULU) ---
+// 2. Semua useCallback
 const fetchScores = useCallback(async (username: string) => {
   try {
     const res = await fetch(`https://cyber-backend-delta.vercel.app/siswa/scores/${username}`);
@@ -439,6 +438,31 @@ const fetchScores = useCallback(async (username: string) => {
     console.error("Gagal sinkronisasi skor:", e); 
   }
 }, []);
+
+// --- 4. DATA RADAR (VISUALISASI DEWA LEVEL) ---
+const radarData = useMemo(() => {
+  // Label yang sangat keren dan profesional untuk pameran
+  const sectors = [
+    { key: "Social", label: "PSYCHOLOGICAL" },
+    { key: "Malware", label: "NEURAL VIRUS" },
+    { key: "Phishing", label: "CREDENTIAL" },
+    { key: "Network", label: "INFRASTRUCTURE" },
+    { key: "Threat", label: "INTEL" },
+    { key: "Access", label: "PERIMETER" }
+  ];
+
+  return sectors.map(s => {
+    const entry = (history || []).find((h: any) => 
+      String(h.domain_id || "").toLowerCase().includes(s.key.toLowerCase())
+    );
+    return { 
+      subject: s.label, 
+      A: entry ? entry.score : 0, 
+      fullMark: 100 
+    };
+  });
+}, [history]);
+
 
 // --- 2. EFFECT UTAMA: OTENTIKASI & MOUNTED ---
 useEffect(() => {
@@ -478,30 +502,6 @@ useEffect(() => {
       .catch(err => console.error("Uplink Error:", err));
   }
 }, [isAuthorized]);
-
-// --- 4. DATA RADAR (VISUALISASI DEWA LEVEL) ---
-const radarData = useMemo(() => {
-  // Label yang sangat keren dan profesional untuk pameran
-  const sectors = [
-    { key: "Social", label: "PSYCHOLOGICAL" },
-    { key: "Malware", label: "NEURAL VIRUS" },
-    { key: "Phishing", label: "CREDENTIAL" },
-    { key: "Network", label: "INFRASTRUCTURE" },
-    { key: "Threat", label: "INTEL" },
-    { key: "Access", label: "PERIMETER" }
-  ];
-
-  return sectors.map(s => {
-    const entry = (history || []).find((h: any) => 
-      String(h.domain_id || "").toLowerCase().includes(s.key.toLowerCase())
-    );
-    return { 
-      subject: s.label, 
-      A: entry ? entry.score : 0, 
-      fullMark: 100 
-    };
-  });
-}, [history]);
 
 // --- 5. GREETING LOGIC ---
 const getGreeting = () => {
