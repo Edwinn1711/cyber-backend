@@ -10,6 +10,7 @@ import {
   Sparkles, AlertTriangle, Eye, CheckCircle2, XCircle, X, User, Info, 
   ShieldQuestion, LayoutGrid, Check, BellRing, Bot, ScanLine, Laptop, Workflow, 
   FileText, TrendingUp, Lightbulb, Hexagon, Send, MessageSquare,
+  Monitor, Network, RefreshCw, Shield,
 } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell as RechartsCell, CartesianGrid,
@@ -882,7 +883,7 @@ export default function StudentPortal() {
 
        {/* Siku Taktis (Tactical Corner HUD) */}
        <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-white/10 rounded-tl-[3.5rem] group-hover:border-cyan-500/50 transition-all duration-700" />
-       <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-white/10 rounded-tr-[3.5rem] group-hover:border-cyan-500/50 transition-all duration-700" />
+       <div className="absolute top-0 right-0 w-24 h-24 border-t-2 border-r-2 border-blue-500/20 rounded-tr-[3.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
        <div className="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-white/10 rounded-bl-[3.5rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
        <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-white/10 rounded-br-[3.5rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
     </motion.div>
@@ -928,36 +929,58 @@ export default function StudentPortal() {
        </motion.div>
 
        {/* System Analytics (Matrix Monitor) */}
-       <motion.div variants={nexusItem} className="group relative p-12 rounded-[3.5rem] bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/5 flex flex-col justify-between shadow-2xl transition-all duration-500 hover:border-blue-500/30 overflow-hidden text-left">
-          <div className="space-y-10 relative z-10">
-             <div className="flex items-center justify-between">
-                <p className="text-[11px] font-black text-slate-400 tracking-[0.5em] uppercase flex items-center gap-4">
-                   <Activity size={18} className="text-blue-500 animate-pulse" /> Analytical Matrix
-                </p>
+       <motion.div 
+            variants={nexusItem} 
+            className="group relative p-12 rounded-[3.5rem] bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/5 flex flex-col justify-between shadow-2xl transition-all duration-500 hover:border-blue-500/30 overflow-hidden text-left"
+          >
+           <div className="space-y-10 relative z-10">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <Activity size={18} className="text-blue-500 animate-pulse" />
+                  <h2 className="text-[11px] font-black text-slate-400 tracking-[0.5em] uppercase leading-none">
+                    Analytical Matrix
+                  </h2>
+                </div>
                 <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6] animate-pulse" />
-             </div>
-             
-             <div className="space-y-7 font-mono text-[11px] tracking-widest uppercase">
-                {[
-                  { label: "Architecture", val: "STABLE", col: "text-white" },
-                  { label: "Cyber_Vault", val: "ACTIVE", col: "text-emerald-400" },
-                  { label: "Latency_Node", val: "SYNCED", col: "text-blue-400" }
-                ].map((m, i) => (
-                  <div key={i} className="flex justify-between items-center py-2.5 border-b border-white/5">
-                     <span className="text-slate-500 font-bold">{m.label}</span>
-                     <span className={`font-black ${m.col}`}>{m.val}</span>
-                  </div>
-                ))}
-             </div>
+              </div>
+            </div>
+              <div className="space-y-8">
+              {[
+        { label: "Architecture", val: "Stable", col: "text-white", icon: Monitor },
+        { label: "Cyber Vault", val: "Active", col: "text-emerald-400", icon: Shield },
+        { label: "Latency Node", val: "Synced", col: "text-blue-400", icon: RefreshCw }
+      ].map((m, i) => (
+        <div key={i} className="flex justify-between items-center group/row">
+          <span className="text-slate-500 font-black text-[10px] tracking-[0.2em] uppercase">
+            {m.label}
+          </span>
+          <div className="flex items-center gap-4">
+            <span className={`text-[11px] font-black uppercase tracking-widest ${m.col} drop-shadow-[0_0_8px_currentColor]`}>
+              {m.val}
+            </span>
+            {/* Visualizer kecil: Memberikan kesan sistem sedang memproses data */}
+            <div className="flex gap-1 h-3 items-end opacity-40 group-hover/row:opacity-100 transition-opacity">
+               {[1, 2, 3].map(b => (
+                 <motion.div 
+                   key={b}
+                   animate={{ height: ["20%", "100%", "20%"] }}
+                   transition={{ duration: 0.5 + Math.random(), repeat: Infinity }}
+                   className={`w-0.5 rounded-full ${m.col.replace('text', 'bg')}`}
+                 />
+               ))}
+            </div>
           </div>
-       </motion.div>
+        </div>
+      ))}
     </div>
+    </motion.div>
+  </div>
 
     {/* --- 3. FINAL MISSION GATEWAY (THE WOW FINISHER) --- */}
-    <motion.div 
-      variants={nexusItem} 
-      className="p-10 lg:p-14 rounded-[4rem] bg-gradient-to-br from-[#05060f] via-black to-[#0a0c14] border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-12 shadow-[0_50px_120px_rgba(0,0,0,0.9)] relative overflow-hidden group"
-    >
+  <motion.div 
+        variants={nexusItem} 
+        className="p-10 lg:p-14 rounded-[4rem] bg-gradient-to-br from-[#05060f] via-black to-[#0a0c14] border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-12 shadow-[0_50px_120px_rgba(0,0,0,0.9)] relative overflow-hidden group"
+      >
        <div className="absolute inset-0 bg-hud-grid opacity-[0.08]" />
        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-fuchsia-500/20 to-transparent animate-pulse" />
        
@@ -1036,7 +1059,7 @@ export default function StudentPortal() {
           <div className="absolute inset-0 bg-hud-grid opacity-[0.03] group-hover:opacity-[0.08] transition-opacity" />
           
           {/* Laser Scanner Line (Horizontal) */}
-          <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400/40 opacity-0 group-hover:opacity-100 group-hover:animate-scanner z-20" />
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400 shadow-[0_0_20px_#22d3ee] animate-scanner opacity-0 group-hover:opacity-100" />
 
           {/* Crosshair Corners (Siku-siku Taktis) */}
           <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-white/20 group-hover:border-cyan-500/50 transition-colors" />
@@ -1067,7 +1090,7 @@ export default function StudentPortal() {
             </div>
 
             {/* Micro-Data Readout (Detail Wah) */}
-            <div className="mt-10 pt-6 border-t border-white/5 flex items-center justify-between">
+            <div className="mt-10 pt-6 border-t border-white/5 flex justify-between items-center opacity-20 group-hover:opacity-100 transition-all duration-700">
                <div className="flex flex-col gap-1">
                   <span className="text-[6px] font-black text-slate-600 uppercase tracking-widest">Protocol Index</span>
                   <span className="text-[9px] font-black text-white font-mono uppercase">SEC ALPHA 01</span>
@@ -1219,7 +1242,8 @@ export default function StudentPortal() {
                         <div key={i} className="w-1 h-1 bg-cyan-500 rounded-full animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
                       ))}
                    </div>
-                   <span className="text-[7px] font-mono text-slate-500 tracking-[0.8em] uppercase">Secured Uplink Channel Enabled</span>
+                   <span className="text-[7px] font-mono text-slate-500 tracking-[0.3em] uppercase">Security Protocol Authorized</span>
+                   <Network size={12} className="text-blue-500" />
                 </div>
              </motion.div>
           </motion.div>
