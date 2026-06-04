@@ -648,70 +648,180 @@ export default function StudentPortal() {
         <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
           <AnimatePresence mode="wait">
             
-            {/* VIEW DASHBOARD */}
-            {view === 'dashboard' && (
-              <motion.div 
-              variants={itemVariants} 
-              className="relative p-8 lg:p-14 rounded-[3rem] bg-[#050505]/60 backdrop-blur-3xl border border-white/5 overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,1)] group mb-12"
-            >
-               {/* HUD Scanner Top (Efek Cahaya Berjalan) */}
-               <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-20" />
-               
-               {/* Ambient Background Tech */}
-               <div className="absolute -top-24 -right-24 w-64 h-64 bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none" />
-               <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-fuchsia-500/5 blur-[100px] rounded-full pointer-events-none" />
-               <div className="absolute inset-0 bg-hud-grid opacity-[0.03] pointer-events-none" />
-            
-               <div className="relative z-10 space-y-8">
-                  {/* Status Badge - Lebih Ramping */}
-                  <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[8px] lg:text-[9px] font-black tracking-[0.5em] uppercase backdrop-blur-md">
-                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
-                     Neural Uplink Confirmed
-                  </div>
-                  
-                  {/* Welcome Text - Ukuran Dioptimalkan (text-6xl) */}
-                  <div className="space-y-1">
-                    <h1 className="text-3xl lg:text-6xl font-black text-white uppercase tracking-tighter leading-none drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-                       WELCOME, <br/>
-                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 animate-gradient-x">
-                         {user.username}
-                       </span>
-                    </h1>
-                  </div>
-                  
-                  {/* Sub-footer Banner dengan Garis Aksentuasi */}
-                  <div className="flex items-center gap-6">
-                     <div className="h-[1px] w-12 bg-gradient-to-r from-cyan-500 to-transparent opacity-40" />
-                     <p className="text-slate-400 text-[9px] lg:text-[11px] font-black tracking-[0.5em] uppercase opacity-60 leading-relaxed">
-                        Integrated Cyber Readiness Control Interface
-                     </p>
-                  </div>
-               </div>
-            
-               {/* Decorative HUD Corners (Detail Siku Digital) */}
-               <div className="absolute top-6 left-6 w-4 h-4 border-t border-l border-white/20 rounded-tl-sm pointer-events-none" />
-               <div className="absolute top-6 right-6 w-4 h-4 border-t border-r border-white/20 rounded-tr-sm pointer-events-none" />
-               <div className="absolute bottom-6 left-6 w-4 h-4 border-b border-l border-white/20 rounded-bl-sm pointer-events-none" />
-               <div className="absolute bottom-6 right-6 w-4 h-4 border-b border-r border-white/20 rounded-br-sm pointer-events-none" />
-               
-               {/* Floating Globe Icon Decoration */}
-               <div className="absolute -right-10 top-1/2 -translate-y-1/2 opacity-5 group-hover:opacity-20 transition-all duration-1000 rotate-12 group-hover:rotate-0">
-                  <Globe size={350} className="text-white" />
-               </div>
-            </motion.div>
-            )}
+ {/* --- VIEW DASHBOARD: THE NEXUS COMMAND CENTER (EXHIBITION EDITION) --- */}
+{view === 'dashboard' && (
+  <motion.div 
+    key="dash" 
+    variants={containerVariants} 
+    initial="hidden" 
+    animate="show" 
+    exit={{opacity:0, y:-10}} 
+    className="max-w-[1400px] mx-auto space-y-10 pb-20"
+  >
+    {/* --- 1. THE GOD-TIER TACTICAL WELCOME BANNER --- */}
+    <motion.div 
+      variants={itemVariants}
+      className="relative p-10 lg:p-16 rounded-[4rem] bg-[#020205]/60 backdrop-blur-3xl border border-cyan-500/20 overflow-hidden shadow-[0_0_100px_rgba(0,0,0,1)] group"
+    >
+       {/* Background Decoration */}
+       <div className="absolute inset-0 bg-hud-grid opacity-[0.05] pointer-events-none" />
+       <motion.div 
+         animate={{ top: ['-100%', '200%'] }}
+         transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+         className="absolute left-0 w-full h-[100px] bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent pointer-events-none z-10"
+       />
 
-            {/* VIEW REPORTS - RESULTS */}
-            {view === 'reports' && (
-              <motion.div key="reports" variants={containerVariants} initial="hidden" animate="show" exit={{opacity:0, x:20}} className="max-w-[1400px] mx-auto space-y-10">
-                 <motion.div variants={itemVariants} className="text-center space-y-4 pt-4"><div className="text-fuchsia-400 font-black text-[12px] tracking-[0.6em] uppercase flex items-center justify-center gap-3"><TrendingUp size={16}/> PERFORMANCE ANALYTICS</div><h2 className="text-4xl lg:text-5xl font-black text-white tracking-widest uppercase drop-shadow-2xl">Mission Intelligence.</h2><p className="text-slate-500 text-[11px] font-bold tracking-[0.4em] uppercase max-w-xl mx-auto opacity-100">Historical operative data records summary from secure cloud vaults.</p></motion.div>
-                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <motion.div variants={itemVariants} className="lg:col-span-7 bg-black/80 backdrop-blur-3xl border border-white/10 rounded-[3rem] p-8 lg:p-10 flex flex-col md:flex-row items-center justify-between shadow-2xl relative overflow-hidden group"><div className="flex-1 text-center md:text-left space-y-6"><p className="text-[11px] font-black text-slate-500 uppercase tracking-widest flex items-center justify-center md:justify-start gap-3"><RadarIcon size={14} className="text-fuchsia-400"/> READINESS BALANCE</p><div className="grid grid-cols-2 gap-4 pt-4">{[ {l:'OPERATIONS', v:history.length}, {l:'GLOBAL SCORE', v:score+'%'} ].map((x,i)=>(<div key={i} className="bg-white/5 p-6 rounded-3xl border border-white/5 shadow-inner hover:border-fuchsia-500/30 transition-all"><p className="text-[9px] font-black text-slate-500 mb-2 uppercase">{x.l}</p><p className="text-3xl lg:text-4xl font-black text-white font-mono tracking-tighter">{x.v}</p></div>))}</div></div><div className="w-full md:w-[320px] h-[300px] mt-10 md:mt-0"><ResponsiveContainer width="100%" height="100%"><RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}><PolarGrid stroke="rgba(255,255,255,0.05)" /><PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 'bold' }} /><Radar name="Score" dataKey="A" stroke="#d946ef" fill="#d946ef" fillOpacity={0.4} /><Tooltip contentStyle={{ backgroundColor: '#000', borderRadius: '12px', border: '1px solid #333' }} /></RadarChart></ResponsiveContainer></div></motion.div>
-                    <motion.div variants={itemVariants} className="lg:col-span-5 bg-black/80 backdrop-blur-3xl border border-white/10 rounded-[3rem] p-8 lg:p-10 flex flex-col items-center justify-center text-center shadow-2xl relative group overflow-hidden"><div className={`p-8 rounded-[2.5rem] mb-6 border-2 shadow-2xl transform group-hover:scale-110 transition-all duration-700`} style={{ borderColor: `${getReadinessData(score).color}30`, backgroundColor: `${getReadinessData(score).color}05` }}><ShieldAlert size={60} style={{ color: getReadinessData(score).color }} className="animate-pulse" /></div><p className="text-[11px] font-black text-slate-500 tracking-widest mb-2 uppercase">CLASSIFICATION</p><h3 className={`text-4xl lg:text-5xl font-black tracking-widest uppercase ${getReadinessData(score).text}`} style={{ textShadow: `0 0 20px ${getReadinessData(score).color}60` }}>{getReadinessData(score).label}</h3></motion.div>
-                 </div>
-                 <motion.div variants={itemVariants} className="bg-black/80 border border-white/10 rounded-[2.5rem] lg:rounded-[3rem] p-6 lg:p-8 shadow-2xl relative overflow-hidden backdrop-blur-3xl"><div className="relative z-10 bg-black/40 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-inner"><table className="w-full text-center border-collapse"><thead><tr className="border-b border-white/10 bg-white/[0.04]"><th className="py-7 text-[10px] font-black tracking-[0.6em] text-slate-400 uppercase">SESSION</th><th className="py-7 text-[10px] font-black tracking-[0.6em] text-slate-400 uppercase">OPERATIONAL SECTOR</th><th className="py-7 text-[10px] font-black tracking-[0.6em] text-slate-400 uppercase">ACCURACY</th><th className="py-7 text-[10px] font-black tracking-[0.6em] text-slate-400 uppercase">ACTION</th></tr></thead><tbody className="text-white font-bold">{history.map((h, i) => { const st = getReadinessData(h.score); return (<tr key={i} className="border-b border-white/5 hover:bg-white/[0.02] transition-all group"><td className="py-10 text-[13px] font-black font-mono text-fuchsia-400 opacity-60 group-hover:opacity-100">#0{history.length - i}</td><td className="py-10 text-[11px] lg:text-[13px] font-black uppercase tracking-widest">{h.domain_id}</td><td className="py-10"><div className="flex flex-col items-center gap-3"><span className="text-2xl font-black font-mono tracking-tighter text-white">{h.score}%</span><div className="w-24 h-1.5 bg-black rounded-full overflow-hidden border border-white/5"><div className={`h-full ${st.bg} shadow-[0_0_10px_currentColor] transition-all duration-1000`} style={{ width: `${h.score}%`, color: st.color }} /></div></div></td><td className="py-10"><button onClick={() => setDetailModal(h.details || [])} className="mx-auto flex items-center gap-4 px-8 py-3 bg-white/5 border border-white/10 hover:border-fuchsia-500/60 text-white rounded-3xl text-[10px] font-black tracking-[0.4em] transition-all uppercase shadow-xl hover:shadow-fuchsia-500/20"><Eye size={16} /> ANALYZE</button></td></tr>)})}</tbody></table></div></motion.div>
-              </motion.div>
-            )}
+       <div className="relative z-20 flex flex-col lg:flex-row justify-between items-center gap-12">
+          {/* Left Side: Identity */}
+          <div className="flex flex-col items-center lg:items-start space-y-8 w-full lg:w-2/3">
+             <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                <div className="px-5 py-2 rounded-xl bg-cyan-500/10 border border-cyan-400/30 flex items-center gap-3">
+                   <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                   <span className="text-[10px] font-black text-cyan-400 tracking-[0.5em] uppercase">Neural Uplink Confirmed</span>
+                </div>
+                <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
+                   <span className="text-[8px] font-mono text-slate-500 uppercase tracking-widest">ENCRYPTION:</span>
+                   <span className="text-[9px] font-black text-emerald-400 tracking-widest uppercase font-mono">Active AES-256</span>
+                </div>
+             </div>
+
+             <div className="space-y-2">
+                <h1 className="text-4xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-[0.9] text-center lg:text-left">
+                   WELCOME, <br/>
+                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 animate-gradient-x drop-shadow-[0_0_20px_rgba(34,211,238,0.4)]">
+                     {user.username}
+                   </span>
+                </h1>
+             </div>
+
+             <div className="flex flex-col sm:flex-row items-center gap-8 w-full">
+                <div className="flex items-center gap-4">
+                   <div className="h-px w-12 bg-cyan-500" />
+                   <p className="text-slate-400 text-[10px] lg:text-[12px] font-black tracking-[0.4em] uppercase opacity-80">
+                      Cyber Readiness Control Interface
+                   </p>
+                </div>
+                <div className="flex gap-6 border-l border-white/10 pl-8">
+                   <div className="flex flex-col"><span className="text-[7px] font-mono text-slate-600 uppercase">Latency</span><span className="text-[10px] font-black text-emerald-400 font-mono">0.002MS</span></div>
+                   <div className="flex flex-col"><span className="text-[7px] font-mono text-slate-600 uppercase">Sector</span><span className="text-[10px] font-black text-cyan-400 font-mono uppercase">{user.class_name || "ALPHA"}</span></div>
+                </div>
+             </div>
+          </div>
+
+          {/* Right Side: Holographic Sphere */}
+          <div className="relative w-full lg:w-1/3 flex items-center justify-center">
+             <div className="relative w-64 h-64 lg:w-80 lg:h-80 flex items-center justify-center group-hover:scale-110 transition-transform duration-1000">
+                <div className="absolute inset-0 border-2 border-dashed border-cyan-500/20 rounded-full animate-[spin_30s_linear_infinite]" />
+                <div className="absolute inset-8 border border-white/5 rounded-full animate-[spin_20s_linear_infinite_reverse]" />
+                <div className="relative z-10 p-10 bg-black/40 rounded-full backdrop-blur-md border border-white/10">
+                   <Globe size={120} className="text-white/10 group-hover:text-cyan-400 transition-colors duration-1000" />
+                   <motion.div animate={{ rotate: 360 }} transition={{ duration: 5, repeat: Infinity, ease: "linear" }} className="absolute inset-0">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
+                   </motion.div>
+                </div>
+             </div>
+          </div>
+       </div>
+
+       {/* Corners Decoration */}
+       <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-cyan-500 rounded-tl-[3rem] opacity-30 group-hover:opacity-100 transition-opacity" />
+       <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-cyan-500 rounded-tr-[3rem] opacity-30 group-hover:opacity-100 transition-opacity" />
+       <div className="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-cyan-500 rounded-bl-[3rem] opacity-30 group-hover:opacity-100 transition-opacity" />
+       <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-cyan-500 rounded-br-[3rem] opacity-30 group-hover:opacity-100 transition-opacity" />
+    </motion.div>
+
+    {/* --- 2. THE STATS CLUSTER --- */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+       {/* Operative Profile Card */}
+       <motion.div variants={itemVariants} className="bg-black/60 backdrop-blur-3xl border border-white/5 p-10 rounded-[3rem] flex flex-col items-center text-center hover:border-fuchsia-500/40 transition-all shadow-2xl relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-full h-[2px] bg-fuchsia-500 shadow-[0_0_15px_#d946ef] animate-scanner opacity-0 group-hover:opacity-100" />
+          <div className="w-20 h-20 bg-gradient-to-b from-fuchsia-600 to-indigo-900 rounded-[2rem] flex items-center justify-center text-white border border-white/10 mb-8 shadow-2xl transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
+            <Fingerprint size={40} className="drop-shadow-[0_0_10px_white]" />
+          </div>
+          <h4 className="text-2xl font-black text-white tracking-widest uppercase leading-none">{user.username}</h4>
+          <p className="text-[10px] text-fuchsia-400 font-black tracking-[0.5em] uppercase mt-4">{user.class_name || "UNASSIGNED SECTOR"}</p>
+          <div className="mt-8 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          <div className="mt-6 flex gap-4 opacity-40 group-hover:opacity-100 transition-opacity">
+            <ShieldCheck size={16} className="text-emerald-400" />
+            <Activity size={16} className="text-cyan-400" />
+            <Database size={16} className="text-amber-400" />
+          </div>
+       </motion.div>
+
+       {/* Readiness Score Card */}
+       <motion.div variants={itemVariants} className="bg-black/60 backdrop-blur-3xl border border-white/5 p-10 rounded-[3rem] flex flex-col items-center justify-center hover:border-cyan-500/40 transition-all shadow-2xl group text-center relative overflow-hidden">
+          <div className="relative mb-6 flex justify-center w-full transform group-hover:scale-105 transition-all">
+            <svg className="w-44 h-44 transform -rotate-90">
+              <circle cx="88" cy="88" r="80" stroke="rgba(255,255,255,0.03)" strokeWidth="8" fill="transparent" />
+              <motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score / 100) * 502} 1000` }} transition={{ duration: 3, ease: "easeOut" }} cx="88" cy="88" r="80" stroke="#22d3ee" strokeWidth="8" strokeLinecap="round" fill="transparent" style={{ filter: 'drop-shadow(0 0 15px #22d3ee)' }} />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">{score}</span>
+              <span className="text-[9px] font-black text-slate-500 uppercase mt-1">READINESS_LVL</span>
+            </div>
+          </div>
+          <div className={`px-10 py-2 rounded-full border border-cyan-500/30 text-[10px] font-black tracking-[0.4em] uppercase bg-black/40 text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.2)]`}>{getReadinessData(score).label}</div>
+       </motion.div>
+
+       {/* Analytics Matrix Card */}
+       <motion.div variants={itemVariants} className="bg-black/60 backdrop-blur-3xl border border-white/5 p-10 rounded-[3rem] hover:border-indigo-500/40 transition-all shadow-2xl flex flex-col justify-between group relative overflow-hidden">
+          <div className="space-y-6 relative z-10">
+            <p className="text-[10px] font-black text-slate-500 tracking-[0.5em] mb-10 uppercase flex items-center gap-3">
+              <BarChart3 size={16} className="text-indigo-500 animate-pulse"/> Analytical Matrix
+            </p>
+            <div className="space-y-6 font-mono text-[10px] tracking-[0.2em] text-slate-300">
+              {[
+                { label: "HOST_GATEWAY", val: "STABLE", col: "text-emerald-400" },
+                { label: "SECURITY_AUTH", val: "VERIFIED", col: "text-cyan-400" },
+                { label: "DATA_UPLINK", val: "SYNCHRONIZED", col: "text-white" }
+              ].map((item, i) => (
+                <div key={i} className="flex justify-between border-b border-white/5 pb-4">
+                  <span className="opacity-50">{item.label}</span>
+                  <span className={`font-black ${item.col}`}>{item.val}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-8 flex justify-between items-center opacity-20">
+             <span className="text-[8px] font-mono uppercase tracking-widest">SYSTEM_OPTIMAL</span>
+             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          </div>
+       </motion.div>
+    </div>
+
+    {/* --- 3. THE MISSION GATEWAY (CALL TO ACTION) --- */}
+    <motion.div 
+      variants={itemVariants} 
+      className="bg-gradient-to-br from-[#050505] to-[#0a0a0f] border border-white/10 p-10 lg:p-16 rounded-[4rem] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-12 shadow-[0_40px_100px_rgba(0,0,0,0.9)] group hover:border-cyan-500/40 transition-all duration-700"
+    >
+       <div className="absolute inset-0 bg-hud-grid opacity-[0.05]" />
+       <div className="absolute -top-24 -left-24 w-64 h-64 bg-cyan-600/10 blur-[100px] rounded-full" />
+       
+       <div className="flex flex-col lg:flex-row items-center gap-10 z-10 text-center lg:text-left">
+          <div className="w-24 h-24 bg-black/80 rounded-[2.5rem] flex items-center justify-center shrink-0 border border-white/10 shadow-3xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-700">
+             <RadarIcon size={48} className="text-cyan-400 animate-pulse" />
+          </div>
+          <div className="space-y-4">
+             <div className="flex items-center justify-center lg:justify-start gap-4">
+                <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981] animate-ping" />
+                <span className="text-[11px] font-black tracking-[0.6em] text-emerald-400 uppercase">Operational Protocol: Ready</span>
+             </div>
+             <h3 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-tight">Initiate Cyber Validation.</h3>
+             <p className="text-[10px] lg:text-[12px] font-black text-slate-500 tracking-[0.4em] max-w-2xl uppercase leading-relaxed mx-auto lg:mx-0 opacity-80">
+                Luncurkan protokol penilaian untuk memvalidasi integritas pertahanan digital Anda sekarang.
+             </p>
+          </div>
+       </div>
+
+       <button 
+         onClick={handleStartMissionClick} 
+         className="w-full lg:w-auto px-16 py-8 bg-white text-black rounded-[2.5rem] font-black text-[12px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-700 shadow-[0_20px_60px_rgba(255,255,255,0.1)] flex items-center justify-center gap-6 uppercase z-10 active:scale-95"
+       >
+          START DEPLOYMENT <Zap size={24} />
+       </button>
+    </motion.div>
+  </motion.div>
+)}
 
 {/* VIEW ASSESSMENT (ULTRA-LUXURY HUD INTERFACE) */}
 {view === 'assessment' && (
