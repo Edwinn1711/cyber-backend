@@ -650,76 +650,55 @@ export default function StudentPortal() {
             
             {/* VIEW DASHBOARD */}
             {view === 'dashboard' && (
-              <motion.div key="dash" variants={containerVariants} initial="hidden" animate="show" exit={{opacity:0, y:-10}} className="max-w-[1300px] mx-auto space-y-12">
-                {/* --- WELCOME BANNER LUXURY (REVISI DEWA: NO V2.1 & NO UNDERSCORES) --- */}
-                <motion.div variants={itemVariants} className="relative p-10 lg:p-20 rounded-[3.5rem] lg:rounded-[5rem] bg-gradient-to-br from-white/[0.04] via-transparent to-transparent border border-white/5 overflow-hidden shadow-2xl group mb-12">
-                   {/* Dekorasi Globe di Latar Belakang */}
-                   <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity duration-1000">
-                      <Globe size={300} className="text-white" />
-                   </div>
-                   
-                   <div className="relative z-10 space-y-8 text-left">
-                      <div className="inline-flex items-center gap-4 px-5 py-2 rounded-full bg-cyan-500/5 border border-cyan-500/15 text-cyan-400 text-[9px] font-black tracking-[0.5em] uppercase backdrop-blur-md">
-                         <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
-                         Authentication Confirmed
-                      </div>
-                      
-                      <h1 className="text-4xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-[0.95]">
-                         WELCOME, <br/>
-                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 animate-gradient-x">
-                           {user.username}
-                         </span>
-                      </h1>
-                      
-                      <p className="text-slate-400 text-[10px] lg:text-[13px] font-bold tracking-[0.4em] uppercase opacity-80 leading-relaxed max-w-xl">
-                         Integrated Cyber Readiness Control Interface
-                      </p>
-                      
-                      <div className="h-px w-full max-w-md bg-gradient-to-r from-white/10 to-transparent" />
-                   </div>
-                </motion.div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                   <motion.div variants={itemVariants} className="bg-black/80 backdrop-blur-2xl border border-white/10 p-10 rounded-[3rem] flex flex-col items-center justify-center text-center hover:border-fuchsia-500/40 transition-all shadow-2xl relative overflow-hidden group">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-fuchsia-500 shadow-[0_0_15px_#d946ef] animate-scan opacity-0 group-hover:opacity-100" />
-                        <div className="w-16 h-16 bg-gradient-to-b from-fuchsia-600 to-indigo-900 rounded-3xl flex items-center justify-center text-white border border-white/10 mb-8 shadow-2xl transform group-hover:scale-110 transition-all duration-500"><Fingerprint size={32} /></div>
-                        <h4 className="text-xl font-black text-white tracking-widest uppercase leading-none">{user.username}</h4>
-                        <p className="text-[10px] text-fuchsia-400 font-black tracking-[0.4em] uppercase mt-4">{user.class_name || "NOT ASSIGNED"}</p>
-                   </motion.div>
-                   <motion.div variants={itemVariants} className="bg-black/80 backdrop-blur-2xl border border-white/10 p-10 rounded-[3rem] flex flex-col items-center justify-center hover:border-fuchsia-500/40 transition-all shadow-2xl group text-center">
-                      <div className="relative mb-6 flex justify-center w-full transform group-hover:scale-105 transition-all">
-                        <svg className="w-36 h-36 transform -rotate-90">
-                          <circle cx="72" cy="72" r="66" stroke="rgba(255,255,255,0.03)" strokeWidth="6" fill="transparent" />
-                          <motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score / 100) * 414} 1000` }} transition={{ duration: 2.5, ease: "easeOut" }} cx="72" cy="72" r="66" stroke="#d946ef" strokeWidth="6" strokeLinecap="round" fill="transparent" style={{ filter: 'drop-shadow(0 0 10px rgba(217,70,239,0.8))' }} />
-                        </svg>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center"><span className="text-5xl font-black text-white tracking-tighter">{score}</span><span className="text-[8px] font-black text-slate-500 uppercase mt-1">AVG SCORE</span></div>
-                      </div>
-                      <div className={`px-8 py-1.5 rounded-full border border-fuchsia-500/30 text-[9px] font-black tracking-widest uppercase bg-black/40 ${getReadinessData(score).text} shadow-lg shadow-black/50`}>{getReadinessData(score).label}</div>
-                   </motion.div>
-                   <motion.div variants={itemVariants} className="bg-black/80 backdrop-blur-2xl border border-white/10 p-10 rounded-[3rem] hover:border-fuchsia-500/40 transition-all shadow-2xl flex flex-col justify-between group text-center"><p className="text-[10px] font-black text-slate-500 tracking-[0.5em] mb-10 uppercase flex items-center justify-center gap-3"><Activity size={16} className="text-fuchsia-500 animate-pulse"/> SYSTEM ANALYTICS</p>
-                      <div className="space-y-6 font-mono text-[9px] lg:text-[10px] tracking-[0.2em] text-slate-300 w-full px-4">
-                        <div className="flex justify-between border-b border-white/5 pb-3"><span>HOST</span><span className="text-fuchsia-400 font-bold uppercase">VERCEL</span></div>
-                        <div className="flex justify-between border-b border-white/5 pb-3"><span>SECURITY</span><span className="text-emerald-500 font-bold uppercase">AES-256</span></div>
-                        <div className="flex justify-between"><span>DATABASE</span><span className="text-white font-bold uppercase opacity-80">SINKRON</span></div>
-                      </div>
-                   </motion.div>
-                   
-                   {/* BROADCAST CENTER */}
-                   <motion.div variants={itemVariants} className="lg:col-span-3 bg-gradient-to-br from-black to-[#050505] border border-white/10 p-8 lg:p-12 rounded-[2.5rem] lg:rounded-[4rem] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-12 shadow-[0_20px_60px_rgba(0,0,0,0.8)] group hover:border-fuchsia-500/40 transition-all duration-700">
-                      <div className="absolute inset-0 bg-hud-grid opacity-20" />
-                      <div className="absolute top-0 right-0 w-64 h-64 bg-violet-600/10 blur-[100px] rounded-full -z-10" />
-                      <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-10 z-10 text-center lg:text-left">
-                        <div className="w-16 lg:w-20 h-16 lg:h-20 bg-black/80 rounded-3xl flex items-center justify-center shrink-0 border border-white/10 shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"><BellRing size={32} className="text-fuchsia-500 fill-current animate-bounce" /></div>
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-center lg:justify-start gap-4"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981] animate-ping" /><span className="text-[10px] lg:text-[11px] font-black tracking-[0.6em] text-emerald-400 uppercase">Mission Status: Active</span></div>
-                          <h3 className="text-2xl lg:text-3xl font-black text-white uppercase tracking-tighter leading-tight">Assessment Gateway Online.</h3>
-                          <p className="text-[10px] lg:text-[11px] font-bold text-slate-400 tracking-widest max-w-2xl uppercase opacity-90 leading-relaxed mx-auto lg:mx-0">Initiate your cyber defense validation protocols now to validate personnel security.</p>
-                        </div>
-                      </div>
-                      <button onClick={handleStartMissionClick} className="w-full lg:w-auto px-10 lg:px-14 py-5 lg:py-7 bg-white text-black rounded-3xl font-black text-[11px] lg:text-[12px] tracking-[0.5em] hover:bg-fuchsia-600 hover:text-white transition-all duration-500 shadow-2xl flex items-center justify-center gap-5 uppercase z-10">START PROTOCOL <Zap size={20} /></button>
-                   </motion.div>
-                </div>
-              </motion.div>
+              <motion.div 
+              variants={itemVariants} 
+              className="relative p-8 lg:p-14 rounded-[3rem] bg-[#050505]/60 backdrop-blur-3xl border border-white/5 overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,1)] group mb-12"
+            >
+               {/* HUD Scanner Top (Efek Cahaya Berjalan) */}
+               <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-20" />
+               
+               {/* Ambient Background Tech */}
+               <div className="absolute -top-24 -right-24 w-64 h-64 bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none" />
+               <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-fuchsia-500/5 blur-[100px] rounded-full pointer-events-none" />
+               <div className="absolute inset-0 bg-hud-grid opacity-[0.03] pointer-events-none" />
+            
+               <div className="relative z-10 space-y-8">
+                  {/* Status Badge - Lebih Ramping */}
+                  <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[8px] lg:text-[9px] font-black tracking-[0.5em] uppercase backdrop-blur-md">
+                     <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
+                     Neural Uplink Confirmed
+                  </div>
+                  
+                  {/* Welcome Text - Ukuran Dioptimalkan (text-6xl) */}
+                  <div className="space-y-1">
+                    <h1 className="text-3xl lg:text-6xl font-black text-white uppercase tracking-tighter leading-none drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                       WELCOME, <br/>
+                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 animate-gradient-x">
+                         {user.username}
+                       </span>
+                    </h1>
+                  </div>
+                  
+                  {/* Sub-footer Banner dengan Garis Aksentuasi */}
+                  <div className="flex items-center gap-6">
+                     <div className="h-[1px] w-12 bg-gradient-to-r from-cyan-500 to-transparent opacity-40" />
+                     <p className="text-slate-400 text-[9px] lg:text-[11px] font-black tracking-[0.5em] uppercase opacity-60 leading-relaxed">
+                        Integrated Cyber Readiness Control Interface
+                     </p>
+                  </div>
+               </div>
+            
+               {/* Decorative HUD Corners (Detail Siku Digital) */}
+               <div className="absolute top-6 left-6 w-4 h-4 border-t border-l border-white/20 rounded-tl-sm pointer-events-none" />
+               <div className="absolute top-6 right-6 w-4 h-4 border-t border-r border-white/20 rounded-tr-sm pointer-events-none" />
+               <div className="absolute bottom-6 left-6 w-4 h-4 border-b border-l border-white/20 rounded-bl-sm pointer-events-none" />
+               <div className="absolute bottom-6 right-6 w-4 h-4 border-b border-r border-white/20 rounded-br-sm pointer-events-none" />
+               
+               {/* Floating Globe Icon Decoration */}
+               <div className="absolute -right-10 top-1/2 -translate-y-1/2 opacity-5 group-hover:opacity-20 transition-all duration-1000 rotate-12 group-hover:rotate-0">
+                  <Globe size={350} className="text-white" />
+               </div>
+            </motion.div>
             )}
 
             {/* VIEW REPORTS - RESULTS */}

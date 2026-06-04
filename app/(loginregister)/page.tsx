@@ -1578,19 +1578,19 @@ export default function CyberLandingDark() {
 
             <div className="space-y-3">
             {[
-  { t: "Assessment Center", i: Target, d: "Inisiasi protokol kuesioner keamanan siber.", id: "protocol", col: "text-cyan-400", longDesc: "Sistem evaluasi mandiri tingkat lanjut yang menggunakan algoritma kepatuhan siber terbaru untuk mengukur kerentanan infrastruktur digital sekolah Anda." },
-  { t: "Infrastructure Monitor", i: Server, d: "Visualisasi stabilitas jaringan real time.", id: "infra", col: "text-emerald-400", longDesc: "Dashboard pemantauan node jaringan secara menyeluruh. Mendeteksi latensi, beban server, dan anomali trafik dalam hitungan milidetik." },
-  { t: "Intelligence Hub", i: Globe, d: "Pusat informasi dan berita keamanan terbaru.", id: "hero", col: "text-fuchsia-400", longDesc: "Arsip intelijen yang terhubung ke basis data ancaman global, memberikan peringatan dini terhadap kampanye phishing dan malware yang menargetkan sektor pendidikan." },
-  { t: "Credential Guard", i: ShieldCheck, d: "Audit metrik dan data identitas warga sekolah.", id: "stats", col: "text-blue-400", longDesc: "Sistem proteksi identitas ganda yang memastikan kredensial siswa dan guru tidak bocor ke dark web melalui audit rutin." },
-  { t: "SOP Protocol", i: FileText, d: "Daftar aturan standar operasional keamanan.", id: "protocol", col: "text-indigo-400", longDesc: "Dokumentasi prosedur operasional standar yang terdigitalisasi untuk memastikan setiap personel mengikuti protokol keamanan yang benar." }
-].map((item, i) => (
-  <motion.div 
-    key={i}
-    whileHover={{ x: 15, scale: 1.02 }}
-    whileTap={{ scale: 0.95 }}
-    onClick={() => setSelectedService(item)} // GANTI INI: Membuka Pop-up Wah
-    className="group flex items-center gap-6 p-5 lg:p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-cyan-500/10 hover:border-cyan-400/40 transition-all duration-500 cursor-pointer shadow-lg"
-                >
+                    { t: "Assessment Center", i: Target, d: "Inisiasi protokol kuesioner keamanan siber.", id: "protocol", col: "text-cyan-400", longDesc: "Sistem evaluasi mandiri tingkat lanjut yang menggunakan algoritma kepatuhan siber terbaru untuk mengukur kerentanan infrastruktur digital sekolah Anda." },
+                    { t: "Infrastructure Monitor", i: Server, d: "Visualisasi stabilitas jaringan real time.", id: "infra", col: "text-emerald-400", longDesc: "Dashboard pemantauan node jaringan secara menyeluruh. Mendeteksi latensi, beban server, dan anomali trafik dalam hitungan milidetik." },
+                    { t: "Intelligence Hub", i: Globe, d: "Pusat informasi dan berita keamanan terbaru.", id: "hero", col: "text-fuchsia-400", longDesc: "Arsip intelijen yang terhubung ke basis data ancaman global, memberikan peringatan dini terhadap kampanye phishing dan malware yang menargetkan sektor pendidikan." },
+                    { t: "Credential Guard", i: ShieldCheck, d: "Audit metrik dan data identitas warga sekolah.", id: "stats", col: "text-blue-400", longDesc: "Sistem proteksi identitas ganda yang memastikan kredensial siswa dan guru tidak bocor ke dark web melalui audit rutin." },
+                    { t: "SOP Protocol", i: FileText, d: "Daftar aturan standar operasional keamanan.", id: "protocol", col: "text-indigo-400", longDesc: "Dokumentasi prosedur operasional standar yang terdigitalisasi untuk memastikan setiap personel mengikuti protokol keamanan yang benar." }
+                  ].map((item, i) => (
+                  <motion.div 
+                    key={i}
+                    whileHover={{ x: 15, scale: 1.02 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setSelectedService(item)} // GANTI INI: Membuka Pop-up Wah
+                    className="group flex items-center gap-6 p-5 lg:p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-cyan-500/10 hover:border-cyan-400/40 transition-all duration-500 cursor-pointer shadow-lg"
+                        >
                   <div className={`w-12 h-12 rounded-2xl bg-black border border-white/10 flex items-center justify-center transition-all group-hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] ${item.col}`}>
                     <item.i size={24} />
                   </div>
