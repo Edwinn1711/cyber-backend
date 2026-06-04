@@ -63,7 +63,7 @@ const ParticleBurstClickEffect = () => {
 // --- 2. BACKGROUND COMPONENT (PURE BLACK BASE) ---
 const PersistentUniverse = React.memo(({ bgIdx }: { bgIdx: number }) => {
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-[#000000]">
+    <div className="fixed inset-0 z-0 opacity-40">
       <AnimatePresence mode="wait">
         <motion.img key={bgIdx} src={CYBER_ASSETS[bgIdx]} initial={{ opacity: 0, scale: 1.05 }} animate={{ opacity: 0.2, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 5 }} className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-lighten" />
       </AnimatePresence>
@@ -552,7 +552,7 @@ export default function StudentPortal() {
 
 
   return (
-    <div className="flex h-screen w-full text-slate-100 overflow-hidden font-sans selection:bg-fuchsia-500/30">
+    <div className="flex h-screen w-full bg-black text-slate-100 overflow-hidden font-sans relative">
       <PersistentUniverse bgIdx={bgIdx} />
       <ParticleBurstClickEffect />
       <AnimatePresence>
@@ -650,98 +650,131 @@ export default function StudentPortal() {
       <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
       <AnimatePresence mode="wait">
             
- {/* --- VIEW DASHBOARD: THE SUPREME INTERFACE (NO UNDERSCORES / NO ITALICS) --- */}
-{view === 'dashboard' && (
+      {view === 'dashboard' && (
   <motion.div 
-    key={theme} 
-    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+    key="dash-supreme" 
+    variants={containerVariants} initial="hidden" animate="show" exit={{opacity:0, y:-20}}
     className="max-w-[1400px] mx-auto space-y-12 pb-20"
   >
-    {/* 1. BANNER UTAMA */}
-    <div className={`relative p-10 lg:p-14 rounded-[3.5rem] border transition-all duration-700 overflow-hidden ${theme === 'dark' ? 'bg-[#020205]/90 border-cyan-500/20 shadow-[0_40px_100px_rgba(0,0,0,1)]' : 'bg-white border-white shadow-[0_30px_100px_rgba(15,23,42,0.05)]'}`}>
+    {/* --- 1. THE GOD-TIER TACTICAL BANNER --- */}
+    <div className="relative p-10 lg:p-16 rounded-[4rem] bg-[#050811]/60 backdrop-blur-3xl border border-cyan-500/20 overflow-hidden shadow-[0_0_100px_rgba(0,0,0,1)] group mb-12">
        
-       {/* Background Grid yang menyesuaikan tema */}
-       <div className={`absolute inset-0 opacity-[0.03] pointer-events-none ${theme === 'dark' ? 'bg-hud-grid' : 'bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:50px_50px]'}`} />
-       
+       {/* Laser Scanner Line (Efek cahaya bergerak dari atas ke bawah) */}
+       <motion.div 
+         animate={{ top: ['-100%', '200%'] }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+         className="absolute left-0 w-full h-[120px] bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent pointer-events-none z-10"
+       />
+
+       {/* Background Grid Hud */}
+       <div className="absolute inset-0 bg-hud-grid opacity-[0.05] pointer-events-none" />
+
        <div className="relative z-20 flex flex-col lg:flex-row justify-between items-center gap-12">
+          {/* Identity Info */}
           <div className="flex flex-col items-center lg:items-start space-y-8 w-full lg:w-2/3 text-left">
-             <div className={`inline-flex items-center gap-4 px-5 py-2 rounded-xl font-black text-[9px] tracking-[0.4em] uppercase border transition-all ${theme === 'dark' ? 'bg-cyan-500/10 border-cyan-400/30 text-cyan-400' : 'bg-cyan-500/5 border-cyan-200 text-cyan-600'}`}>
-                Authentication Confirmed
+             <div className="flex gap-4">
+                <div className="px-6 py-2 rounded-xl bg-cyan-500/10 border border-cyan-400/30 flex items-center gap-3 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
+                   <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                   <span className="text-[10px] font-black text-cyan-400 tracking-[0.5em] uppercase">Neural Uplink Confirmed</span>
+                </div>
              </div>
 
-             <div className="space-y-1">
-                <h1 className={`text-3xl lg:text-5xl font-black uppercase tracking-tighter leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>WELCOME,</h1>
-                <h2 className={`text-4xl lg:text-7xl font-black uppercase tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-r animate-gradient-x ${theme === 'dark' ? 'from-cyan-400 via-blue-500 to-fuchsia-600' : 'from-blue-600 via-indigo-600 to-fuchsia-600'}`}>
-                   {user.username}
-                </h2>
+             <div className="space-y-2">
+                <h1 className="text-4xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                   WELCOME, <br/>
+                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 animate-gradient-x">
+                     {user.username}
+                   </span>
+                </h1>
              </div>
 
-             {/* Deskripsi dengan aksen Garis Vertikal (Bukan garis bawah) */}
+             {/* Deskripsi dengan Vertical Accent */}
              <div className="flex flex-col sm:flex-row items-center gap-10 w-full">
-                <div className={`border-l-4 pl-6 py-1 ${theme === 'dark' ? 'border-cyan-500' : 'border-blue-600'}`}>
-                   <p className={`text-[10px] lg:text-[12px] font-black tracking-[0.4em] uppercase opacity-80 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                      Integrated Cyber Readiness Control
+                <div className="border-l-[6px] border-cyan-500 pl-6 py-1">
+                   <p className="text-slate-400 text-[11px] lg:text-[14px] font-black tracking-[0.4em] uppercase opacity-90 leading-none">
+                      Integrated Cyber Readiness Control Interface
                    </p>
                 </div>
-                <div className="flex gap-8">
-                   <div className="flex flex-col text-left"><span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Latency</span><span className="text-[11px] font-black text-emerald-500 font-mono">0.002MS</span></div>
-                   <div className="flex flex-col text-left"><span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Sector</span><span className={`text-[11px] font-black font-mono uppercase ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-700'}`}>{user.class_name || "ALPHA"}</span></div>
+                <div className="flex gap-8 border-l border-white/10 pl-8">
+                   <div className="flex flex-col"><span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">Latency</span><span className="text-[11px] font-black text-emerald-400 font-mono">0.002MS</span></div>
+                   <div className="flex flex-col"><span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">Sector</span><span className="text-[11px] font-black text-cyan-400 font-mono uppercase">{user.class_name || "ALPHA"}</span></div>
                 </div>
              </div>
           </div>
 
-          {/* Right Side Orb */}
+          {/* Right Side: Holographic Sphere */}
           <div className="relative w-full lg:w-1/3 flex items-center justify-center">
-             <div className={`relative p-10 rounded-full border transition-all duration-1000 ${theme === 'dark' ? 'bg-black/40 border-white/10 shadow-[0_0_50px_rgba(0,0,0,1)]' : 'bg-white border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.05)]'}`}>
-                <Globe size={110} className={`${theme === 'dark' ? 'text-white/5' : 'text-slate-100'}`} />
-                <motion.div animate={{ rotate: 360 }} transition={{ duration: 6, repeat: Infinity, ease: "linear" }} className="absolute inset-0">
-                   <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full ${theme === 'dark' ? 'bg-cyan-400 shadow-cyan-400' : 'bg-blue-600 shadow-blue-400'}`} />
-                </motion.div>
+             <div className="relative w-64 h-64 lg:w-80 lg:h-80 flex items-center justify-center group-hover:scale-110 transition-transform duration-1000">
+                <div className="absolute inset-0 border-2 border-dashed border-cyan-500/20 rounded-full animate-[spin_40s_linear_infinite]" />
+                <div className="absolute inset-8 border border-white/5 rounded-full animate-[spin_25s_linear_infinite_reverse]" />
+                <div className="relative z-10 p-10 bg-black/40 rounded-full backdrop-blur-2xl border border-white/10 shadow-[inner_0_0_50px_rgba(34,211,238,0.1)]">
+                   <Globe size={120} className="text-white/5 group-hover:text-cyan-400 transition-colors duration-1000" />
+                   <motion.div animate={{ rotate: 360 }} transition={{ duration: 6, repeat: Infinity, ease: "linear" }} className="absolute inset-0">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-cyan-400 rounded-full shadow-[0_0_20px_#22d3ee]" />
+                   </motion.div>
+                </div>
              </div>
           </div>
        </div>
-       {/* Tactical Corners (Bersih) */}
-       <div className={`absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 rounded-tl-[3.5rem] opacity-20 ${theme === 'dark' ? 'border-cyan-500' : 'border-blue-600'}`} />
-       <div className={`absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 rounded-br-[3.5rem] opacity-20 ${theme === 'dark' ? 'border-cyan-500' : 'border-blue-600'}`} />
+
+       {/* Symmetrical Tactical Corners (Glow Solid) */}
+       <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-cyan-500/50 rounded-tl-[3.5rem]" />
+       <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-cyan-500/50 rounded-tr-[3.5rem]" />
+       <div className="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-cyan-500/50 rounded-bl-[3.5rem]" />
+       <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-cyan-500/50 rounded-br-[3.5rem]" />
     </div>
 
-    {/* 2. GRID CARDS */}
+    {/* --- 2. THE DATA CLUSTER CARDS --- */}
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
        {[
-         { title: user.username, sub: "IDENTITY VERIFIED", icon: Fingerprint, accent: theme === 'dark' ? 'fuchsia' : 'slate' },
+         { title: user.username, sub: "IDENTITY VERIFIED", icon: Fingerprint },
          { title: score, sub: "READINESS LEVEL", isScore: true },
          { title: "Analytical Matrix", sub: "OPERATIONAL READY", isMatrix: true }
        ].map((card, i) => (
-         <div key={i} className={`p-10 rounded-[3rem] border transition-all duration-500 flex flex-col items-center text-center ${theme === 'dark' ? 'bg-black/60 border-white/5 shadow-2xl' : 'bg-white border-slate-100 shadow-xl shadow-slate-200/20'}`}>
+         <div key={i} className="p-10 rounded-[3rem] border border-white/5 bg-[#080a12]/80 backdrop-blur-3xl hover:border-fuchsia-500/30 transition-all duration-500 flex flex-col items-center text-center shadow-2xl relative group overflow-hidden">
+            {/* Scanner Line on Hover */}
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-fuchsia-500 shadow-[0_0_15px_#d946ef] opacity-0 group-hover:opacity-100 group-hover:animate-scanner" />
+            
             {card.icon && (
-               <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center text-white mb-8 ${theme === 'dark' ? 'bg-slate-900 border border-white/10' : 'bg-slate-950'}`}>
-                  <card.icon size={36} />
+               <div className="w-20 h-20 bg-slate-900 border border-white/10 rounded-[2.5rem] flex items-center justify-center text-white mb-8 shadow-2xl group-hover:rotate-12 transition-transform">
+                  <card.icon size={40} />
                </div>
             )}
             {card.isScore && (
                <div className="relative mb-6">
                   <svg className="w-40 h-40 transform -rotate-90">
-                     <circle cx="80" cy="80" r="72" stroke={theme === 'dark' ? "rgba(255,255,255,0.03)" : "#f8fafc"} strokeWidth="10" fill="none" />
-                     <motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score/100)*452} 1000` }} transition={{ duration: 2.5 }} cx="80" cy="80" r="72" stroke={theme === 'dark' ? "#d946ef" : "#2563eb"} strokeWidth="10" strokeLinecap="round" fill="none" />
+                     <circle cx="80" cy="80" r="72" stroke="rgba(255,255,255,0.03)" strokeWidth="10" fill="none" />
+                     <motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score/100)*452} 1000` }} transition={{ duration: 2.5 }} cx="80" cy="80" r="72" stroke="#d946ef" strokeWidth="10" strokeLinecap="round" fill="none" style={{ filter: 'drop-shadow(0 0 15px #d946ef)' }} />
                   </svg>
-                  <div className={`absolute inset-0 flex items-center justify-center text-5xl font-black ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{score}</div>
+                  <div className="absolute inset-0 flex items-center justify-center text-5xl font-black text-white">{score}</div>
                </div>
             )}
             {card.isMatrix && (
-               <div className="w-full space-y-6 text-[10px] font-black tracking-[0.3em] uppercase mb-6 text-left">
-                  <div className="flex justify-between items-center"><span className="text-slate-400">Node Host</span><span className={theme === 'dark' ? 'text-fuchsia-400' : 'text-slate-900'}>Stable</span></div>
-                  <div className="flex justify-between items-center"><span className="text-slate-400">Security</span><span className={theme === 'dark' ? 'text-emerald-400' : 'text-blue-700'}>Verified</span></div>
+               <div className="w-full space-y-6 text-[11px] font-black tracking-[0.3em] uppercase mb-6 text-left px-2">
+                  <div className="flex justify-between items-center"><span className="text-slate-500">Node Host</span><span className="text-fuchsia-400">Stable</span></div>
+                  <div className="flex justify-between items-center"><span className="text-slate-500">Security</span><span className="text-emerald-400">Verified</span></div>
                </div>
             )}
-            <h4 className={`text-2xl font-black uppercase tracking-widest ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{!card.isScore && !card.isMatrix ? card.title : ""}</h4>
-            <p className={`text-[9px] font-black tracking-[0.5em] uppercase mt-3 ${theme === 'dark' ? 'text-fuchsia-500' : 'text-blue-600'}`}>{card.sub}</p>
+            <h4 className="text-2xl font-black uppercase tracking-widest text-white leading-none">{!card.isScore && !card.isMatrix ? card.title : ""}</h4>
+            <p className="text-[10px] font-black tracking-[0.5em] uppercase mt-4 text-fuchsia-500">{card.sub}</p>
          </div>
        ))}
     </div>
 
+    {/* --- 3. THE MISSION BUTTON (ULTRA GARANG) --- */}
+    <div className="p-8 lg:p-12 rounded-[3.5rem] bg-slate-900 border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden group">
+       <div className="absolute inset-0 bg-hud-grid opacity-10" />
+       <div className="flex flex-col lg:flex-row items-center gap-10 z-10 text-center lg:text-left">
+          <div className="w-20 h-20 bg-white/5 rounded-[2rem] flex items-center justify-center border border-white/10"><BellRing size={36} className="text-white animate-bounce" /></div>
+          <div className="space-y-3">
+             <div className="flex items-center justify-center lg:justify-start gap-4"><div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981] animate-ping" /><span className="text-[11px] font-black tracking-[0.6em] text-emerald-400 uppercase">Operational Protocol: Active</span></div>
+             <h3 className="text-2xl lg:text-4xl font-black text-white uppercase tracking-tight">Assessment Gateway.</h3>
+             <p className="text-[11px] font-black text-slate-400 tracking-[0.4em] uppercase opacity-70">Validasi identitas operasional Anda melalui protokol keamanan siber resmi sekarang.</p>
+          </div>
+       </div>
+       <button onClick={handleStartMissionClick} className="px-16 py-8 bg-white text-slate-950 rounded-[2.5rem] font-black text-[13px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-500 uppercase flex items-center gap-6 active:scale-95 shadow-[0_0_50px_rgba(255,255,255,0.2)]">START PROTOCOL <Zap size={24} /></button>
+    </div>
   </motion.div>
 )}
-
 
 
 {/* VIEW ASSESSMENT (ULTRA-LUXURY HUD INTERFACE) */}
@@ -1036,7 +1069,21 @@ export default function StudentPortal() {
         ::-webkit-scrollbar { width: 0px; }
         ::selection { background: #d946ef; color: white; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        * { border-bottom-style: none !important; text-decoration: none !important; font-style: normal !important; }
+        * { 
+        border-bottom-style: none !important; 
+        text-decoration: none !important; 
+        font-style: normal !important; 
+        }
+
+        @keyframes scanner { 
+        0% { top: -10%; opacity: 0; } 
+        50% { opacity: 1; }
+        100% { top: 110%; opacity: 0; } 
+        }
+
+       .animate-scanner { 
+        animation: scanner 3s ease-in-out infinite; 
+        }
         .bg-hud-grid { 
         background-image: linear-gradient(to right, rgba(34, 211, 238, 0.1) 1px, transparent 1px), 
         linear-gradient(to bottom, rgba(34, 211, 238, 0.1) 1px, transparent 1px); 
