@@ -105,6 +105,25 @@ const RobotFace = ({ size = 24, ringSize = "w-40 h-40", coreSize = "w-24 h-24" }
     </div>
   );
 };
+const NeonCursor = () => {
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const move = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, []);
+
+  return (
+    <motion.div
+      animate={{ x: pos.x - 12, y: pos.y - 12 }}
+      transition={{ type: "spring", damping: 30, stiffness: 400, mass: 0.5 }}
+      className="fixed top-0 left-0 w-6 h-6 border border-cyan-400 rounded-full z-[99999] pointer-events-none flex items-center justify-center"
+    >
+      <div className="w-1 h-1 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" />
+    </motion.div>
+  );
+};
+
 
 // --- ANIMATION VARIANTS ---
 const containerVariants = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } } as any;
@@ -399,6 +418,7 @@ export default function StudentPortal() {
 
   // 1. Semua useState
   const [mounted, setMounted] = useState(false);
+  const [bootDone, setBootDone] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [theme, setTheme] = useState('dark');
@@ -423,7 +443,7 @@ export default function StudentPortal() {
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
 
-// 2. Semua useCallback
+// 2. Semua useCallbac
 const fetchScores = useCallback(async (username: string) => {
   try {
     const res = await fetch(`https://cyber-backend-delta.vercel.app/siswa/scores/${username}`);
@@ -439,29 +459,6 @@ const fetchScores = useCallback(async (username: string) => {
   }
 }, []);
 
-// --- 4. DATA RADAR (VISUALISASI DEWA LEVEL) ---
-const radarData = useMemo(() => {
-  // Label yang sangat keren dan profesional untuk pameran
-  const sectors = [
-    { key: "Social", label: "PSYCHOLOGICAL" },
-    { key: "Malware", label: "NEURAL VIRUS" },
-    { key: "Phishing", label: "CREDENTIAL" },
-    { key: "Network", label: "INFRASTRUCTURE" },
-    { key: "Threat", label: "INTEL" },
-    { key: "Access", label: "PERIMETER" }
-  ];
-
-  return sectors.map(s => {
-    const entry = (history || []).find((h: any) => 
-      String(h.domain_id || "").toLowerCase().includes(s.key.toLowerCase())
-    );
-    return { 
-      subject: s.label, 
-      A: entry ? entry.score : 0, 
-      fullMark: 100 
-    };
-  });
-}, [history]);
 
 
 // --- 2. EFFECT UTAMA: OTENTIKASI & MOUNTED ---
@@ -502,6 +499,30 @@ useEffect(() => {
       .catch(err => console.error("Uplink Error:", err));
   }
 }, [isAuthorized]);
+
+// --- 4. DATA RADAR (VISUALISASI DEWA LEVEL) ---
+const radarData = useMemo(() => {
+  // Label yang sangat keren dan profesional untuk pameran
+  const sectors = [
+    { key: "Social", label: "PSYCHOLOGICAL" },
+    { key: "Malware", label: "NEURAL VIRUS" },
+    { key: "Phishing", label: "CREDENTIAL" },
+    { key: "Network", label: "INFRASTRUCTURE" },
+    { key: "Threat", label: "INTEL" },
+    { key: "Access", label: "PERIMETER" }
+  ];
+
+  return sectors.map(s => {
+    const entry = (history || []).find((h: any) => 
+      String(h.domain_id || "").toLowerCase().includes(s.key.toLowerCase())
+    );
+    return { 
+      subject: s.label, 
+      A: entry ? entry.score : 0, 
+      fullMark: 100 
+    };
+  });
+}, [history]);
 
 // --- 5. GREETING LOGIC ---
 const getGreeting = () => {
@@ -813,10 +834,29 @@ const maxStep = useMemo(() => {
   };
 
 
+ // --- BAGIAN INI UNTUK MENGGANTI BARIS SEKITAR 506 ---
+  
+  // 1. Fix Hydration Error (Menghindari Error #310)
+  if (!mounted) return <div className="bg-black h-screen w-full" />;
+
+  // 2. Tampilkan Boot Sequence dulu sebelum masuk Dashboard
+  if (!bootDone) {
+    return (
+      <AnimatePresence>
+        <CyberBootSequence onComplete={() => setBootDone(true)} />
+      </AnimatePresence>
+    );
+  }
+
+  // 3. Jika sudah boot, tampilkan Dashboard Utama
   return (
-    <div className="flex h-screen w-full bg-black text-slate-100 overflow-hidden font-sans relative">
+    <div className="flex h-screen w-full bg-[#020105] text-slate-100 overflow-hidden font-sans relative">
+      <NeonCursor /> {/* Kursor Cyber Baru */}
+      
       <PersistentUniverse bgIdx={bgIdx} />
       <ParticleBurstClickEffect />
+      
+      {/* Kode AnimatePresence isCalculating kamu tetap di sini */}
       <AnimatePresence>
         {isCalculating && (
           <CyberCalculationFinale 
@@ -828,6 +868,8 @@ const maxStep = useMemo(() => {
           />
         )}
       </AnimatePresence>
+
+      {/* ... Lanjutkan dengan kode <motion.aside> dan <main> kamu seperti biasa ... */}
 
       <motion.aside 
       initial={false} 
