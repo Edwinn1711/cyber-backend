@@ -387,21 +387,69 @@ export default function StudentPortal() {
         <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
           <AnimatePresence mode="wait">
 
-            {/* --- 1. DASHBOARD --- */}
-            {view === 'dashboard' && (
-              <motion.div key="dash" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="max-w-[1350px] mx-auto space-y-12 pb-20">
-                 <div className="p-10 rounded-[2.5rem] bg-[#020308]/90 backdrop-blur-3xl border border-cyan-500/20 shadow-[0_30px_80px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-10">
-                    <div className="absolute inset-0 bg-hud-grid opacity-[0.06]" />
-                    <div className="relative z-10 space-y-6 text-left">
-                       <h2 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter text-white">SELAMAT DATANG, <br/><span className="text-cyan-400">{user.username}</span></h2>
-                       <p className="text-[12px] font-black tracking-[0.4em] uppercase text-slate-500">Cyber Readiness Index - {user.class_name}</p>
+           {/* --- 1. DASHBOARD MEWAH (WAH FACTOR) --- */}
+          {view === 'dashboard' && (
+            <motion.div 
+              key="dash-final-exhibition" 
+              initial={{ opacity: 0, scale: 0.95 }} 
+              animate={{ opacity: 1, scale: 1 }} 
+              exit={{ opacity: 0, y: -20 }}
+              className="max-w-[1350px] mx-auto space-y-12 pb-20"
+            >
+              {/* Banner Utama */}
+              <motion.div className="relative p-10 rounded-[2.5rem] bg-[#020308]/90 backdrop-blur-3xl border border-cyan-500/20 overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.8)] group">
+                <div className="absolute inset-0 bg-hud-grid opacity-[0.06]" />
+                <motion.div animate={{ top: ['-100%', '200%'] }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="absolute left-0 w-full h-[60px] bg-gradient-to-b from-transparent via-cyan-500/15 to-transparent z-10" />
+
+                <div className="relative z-20 space-y-8 text-left">
+                    <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-lg bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[8px] font-black tracking-[0.4em] uppercase shadow-inner">
+                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"/> AKSES SISTEM BERHASIL
                     </div>
-                    <button onClick={handleStartMissionClick} className="relative z-10 px-12 py-5 bg-white text-slate-950 rounded-2xl font-black text-[11px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all uppercase flex items-center gap-5 shadow-xl">
+                    
+                    <div className="space-y-2">
+                      <h2 className="text-6xl font-black uppercase tracking-tighter text-white">
+                        <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 bg-clip-text text-transparent animate-gradient-x">
+                          {user.username}
+                        </span>
+                      </h2>
+                      <p className="text-[12px] font-black tracking-[0.4em] uppercase text-slate-500">Cyber Readiness Index - {user.class_name}</p>
+                    </div>
+                    
+                    <button onClick={handleStartMissionClick} className="px-12 py-5 bg-white text-black rounded-2xl font-black text-[11px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all uppercase flex items-center gap-5 shadow-xl">
                       INITIALIZE <Zap size={18} />
                     </button>
-                 </div>
+                </div>
               </motion.div>
-            )}
+
+              {/* Trinity Widgets */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Widget 1 */}
+                <div className="p-8 rounded-[2.5rem] bg-[#0a0c14]/90 border border-white/5 flex flex-col items-center text-center shadow-2xl">
+                    <ShieldCheck size={36} className="text-cyan-400 mb-6" />
+                    <h4 className="text-2xl font-black text-white">{user.username}</h4>
+                    <span className="text-[8px] font-black text-slate-600 uppercase tracking-[0.4em]">Identity Profile</span>
+                </div>
+                
+                {/* Widget 2 */}
+                <div className="p-8 rounded-[2.5rem] bg-[#0a0c14]/90 border border-white/5 flex flex-col items-center justify-center text-center">
+                    <div className="text-4xl font-black text-white mb-2">{score}</div>
+                    <span className="text-[8px] font-black text-fuchsia-400 uppercase tracking-[0.3em]">Readiness Index</span>
+                </div>
+
+                {/* Widget 3 */}
+                <div className="p-8 rounded-[2.5rem] bg-[#0a0c14]/90 border border-white/5 flex flex-col justify-center text-left">
+                    <h2 className="text-[10px] font-black text-slate-400 tracking-[0.4em] uppercase mb-6">Analytical Matrix</h2>
+                    <div className="space-y-4">
+                      {["Architecture", "Cyber Vault", "Latency Node"].map((m, i) => (
+                        <div key={i} className="flex justify-between items-center text-[10px] font-black text-white">
+                          {m} <span className="text-cyan-400">STABLE</span>
+                        </div>
+                      ))}
+                    </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
             {/* --- 2. ASSESSMENT (PILIH DOMAIN) --- */}
             {view === 'assessment' && (
