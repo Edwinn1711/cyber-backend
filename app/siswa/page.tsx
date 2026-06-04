@@ -620,21 +620,21 @@ export default function StudentPortal() {
 
     <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
     <header className={`h-20 flex items-center justify-between px-10 border-b transition-all duration-700 ${theme === 'dark' ? 'bg-black/50 border-white/10 backdrop-blur-xl' : 'bg-white/80 border-slate-200 backdrop-blur-xl'}`}>
-        <div className="flex items-center gap-6">
-          <div className={`flex items-center gap-3 px-5 py-2 border rounded-full ${theme === 'dark' ? 'bg-white/5 border-white/20 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-900'}`}>
+    <div className="flex items-center gap-6">
+        <div className={`flex items-center gap-3 px-5 py-2 border rounded-full ${theme === 'dark' ? 'bg-white/5 border-white/20 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-900'}`}>
             <div className={`w-2 h-2 rounded-full animate-pulse ${theme === 'dark' ? 'bg-emerald-400' : 'bg-emerald-600'}`} />
-            <span className="text-[9px] font-black uppercase tracking-widest text-left">GATEWAY ACTIVE</span>
-          </div>
-
-          {/* TOMBOL GANTI TEMA (WAH VERSION) */}
-          <button 
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className={`px-6 py-2 rounded-xl border font-black text-[9px] tracking-[0.4em] transition-all duration-500 flex items-center gap-3 shadow-xl active:scale-95 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white hover:border-cyan-400' : 'bg-white border-slate-200 text-slate-900 hover:border-blue-600'}`}
-          >
-             <div className={`w-2 h-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400 shadow-[0_0_10px_#22d3ee]' : 'bg-blue-600 shadow-[0_0_10px_#2563eb]'}`} />
-             {theme === 'dark' ? 'DARK_PROTOCOL' : 'LIGHT_PROTOCOL'}
-          </button>
+            <span className="text-[9px] font-black uppercase tracking-widest">GATEWAY ACTIVE</span>
         </div>
+
+        {/* TOMBOL THEME TANPA UNDERSCORE & ITALIC */}
+        <button 
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          className={`px-6 py-2 rounded-xl border font-black text-[9px] tracking-[0.4em] transition-all duration-500 flex items-center gap-3 shadow-xl active:scale-95 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white hover:border-cyan-400' : 'bg-white border-slate-200 text-slate-900 hover:border-blue-600 shadow-slate-200'}`}
+        >
+           <div className={`w-2 h-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400 shadow-[0_0_10px_#22d3ee]' : 'bg-blue-600 shadow-[0_0_10px_#2563eb]'}`} />
+           {theme === 'dark' ? 'DARK PROTOCOL' : 'LIGHT PROTOCOL'}
+        </button>
+    </div>
 
         <div className="flex items-center gap-6 text-right text-left">
           <div className="hidden sm:block">
@@ -650,93 +650,86 @@ export default function StudentPortal() {
       <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
       <AnimatePresence mode="wait">
             
-          {view === 'dashboard' && (
+ {/* --- VIEW DASHBOARD: THE SUPREME INTERFACE (NO UNDERSCORES / NO ITALICS) --- */}
+{view === 'dashboard' && (
   <motion.div 
     key={theme} 
-    initial={{ opacity: 0, scale: 0.98 }} 
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.8 }}
+    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
     className="max-w-[1400px] mx-auto space-y-12 pb-20"
   >
-    {/* --- 1. THE GLASS COMMAND BANNER (NO UNDERLINES / NO ITALICS) --- */}
-    <div className={`relative p-8 lg:p-14 rounded-[3rem] border transition-all duration-700 overflow-hidden ${theme === 'dark' ? 'bg-[#020205]/90 border-cyan-500/20 shadow-[0_40px_100px_rgba(0,0,0,1)]' : 'bg-white/80 backdrop-blur-3xl border-white shadow-[0_40px_100px_rgba(15,23,42,0.08)]'}`}>
+    {/* 1. BANNER UTAMA */}
+    <div className={`relative p-10 lg:p-14 rounded-[3.5rem] border transition-all duration-700 overflow-hidden ${theme === 'dark' ? 'bg-[#020205]/90 border-cyan-500/20 shadow-[0_40px_100px_rgba(0,0,0,1)]' : 'bg-white border-white shadow-[0_30px_100px_rgba(15,23,42,0.05)]'}`}>
        
-       {/* Background Grid yang Berubah Warna */}
+       {/* Background Grid yang menyesuaikan tema */}
        <div className={`absolute inset-0 opacity-[0.03] pointer-events-none ${theme === 'dark' ? 'bg-hud-grid' : 'bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:50px_50px]'}`} />
        
        <div className="relative z-20 flex flex-col lg:flex-row justify-between items-center gap-12">
           <div className="flex flex-col items-center lg:items-start space-y-8 w-full lg:w-2/3 text-left">
-             
-             {/* Status Badge */}
-             <div className="flex gap-4">
-                <div className={`px-5 py-2 rounded-xl font-black text-[9px] tracking-[0.4em] uppercase border transition-all ${theme === 'dark' ? 'bg-cyan-500/10 border-cyan-400/30 text-cyan-400' : 'bg-cyan-500/5 border-cyan-200 text-cyan-600 shadow-sm'}`}>
-                   Authentication Confirmed
-                </div>
+             <div className={`inline-flex items-center gap-4 px-5 py-2 rounded-xl font-black text-[9px] tracking-[0.4em] uppercase border transition-all ${theme === 'dark' ? 'bg-cyan-500/10 border-cyan-400/30 text-cyan-400' : 'bg-cyan-500/5 border-cyan-200 text-cyan-600'}`}>
+                Authentication Confirmed
              </div>
 
-             {/* Title (UKURAN 6XL - SEMPURNA) */}
              <div className="space-y-1">
                 <h1 className={`text-3xl lg:text-5xl font-black uppercase tracking-tighter leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>WELCOME,</h1>
-                <h2 className={`text-4xl lg:text-7xl font-black uppercase tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-r animate-gradient-x ${theme === 'dark' ? 'from-cyan-400 via-blue-500 to-fuchsia-600 drop-shadow-[0_0_20px_rgba(34,211,238,0.4)]' : 'from-cyan-600 via-blue-700 to-indigo-700'}`}>
+                <h2 className={`text-4xl lg:text-7xl font-black uppercase tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-r animate-gradient-x ${theme === 'dark' ? 'from-cyan-400 via-blue-500 to-fuchsia-600' : 'from-blue-600 via-indigo-600 to-fuchsia-600'}`}>
                    {user.username}
                 </h2>
              </div>
 
-             {/* Deskripsi (Garis Samping Vertikal Tebal - NO UNDERLINE) */}
+             {/* Deskripsi dengan aksen Garis Vertikal (Bukan garis bawah) */}
              <div className="flex flex-col sm:flex-row items-center gap-10 w-full">
-                <div className={`border-l-[6px] pl-6 py-1 transition-colors ${theme === 'dark' ? 'border-cyan-500' : 'border-blue-600'}`}>
-                   <p className={`text-[10px] lg:text-[12px] font-black tracking-[0.4em] uppercase opacity-80 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-700'}`}>
+                <div className={`border-l-4 pl-6 py-1 ${theme === 'dark' ? 'border-cyan-500' : 'border-blue-600'}`}>
+                   <p className={`text-[10px] lg:text-[12px] font-black tracking-[0.4em] uppercase opacity-80 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
                       Integrated Cyber Readiness Control
                    </p>
                 </div>
                 <div className="flex gap-8">
-                   <div className="flex flex-col"><span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Latency</span><span className="text-[11px] font-black text-emerald-500 font-mono">0.002MS</span></div>
-                   <div className="flex flex-col"><span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Sector</span><span className={`text-[11px] font-black font-mono uppercase ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-700'}`}>{user.class_name || "ALPHA"}</span></div>
+                   <div className="flex flex-col text-left"><span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Latency</span><span className="text-[11px] font-black text-emerald-500 font-mono">0.002MS</span></div>
+                   <div className="flex flex-col text-left"><span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Sector</span><span className={`text-[11px] font-black font-mono uppercase ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-700'}`}>{user.class_name || "ALPHA"}</span></div>
                 </div>
              </div>
           </div>
 
-          {/* Right Side Globe (Mewah & Beradaptasi) */}
+          {/* Right Side Orb */}
           <div className="relative w-full lg:w-1/3 flex items-center justify-center">
-             <div className={`relative p-10 rounded-full border transition-all duration-1000 ${theme === 'dark' ? 'bg-black/40 border-white/10 shadow-[0_0_50px_rgba(0,0,0,1)]' : 'bg-white border-white shadow-[0_30px_60px_rgba(15,23,42,0.1)]'}`}>
-                <Globe size={110} className={`transition-colors duration-1000 ${theme === 'dark' ? 'text-white/5' : 'text-slate-100'}`} />
+             <div className={`relative p-10 rounded-full border transition-all duration-1000 ${theme === 'dark' ? 'bg-black/40 border-white/10 shadow-[0_0_50px_rgba(0,0,0,1)]' : 'bg-white border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.05)]'}`}>
+                <Globe size={110} className={`${theme === 'dark' ? 'text-white/5' : 'text-slate-100'}`} />
                 <motion.div animate={{ rotate: 360 }} transition={{ duration: 6, repeat: Infinity, ease: "linear" }} className="absolute inset-0">
-                   <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full shadow-lg ${theme === 'dark' ? 'bg-cyan-400 shadow-cyan-400' : 'bg-blue-600 shadow-blue-400'}`} />
+                   <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full ${theme === 'dark' ? 'bg-cyan-400 shadow-cyan-400' : 'bg-blue-600 shadow-blue-400'}`} />
                 </motion.div>
              </div>
           </div>
        </div>
-
-       {/* Symmetrical Tactical Corners */}
-       <div className={`absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 rounded-tl-[3.5rem] opacity-20 transition-colors ${theme === 'dark' ? 'border-cyan-500' : 'border-blue-600'}`} />
-       <div className={`absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 rounded-br-[3.5rem] opacity-20 transition-colors ${theme === 'dark' ? 'border-cyan-500' : 'border-blue-600'}`} />
+       {/* Tactical Corners (Bersih) */}
+       <div className={`absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 rounded-tl-[3.5rem] opacity-20 ${theme === 'dark' ? 'border-cyan-500' : 'border-blue-600'}`} />
+       <div className={`absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 rounded-br-[3.5rem] opacity-20 ${theme === 'dark' ? 'border-cyan-500' : 'border-blue-600'}`} />
     </div>
 
-    {/* --- 2. GRID CARDS (CLEAN CRYSTAL STYLE) --- */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    {/* 2. GRID CARDS */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
        {[
-         { title: user.username, sub: "IDENTITY_VERIFIED", icon: Fingerprint, accent: theme === 'dark' ? 'fuchsia' : 'slate' },
-         { title: score, sub: "READINESS_LEVEL", isScore: true },
-         { title: "Analytical Matrix", sub: "OPERATIONAL_READY", isMatrix: true }
+         { title: user.username, sub: "IDENTITY VERIFIED", icon: Fingerprint, accent: theme === 'dark' ? 'fuchsia' : 'slate' },
+         { title: score, sub: "READINESS LEVEL", isScore: true },
+         { title: "Analytical Matrix", sub: "OPERATIONAL READY", isMatrix: true }
        ].map((card, i) => (
-         <div key={i} className={`p-10 rounded-[3rem] border transition-all duration-700 flex flex-col items-center text-center ${theme === 'dark' ? 'bg-black/60 border-white/5 shadow-2xl' : 'bg-white border-white shadow-[0_20px_50px_rgba(15,23,42,0.04)] hover:shadow-[0_30px_80px_rgba(15,23,42,0.08)]'}`}>
+         <div key={i} className={`p-10 rounded-[3rem] border transition-all duration-500 flex flex-col items-center text-center ${theme === 'dark' ? 'bg-black/60 border-white/5 shadow-2xl' : 'bg-white border-slate-100 shadow-xl shadow-slate-200/20'}`}>
             {card.icon && (
-               <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center text-white mb-8 transition-all ${theme === 'dark' ? 'bg-slate-900 border border-white/10' : 'bg-slate-950 shadow-xl'}`}>
+               <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center text-white mb-8 ${theme === 'dark' ? 'bg-slate-900 border border-white/10' : 'bg-slate-950'}`}>
                   <card.icon size={36} />
                </div>
             )}
             {card.isScore && (
                <div className="relative mb-6">
                   <svg className="w-40 h-40 transform -rotate-90">
-                     <circle cx="80" cy="80" r="72" stroke={theme === 'dark' ? "rgba(255,255,255,0.03)" : "#f1f5f9"} strokeWidth="10" fill="none" />
+                     <circle cx="80" cy="80" r="72" stroke={theme === 'dark' ? "rgba(255,255,255,0.03)" : "#f8fafc"} strokeWidth="10" fill="none" />
                      <motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score/100)*452} 1000` }} transition={{ duration: 2.5 }} cx="80" cy="80" r="72" stroke={theme === 'dark' ? "#d946ef" : "#2563eb"} strokeWidth="10" strokeLinecap="round" fill="none" />
                   </svg>
                   <div className={`absolute inset-0 flex items-center justify-center text-5xl font-black ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{score}</div>
                </div>
             )}
             {card.isMatrix && (
-               <div className="w-full space-y-6 text-[10px] font-black tracking-[0.3em] uppercase mb-6">
-                  <div className="flex justify-between items-center"><span className="text-slate-400">Node_Host</span><span className={theme === 'dark' ? 'text-fuchsia-400' : 'text-slate-900'}>Stable</span></div>
+               <div className="w-full space-y-6 text-[10px] font-black tracking-[0.3em] uppercase mb-6 text-left">
+                  <div className="flex justify-between items-center"><span className="text-slate-400">Node Host</span><span className={theme === 'dark' ? 'text-fuchsia-400' : 'text-slate-900'}>Stable</span></div>
                   <div className="flex justify-between items-center"><span className="text-slate-400">Security</span><span className={theme === 'dark' ? 'text-emerald-400' : 'text-blue-700'}>Verified</span></div>
                </div>
             )}
@@ -746,20 +739,9 @@ export default function StudentPortal() {
        ))}
     </div>
 
-    {/* --- 3. THE MISSION GATEWAY (THE WOW FACTOR) --- */}
-    <div className={`p-8 lg:p-10 rounded-[3.5rem] flex flex-col lg:flex-row items-center justify-between gap-10 transition-all duration-700 ${theme === 'dark' ? 'bg-slate-900 border border-white/10' : 'bg-slate-950 shadow-2xl'}`}>
-       <div className="flex flex-col lg:flex-row items-center gap-8 text-center lg:text-left">
-          <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 shadow-inner"><BellRing size={28} className="text-white animate-pulse" /></div>
-          <div className="space-y-2">
-             <div className="flex items-center justify-center lg:justify-start gap-4"><div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_10px_#10b981] animate-ping" /><span className="text-[10px] font-black tracking-[0.4em] text-emerald-400 uppercase">Operational Status: Online</span></div>
-             <h3 className="text-2xl font-black text-white uppercase tracking-tight">Assessment Gateway.</h3>
-             <p className="text-[10px] font-black text-slate-400 tracking-[0.3em] uppercase opacity-70">Luncurkan protokol penilaian keamanan siber untuk memvalidasi identitas operasional Anda.</p>
-          </div>
-       </div>
-       <button onClick={handleStartMissionClick} className="px-14 py-6 bg-white text-slate-950 rounded-[2rem] font-black text-[12px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-500 uppercase flex items-center gap-5 active:scale-95 shadow-xl">START PROTOCOL <Zap size={22} /></button>
-    </div>
   </motion.div>
 )}
+
 
 
 {/* VIEW ASSESSMENT (ULTRA-LUXURY HUD INTERFACE) */}
@@ -1057,8 +1039,17 @@ export default function StudentPortal() {
         * { border-bottom-style: none !important; text-decoration: none !important; font-style: normal !important; }
         .bg-hud-grid { 
         background-image: linear-gradient(to right, rgba(34, 211, 238, 0.1) 1px, transparent 1px), 
-                          linear-gradient(to bottom, rgba(34, 211, 238, 0.1) 1px, transparent 1px); 
+        linear-gradient(to bottom, rgba(34, 211, 238, 0.1) 1px, transparent 1px); 
         background-size: 50px 50px; 
+        * { 
+        border-bottom-style: none !important; 
+        text-decoration: none !important; 
+        font-style: normal !important; 
+        }
+        input[type="date"] {
+        color-scheme: ${theme === 'dark' ? 'dark' : 'light'};
+        }
+        
       `}} />
     </div>
   );
