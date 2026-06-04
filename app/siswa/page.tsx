@@ -278,7 +278,7 @@ const CyberCalculationFinale = ({ score, onFinish }: { score: number, onFinish: 
       </div>
 
       {/* Overlay Scanline Glitch */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(34,211,238,0.05)_0%,transparent_70%)]" />
     </motion.div>
   );
 };
@@ -794,8 +794,8 @@ export default function StudentPortal() {
       className="relative p-10 lg:p-14 rounded-[3.5rem] bg-[#020308]/90 backdrop-blur-3xl border border-cyan-500/20 overflow-hidden shadow-[0_0_100px_rgba(0,0,0,1)] group"
     >
        {/* Efek HUD Grid & Laser Scanning */}
-       <div className="absolute inset-0 bg-hud-grid opacity-[0.04] pointer-events-none" />
-       <motion.div animate={{ top: ['-100%', '200%'] }} transition={{ duration: 5, repeat: Infinity, ease: "linear" }} className="absolute left-0 w-full h-[100px] bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent pointer-events-none z-10" />
+       <div className="absolute inset-0 bg-hud-grid opacity-20" />
+       <motion.div animate={{ top: ['-100%', '200%'] }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="absolute left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent z-10"/>
 
        <div className="relative z-20 space-y-10 text-left">
           {/* Header Badge */}
@@ -1241,7 +1241,12 @@ export default function StudentPortal() {
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes scan { 0% { top: 0%; } 50% { top: 100%; } 100% { top: 0%; } }
         .animate-scan { animation: scan 6s linear infinite; position: absolute; z-index: 10; }
-        .bg-hud-grid { background-image: linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px); background-size: 50px 50px; transform: perspective(800px) rotateX(45deg) scale(2.5); transform-origin: top; }
+        .bg-hud-grid { 
+        background-image: 
+        linear-gradient(to right, rgba(34, 211, 238, 0.15) 1px, transparent 1px), 
+        linear-gradient(to bottom, rgba(34, 211, 238, 0.15) 1px, transparent 1px); 
+        background-size: 40px 40px; 
+        }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(217, 70, 239, 0.5); border-radius: 20px; }
         ::-webkit-scrollbar { width: 0px; }
