@@ -685,90 +685,62 @@ const CRTOverlay = () => (
         )}
       </AnimatePresence>
 
-      {/* ... Lanjutkan dengan kode <motion.aside> dan <main> kamu seperti biasa ... */}
+      <motion.aside initial={false} animate={{ width: isSidebarCollapsed ? 80 : 260 }} className={`h-screen border-r transition-all duration-700 flex flex-col z-[100] relative shadow-2xl ${theme === 'dark' ? 'bg-black/95 border-white/10' : 'bg-white border-slate-200'}`}>
+        <div className={`h-20 px-6 flex items-center justify-between border-b ${theme === 'dark' ? 'border-white/10' : 'border-slate-100'}`}>
+          {!isSidebarCollapsed && (
+            <div className="flex flex-col text-left">
+              <span className={`font-black text-[11px] tracking-[0.2em] uppercase leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>CYBER READINESS</span>
+              <span className="font-black text-fuchsia-500 text-[9px] tracking-[0.4em] mt-1 uppercase">INDEX</span>
+            </div>
+          )}
+          <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-2 text-slate-400 hover:text-fuchsia-500 transition-all">
+            {isSidebarCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          </button>
+        </div>
 
-      <motion.aside 
-      initial={false} 
-      animate={{ width: isSidebarCollapsed ? 80 : 260 }} 
-      className={`h-screen border-r transition-all duration-700 flex flex-col z-[100] relative shadow-2xl ${theme === 'dark' ? 'bg-black/95 border-white/10' : 'bg-white border-slate-200'}`}
-    >
-      <div className={`h-20 px-6 flex items-center justify-between border-b ${theme === 'dark' ? 'border-white/10' : 'border-slate-100'}`}>
-        {!isSidebarCollapsed && (
-          <div className="flex flex-col text-left">
-            <span className={`font-black text-[11px] tracking-[0.2em] uppercase leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>CYBER READINESS</span>
-            <span className="font-black text-fuchsia-500 text-[9px] tracking-[0.4em] mt-1 uppercase">INDEX</span>
-          </div>
-        )}
-        <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-2 text-slate-400 hover:text-fuchsia-500 transition-all">
-          {isSidebarCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-        </button>
-      </div>
 
-      {/* Navigasi Sidebar */}
-      <nav className="flex-1 px-4 py-10 space-y-3">
-        {[
-          { id: 'dashboard', label: 'DASHBOARD', icon: LayoutGrid },
-          { id: 'assessment', label: 'ASSESSMENT', icon: Target },
-          { id: 'reports', label: 'REPORT', icon: FileText },
-          { id: 'feedback', label: 'FEEDBACK', icon: Lightbulb }
-        ].map((item) => {
-          const isActive = view === item.id;
-          return (
-            <button 
-              key={item.id} 
-              onClick={() => setView(item.id)}
-              className="w-full flex items-center p-4 rounded-2xl transition-all relative group outline-none"
-            >
-              {isActive && (
-                <motion.div layoutId="sidebar-active" className={`absolute inset-0 rounded-2xl z-0 ${theme === 'dark' ? 'bg-fuchsia-600/20 border-l-4 border-fuchsia-500' : 'bg-blue-600/10 border-l-4 border-blue-600'}`} />
-              )}
-              <div className="relative z-10 flex items-center gap-4">
-                <item.icon size={20} className={`${isActive ? (theme === 'dark' ? 'text-fuchsia-400' : 'text-blue-600') : 'text-slate-500'}`} />
-                {!isSidebarCollapsed && <span className={`font-black text-[10px] tracking-widest uppercase ${isActive ? (theme === 'dark' ? 'text-white' : 'text-slate-900') : 'text-slate-500'}`}>{item.label}</span>}
-              </div>
-            </button>
-          );
-        })}
+        <nav className="flex-1 px-4 py-10 space-y-3">
+          {[{ id: 'dashboard', label: 'DASHBOARD', icon: LayoutGrid }, { id: 'assessment', label: 'ASSESSMENT', icon: Target }, { id: 'reports', label: 'REPORT', icon: FileText }, { id: 'feedback', label: 'FEEDBACK', icon: Lightbulb }].map((item) => {
+            const isActive = view === item.id;
+            return (
+              <button key={item.id} onClick={() => setView(item.id)} className="w-full flex items-center p-4 rounded-2xl transition-all relative group outline-none">
+                {isActive && <motion.div layoutId="sidebar-active" className="absolute inset-0 rounded-2xl z-0 bg-cyan-600/20 border-l-4 border-cyan-500" />}
+                <div className="relative z-10 flex items-center gap-4">
+                  <item.icon size={20} className={isActive ? 'text-cyan-400' : 'text-slate-500'} />
+                  {!isSidebarCollapsed && <span className={`font-black text-[10px] tracking-widest uppercase ${isActive ? 'text-white' : 'text-slate-500'}`}>{item.label}</span>}
+                </div>
+              </button>
+            );
+          })}
       </nav>
 
       <div className={`p-6 border-t ${theme === 'dark' ? 'border-white/10' : 'border-slate-100'}`}>
-        <button onClick={() => { localStorage.removeItem('user'); router.push('/'); }} className="w-full flex items-center p-4 text-red-500 hover:bg-red-500/10 rounded-2xl gap-4 font-black text-[10px] tracking-widest uppercase">
-          <Power size={18} /> {!isSidebarCollapsed && "LOGOUT"}
-        </button>
-      </div>
-    </motion.aside>
-
-    <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
-    <header className={`h-20 flex items-center justify-between px-10 border-b transition-all duration-700 ${theme === 'dark' ? 'bg-black/50 border-white/10 backdrop-blur-xl' : 'bg-white/80 border-slate-200 backdrop-blur-xl'}`}>
-    <div className="flex items-center gap-6">
-        <div className={`flex items-center gap-3 px-5 py-2 border rounded-full ${theme === 'dark' ? 'bg-white/5 border-white/20 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-900'}`}>
-            <div className={`w-2 h-2 rounded-full animate-pulse ${theme === 'dark' ? 'bg-emerald-400' : 'bg-emerald-600'}`} />
-            <span className="text-[9px] font-black uppercase tracking-widest">GATEWAY ACTIVE</span>
+          <button onClick={() => { localStorage.removeItem('user'); router.push('/'); }} className="w-full flex items-center p-4 text-red-500 hover:bg-red-500/10 rounded-2xl gap-4 font-black text-[10px] tracking-widest uppercase">
+            <Power size={18} /> {!isSidebarCollapsed && "LOGOUT"}
+          </button>
         </div>
+      </motion.aside>
 
-        {/* TOMBOL THEME TANPA UNDERSCORE & ITALIC */}
-        <button 
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className={`px-6 py-2 rounded-xl border font-black text-[9px] tracking-[0.4em] transition-all duration-500 flex items-center gap-3 shadow-xl active:scale-95 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white hover:border-cyan-400' : 'bg-white border-slate-200 text-slate-900 hover:border-blue-600 shadow-slate-200'}`}
-        >
-           <div className={`w-2 h-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400 shadow-[0_0_10px_#22d3ee]' : 'bg-blue-600 shadow-[0_0_10px_#2563eb]'}`} />
-           {theme === 'dark' ? 'DARK PROTOCOL' : 'LIGHT PROTOCOL'}
-        </button>
-    </div>
-
-        <div className="flex items-center gap-6 text-right text-left">
-          <div className="hidden sm:block">
-            <p className={`text-[11px] font-black tracking-widest uppercase ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{user.username}</p>
-            <p className="text-[9px] font-black text-fuchsia-500 uppercase tracking-widest mt-1">OPERATIVE MODE</p>
+      <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
+        <header className="h-20 flex items-center justify-between px-10 border-b bg-black/50 border-white/10 backdrop-blur-xl">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 px-5 py-2 border rounded-full bg-white/5 border-white/20 text-slate-300">
+              <div className="w-2 h-2 rounded-full animate-pulse bg-emerald-400" />
+              <span className="text-[9px] font-black uppercase tracking-widest">GATEWAY ACTIVE</span>
+            </div>
           </div>
-          <div className="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center border border-white/20 shadow-lg text-white">
-            <User size={18} />
+          <div className="flex items-center gap-6 text-right text-left">
+            <div className="hidden sm:block">
+              <p className="text-[11px] font-black tracking-widest uppercase text-white">{user.username}</p>
+              <p className="text-[9px] font-black text-cyan-500 uppercase tracking-widest mt-1">OPERATIVE MODE</p>
+            </div>
+            <div className="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center border border-white/20 shadow-lg text-white">
+              <User size={18} />
+            </div>
           </div>
-        </div>
-      </header>
-
+        </header>
       <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
-      <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait">
             
 {/* --- HANYA GUNAKAN SATU BLOK INI DI DALAM <main> UNTUK DASHBOARD --- */}
 {view === 'dashboard' && (
@@ -1121,88 +1093,6 @@ const CRTOverlay = () => (
   </motion.div>
 )}
 
-{/* --- 3. THE TACTICAL NAVIGATION DOCK (FLOATING & ALWAYS VISIBLE) --- */}
-<div className="fixed bottom-0 left-0 lg:left-[260px] right-0 z-[1000] p-6 lg:p-10 pointer-events-none">
-   <motion.div 
-     initial={{ y: 100, opacity: 0 }}
-     animate={{ y: 0, opacity: 1 }}
-     transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.5 }}
-     className="max-w-4xl mx-auto bg-[#050508]/80 backdrop-blur-3xl border border-white/10 p-5 lg:p-7 rounded-[2.5rem] shadow-[0_-20px_80px_rgba(0,0,0,0.8)] flex items-center justify-between gap-6 pointer-events-auto relative overflow-hidden"
-   >
-      {/* Laser Top Line Decor */}
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-fuchsia-500/40 to-transparent animate-pulse" />
-
-      {/* SISI KIRI: Real-time Phase Progress (Wah Factor) */}
-      <div className="hidden md:flex items-center gap-6 pl-4 border-r border-white/10 pr-8">
-         <div className="flex flex-col gap-1">
-            <span className="text-[7px] font-black text-slate-500 uppercase tracking-[0.4em]">Mission Progress</span>
-            <div className="flex items-center gap-3">
-               <span className="text-xl font-black text-white font-mono leading-none">0{currentStep}</span>
-               <div className="w-24 h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: `${(currentStep / maxStep) * 100}%` }}
-                    className="h-full bg-gradient-to-r from-fuchsia-600 to-indigo-600 shadow-[0_0_12px_#d946ef]" 
-                  />
-               </div>
-               <span className="text-[9px] font-black text-slate-600 font-mono">0{maxStep}</span>
-            </div>
-         </div>
-      </div>
-
-      {/* SISI KANAN: Action Controls */}
-      <div className="flex items-center gap-4 flex-1 justify-end">
-         
-         {/* Tombol Back (Hanya muncul jika di Phase > 1) */}
-         {currentStep > 1 && (
-           <button 
-             onClick={() => {
-                setCurrentStep(p => p - 1);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-             }}
-             className="px-8 py-4 bg-white/5 border border-white/10 text-slate-400 rounded-2xl font-black text-[9px] tracking-widest uppercase hover:text-white hover:bg-white/10 transition-all flex items-center gap-3 active:scale-95"
-           >
-              <ChevronLeft size={16} /> Back
-           </button>
-         )}
-
-{currentStep < maxStep ? (
-  <button 
-    disabled={!isStepComplete} // Tombol mati jika BELUM lengkap
-    onClick={() => {
-       setCurrentStep(p => p + 1);
-       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }} 
-    className={`group/next relative overflow-hidden px-10 py-4 lg:px-14 lg:py-5 rounded-2xl font-black text-[10px] lg:text-[11px] tracking-[0.4em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-fuchsia-600 text-white shadow-[0_0_40px_rgba(217,70,239,0.4)] hover:bg-fuchsia-500' : 'bg-white/5 text-slate-700 cursor-not-allowed opacity-40'}`}
-  >
-     <span className="relative z-10">Next Phase</span>
-     <ChevronRight size={18} className="relative z-10 group-hover/next:translate-x-1 transition-transform" />
-     {/* Flare Effect (The "Wah" Element) */}
-     {isStepComplete && (
-       <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:left-[100%] transition-all duration-1000" />
-     )}
-  </button>
-) : (
-  <button 
-    disabled={!isStepComplete || loading} 
-    onClick={executeUplink} 
-    className={`group/submit relative overflow-hidden px-10 py-4 lg:px-14 lg:py-5 rounded-2xl font-black text-[10px] lg:text-[11px] tracking-[0.4em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-fuchsia-500 text-white shadow-[0_0_50px_rgba(217,70,239,0.5)]' : 'bg-white/5 text-slate-700 cursor-not-allowed opacity-40'}`}
-  >
-     <span className="relative z-10">{loading ? "Synchronizing..." : "Submit Assessment"}</span>
-     <Zap size={20} className={`relative z-10 ${loading ? 'animate-spin' : 'group-hover/submit:rotate-12'} transition-transform`} />
-     {/* Flare Effect */}
-     {isStepComplete && (
-       <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:left-[100%] transition-all duration-1000" />
-     )}
-  </button>
-)}
-      </div>
-
-      {/* Tactical Corner HUD (Siku-siku mini) */}
-      <div className="absolute top-3 left-3 w-4 h-4 border-t border-l border-white/10 pointer-events-none" />
-      <div className="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-white/10 pointer-events-none" />
-   </motion.div>
-</div>
 
 {/* --- VIEW FEEDBACK: NEXUS INTELLIGENCE REPORT (COMPACT & ELITE) --- */}
 {view === 'feedback' && (
@@ -1399,6 +1289,7 @@ const CRTOverlay = () => (
 {/* --- VIEW MISSION: MODUL PENGERJAAN SOAL (FIXED STRUCTURE) --- */}
 <AnimatePresence mode="wait">
   {/* --- VIEW MISSION: MODUL SOAL & NAVIGASI (UTUH) --- */}
+{/* --- VIEW MISSION: MODUL PENGERJAAN SOAL (UTUH & AMAN) --- */}
 {view === 'mission' && (
   <motion.div 
     key="mission-root"
@@ -1407,7 +1298,9 @@ const CRTOverlay = () => (
     exit={{ opacity: 0 }}
     className="relative w-full"
   >
-    {/* A. DAFTAR SOAL STUDI KASUS */}
+    {/* ========================================== */}
+    {/* BAGIAN 1: DAFTAR SOAL & STUDI KASUS        */}
+    {/* ========================================== */}
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -1433,10 +1326,17 @@ const CRTOverlay = () => (
             >
               <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500/10 group-hover:bg-cyan-500 transition-all duration-500" />
               <div className="relative z-10 text-left">
-                <span className="text-[9px] font-black text-cyan-500/40 uppercase tracking-[0.4em] block mb-6">Question Node Alpha-{idx + 1}</span>
+                
+                {/* --- JUDUL SOAL DINAMIS SESUAI DOMAIN --- */}
+                <span className="text-[9px] font-black text-cyan-500/80 uppercase tracking-[0.4em] block mb-6">
+                  QUESTION {selectedDomain} {idx + 1}
+                </span>
+                
+                {/* --- TEKS STUDI KASUS (DIJAMIN MUNCUL) --- */}
                 <p className="text-xl lg:text-2xl font-bold text-white leading-relaxed mb-10 tracking-tight">
                   {q.question}
                 </p>
+
                 <div className="grid grid-cols-1 gap-4">
                   {q.options && q.options.map((opt: any, i: number) => (
                     <button
@@ -1464,7 +1364,9 @@ const CRTOverlay = () => (
       </div>
     </motion.div>
 
-    {/* B. TACTICAL BOTTOM DOCK (NAVIGASI - TERKUNCI HANYA DI MISSION) */}
+    {/* ========================================== */}
+    {/* BAGIAN 2: NAVIGASI NEXT PHASE (TERKUNCI)   */}
+    {/* ========================================== */}
     <div className="fixed bottom-0 left-0 lg:left-[260px] right-0 z-[5000] p-6 lg:p-10 pointer-events-none">
        <motion.div 
          initial={{ y: 100, opacity: 0 }}
@@ -1490,13 +1392,24 @@ const CRTOverlay = () => (
              {currentStep > 1 && (
                <button onClick={() => { setCurrentStep(p => p - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-10 py-5 bg-white/5 border border-white/10 text-slate-500 rounded-2xl font-black text-[10px] tracking-widest uppercase hover:text-white transition-all">BACK</button>
              )}
-             <button 
-               disabled={!isStepComplete} 
-               onClick={() => currentStep < maxStep ? setCurrentStep(p => p + 1) : executeUplink()} 
-               className={`px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-cyan-600 text-white shadow-xl' : 'bg-white/5 text-slate-800 opacity-20'}`}
-             >
-                {currentStep < maxStep ? 'NEXT PHASE' : 'FINAL UPLINK'} <ChevronRight size={18} />
-             </button>
+             
+             {currentStep < maxStep ? (
+               <button 
+                 disabled={!isStepComplete} 
+                 onClick={() => { setCurrentStep(p => p + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
+                 className={`px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-cyan-600 text-white shadow-xl' : 'bg-white/5 text-slate-800 opacity-20 cursor-not-allowed'}`}
+               >
+                  NEXT PHASE <ChevronRight size={18} />
+               </button>
+             ) : (
+               <button 
+                 disabled={!isStepComplete || loading} 
+                 onClick={executeUplink} 
+                 className={`px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-gradient-to-r from-cyan-600 to-blue-700 text-white shadow-xl' : 'bg-white/5 text-slate-800 opacity-20'}`}
+               >
+                  {loading ? "ENCRYPTING..." : "FINAL UPLINK"} <Zap size={20} className={loading ? 'animate-spin' : ''} />
+               </button>
+             )}
           </div>
        </motion.div>
     </div>
