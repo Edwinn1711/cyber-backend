@@ -415,6 +415,7 @@ export default function StudentPortal() {
   const [isCalculating, setIsCalculating] = useState(false);
   const [theme, setTheme] = useState('dark');
 
+
   // States
   const [view, setView] = useState('dashboard'); 
   const [currentStep, setCurrentStep] = useState(1); 
@@ -423,7 +424,7 @@ export default function StudentPortal() {
   const [ans, setAns] = useState<Record<number, {score: number, text: string}>>({});
   const [score, setScore] = useState(0);
   const [history, setHistory] = useState<any[]>([]);
-  const [user, setUser] = useState({ username: 'STUDENT', class_name: '' });
+  const [user, setUser] = useState({ username: 'STUDENT', class_name: '', tanggal_lahir: '' });
   const [loading, setLoading] = useState(false);
   const [bgIdx, setBgIdx] = useState(0);
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -435,6 +436,7 @@ export default function StudentPortal() {
   const [appFeedbackForm, setAppFeedbackForm] = useState({ category: 'AI ENHANCEMENT', message: '' });
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
+  
   // Greeting Logic
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -784,14 +786,14 @@ export default function StudentPortal() {
     initial="hidden" animate="show" exit={{ opacity: 0, y: -20 }}
     className="max-w-[1300px] mx-auto space-y-12 pb-20"
   >
-    {/* --- THE SUPREME TACTICAL BANNER (REFINED SIZE & CONTINUOUS ANIMATION) --- */}
+    {/* --- BANNER UTAMA: THE COMMAND CENTER (REFINED & UNDERSTANDABLE) --- */}
     <motion.div 
       variants={nexusItem}
       className="relative p-10 lg:p-14 rounded-[3.5rem] bg-[#020308]/90 backdrop-blur-3xl border border-cyan-500/20 overflow-hidden shadow-[0_0_100px_rgba(0,0,0,1)] group"
     >
        <div className="absolute inset-0 bg-hud-grid opacity-[0.03] pointer-events-none" />
        
-       {/* Scanner Beam yang Terus Menyapu */}
+       {/* Scanner Beam (Cahaya Pindai Terus Menerus) */}
        <motion.div 
          animate={{ top: ['-100%', '200%'] }}
          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
@@ -799,37 +801,38 @@ export default function StudentPortal() {
        />
 
        <div className="relative z-20 space-y-10 text-left">
-          {/* Badge & Telemetry Header */}
+          {/* Header Status - Lebih Mudah Dimengerti */}
           <div className="flex flex-wrap gap-5 items-center">
-             <div className="inline-flex items-center gap-4 px-5 py-2 rounded-xl bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[9px] font-black tracking-[0.5em] uppercase shadow-[0_0_20px_rgba(34,211,238,0.1)]">
-                <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
-                Neural Uplink Synchronized
+             <div className="inline-flex items-center gap-4 px-6 py-2.5 rounded-xl bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.4em] uppercase shadow-[0_0_20px_rgba(34,211,238,0.1)]">
+                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
+                Akses Masuk Berhasil
              </div>
-             <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg">
-                <span className="text-[8px] font-mono text-slate-600 uppercase tracking-widest">Build v2.0.4 - Secured</span>
+             <div className="px-5 py-2.5 bg-emerald-500/5 border border-emerald-500/20 rounded-xl flex items-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Sistem Terproteksi</span>
              </div>
           </div>
           
-          {/* IDENTITY SECTION (CONTINUOUS GLOW & DECRYPTION) */}
-          <div className="space-y-4 relative group">
+          {/* IDENTITY SECTION (CONTINUOUS ANIMATION) */}
+          <div className="space-y-4 relative">
             <div className="h-8 lg:h-10 overflow-hidden">
               <CyberLetterReveal 
-                text="WELCOME OPERATIVE," 
-                className="text-xl lg:text-3xl font-black text-white uppercase tracking-[0.6em] opacity-20" 
+                text="SELAMAT DATANG," 
+                className="text-2xl lg:text-4xl font-black text-white uppercase tracking-[0.4em] opacity-20" 
               />
             </div>
 
             <div className="relative inline-block">
-              {/* Ukuran Huruf Diperkecil ke text-7xl agar Elegant */}
+              {/* Ukuran Nama Dikecilkan sedikit agar Elegant (text-7xl) */}
               <h2 className="text-4xl lg:text-7xl font-black uppercase tracking-tighter leading-none relative z-10 text-white">
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_0_25px_rgba(34,211,238,0.4)]">
                   <CyberContinuousDecryption text={user.username} />
                 </span>
               </h2>
 
               {/* Breathing Aura Background */}
               <motion.div 
-                animate={{ opacity: [0.1, 0.4, 0.1], scale: [1, 1.05, 1] }}
+                animate={{ opacity: [0.2, 0.4, 0.2], scale: [1, 1.05, 1] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute inset-0 z-0 blur-[50px] pointer-events-none rounded-full"
                 style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.2) 0%, rgba(217,70,239,0.1) 100%)' }}
@@ -837,34 +840,39 @@ export default function StudentPortal() {
             </div>
           </div>
           
-          {/* INFO BAR - Sektor satu baris & Data Taktis */}
+          {/* INFO BAR - Gabungan Laguboti + Data Personal */}
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-14 pt-6">
-             <div className="flex items-center gap-6 border-l-[8px] border-fuchsia-600 pl-8 h-14">
+             <div className="flex items-center gap-6 border-l-[8px] border-fuchsia-600 pl-8 h-14 transition-all group-hover:border-cyan-400">
                 <div className="space-y-1">
                    <p className="text-white text-[13px] lg:text-[15px] font-black tracking-[0.4em] uppercase leading-none">
-                      Integrated Readiness Interface
+                      Cyber Readiness Index
                    </p>
-                   <p className="text-slate-500 text-[8px] font-mono tracking-[0.3em] uppercase">
-                      Central Control Node - LAGUBOTI SVR 01
+                   <p className="text-slate-500 text-[9px] font-black tracking-[0.3em] uppercase">
+                      Pusat Kendali - Laguboti, Indonesia
                    </p>
                 </div>
              </div>
              
              <div className="flex gap-14 px-10 border-l border-white/10">
+                {/* Data Lahir / Identitas Operasional */}
                 <div className="flex flex-col gap-1.5">
-                   <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.4em]">Network Ping</span>
-                   <div className="flex items-center gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping shadow-[0_0_10px_#10b981]" />
-                      <span className="text-[14px] font-black text-emerald-400 font-mono tracking-widest">0.0002 MS</span>
-                   </div>
-                </div>
-                <div className="flex flex-col gap-1.5">
-                   <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.4em]">Operational Sector</span>
+                   <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.4em]">Node Operasional</span>
                    <div className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]" />
-                      {/* FIX: Teks kelas dipaksa satu baris */}
+                      {/* Menampilkan Lokasi & Tanggal Lahir (Jika ada di user object) */}
                       <span className="text-[14px] font-black text-cyan-400 font-mono tracking-widest uppercase whitespace-nowrap">
-                         {user.class_name || "CENTRAL SECTOR"}
+                         LAGUBOTI {user.tanggal_lahir ? `· ${user.tanggal_lahir}` : "· TERVERIFIKASI"}
+                      </span>
+                   </div>
+                </div>
+
+                {/* Sektor Kelas */}
+                <div className="flex flex-col gap-1.5">
+                   <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.4em]">Sektor Pengguna</span>
+                   <div className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping shadow-[0_0_10px_#10b981]" />
+                      <span className="text-[14px] font-black text-emerald-400 font-mono tracking-widest uppercase whitespace-nowrap">
+                         {user.class_name || "UMUM"}
                       </span>
                    </div>
                 </div>
@@ -872,7 +880,7 @@ export default function StudentPortal() {
           </div>
        </div>
 
-       {/* Symmetrical Tactical Corner HUD */}
+       {/* Siku Taktis (Tactical Corner HUD) */}
        <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-white/10 rounded-tl-[3.5rem] group-hover:border-cyan-500/50 transition-all duration-700" />
        <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-white/10 rounded-tr-[3.5rem] group-hover:border-cyan-500/50 transition-all duration-700" />
        <div className="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-white/10 rounded-bl-[3.5rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
