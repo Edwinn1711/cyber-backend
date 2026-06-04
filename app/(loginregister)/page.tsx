@@ -1362,8 +1362,13 @@ export default function CyberLandingDark() {
 
         <SectionDivider /><VisiMisiSection bgIdx={bgIdx} />
         <SectionDivider /><SecurityStatsSection />
-        <SectionDivider /><CyberInfrastructureSection />
-        <SectionDivider /><ReadinessProtocolSection />
+        <section id="infra">
+        <CyberInfrastructureSection />
+        </section>
+        <SectionDivider />
+        <section id="protocol">
+        <ReadinessProtocolSection />
+        </section>
         <SectionDivider /><CyberClosingSection />
         <CyberFooterLuxury onScroll={scrollToSection} />
       </main>
@@ -1523,81 +1528,70 @@ export default function CyberLandingDark() {
         </div>
       </CyberModal>
 
-{/* --- MODAL LAYANAN (REVISI FINAL: FUNCTIONAL & DEWA VISUAL) --- */}
+{/* --- MODAL LAYANAN (REVISI FINAL: TARGET SISTEM AKURAT) --- */}
 <CyberModal 
         isOpen={activeModal === 'LAYANAN'} 
         onClose={() => setActiveModal(null)} 
         title="PLATFORM STRATEGIC CAPABILITIES"
       >
-        <div className="flex flex-col lg:flex-row gap-12 items-center lg:items-stretch py-4">
+        <div className="flex flex-col lg:flex-row gap-10 items-center lg:items-stretch py-4">
           
-          {/* --- SISI KIRI: THE CORE ENGINE (DENGAN LAYANANCYBER.JPG) --- */}
-          <div className="w-full lg:w-1/2 relative min-h-[350px] lg:min-h-[550px] bg-black border border-white/10 rounded-[4rem] flex items-center justify-center overflow-hidden shadow-2xl group">
-             
-             {/* GAMBAR UTAMA DENGAN FILTER SIBER */}
+          {/* --- SISI KIRI: VISUAL CORE (DENGAN GAMBAR LAYANANCYBER) --- */}
+          <div className="w-full lg:w-1/2 relative min-h-[350px] lg:min-h-[550px] bg-black border border-white/10 rounded-[3.5rem] flex items-center justify-center overflow-hidden shadow-2xl group">
              <div className="absolute inset-0 z-0">
                 <img 
                   src="/bg/layanancyber.jpg" 
-                  className="w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-[3s] mix-blend-lighten"
+                  className="w-full h-full object-cover opacity-30 group-hover:scale-110 transition-transform duration-[4s] mix-blend-lighten"
                   alt="Cyber Infrastructure"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,#000000_100%)]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
              </div>
 
-             {/* HUD LAYER DI ATAS GAMBAR */}
-             <div className="relative z-10">
-                {/* Ring Orbit Raksasa */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 lg:w-80 lg:h-80 border border-cyan-500/30 rounded-full animate-[spin_20s_linear_infinite]" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 lg:w-72 lg:h-72 border border-dashed border-fuchsia-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
-                
-                {/* Central Reactive Icon */}
+             <div className="relative z-10 flex flex-col items-center">
+                <div className="absolute w-64 h-64 border border-cyan-500/20 rounded-full animate-[spin_20s_linear_infinite]" />
                 <motion.div 
-                  animate={{ scale: [1, 1.15, 1] }}
+                  animate={{ scale: [1, 1.1, 1] }}
                   transition={{ duration: 4, repeat: Infinity }}
-                  className="relative w-28 h-28 lg:w-36 lg:h-36 bg-black/60 backdrop-blur-xl border-2 border-cyan-400/50 rounded-3xl flex items-center justify-center shadow-[0_0_60px_rgba(34,211,238,0.4)] z-20"
+                  className="relative w-28 h-28 lg:w-36 lg:h-36 bg-black/60 backdrop-blur-xl border-2 border-cyan-400/50 rounded-3xl flex items-center justify-center shadow-[0_0_50px_rgba(34,211,238,0.3)]"
                 >
-                   <Cpu size={50} className="text-cyan-400 drop-shadow-[0_0_15px_#22d3ee] animate-pulse" />
-                   {/* Scanner Line Internal */}
-                   <div className="absolute top-0 left-0 w-full h-1 bg-cyan-400/40 animate-scanner pointer-events-none" />
+                   <Cpu size={48} className="text-cyan-400 drop-shadow-[0_0_15px_#22d3ee] animate-pulse" />
                 </motion.div>
              </div>
 
-             {/* Animated Badge */}
              <div className="absolute top-10 left-10 flex items-center gap-3 px-4 py-2 bg-black/50 border border-white/10 rounded-full backdrop-blur-md">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
                 <span className="text-[8px] font-mono text-emerald-400 tracking-[0.4em] uppercase">Core Sync Stable</span>
              </div>
           </div>
 
-          {/* --- SISI KANAN: THE CAPABILITY LIST (FUNCTIONAL LINKS) --- */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-between py-2 space-y-8">
+          {/* --- SISI KANAN: NAVIGATION LIST (TARGET AKURAT) --- */}
+          <div className="w-full lg:w-1/2 flex flex-col justify-between py-2 space-y-6">
             <div className="space-y-4 text-left px-4">
               <h3 className="text-4xl lg:text-6xl font-black text-white uppercase tracking-tighter leading-none">
                 MODUL <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">OPERASI</span>
               </h3>
-              <p className="text-slate-400 text-sm lg:text-base font-medium leading-relaxed max-w-lg opacity-80">
-                Akses pusat komando pertahanan siber sekolah. Pilih modul di bawah untuk memulai validasi keamanan infrastruktur.
+              <p className="text-slate-400 text-sm lg:text-base font-medium leading-relaxed max-w-lg">
+                Pilih modul operasional di bawah untuk melakukan validasi atau pemantauan infrastruktur siber secara langsung.
               </p>
             </div>
 
             <div className="space-y-3">
               {[
-                { t: "Assessment Center", i: Target, d: "Inisiasi simulasi kuesioner keamanan.", id: "protocol", col: "text-cyan-400" },
-                { t: "Intelligence Hub", i: BrainCircuit, d: "Pusat edukasi ancaman siber terbaru.", id: "hero", col: "text-fuchsia-400" },
-                { t: "Credential Guard", i: ShieldCheck, d: "Audit identitas digital warga sekolah.", id: "hero", col: "text-blue-400" },
-                { t: "Infrastructure Monitor", i: Server, d: "Visualisasi stabilitas jaringan real-time.", id: "infra", col: "text-emerald-400" },
-                { t: "Incident Response", i: ShieldAlert, d: "Protokol mitigasi anomali trafik siber.", id: "protocol", col: "text-rose-400" }
+                { t: "Assessment Center", i: Target, d: "Inisiasi protokol kuesioner keamanan siber.", id: "protocol", col: "text-cyan-400" },
+                { t: "Infrastructure Monitor", i: Server, d: "Visualisasi stabilitas jaringan real time.", id: "infra", col: "text-emerald-400" },
+                { t: "Intelligence Hub", i: Globe, d: "Pusat informasi dan berita keamanan terbaru.", id: "hero", col: "text-fuchsia-400" },
+                { t: "Credential Guard", i: ShieldCheck, d: "Audit metrik dan data identitas warga sekolah.", id: "stats", col: "text-blue-400" },
+                { t: "SOP Protocol", i: FileText, d: "Daftar aturan standar operasional keamanan.", id: "protocol", col: "text-indigo-400" }
               ].map((item, i) => (
                 <motion.div 
                   key={i}
                   whileHover={{ x: 10, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
-                    setActiveModal(null); // TUTUP MODAL
-                    setTimeout(() => scrollToSection(item.id, item.t), 300); // JALANKAN SCROLL KE SECTION TERKAIT
+                    setActiveModal(null); // TUTUP MODAL DULU
+                    setTimeout(() => scrollToSection(item.id, item.t), 300); // LALU JALANKAN SCROLL KE TEMPATNYA
                   }}
-                  className="group flex items-center gap-6 p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-cyan-500/10 hover:border-cyan-400/40 transition-all duration-500 cursor-pointer shadow-lg"
+                  className="group flex items-center gap-6 p-5 lg:p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-cyan-500/10 hover:border-cyan-400/40 transition-all duration-500 cursor-pointer shadow-lg"
                 >
                   <div className={`w-12 h-12 rounded-2xl bg-black border border-white/10 flex items-center justify-center transition-all group-hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] ${item.col}`}>
                     <item.i size={24} />
@@ -1606,16 +1600,14 @@ export default function CyberLandingDark() {
                     <h4 className="text-sm lg:text-base font-black text-white uppercase tracking-widest mb-1 group-hover:text-cyan-400 transition-colors">{item.t}</h4>
                     <p className="text-[10px] lg:text-[11px] text-slate-500 font-medium group-hover:text-slate-300 transition-colors">{item.d}</p>
                   </div>
-                  <div className="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
-                    <ChevronRight size={16} className="text-cyan-400" />
-                  </div>
+                  <ChevronRight size={16} className="text-slate-700 group-hover:text-cyan-400 opacity-0 group-hover:opacity-100 transition-all" />
                 </motion.div>
               ))}
             </div>
 
-            <div className="pt-6 px-4">
-               <p className="text-[9px] font-mono text-slate-700 tracking-[0.5em] uppercase text-center lg:text-left">
-                 Platform Operational Security Interface // 2026
+            <div className="pt-6 px-4 text-center lg:text-left">
+               <p className="text-[9px] font-mono text-slate-700 tracking-[0.5em] uppercase">
+                 Platform Operational Security Interface 2026
                </p>
             </div>
           </div>
