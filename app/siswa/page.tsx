@@ -788,156 +788,208 @@ export default function StudentPortal() {
     initial="hidden" animate="show" exit={{ opacity: 0, y: -20 }}
     className="max-w-[1350px] mx-auto space-y-12 pb-20"
   >
-    {/* --- 1. BANNER UTAMA (SINGLE MASTERPIECE) --- */}
-    <motion.div 
-      variants={nexusItem}
-      className="relative p-10 lg:p-14 rounded-[3.5rem] bg-[#020308]/90 backdrop-blur-3xl border border-cyan-500/20 overflow-hidden shadow-[0_0_100px_rgba(0,0,0,1)] group"
-    >
-       {/* Efek HUD Grid & Laser Scanning */}
-       <div className="absolute inset-0 bg-hud-grid opacity-20" />
-       <motion.div animate={{ top: ['-100%', '200%'] }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="absolute left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent z-10"/>
+    {/* --- 1. THE REFINED ELITE COMMAND BANNER (SMALLER & MORE DETAILED) --- */}
+<motion.div 
+  variants={nexusItem}
+  className="relative p-6 lg:p-10 rounded-[2.5rem] bg-[#020308]/90 backdrop-blur-3xl border border-cyan-500/20 overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.8)] group mb-8"
+>
+   {/* Grid Cyber Lebih Padat */}
+   <div className="absolute inset-0 bg-hud-grid opacity-[0.06] pointer-events-none" style={{ backgroundSize: '30px 30px' }} />
+   
+   {/* Laser Scan Line yang Halus */}
+   <motion.div 
+     animate={{ top: ['-100%', '200%'] }}
+     transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+     className="absolute left-0 w-full h-[60px] bg-gradient-to-b from-transparent via-cyan-500/15 to-transparent pointer-events-none z-10"
+   />
 
-       <div className="relative z-20 space-y-10 text-left">
-          {/* Header Badge */}
-          <div className="flex flex-wrap gap-5 items-center">
-             <div className="inline-flex items-center gap-4 px-6 py-2.5 rounded-xl bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.5em] uppercase shadow-[0_0_20px_rgba(34,211,238,0.1)]">
-                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
-                Akses Sistem Berhasil
-             </div>
-             <div className="px-5 py-2.5 bg-white/5 border border-white/10 rounded-xl">
-                <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest font-bold">Node Terverifikasi</span>
-             </div>
-          </div>
-          
-          {/* Welcome Text Section */}
-          <div className="space-y-6 relative group">
-            <div className="h-10 lg:h-12 overflow-hidden">
-              <CyberLetterReveal text="SELAMAT DATANG," className="text-2xl lg:text-4xl font-black text-white uppercase tracking-[0.5em] opacity-20" />
+   <div className="relative z-20 space-y-8 text-left">
+      {/* Header Status (Compact Mode) */}
+      <div className="flex flex-wrap gap-3 items-center">
+         <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-lg bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[8px] font-black tracking-[0.4em] uppercase shadow-inner">
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_#22d3ee]"/> 
+            Akses Sistem Berhasil
+         </div>
+         <div className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg">
+            <span className="text-[7px] font-mono text-slate-500 uppercase tracking-widest font-bold">Protocol: Verified</span>
+         </div>
+         {/* Detail Koordinat Palsu (Bikin tambah "Wah") */}
+         <div className="hidden xl:block px-3 py-1.5 opacity-30">
+            <span className="text-[7px] font-mono text-slate-500 uppercase tracking-widest">Coord: 2.38° N, 99.14° E</span>
+         </div>
+      </div>
+      
+      {/* Identity Section (Downsized for Luxury) */}
+      <div className="space-y-2 relative">
+        <div className="h-6 lg:h-8 overflow-hidden">
+          <CyberLetterReveal 
+            text="SELAMAT DATANG OPERATIVE," 
+            className="text-lg lg:text-xl font-black text-white uppercase tracking-[0.5em] opacity-20" 
+          />
+        </div>
+        <div className="relative inline-block">
+          {/* Ukuran Nama Dikecilkan ke 5xl/6xl agar Elegan dan Tajam */}
+          <h2 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter leading-none relative z-10 text-white">
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+              <CyberContinuousDecryption text={user.username} />
+            </span>
+          </h2>
+          {/* Aura Cahaya Halus di belakang nama */}
+          <motion.div animate={{ opacity: [0.1, 0.3, 0.1], scale: [1, 1.05, 1] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute inset-0 z-0 blur-[40px] pointer-events-none rounded-full" style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.2) 0%, rgba(217,70,239,0.1) 100%)' }} />
+        </div>
+      </div>
+      
+      {/* Tactical Info Bar (Sektor Tetap Satu Baris) */}
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-10 pt-4 border-t border-white/5">
+         <div className="flex items-center gap-4 border-l-[4px] border-fuchsia-600 pl-6 h-10">
+            <div className="space-y-0.5">
+               <p className="text-white text-[10px] lg:text-[12px] font-black tracking-[0.4em] uppercase leading-none">Cyber Readiness Index</p>
+               <p className="text-slate-500 text-[7px] font-black tracking-[0.2em] uppercase">Pusat Kendali - Laguboti, Indonesia</p>
             </div>
-            <div className="relative inline-block">
-              <h2 className="text-5xl lg:text-8xl font-black uppercase tracking-tighter leading-none relative z-10 text-white">
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_0_30px_rgba(34,211,238,0.4)]">
-                   {/* Memakai komponen Continuous Decryption jika sudah didefinisikan */}
-                   <CyberContinuousDecryption text={user.username} />
-                </span>
-              </h2>
-              {/* Aura Background */}
-              <motion.div animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.05, 1] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute inset-0 z-0 blur-[60px] pointer-events-none rounded-full" style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.2) 0%, rgba(217,70,239,0.1) 100%)' }} />
+         </div>
+         
+         <div className="flex gap-12 px-8 border-l border-white/10">
+            {/* Latency Stream */}
+            <div className="flex flex-col gap-1">
+               <span className="text-[7px] font-black text-slate-600 uppercase tracking-[0.3em]">Network Latency</span>
+               <div className="flex items-center gap-2.5">
+                  <div className="w-1 h-1 rounded-full bg-emerald-500 animate-ping shadow-[0_0_8px_#10b981]" />
+                  <span className="text-[12px] font-black text-emerald-400 font-mono tracking-widest uppercase">0.0002 MS</span>
+               </div>
             </div>
-          </div>
-          
-          {/* Dashboard Info Bar (Bottom Banner) */}
-          <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-14 pt-6">
-             <div className="flex items-center gap-6 border-l-[8px] border-fuchsia-600 pl-8 h-14">
-                <div className="space-y-1">
-                   <p className="text-white text-[14px] lg:text-[16px] font-black tracking-[0.5em] uppercase leading-none">Cyber Readiness Index</p>
-                   <p className="text-slate-500 text-[9px] font-black tracking-[0.3em] uppercase">Pusat Kendali - Laguboti, Indonesia</p>
-                </div>
-             </div>
-             <div className="flex gap-16 px-12 border-l border-white/10">
-                <div className="flex flex-col gap-2.5">
-                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Node Operasional</span>
-                   <div className="flex items-center gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
-                      <span className="text-[15px] font-black text-cyan-400 font-mono tracking-widest uppercase whitespace-nowrap">
-                        LAGUBOTI {user.tanggal_lahir ? `· ${user.tanggal_lahir}` : "· AKTIF"}
-                      </span>
-                   </div>
-                </div>
-                <div className="flex flex-col gap-2.5">
-                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Sektor Pengguna</span>
-                   <div className="flex items-center gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                      <span className="text-[15px] font-black text-emerald-400 font-mono tracking-widest uppercase whitespace-nowrap">
-                         {user.class_name || "UMUM SECTOR"}
-                      </span>
-                   </div>
-                </div>
-             </div>
-          </div>
-       </div>
 
-       {/* Symmetrical Tactical Corners */}
-       <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-white/10 rounded-tl-[3.5rem] group-hover:border-cyan-500/50 transition-all duration-700" />
-       <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-white/10 rounded-tr-[3.5rem] group-hover:border-cyan-500/50 transition-all duration-700" />
-       <div className="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-white/10 rounded-bl-[3.5rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
-       <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-white/10 rounded-br-[3.5rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
-    </motion.div>
+            {/* User Sector - FIX WHITE-SPACE NOWRAP */}
+            <div className="flex flex-col gap-1 text-left">
+               <span className="text-[7px] font-black text-slate-600 uppercase tracking-[0.3em]">Operational Sector</span>
+               <div className="flex items-center gap-2.5">
+                  <div className="w-1 h-1 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_#22d3ee]" />
+                  <span className="text-[12px] font-black text-cyan-400 font-mono tracking-widest uppercase whitespace-nowrap">
+                     {user.class_name || "CENTRAL NODE"}
+                  </span>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 
-    {/* --- 2. TRINITY DATA CLUSTERS (WIDGETS) --- */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-       
-       {/* Widget 1: Identity (Jujur - No Fingerprint) */}
-       <motion.div variants={nexusItem} className="group relative p-10 rounded-[3rem] bg-[#0a0c14]/90 backdrop-blur-3xl border border-white/5 flex flex-col items-center text-center shadow-2xl transition-all duration-500 hover:border-cyan-500/40 overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500 shadow-[0_0_20px_#22d3ee] opacity-0 group-hover:opacity-100 group-hover:animate-scanner" />
-          <div className="w-24 h-24 bg-slate-900 border border-white/10 rounded-[2.5rem] flex items-center justify-center text-white mb-10 shadow-3xl group-hover:scale-110 transition-transform duration-500">
-             <ShieldCheck size={48} className="text-cyan-400 drop-shadow-[0_0_15px_#22d3ee]" />
-          </div>
-          <div className="space-y-4">
-             <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.5em]">Identity Status</span>
-             <h4 className="text-3xl font-black text-white tracking-widest uppercase">{user.username}</h4>
-             <div className="mt-8 flex items-center gap-3 px-6 py-2 bg-emerald-500/5 border border-emerald-500/20 rounded-full">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
-                <span className="text-[9px] font-black text-emerald-400 tracking-[0.4em] uppercase">Account Verified</span>
-             </div>
-          </div>
-       </motion.div>
+   {/* Symmetrical Tactical Corners (Siku Dikecilkan) */}
+   <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-white/10 rounded-tl-[2.5rem] group-hover:border-cyan-500/40 transition-all duration-700" />
+   <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-white/10 rounded-tr-[2.5rem] group-hover:border-cyan-500/40 transition-all duration-700" />
+   <div className="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-white/10 rounded-bl-[2.5rem] group-hover:border-fuchsia-500/40 transition-all duration-700" />
+   <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-white/10 rounded-br-[2.5rem] group-hover:border-fuchsia-500/40 transition-all duration-700" />
+</motion.div>
 
-       {/* Widget 2: Readiness Status (Glow Score) */}
-       <motion.div variants={nexusItem} className="group relative p-10 rounded-[3rem] bg-[#0a0c14]/90 backdrop-blur-3xl border border-white/5 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-500 hover:border-fuchsia-500/40 overflow-hidden">
-          <div className="absolute inset-0 bg-fuchsia-500/5 opacity-0 group-hover:opacity-100 transition-opacity blur-[80px]" />
-          <div className="relative mb-8 transform group-hover:scale-110 transition-all duration-700">
-             <svg className="w-48 h-48 transform -rotate-90">
-                <circle cx="96" cy="96" r="84" stroke="rgba(255,255,255,0.03)" strokeWidth="12" fill="none" />
-                <motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score/100)*527} 1000` }} transition={{ duration: 3.5, ease: "circOut" }} cx="96" cy="96" r="84" stroke="#d946ef" strokeWidth="12" strokeLinecap="round" fill="none" style={{ filter: 'drop-shadow(0 0 25px #d946ef)' }} />
-             </svg>
-             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <motion.span key={score} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} className="text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_20px_white]">{score}</motion.span>
-                <span className="text-[10px] font-black text-slate-500 uppercase mt-1 tracking-widest">Percent</span>
-             </div>
-          </div>
-          <div className="space-y-2">
-             <h3 className="text-[11px] font-black text-fuchsia-400 tracking-[0.4em] uppercase">Readiness Index Status</h3>
-             <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Secured Core Analysis</p>
-          </div>
-       </motion.div>
+{/* --- 2. THE TRINITY DATA CLUSTERS (COMPACT & ELITE VERSION) --- */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+   
+   {/* WIDGET 1: IDENTITY STATUS (SMALLER & SLEEK) */}
+   <motion.div 
+     variants={nexusItem} 
+     className="group relative p-8 rounded-[2.5rem] bg-[#0a0c14]/90 backdrop-blur-3xl border border-white/5 flex flex-col items-center text-center shadow-2xl transition-all duration-500 hover:border-cyan-500/30 overflow-hidden"
+   >
+      {/* Micro Scanner Line */}
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-500 shadow-[0_0_15px_#22d3ee] opacity-0 group-hover:opacity-100 group-hover:animate-scanner" />
+      
+      {/* Shield Icon: Ukuran dikalibrasi (w-20 h-20) */}
+      <div className="relative w-20 h-20 mb-8">
+         <div className="absolute inset-0 bg-cyan-500/10 blur-2xl rounded-full" />
+         <div className="relative z-10 w-full h-full bg-slate-900 border border-white/10 rounded-2xl flex items-center justify-center text-white shadow-3xl group-hover:scale-105 transition-transform duration-500">
+            <ShieldCheck size={36} className="text-cyan-400 drop-shadow-[0_0_10px_#22d3ee]" />
+         </div>
+         {/* Subtle Orbital */}
+         <motion.div animate={{ rotate: 360 }} transition={{ duration: 12, repeat: Infinity, ease: "linear" }} className="absolute inset-[-8px] border border-dashed border-cyan-500/15 rounded-full" />
+      </div>
 
-       {/* Widget 3: Analytical Matrix */}
-       <motion.div variants={nexusItem} className="group relative p-12 rounded-[3.5rem] bg-[#0a0c14]/90 backdrop-blur-3xl border border-white/5 flex flex-col justify-between shadow-2xl transition-all duration-500 hover:border-blue-500/30 overflow-hidden text-left">
-          <div className="space-y-10 relative z-10">
-             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                   <Activity size={18} className="text-blue-500 animate-pulse" />
-                   <h2 className="text-[11px] font-black text-slate-400 tracking-[0.5em] uppercase leading-none">Analytical Matrix</h2>
-                </div>
-                <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6] animate-pulse" />
-             </div>
-             <div className="space-y-8">
-                {[
-                  { label: "Architecture", val: "Stable", col: "text-white" },
-                  { label: "Cyber Vault", val: "Active", col: "text-emerald-400" },
-                  { label: "Latency Node", val: "Synced", col: "text-blue-400" }
-                ].map((m, i) => (
-                  <div key={i} className="flex justify-between items-center group/row">
-                     <span className="text-slate-500 font-black text-[10px] tracking-[0.2em] uppercase">{m.label}</span>
-                     <div className="flex items-center gap-4">
-                        <span className={`text-[11px] font-black uppercase tracking-widest ${m.col} drop-shadow-[0_0_8px_currentColor]`}>{m.val}</span>
-                        <div className="flex gap-1 h-3 items-end opacity-30">
-                           {[1, 2, 3].map(b => (
-                             <motion.div key={b} animate={{ height: ["20%", "100%", "20%"] }} transition={{ duration: 0.5 + Math.random(), repeat: Infinity }} className={`w-0.5 rounded-full ${m.col.replace('text', 'bg')}`} />
-                           ))}
-                        </div>
-                     </div>
-                  </div>
-                ))}
-             </div>
-          </div>
-          <div className="mt-10 pt-6 border-t border-white/5 flex justify-between items-center opacity-20 group-hover:opacity-100 transition-all duration-700">
-             <span className="text-[7px] font-mono text-slate-500 tracking-[0.3em] uppercase">Auth Level: Secure</span>
-             <Network size={12} className="text-blue-500" />
-          </div>
-       </motion.div>
-    </div>
+      <div className="space-y-2.5">
+         <span className="text-[8px] font-black text-slate-600 uppercase tracking-[0.4em]">Identity Profile</span>
+         <h4 className="text-xl lg:text-2xl font-black text-white tracking-widest uppercase leading-none">{user.username}</h4>
+         <div className="mt-6 flex items-center gap-2 px-4 py-1.5 bg-emerald-500/5 border border-emerald-500/10 rounded-full">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
+            <span className="text-[8px] font-black text-emerald-400 tracking-[0.3em] uppercase">Verified Account</span>
+         </div>
+      </div>
+      
+      {/* Corner Details */}
+      <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-white/10 group-hover:border-cyan-500/30 transition-colors" />
+   </motion.div>
+
+   {/* WIDGET 2: READINESS LEVEL (COMPACT RADIAL) */}
+   <motion.div 
+     variants={nexusItem}
+     className="group relative p-8 rounded-[2.5rem] bg-[#0a0c14]/90 backdrop-blur-3xl border border-white/5 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-500 hover:border-fuchsia-500/30 overflow-hidden"
+   >
+      <div className="relative mb-6 transform group-hover:scale-105 transition-all duration-700">
+         {/* Lingkaran diperkecil ke w-36 agar tidak berlebihan */}
+         <svg className="w-36 h-36 transform -rotate-90">
+            <circle cx="72" cy="72" r="64" stroke="rgba(255,255,255,0.02)" strokeWidth="8" fill="none" />
+            <motion.circle 
+               initial={{ strokeDasharray: "0 1000" }} 
+               animate={{ strokeDasharray: `${(score/100)*402} 1000` }} 
+               transition={{ duration: 3.5 }} 
+               cx="72" cy="72" r="64" 
+               stroke="#d946ef" strokeWidth="8" strokeLinecap="round" fill="none" 
+               style={{ filter: 'drop-shadow(0 0 15px #d946ef)' }} 
+            />
+         </svg>
+         <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-4xl font-black text-white tracking-tighter drop-shadow-[0_0_10px_white]">{score}</span>
+            <span className="text-[8px] font-black text-slate-600 uppercase mt-0.5">Percent</span>
+         </div>
+      </div>
+
+      <div className="space-y-1.5">
+         <h3 className="text-[10px] font-black text-fuchsia-400 tracking-[0.3em] uppercase">Readiness Index Status</h3>
+         <p className="text-[8px] font-bold text-slate-600 uppercase tracking-widest leading-none">Security Metric Alpha</p>
+      </div>
+   </motion.div>
+
+   {/* WIDGET 3: ANALYTICAL MATRIX (PADAT & DENSE) */}
+   <motion.div 
+     variants={nexusItem}
+     className="group relative p-10 rounded-[2.5rem] bg-[#0a0c14]/90 backdrop-blur-3xl border border-white/5 flex flex-col justify-between shadow-2xl transition-all duration-500 hover:border-blue-500/30 overflow-hidden text-left"
+   >
+      <div className="space-y-8 relative z-10">
+         <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+               <Activity size={14} className="text-blue-500 animate-pulse" />
+               <h2 className="text-[10px] font-black text-slate-400 tracking-[0.4em] uppercase">Analytical Matrix</h2>
+            </div>
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6] animate-pulse" />
+         </div>
+         
+         <div className="space-y-6">
+            {[
+              { label: "Architecture", val: "Stable", col: "text-white" },
+              { label: "Cyber Vault", val: "Active", col: "text-emerald-400" },
+              { label: "Latency Node", val: "Synced", col: "text-blue-400" }
+            ].map((m, i) => (
+              <div key={i} className="flex justify-between items-center group/row">
+                 <span className="text-slate-500 font-black text-[9px] tracking-[0.1em] uppercase">{m.label}</span>
+                 <div className="flex items-center gap-3">
+                    <span className={`text-[10px] font-black uppercase tracking-widest ${m.col} drop-shadow-[0_0_5px_currentColor]`}>{m.val}</span>
+                    {/* Visualizer super kecil (kelihatan pro) */}
+                    <div className="flex gap-0.5 h-2.5 items-end opacity-20 group-hover/row:opacity-100 transition-opacity">
+                       {[1, 2].map(b => (
+                         <motion.div 
+                           key={b}
+                           animate={{ height: ["20%", "100%", "20%"] }}
+                           transition={{ duration: 0.8 + Math.random(), repeat: Infinity }}
+                           className={`w-0.5 rounded-full ${m.col.replace('text', 'bg')}`}
+                         />
+                       ))}
+                    </div>
+                 </div>
+              </div>
+            ))}
+         </div>
+      </div>
+
+      <div className="mt-8 pt-4 border-t border-white/5 flex justify-between items-center opacity-20 group-hover:opacity-100 transition-all">
+         <span className="text-[7px] font-mono text-slate-600 tracking-[0.2em] uppercase">Security Level: Alpha 01</span>
+         <Network size={10} className="text-blue-500" />
+      </div>
+   </motion.div>
+</div>
 
     {/* --- 3. FINAL MISSION GATEWAY (THE FINISHER) --- */}
     <motion.div 
