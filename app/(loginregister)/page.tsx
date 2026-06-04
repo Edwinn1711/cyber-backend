@@ -1056,7 +1056,8 @@ export default function CyberLandingDark() {
   const [isLoginOpen, setIsLoginOpen] = useState(false); 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
   const [activeSection, setActiveSection] = useState('Beranda');
-  const [activeModal, setActiveModal] = useState<'TENTANG KAMI' | 'LAYANAN' | null>(null); // State Modal Baru
+  const [activeModal, setActiveModal] = useState<'TENTANG KAMI' | 'LAYANAN' | null>(null); 
+  const [selectedService, setSelectedService] = useState<any>(null);
 
   // State Form & Mouse (Sama seperti sebelumnya)
   const [activeTab, setActiveTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
@@ -1576,22 +1577,19 @@ export default function CyberLandingDark() {
             </div>
 
             <div className="space-y-3">
-              {[
-                { t: "Assessment Center", i: Target, d: "Inisiasi protokol kuesioner keamanan siber.", id: "protocol", col: "text-cyan-400" },
-                { t: "Infrastructure Monitor", i: Server, d: "Visualisasi stabilitas jaringan real time.", id: "infra", col: "text-emerald-400" },
-                { t: "Intelligence Hub", i: Globe, d: "Pusat informasi dan berita keamanan terbaru.", id: "hero", col: "text-fuchsia-400" },
-                { t: "Credential Guard", i: ShieldCheck, d: "Audit metrik dan data identitas warga sekolah.", id: "stats", col: "text-blue-400" },
-                { t: "SOP Protocol", i: FileText, d: "Daftar aturan standar operasional keamanan.", id: "protocol", col: "text-indigo-400" }
-              ].map((item, i) => (
-                <motion.div 
-                  key={i}
-                  whileHover={{ x: 10, scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    setActiveModal(null); // TUTUP MODAL DULU
-                    setTimeout(() => scrollToSection(item.id, item.t), 300); // LALU JALANKAN SCROLL KE TEMPATNYA
-                  }}
-                  className="group flex items-center gap-6 p-5 lg:p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-cyan-500/10 hover:border-cyan-400/40 transition-all duration-500 cursor-pointer shadow-lg"
+            {[
+  { t: "Assessment Center", i: Target, d: "Inisiasi protokol kuesioner keamanan siber.", id: "protocol", col: "text-cyan-400", longDesc: "Sistem evaluasi mandiri tingkat lanjut yang menggunakan algoritma kepatuhan siber terbaru untuk mengukur kerentanan infrastruktur digital sekolah Anda." },
+  { t: "Infrastructure Monitor", i: Server, d: "Visualisasi stabilitas jaringan real time.", id: "infra", col: "text-emerald-400", longDesc: "Dashboard pemantauan node jaringan secara menyeluruh. Mendeteksi latensi, beban server, dan anomali trafik dalam hitungan milidetik." },
+  { t: "Intelligence Hub", i: Globe, d: "Pusat informasi dan berita keamanan terbaru.", id: "hero", col: "text-fuchsia-400", longDesc: "Arsip intelijen yang terhubung ke basis data ancaman global, memberikan peringatan dini terhadap kampanye phishing dan malware yang menargetkan sektor pendidikan." },
+  { t: "Credential Guard", i: ShieldCheck, d: "Audit metrik dan data identitas warga sekolah.", id: "stats", col: "text-blue-400", longDesc: "Sistem proteksi identitas ganda yang memastikan kredensial siswa dan guru tidak bocor ke dark web melalui audit rutin." },
+  { t: "SOP Protocol", i: FileText, d: "Daftar aturan standar operasional keamanan.", id: "protocol", col: "text-indigo-400", longDesc: "Dokumentasi prosedur operasional standar yang terdigitalisasi untuk memastikan setiap personel mengikuti protokol keamanan yang benar." }
+].map((item, i) => (
+  <motion.div 
+    key={i}
+    whileHover={{ x: 15, scale: 1.02 }}
+    whileTap={{ scale: 0.95 }}
+    onClick={() => setSelectedService(item)} // GANTI INI: Membuka Pop-up Wah
+    className="group flex items-center gap-6 p-5 lg:p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-cyan-500/10 hover:border-cyan-400/40 transition-all duration-500 cursor-pointer shadow-lg"
                 >
                   <div className={`w-12 h-12 rounded-2xl bg-black border border-white/10 flex items-center justify-center transition-all group-hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] ${item.col}`}>
                     <item.i size={24} />
@@ -1745,6 +1743,91 @@ export default function CyberLandingDark() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <AnimatePresence>
+  {selectedService && (
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        exit={{ opacity: 0 }}
+        onClick={() => setSelectedService(null)}
+        className="absolute inset-0 bg-black/90 backdrop-blur-2xl"
+      />
+      
+      <motion.div
+        initial={{ scale: 0.7, opacity: 0, y: 50 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        className="relative w-full max-w-2xl bg-[#050811]/95 border-2 border-cyan-500/30 rounded-[3rem] p-8 lg:p-12 overflow-hidden shadow-[0_0_100px_rgba(34,211,238,0.3)]"
+      >
+        {/* Scanner Line Effect */}
+        <div className="absolute top-0 left-0 w-full h-1 bg-cyan-400 shadow-[0_0_20px_#22d3ee] animate-scanner z-50" />
+        
+        {/* HUD Corner Decorations */}
+        <div className="absolute top-8 left-8 w-8 h-8 border-t-2 border-l-2 border-cyan-500/50 rounded-tl-xl" />
+        <div className="absolute top-8 right-8 w-8 h-8 border-t-2 border-r-2 border-cyan-500/50 rounded-tr-xl" />
+        <div className="absolute bottom-8 left-8 w-8 h-8 border-b-2 border-l-2 border-cyan-500/50 rounded-bl-xl" />
+        <div className="absolute bottom-8 right-8 w-8 h-8 border-b-2 border-r-2 border-cyan-500/50 rounded-br-xl" />
+
+        <button 
+          onClick={() => setSelectedService(null)}
+          className="absolute top-10 right-10 p-2 bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 rounded-full transition-all z-50"
+        >
+          <X size={20} />
+        </button>
+
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <div className="relative mb-8">
+            <div className={`absolute inset-0 blur-3xl opacity-30 ${selectedService.col.replace('text', 'bg')}`} />
+            <motion.div 
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 4, repeat: Infinity }}
+              className={`w-24 h-24 lg:w-32 lg:h-32 bg-black border-2 border-white/10 rounded-[2rem] flex items-center justify-center shadow-2xl ${selectedService.col}`}
+            >
+              <selectedService.i size={50} className="drop-shadow-[0_0_15px_currentColor]" />
+            </motion.div>
+          </div>
+
+          <h3 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+            {selectedService.t}
+          </h3>
+          
+          <div className="flex items-center gap-3 mb-8 px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full">
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="text-[10px] font-mono text-cyan-400 tracking-[0.4em] uppercase">Status: Data_Link_Established</span>
+          </div>
+
+          {/* Teks Deskripsi Bersih (Tanpa Miring/Garis Bawah) */}
+          <p className="text-slate-300 text-sm lg:text-lg leading-relaxed font-bold max-w-lg mb-10 uppercase tracking-tight">
+            {selectedService.longDesc}
+          </p>
+
+          <div className="grid grid-cols-3 gap-4 w-full mb-10">
+             {[
+               { l: "STABILITY", v: "OPTIMAL", c: "text-emerald-400" },
+               { l: "PROTOCOL", v: "SECURE", c: "text-cyan-400" },
+               { l: "ENCRYPTION", v: "ACTIVE", c: "text-fuchsia-400" }
+             ].map((stat, sidx) => (
+               <div key={sidx} className="bg-white/5 border border-white/5 p-4 rounded-2xl flex flex-col items-center">
+                 <span className="text-[7px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1">{stat.l}</span>
+                 <span className={`text-[10px] font-mono font-black ${stat.c}`}>{stat.v}</span>
+               </div>
+             ))}
+          </div>
+
+          <button 
+            onClick={() => setSelectedService(null)}
+            className="w-full py-5 bg-cyan-500 text-black rounded-2xl font-black text-xs tracking-[0.5em] uppercase hover:bg-white hover:shadow-[0_0_40px_rgba(34,211,238,0.6)] transition-all active:scale-95"
+          >
+            KONFIRMASI AKSES
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  )}
+</AnimatePresence>
 
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes gradient-x { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
