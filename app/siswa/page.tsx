@@ -976,44 +976,59 @@ export default function StudentPortal() {
     </motion.div>
   </div>
 
-    {/* --- 3. FINAL MISSION GATEWAY (THE WOW FINISHER) --- */}
-  <motion.div 
-        variants={nexusItem} 
-        className="p-10 lg:p-14 rounded-[4rem] bg-gradient-to-br from-[#05060f] via-black to-[#0a0c14] border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-12 shadow-[0_50px_120px_rgba(0,0,0,0.9)] relative overflow-hidden group"
-      >
-       <div className="absolute inset-0 bg-hud-grid opacity-[0.08]" />
-       <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-fuchsia-500/20 to-transparent animate-pulse" />
-       
-       <div className="flex flex-col lg:flex-row items-center gap-12 z-10 text-center lg:text-left">
-          <div className="relative">
-             <div className="absolute inset-0 bg-cyan-500/10 blur-[40px] rounded-full animate-pulse" />
-             <div className="w-24 h-24 bg-black/90 rounded-[2.5rem] flex items-center justify-center border border-white/10 shadow-3xl group-hover:rotate-12 transition-transform duration-700">
-                <BellRing size={44} className="text-cyan-400 animate-bounce" />
-             </div>
-          </div>
+{/* --- 3. THE MISSION GATEWAY: COMPACT ELITE VERSION (FINAL SHOWPIECE) --- */}
+<motion.div 
+  variants={nexusItem} 
+  className="p-8 lg:p-10 rounded-[3rem] bg-[#050505]/80 backdrop-blur-3xl border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden group"
+>
+   {/* BACKGROUND HUD DETAILS (INI YANG BIKIN WAH) */}
+   <div className="absolute inset-0 bg-hud-grid opacity-[0.05] pointer-events-none" />
+   <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500/20 animate-scanner pointer-events-none" />
+   
+   <div className="flex flex-col lg:flex-row items-center gap-8 z-10 text-center lg:text-left">
+      {/* Icon Container yang Lebih Proporsional */}
+      <div className="relative">
+         <div className="absolute inset-0 bg-cyan-500/10 blur-xl rounded-full" />
+         <div className="w-16 h-16 bg-black/80 rounded-2xl flex items-center justify-center border border-white/10 shadow-2xl group-hover:rotate-6 transition-all duration-500">
+            <BellRing size={28} className="text-cyan-400 animate-pulse" />
+         </div>
+      </div>
 
-          <div className="space-y-4">
-             <div className="flex items-center justify-center lg:justify-start gap-5">
-                <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981] animate-ping" />
-                <span className="text-[12px] font-black tracking-[0.6em] text-emerald-400 uppercase">Perimeter Defense: Locked</span>
-             </div>
-             <h3 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-tight drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">Assessment Hub Offline.</h3>
-             <p className="text-[12px] lg:text-[13px] font-black text-slate-500 tracking-[0.4em] uppercase opacity-90 leading-relaxed mx-auto lg:mx-0 max-w-xl">
-                Luncurkan protokol validasi siber untuk mengamankan data dan profil identitas operasional Anda.
-             </p>
-          </div>
-       </div>
+      <div className="space-y-2">
+         {/* Status Tag Bersih Tanpa Underscore */}
+         <div className="flex items-center justify-center lg:justify-start gap-4">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-ping" />
+            <span className="text-[9px] font-black tracking-[0.5em] text-emerald-400 uppercase">Operational Status: Online</span>
+         </div>
+         
+         {/* Judul: Ukuran Dikalibrasi Menjadi Sangat Nyaman (text-2xl) */}
+         <h3 className="text-xl lg:text-2xl font-black text-white uppercase tracking-tight leading-none drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]">
+            Mission Deployment Hub
+         </h3>
+         
+         {/* Deskripsi: Ukuran Kecil Namun Padat (Tampilan Pro) */}
+         <p className="text-[10px] lg:text-[11px] font-bold text-slate-500 tracking-[0.3em] uppercase opacity-70 leading-relaxed max-w-xl mx-auto lg:mx-0">
+            Eksekusi protokol keamanan siber untuk memvalidasi integritas pertahanan digital dan profil operasional Anda sekarang.
+         </p>
+      </div>
+   </div>
 
-       <button 
-         onClick={handleStartMissionClick} 
-         className="relative w-full lg:w-auto px-16 py-8 bg-white text-slate-950 rounded-[3rem] font-black text-[14px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-700 uppercase flex items-center justify-center gap-7 shadow-[0_30px_70px_rgba(255,255,255,0.1)] active:scale-95 group overflow-hidden"
-       >
-          <span className="relative z-10">START MISSION</span>
-          <Zap size={28} className="relative z-10 group-hover:rotate-12 transition-transform duration-500" />
-          {/* Efek Flare Mewah pada Tombol */}
-          <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:left-[100%] transition-all duration-1000 ease-in-out" />
-       </button>
-    </motion.div>
+   {/* Tombol Taktis yang Lebih Sleek & Mewah */}
+   <button 
+     onClick={handleStartMissionClick} 
+     className="relative overflow-hidden px-12 py-5 bg-white text-slate-950 rounded-2xl font-black text-[11px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-500 uppercase flex items-center justify-center gap-5 shadow-[0_20px_50px_rgba(255,255,255,0.1)] active:scale-95 group/btn"
+   >
+      <span className="relative z-10">INITIALIZE</span>
+      <Zap size={18} className="relative z-10 group-hover/btn:rotate-12 transition-transform" />
+      
+      {/* Efek Kilat Flare saat Hover */}
+      <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/btn:left-[100%] transition-all duration-1000 ease-in-out" />
+   </button>
+
+   {/* TACITCAL HUD CORNERS (Detail Siku Digital di Pojok Banner) */}
+   <div className="absolute top-4 left-4 w-6 h-6 border-t border-l border-white/10 rounded-tl-lg pointer-events-none" />
+   <div className="absolute bottom-4 right-4 w-6 h-6 border-b border-r border-white/10 rounded-br-lg pointer-events-none" />
+</motion.div>
   </motion.div>
 )}
 
