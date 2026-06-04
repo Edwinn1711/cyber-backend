@@ -317,34 +317,26 @@ const SmoothAnimatedText = ({ text }: { text: string }) => {
 };
 
 const CyberLetterReveal = ({ text, className }: { text: string, className: string }) => {
-  const letters = Array.from(text || "OPERATIVE");
+  // Fallback jika username belum load agar tidak kosong melompong
+  const content = text || "OPERATIVE";
+  const letters = Array.from(content);
   
-  // Tambahkan ': any' agar Vercel melewati pengecekan ketat
   const container: any = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.03, delayChildren: 0.2 },
-    },
+      transition: { staggerChildren: 0.05, delayChildren: 0.2 }
+    }
   };
 
-  // Gunakan 'as const' pada type: "spring"
   const child: any = {
-    visible: {
-      opacity: 1,
-      y: 0,
+    visible: { 
+      opacity: 1, 
+      y: 0, 
       filter: "blur(0px)",
-      transition: { 
-        type: "spring" as const, // KUNCI PERBAIKAN DI SINI
-        damping: 12, 
-        stiffness: 200 
-      },
+      transition: { type: "spring" as const, damping: 12, stiffness: 200 } 
     },
-    hidden: {
-      opacity: 0,
-      y: 15,
-      filter: "blur(10px)",
-    },
+    hidden: { opacity: 0, y: 15, filter: "blur(10px)" }
   };
 
   return (
@@ -355,7 +347,11 @@ const CyberLetterReveal = ({ text, className }: { text: string, className: strin
       className={`flex flex-wrap ${className}`}
     >
       {letters.map((letter, index) => (
-        <motion.span variants={child} key={index}>
+        <motion.span 
+          variants={child} 
+          key={index}
+          className="inline-block text-white drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]"
+        >
           {letter === " " ? "\u00A0" : letter}
         </motion.span>
       ))}
@@ -754,148 +750,223 @@ export default function StudentPortal() {
       <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
       <AnimatePresence mode="wait">
             
-      {view === 'dashboard' && (
+{/* --- VIEW DASHBOARD: THE ULTIMATE COMMAND CENTER (EXHIBITION EDITION) --- */}
+{view === 'dashboard' && (
   <motion.div 
     key="dash-nexus" 
     variants={nexusContainer} 
     initial="hidden" animate="show" exit={{ opacity: 0, y: -20 }}
-    className="max-w-[1350px] mx-auto space-y-10 pb-20"
+    className="max-w-[1350px] mx-auto space-y-12 pb-20"
   >
-    {/* --- 1. THE ARCHITECT WELCOME BANNER (EXHIBITION MASTERPIECE) --- */}
+    {/* --- 1. THE ARCHITECT WELCOME BANNER (THE MAIN SHOWPIECE) --- */}
     <motion.div 
       variants={nexusItem}
-      className="relative p-10 lg:p-14 rounded-[3.5rem] bg-[#020308]/80 backdrop-blur-3xl border border-white/5 overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,1)] group"
+      className="relative p-10 lg:p-16 rounded-[4rem] bg-[#020308]/90 backdrop-blur-3xl border border-white/5 overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,1)] group"
     >
-       <div className="absolute inset-0 bg-hud-grid opacity-[0.03] pointer-events-none" />
-       <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity duration-1000 rotate-12">
-          <Globe size={350} className="text-white" />
+       {/* High-Tech Layers */}
+       <div className="absolute inset-0 bg-hud-grid opacity-[0.04] pointer-events-none" />
+       
+       {/* Efek Scanning Laser Horizontal */}
+       <motion.div 
+         animate={{ top: ['-100%', '200%'] }}
+         transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+         className="absolute left-0 w-full h-[120px] bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent pointer-events-none z-10"
+       />
+
+       {/* Globe Decoration di Latar Belakang */}
+       <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-15 transition-opacity duration-1000 rotate-12">
+          <Globe size={400} className="text-white" />
        </div>
 
-       <div className="relative z-10 space-y-10 text-left">
-          {/* Badge Keamanan - Detail Taktis */}
-          <div className="flex flex-wrap gap-4 items-center">
-             <div className="inline-flex items-center gap-4 px-6 py-2 rounded-xl bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[9px] font-black tracking-[0.5em] uppercase">
-                <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
-                Cryptographic Uplink Established
+       <div className="relative z-20 space-y-12 text-left">
+          {/* Header Identitas & Badge Build */}
+          <div className="flex flex-wrap gap-5 items-center">
+             <div className="inline-flex items-center gap-4 px-6 py-2.5 rounded-xl bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.5em] uppercase shadow-[0_0_20px_rgba(34,211,238,0.1)]">
+                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
+                Neural Uplink Synchronized
              </div>
-             <div className="px-4 py-1.5 border border-white/5 rounded-lg">
-                <span className="text-[8px] font-mono text-slate-600 uppercase tracking-widest">Build: v2.0.4 stable</span>
+             <div className="px-5 py-2.5 bg-white/5 border border-white/10 rounded-xl">
+                <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest font-bold">Build v2.0.4 - Secure Layer</span>
              </div>
           </div>
           
-          <div className="space-y-4 relative">
-  {/* TEKS WELCOME - Selalu nampak */}
-  <div className="h-8 lg:h-12 overflow-hidden">
-     <CyberLetterReveal 
-       text="WELCOME," 
-       className="text-2xl lg:text-4xl font-black text-white uppercase tracking-[0.3em] opacity-30" 
-     />
-  </div>
+          {/*Identity Section (Text Reveal) */}
+          <div className="space-y-6 relative group">
+            <div className="h-10 lg:h-12 overflow-hidden">
+              <CyberLetterReveal 
+                text="WELCOME OPERATIVE," 
+                className="text-2xl lg:text-4xl font-black text-white uppercase tracking-[0.5em] opacity-20" 
+              />
+            </div>
 
-            {/* TEKS USERNAME - Versi Anti-Gagal */}
-            <div className="relative">
-              <div className="text-5xl lg:text-9xl font-black uppercase tracking-tighter leading-none relative z-10">
-                {/* Kita pakai warna putih dulu sebagai dasar, lalu kita timpa gradient */}
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">
-                    <CyberLetterReveal text={user.username} className="" />
+            <div className="relative inline-block">
+              <h2 className="text-5xl lg:text-9xl font-black uppercase tracking-tighter leading-none relative z-10">
+                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_0_30px_rgba(34,211,238,0.4)]">
+                  <CyberLetterReveal text={user.username} className="" />
                 </span>
-              </div>
+              </h2>
 
-              {/* EFEK GLOW DI BELAKANG (Agar meskipun gradient gagal, teks tetap nampak bayangannya) */}
+              {/* Efek Aura Bernapas (Breathing Aura) */}
               <motion.div 
-                animate={{ opacity: [0.2, 0.4, 0.2] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute inset-0 z-0 blur-[50px] pointer-events-none"
-              >
-                <span className="text-5xl lg:text-9xl font-black uppercase tracking-tighter text-cyan-500/20">
-                  {user.username || "OPERATIVE"}
-                </span>
-              </motion.div>
+                animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.05, 1] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 z-0 blur-[60px] pointer-events-none rounded-full"
+                style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.2) 0%, rgba(217,70,239,0.1) 100%)' }}
+              />
+
+              {/* Kilatan Cahaya Menyapu (Sweep Shine) */}
+              <motion.div 
+                animate={{ left: ["-100%", "200%"] }}
+                transition={{ duration: 4, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
+                className="absolute top-0 bottom-0 w-48 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] z-20 pointer-events-none"
+              />
             </div>
           </div>
           
-          {/* INFO BAR - FIX WRAPPING SECTOR */}
-          <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16 pt-8">
-             <div className="flex items-center gap-5 border-l-[6px] border-cyan-500 pl-6 py-1 h-12">
-                <p className="text-slate-400 text-[10px] lg:text-[13px] font-black tracking-[0.4em] uppercase opacity-90 leading-none">
-                   Integrated Cyber Readiness Control
-                </p>
+          {/* Tactical Info Bar */}
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-14 pt-6">
+             <div className="flex items-center gap-6 border-l-[8px] border-fuchsia-600 pl-8 h-16 transition-all group-hover:border-cyan-400">
+                <div className="space-y-1.5">
+                   <p className="text-white text-[14px] lg:text-[16px] font-black tracking-[0.5em] uppercase leading-none">
+                      Integrated Readiness Interface
+                   </p>
+                   <p className="text-slate-500 text-[9px] font-mono tracking-[0.3em] uppercase opacity-60">
+                      Central Control Node - Laguboti SVR 01
+                   </p>
+                </div>
              </div>
              
-             <div className="flex gap-14 items-center">
-                <div className="flex flex-col text-left">
-                   <span className="text-[7px] font-black text-slate-600 uppercase tracking-[0.5em] mb-2">Latency</span>
-                   <div className="flex items-center gap-2">
-                      <div className="w-1 h-1 rounded-full bg-emerald-500 animate-ping" />
-                      <span className="text-[12px] font-black text-emerald-400 font-mono tracking-widest">0.0002 MS</span>
+             {/* Live Telemetry Data */}
+             <div className="flex gap-16 px-12 border-l border-white/10">
+                <div className="flex flex-col gap-2.5">
+                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Network Ping</span>
+                   <div className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping shadow-[0_0_12px_#10b981]" />
+                      <span className="text-[15px] font-black text-emerald-400 font-mono tracking-widest">0.0002 MS</span>
                    </div>
                 </div>
-                <div className="flex flex-col text-left">
-                   <span className="text-[7px] font-black text-slate-600 uppercase tracking-[0.5em] mb-2">Operational Sector</span>
-                   {/* whitespace-nowrap menjamin teks X MIPA 1 selalu satu baris */}
-                   <span className="text-[12px] font-black text-cyan-400 font-mono tracking-widest uppercase whitespace-nowrap flex-shrink-0">
-                      {user.class_name || "CENTRAL NODE"}
-                   </span>
+                <div className="flex flex-col gap-2.5 text-left">
+                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Operational Sector</span>
+                   <div className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_12px_#22d3ee]" />
+                      <span className="text-[15px] font-black text-cyan-400 font-mono tracking-widest uppercase whitespace-nowrap">
+                         {user.class_name || "CENTRAL SECTOR"}
+                      </span>
+                   </div>
                 </div>
              </div>
           </div>
        </div>
 
-       <div className="absolute top-8 left-8 w-12 h-12 border-t-2 border-l-2 border-white/10 rounded-tl-xl pointer-events-none" />
-       <div className="absolute bottom-8 right-8 w-12 h-12 border-b-2 border-r-2 border-white/10 rounded-br-xl pointer-events-none" />
+       {/* Tactical Corner HUD (Enhanced Thickness) */}
+       <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-l-4 border-white/10 rounded-tl-[4rem] group-hover:border-cyan-500/50 transition-all duration-700" />
+       <div className="absolute top-0 right-0 w-20 h-20 border-t-4 border-r-4 border-white/10 rounded-tr-[4rem] group-hover:border-cyan-500/50 transition-all duration-700" />
+       <div className="absolute bottom-0 left-0 w-20 h-20 border-b-4 border-l-4 border-white/10 rounded-bl-[4rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
+       <div className="absolute bottom-0 right-0 w-20 h-20 border-b-4 border-r-4 border-white/10 rounded-br-[4rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
     </motion.div>
 
-    {/* --- 2. DATA CLUSTERS (WIDGETS STAGGERED) --- */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-       {/* Widget 1 */}
-       <motion.div variants={nexusItem} className="group relative p-10 rounded-[3rem] bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/5 flex flex-col items-center text-center shadow-2xl transition-all duration-500 hover:border-cyan-500/40 overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-cyan-500 shadow-[0_0_15px_#22d3ee] animate-scan opacity-0 group-hover:opacity-100" />
-          <div className="w-20 h-20 bg-slate-900 border border-white/10 rounded-[2rem] flex items-center justify-center text-white mb-8 shadow-2xl group-hover:rotate-12 transition-transform">
-             <Fingerprint size={36} className="text-cyan-400" />
+    {/* --- 2. DATA CLUSTERS (WIDGETS WITH HOVER GLOW) --- */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+       {/* Identity Widget */}
+       <motion.div variants={nexusItem} className="group relative p-10 rounded-[3.5rem] bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/5 flex flex-col items-center text-center shadow-2xl transition-all duration-500 hover:border-cyan-500/30 overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500 shadow-[0_0_20px_#22d3ee] opacity-0 group-hover:opacity-100 group-hover:animate-scanner" />
+          <div className="w-24 h-24 bg-slate-900 border border-white/10 rounded-[2.5rem] flex items-center justify-center text-white mb-10 shadow-[0_0_40px_rgba(0,0,0,0.5)] group-hover:scale-110 transition-transform duration-500">
+             <Fingerprint size={48} className="text-cyan-400 drop-shadow-[0_0_10px_#22d3ee]" />
           </div>
-          <h4 className="text-2xl font-black text-white tracking-widest uppercase leading-none">{user.username}</h4>
-          <p className="text-[10px] text-cyan-400 font-black tracking-[0.4em] uppercase mt-4">Identity Verified</p>
+          <div className="space-y-3">
+             <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.5em]">Identity Status</span>
+             <h4 className="text-3xl font-black text-white tracking-widest uppercase">{user.username}</h4>
+             <div className="mt-6 px-6 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full inline-block">
+                <span className="text-[9px] font-black text-emerald-400 tracking-[0.4em] uppercase">Verified Account</span>
+             </div>
+          </div>
        </motion.div>
 
-       {/* Widget 2 */}
-       <motion.div variants={nexusItem} className="group relative p-10 rounded-[3rem] bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/5 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-500 hover:border-fuchsia-500/40 overflow-hidden">
-          <div className="relative mb-6 transform group-hover:scale-105 transition-all">
-             <svg className="w-40 h-40 transform -rotate-90">
-                <circle cx="80" cy="80" r="72" stroke="rgba(255,255,255,0.03)" strokeWidth="10" fill="none" />
-                <motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score/100)*452} 1000` }} transition={{ duration: 3 }} cx="80" cy="80" r="72" stroke="#d946ef" strokeWidth="10" strokeLinecap="round" fill="none" style={{ filter: 'drop-shadow(0 0 15px #d946ef)' }} />
+       {/* Readiness Core (Radial Monitor) */}
+       <motion.div variants={nexusItem} className="group relative p-10 rounded-[3.5rem] bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/5 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-500 hover:border-fuchsia-500/30 overflow-hidden">
+          <div className="relative mb-8 transform group-hover:scale-110 transition-all duration-700">
+             <div className="absolute inset-0 bg-fuchsia-500/10 blur-3xl rounded-full" />
+             <svg className="w-48 h-48 transform -rotate-90 relative z-10">
+                <circle cx="96" cy="96" r="84" stroke="rgba(255,255,255,0.02)" strokeWidth="12" fill="none" />
+                <motion.circle 
+                   initial={{ strokeDasharray: "0 1000" }} 
+                   animate={{ strokeDasharray: `${(score/100)*527} 1000` }} 
+                   transition={{ duration: 3.5, ease: "circOut" }} 
+                   cx="96" cy="96" r="84" 
+                   stroke="#d946ef" strokeWidth="12" strokeLinecap="round" fill="none" 
+                   style={{ filter: 'drop-shadow(0 0 20px #d946ef)' }} 
+                />
              </svg>
-             <div className="absolute inset-0 flex flex-col items-center justify-center"><span className="text-5xl font-black text-white tracking-tighter">{score}</span></div>
+             <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_15px_white]">{score}</span>
+                <span className="text-[10px] font-black text-slate-500 uppercase mt-1">Level</span>
+             </div>
           </div>
-          <p className="text-[10px] text-slate-500 font-black tracking-[0.5em] uppercase">Readiness Level</p>
+          <p className="text-[11px] font-black text-slate-400 tracking-[0.6em] uppercase">Core Index Profile</p>
        </motion.div>
 
-       {/* Widget 3 */}
-       <motion.div variants={nexusItem} className="group relative p-10 rounded-[3rem] bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/5 flex flex-col justify-between shadow-2xl transition-all duration-500 hover:border-blue-500/40 overflow-hidden text-left px-12">
-          <p className="text-[10px] font-black text-slate-400 tracking-[0.4em] uppercase flex items-center gap-3 mb-8"><Activity size={14} className="text-blue-500" /> System Metrics</p>
-          <div className="space-y-6 font-mono text-[10px] tracking-widest uppercase">
-             <div className="flex justify-between border-b border-white/5 pb-2"><span>Cluster</span><span className="text-white font-black">STABLE</span></div>
-             <div className="flex justify-between border-b border-white/5 pb-2"><span>Encryption</span><span className="text-emerald-400 font-black">ACTIVE</span></div>
-             <div className="flex justify-between"><span>Status</span><span className="text-blue-400 font-black">SYNC</span></div>
+       {/* System Analytics (Matrix Monitor) */}
+       <motion.div variants={nexusItem} className="group relative p-12 rounded-[3.5rem] bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/5 flex flex-col justify-between shadow-2xl transition-all duration-500 hover:border-blue-500/30 overflow-hidden text-left">
+          <div className="space-y-10 relative z-10">
+             <div className="flex items-center justify-between">
+                <p className="text-[11px] font-black text-slate-400 tracking-[0.5em] uppercase flex items-center gap-4">
+                   <Activity size={18} className="text-blue-500 animate-pulse" /> Analytical Matrix
+                </p>
+                <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6] animate-pulse" />
+             </div>
+             
+             <div className="space-y-7 font-mono text-[11px] tracking-widest uppercase">
+                {[
+                  { label: "Architecture", val: "STABLE", col: "text-white" },
+                  { label: "Cyber_Vault", val: "ACTIVE", col: "text-emerald-400" },
+                  { label: "Latency_Node", val: "SYNCED", col: "text-blue-400" }
+                ].map((m, i) => (
+                  <div key={i} className="flex justify-between items-center py-2.5 border-b border-white/5">
+                     <span className="text-slate-500 font-bold">{m.label}</span>
+                     <span className={`font-black ${m.col}`}>{m.val}</span>
+                  </div>
+                ))}
+             </div>
           </div>
        </motion.div>
     </div>
 
-    {/* --- 3. THE MISSION GATEWAY (CALL TO ACTION) --- */}
-    <motion.div variants={nexusItem} className="p-8 lg:p-12 rounded-[3.5rem] bg-gradient-to-br from-slate-950 to-black border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-12 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden group">
-       <div className="flex flex-col lg:flex-row items-center gap-10 z-10 text-center lg:text-left">
-          <div className="w-20 h-20 bg-black/80 rounded-[2rem] flex items-center justify-center border border-white/20 shadow-2xl group-hover:rotate-12 transition-transform"><BellRing size={36} className="text-cyan-400 animate-bounce" /></div>
-          <div className="space-y-3">
-             <div className="flex items-center justify-center lg:justify-start gap-4">
-                <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981] animate-ping" />
-                <span className="text-[11px] font-black tracking-[0.6em] text-emerald-400 uppercase">Perimeter: Online</span>
+    {/* --- 3. FINAL MISSION GATEWAY (THE WOW FINISHER) --- */}
+    <motion.div 
+      variants={nexusItem} 
+      className="p-10 lg:p-14 rounded-[4rem] bg-gradient-to-br from-[#05060f] via-black to-[#0a0c14] border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-12 shadow-[0_50px_120px_rgba(0,0,0,0.9)] relative overflow-hidden group"
+    >
+       <div className="absolute inset-0 bg-hud-grid opacity-[0.08]" />
+       <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-fuchsia-500/20 to-transparent animate-pulse" />
+       
+       <div className="flex flex-col lg:flex-row items-center gap-12 z-10 text-center lg:text-left">
+          <div className="relative">
+             <div className="absolute inset-0 bg-cyan-500/10 blur-[40px] rounded-full animate-pulse" />
+             <div className="w-24 h-24 bg-black/90 rounded-[2.5rem] flex items-center justify-center border border-white/10 shadow-3xl group-hover:rotate-12 transition-transform duration-700">
+                <BellRing size={44} className="text-cyan-400 animate-bounce" />
              </div>
-             <h3 className="text-2xl lg:text-3xl font-black text-white uppercase tracking-tight">Assessment Gateway.</h3>
-             <p className="text-[11px] font-black text-slate-500 tracking-[0.4em] uppercase opacity-80 leading-relaxed mx-auto lg:mx-0">Validasi integritas operasional Anda melalui protokol resmi.</p>
+          </div>
+
+          <div className="space-y-4">
+             <div className="flex items-center justify-center lg:justify-start gap-5">
+                <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981] animate-ping" />
+                <span className="text-[12px] font-black tracking-[0.6em] text-emerald-400 uppercase">Perimeter Defense: Locked</span>
+             </div>
+             <h3 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-tight drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">Assessment Hub Offline.</h3>
+             <p className="text-[12px] lg:text-[13px] font-black text-slate-500 tracking-[0.4em] uppercase opacity-90 leading-relaxed mx-auto lg:mx-0 max-w-xl">
+                Luncurkan protokol validasi siber untuk mengamankan data dan profil identitas operasional Anda.
+             </p>
           </div>
        </div>
-       <button onClick={handleStartMissionClick} className="relative w-full lg:w-auto px-16 py-8 bg-white text-slate-950 rounded-[2.5rem] font-black text-[13px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-500 uppercase flex items-center justify-center gap-6 shadow-xl active:scale-95 group overflow-hidden">
-          START PROTOCOL <Zap size={24} className="group-hover:rotate-12 transition-transform" />
-          <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:left-[100%] transition-all duration-1000" />
+
+       <button 
+         onClick={handleStartMissionClick} 
+         className="relative w-full lg:w-auto px-16 py-8 bg-white text-slate-950 rounded-[3rem] font-black text-[14px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-700 uppercase flex items-center justify-center gap-7 shadow-[0_30px_70px_rgba(255,255,255,0.1)] active:scale-95 group overflow-hidden"
+       >
+          <span className="relative z-10">START MISSION</span>
+          <Zap size={28} className="relative z-10 group-hover:rotate-12 transition-transform duration-500" />
+          {/* Efek Flare Mewah pada Tombol */}
+          <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:left-[100%] transition-all duration-1000 ease-in-out" />
        </button>
     </motion.div>
   </motion.div>
