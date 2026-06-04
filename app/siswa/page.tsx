@@ -655,7 +655,7 @@ const CRTOverlay = () => (
         </AnimatePresence>
       );
     }
-    
+
     // --- 6. RENDER UTAMA ---
     return (
       <div className="flex h-screen w-full bg-[#020105] text-slate-100 overflow-hidden font-sans relative selection:bg-cyan-500/30">
@@ -1389,6 +1389,72 @@ const CRTOverlay = () => (
     </div>
   </motion.div>
 )}
+
+{/* --- TACTICAL BOTTOM NAVIGATION DOCK (FLOATING) --- */}
+<AnimatePresence>
+  {view === 'mission' && (
+    <motion.div 
+      initial={{ y: 120, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 120, opacity: 0 }}
+      className="fixed bottom-0 left-0 lg:left-[260px] right-0 z-[2000] p-6 lg:p-10 pointer-events-none"
+    >
+       <div className="max-w-4xl mx-auto bg-[#050508]/90 backdrop-blur-3xl border border-white/10 p-6 rounded-[2.8rem] shadow-[0_-30px_100px_rgba(0,0,0,0.9)] flex items-center justify-between gap-8 pointer-events-auto relative overflow-hidden">
+          {/* Progress Section */}
+          <div className="hidden md:flex items-center gap-8 pl-6 border-r border-white/10 pr-12">
+             <div className="flex flex-col gap-2">
+                <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.5em]">Sync Progress</span>
+                <div className="flex items-center gap-4">
+                   <span className="text-2xl font-black text-white font-mono leading-none">0{currentStep}</span>
+                   <div className="w-32 h-2 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(currentStep / maxStep) * 100}%` }}
+                        className="h-full bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#22d3ee]" 
+                      />
+                   </div>
+                   <span className="text-[10px] font-black text-slate-700 font-mono">0{maxStep}</span>
+                </div>
+             </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-5 flex-1 justify-end">
+             {currentStep > 1 && (
+               <button 
+                 onClick={() => setCurrentStep(p => p - 1)}
+                 className="px-10 py-5 bg-white/5 border border-white/10 text-slate-500 rounded-2xl font-black text-[10px] tracking-widest uppercase hover:text-white hover:bg-white/10 transition-all flex items-center gap-3 active:scale-95"
+               >
+                  <ChevronLeft size={16} /> Back
+               </button>
+             )}
+
+             {currentStep < maxStep ? (
+               <button 
+                 disabled={!isStepComplete} 
+                 onClick={() => { setCurrentStep(p => p + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
+                 className={`group/next relative overflow-hidden px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-cyan-600 text-white shadow-[0_0_40px_rgba(34,211,238,0.4)]' : 'bg-white/5 text-slate-800 cursor-not-allowed opacity-30'}`}
+               >
+                  <span>Next Phase</span>
+                  <ChevronRight size={18} className="group-hover/next:translate-x-1 transition-transform" />
+                  {isStepComplete && <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:left-[100%] transition-all duration-1000" />}
+               </button>
+             ) : (
+               <button 
+                 disabled={!isStepComplete || loading} 
+                 onClick={executeUplink} 
+                 className={`group/submit relative overflow-hidden px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-gradient-to-r from-cyan-600 to-blue-700 text-white shadow-[0_0_50px_rgba(34,211,238,0.5)]' : 'bg-white/5 text-slate-800 cursor-not-allowed opacity-30'}`}
+               >
+                  <span>{loading ? "Encrypting..." : "Final Uplink"}</span>
+                  <Zap size={20} className={loading ? 'animate-spin' : 'group-hover/submit:rotate-12'} />
+                  {isStepComplete && <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:left-[100%] transition-all duration-1000" />}
+               </button>
+             )}
+          </div>
+       </div>
+    </motion.div>
+  )}
+</AnimatePresence>
 
 {/* --- VIEW BRIEFING: TACTICAL NEXUS SEQUENCE (ELITE EXHIBITION) --- */}
 {view === 'briefing' && (
