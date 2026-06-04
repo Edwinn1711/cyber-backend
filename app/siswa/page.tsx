@@ -1115,6 +1115,91 @@ export default function StudentPortal() {
   </motion.div>
 )}
 
+{/* --- VIEW FEEDBACK: NEXUS INTELLIGENCE REPORT (COMPACT & ELITE) --- */}
+{view === 'feedback' && (
+  <motion.div 
+    key="feedback-nexus" 
+    initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }}
+    className="max-w-[800px] mx-auto py-10 px-6"
+  >
+    {/* --- HEADER FORM (KECIL & MEWAH) --- */}
+    <div className="text-center mb-10 space-y-3">
+       <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-lg bg-fuchsia-500/5 border border-fuchsia-500/20 text-fuchsia-400 text-[8px] font-black tracking-[0.5em] uppercase backdrop-blur-xl">
+          <Lightbulb size={12} className="animate-pulse" /> Nexus Intelligence Protocol
+       </div>
+       <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-none">
+          SYSTEM <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-indigo-500">FEEDBACK.</span>
+       </h2>
+    </div>
+
+    {/* --- TERMINAL CARD (COMPACT SIZE) --- */}
+    <div className="relative p-8 lg:p-10 rounded-[2.5rem] bg-[#050508]/80 backdrop-blur-3xl border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,1)] overflow-hidden group">
+       {/* High-Tech Background Decor */}
+       <div className="absolute inset-0 bg-hud-grid opacity-[0.03] pointer-events-none" />
+       <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-fuchsia-500/30 to-transparent animate-pulse" />
+
+       <div className="relative z-10 space-y-8 text-left">
+          
+          {/* 1. Category Selection (Horizontal HUD Style) */}
+          <div className="space-y-4">
+             <label className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] flex items-center gap-3">
+                <Hexagon size={12} className="text-fuchsia-500"/> Select Report Category
+             </label>
+             <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                {['UI_UX', 'SECURITY', 'PERFORMANCE', 'AI_LOGIC', 'BUG_REPORT'].map((cat) => (
+                  <button 
+                    key={cat}
+                    onClick={() => setAppFeedbackForm({...appFeedbackForm, category: cat})}
+                    className={`py-3 px-4 rounded-xl border text-[9px] font-black tracking-widest transition-all uppercase ${appFeedbackForm.category === cat ? 'bg-fuchsia-600 border-fuchsia-400 text-white shadow-[0_0_15px_rgba(217,70,239,0.3)]' : 'bg-white/5 border-white/5 text-slate-500 hover:border-white/10'}`}
+                  >
+                    {cat.replace('_', ' ')}
+                  </button>
+                ))}
+             </div>
+          </div>
+
+          {/* 2. Intelligence Input (Textarea) */}
+          <div className="space-y-4">
+             <label className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] flex items-center gap-3">
+                <Terminal size={12} className="text-fuchsia-500"/> Input Recommendation Data
+             </label>
+             <textarea 
+                value={appFeedbackForm.message}
+                onChange={(e) => setAppFeedbackForm({...appFeedbackForm, message: e.target.value})}
+                placeholder="TYPE YOUR INTELLIGENCE REPORT HERE..."
+                className="w-full h-32 bg-black/40 border border-white/5 rounded-2xl p-6 text-[11px] font-medium text-white placeholder:text-slate-800 outline-none focus:border-fuchsia-500/30 transition-all resize-none shadow-inner"
+             />
+          </div>
+
+          {/* 3. Execute Button (Wah & Compact) */}
+          <div className="pt-4">
+             <button 
+                onClick={submitAppFeedback}
+                disabled={isSendingFeedback}
+                className="w-full py-5 bg-white text-slate-950 rounded-2xl font-black text-[10px] tracking-[0.6em] uppercase hover:bg-fuchsia-600 hover:text-white transition-all duration-500 flex items-center justify-center gap-5 shadow-2xl active:scale-95 group/btn overflow-hidden relative"
+             >
+                <span className="relative z-10">{isSendingFeedback ? "ENCRYPTING..." : "EXECUTE TRANSMISSION"}</span>
+                <Send size={16} className="relative z-10 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                {/* Flare Effect */}
+                <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:left-[100%] transition-all duration-1000" />
+             </button>
+          </div>
+       </div>
+
+       {/* Siku Taktis Dikecilkan agar Elegan */}
+       <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-white/5 rounded-tl-[2.5rem]" />
+       <div className="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-white/5 rounded-br-[2.5rem]" />
+    </div>
+
+    {/* Metadata Footer */}
+    <div className="mt-8 flex justify-center items-center gap-6 opacity-30 text-[7px] font-mono text-slate-500 tracking-[0.5em] uppercase">
+       <span>Secure Uplink Established</span>
+       <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+       <span>Laguboti SVR Node 01</span>
+    </div>
+  </motion.div>
+)}
+
 {/* --- VIEW ASSESSMENT: TACTICAL MISSION SELECTION (DOWNSIZED & ULTRA WAH) --- */}
 {view === 'assessment' && (
   <motion.div 
