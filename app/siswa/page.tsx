@@ -451,39 +451,56 @@ export default function StudentPortal() {
               </motion.div>
             )}
 
-            {/* --- 4. MISSION (SOAL DAN NAVIGASI TERKUNCI DISINI) --- */}
-            {view === 'mission' && (
+{/* --- 4. MISSION (WARNA NEON & SOAL DIJAMIN MUNCUL) --- */}
+{view === 'mission' && (
               <motion.div key="mission-root" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative w-full">
                 
+                {/* A. DAFTAR SOAL */}
                 <div className="max-w-3xl mx-auto space-y-12 pb-48 pt-4">
-                  <div className="border-l-4 border-cyan-500 pl-8 py-4 bg-white/[0.03] rounded-r-[2rem] shadow-2xl text-left">
-                     <h2 className="text-4xl font-black text-white uppercase tracking-tighter">PHASE 0{currentStep}</h2>
-                     <p className="text-[10px] font-black text-cyan-400 tracking-[0.5em] uppercase mt-2">SECTOR: {selectedDomain}</p>
+                  {/* HEADER FASE - NEON FUCHSIA GLOW */}
+                  <div className="border-l-4 border-fuchsia-500 pl-8 py-4 bg-fuchsia-900/5 rounded-r-[2rem] shadow-[0_0_30px_rgba(217,70,239,0.1)] text-left relative overflow-hidden">
+                     <div className="absolute inset-0 bg-hud-grid opacity-10" />
+                     <div className="relative z-10">
+                       <h2 className="text-4xl font-black text-white uppercase tracking-tighter drop-shadow-[0_0_15px_rgba(217,70,239,0.5)]">PHASE 0{currentStep}</h2>
+                       <p className="text-[10px] font-black text-fuchsia-400 tracking-[0.5em] uppercase mt-2 drop-shadow-[0_0_8px_rgba(217,70,239,0.8)]">SECTOR: {selectedDomain}</p>
+                     </div>
                   </div>
 
                   <div className="space-y-10">
                     {currentStepQs.length > 0 ? (
                       currentStepQs.map((q, idx) => (
-                        <motion.div key={q.id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.1 }} className="p-10 rounded-[3.5rem] bg-[#05060b]/80 backdrop-blur-3xl border border-white/5 shadow-2xl relative overflow-hidden group">
-                          <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500/10 group-hover:bg-cyan-500 transition-all" />
+                        <motion.div key={q.id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.1 }} className="p-10 rounded-[3.5rem] bg-[#05060b]/90 backdrop-blur-3xl border border-fuchsia-500/20 shadow-[0_20px_50px_rgba(217,70,239,0.05)] relative overflow-hidden group">
+                          
+                          {/* Garis Neon Kiri */}
+                          <div className="absolute top-0 left-0 w-2 h-full bg-fuchsia-500/20 group-hover:bg-fuchsia-500 transition-all duration-500 shadow-[0_0_20px_#d946ef]" />
+                          
                           <div className="relative z-10 text-left">
-                            <span className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.4em] block mb-8">
+                            <span className="text-[10px] font-black text-fuchsia-500 uppercase tracking-[0.4em] block mb-8 drop-shadow-[0_0_8px_rgba(217,70,239,0.4)]">
                                QUESTION {selectedDomain} {idx + 1}
                             </span>
-                            <div className="bg-white/[0.02] border border-white/5 p-6 rounded-3xl mb-10">
+                            
+                            {/* --- KOTAK STUDI KASUS (ANTI-HILANG) --- */}
+                            <div className="bg-fuchsia-500/5 border border-fuchsia-500/20 p-8 rounded-3xl mb-10 shadow-[inset_0_0_20px_rgba(217,70,239,0.05)]">
                                <p className="text-xl lg:text-2xl font-bold text-white leading-relaxed tracking-tight">
-                                 {q.question || "Teks studi kasus kosong..."}
+                                 {/* SAYA MASUKKAN SEMUA KEMUNGKINAN NAMA KOLOM DATABASE DI SINI */}
+                                 {q.question || q.case_study || q.studi_kasus || q.deskripsi || q.text || q.soal || "Error: Data Teks Soal kosong di Database. Cek nama kolom API-mu!"}
                                </p>
                             </div>
+
+                            {/* --- OPSI JAWABAN NEON --- */}
                             <div className="grid grid-cols-1 gap-4">
                               {q.options && q.options.map((opt: any, i: number) => (
                                 <button
                                   key={i}
                                   onClick={() => setAns({ ...ans, [q.id]: { score: opt.score, text: opt.text } })}
-                                  className={`relative p-6 rounded-[2.2rem] border text-left text-[13px] font-bold transition-all flex items-center justify-between ${ans[q.id]?.text === opt.text ? 'bg-cyan-600 border-cyan-400 text-white shadow-[0_0_30px_rgba(34,211,238,0.3)]' : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'}`}
+                                  className={`relative p-6 rounded-[2.2rem] border text-left text-[13px] font-bold transition-all duration-300 flex items-center justify-between ${
+                                    ans[q.id]?.text === opt.text 
+                                    ? 'bg-fuchsia-600 border-fuchsia-400 text-white shadow-[0_0_30px_rgba(217,70,239,0.5)] scale-[1.01]' 
+                                    : 'bg-white/5 border-white/10 text-slate-400 hover:bg-fuchsia-500/10 hover:border-fuchsia-500/30 hover:text-fuchsia-100'
+                                  }`}
                                 >
                                   <span className="relative z-10 pr-10">{opt.text}</span>
-                                  {ans[q.id]?.text === opt.text && <Check size={16} className="relative z-10" />}
+                                  {ans[q.id]?.text === opt.text && <Check size={18} className="relative z-10 drop-shadow-[0_0_8px_white]" />}
                                 </button>
                               ))}
                             </div>
@@ -491,35 +508,38 @@ export default function StudentPortal() {
                         </motion.div>
                       ))
                     ) : (
-                      <div className="py-24 text-center border-2 border-dashed border-white/5 rounded-[3.5rem] opacity-30 font-mono text-[11px] tracking-widest uppercase">
-                         Tidak ada soal ditemukan.
+                      <div className="py-24 text-center border-2 border-dashed border-fuchsia-500/20 rounded-[3.5rem] opacity-50 font-mono text-[11px] tracking-widest uppercase text-fuchsia-400 shadow-[inset_0_0_30px_rgba(217,70,239,0.1)]">
+                         Mencari Data Neural... Kosong.
                       </div>
                     )}
                   </div>
                 </div>
 
+                {/* B. NAVIGASI BAWAH (GLOWING NEON) */}
                 <div className="fixed bottom-0 left-0 lg:left-[260px] right-0 z-[5000] p-6 lg:p-10 pointer-events-none">
-                   <div className="max-w-4xl mx-auto bg-[#050508]/95 backdrop-blur-3xl border border-white/10 p-6 rounded-[2.8rem] shadow-[0_-30px_100px_rgba(0,0,0,0.9)] flex items-center justify-between pointer-events-auto">
+                   <div className="max-w-4xl mx-auto bg-[#050508]/95 backdrop-blur-3xl border border-fuchsia-500/20 p-6 rounded-[2.8rem] shadow-[0_-20px_80px_rgba(217,70,239,0.15)] flex items-center justify-between pointer-events-auto">
+                      
                       <div className="hidden md:flex flex-col gap-2 pl-6 border-r border-white/10 pr-12 text-left">
-                         <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.5em]">Progress</span>
+                         <span className="text-[8px] font-black text-fuchsia-500 uppercase tracking-[0.5em] drop-shadow-[0_0_5px_rgba(217,70,239,0.5)]">Progress</span>
                          <div className="flex items-center gap-4">
                             <span className="text-2xl font-black text-white font-mono leading-none">0{currentStep}</span>
-                            <div className="w-32 h-2 bg-white/5 rounded-full overflow-hidden">
-                               <motion.div animate={{ width: `${(currentStep / maxStep) * 100}%` }} className="h-full bg-cyan-500" />
+                            <div className="w-32 h-2 bg-white/5 rounded-full overflow-hidden border border-white/10">
+                               <motion.div animate={{ width: `${(currentStep / maxStep) * 100}%` }} className="h-full bg-fuchsia-500 shadow-[0_0_15px_#d946ef]" />
                             </div>
-                            <span className="text-[10px] font-black text-slate-700 font-mono leading-none">0{maxStep}</span>
+                            <span className="text-[10px] font-black text-slate-500 font-mono leading-none">0{maxStep}</span>
                          </div>
                       </div>
+
                       <div className="flex items-center gap-5 flex-1 justify-end">
                          {currentStep > 1 && (
-                           <button onClick={() => { setCurrentStep(p => p - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-10 py-5 bg-white/5 border border-white/10 text-slate-500 rounded-2xl font-black text-[10px] tracking-widest uppercase hover:text-white transition-all">BACK</button>
+                           <button onClick={() => { setCurrentStep(p => p - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-10 py-5 bg-white/5 border border-white/10 text-slate-400 rounded-2xl font-black text-[10px] tracking-widest uppercase hover:text-fuchsia-400 hover:border-fuchsia-500/30 transition-all">BACK</button>
                          )}
                          <button 
                            disabled={!isStepComplete} 
                            onClick={() => currentStep < maxStep ? setCurrentStep(p => p + 1) : executeUplink()} 
-                           className={`px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] uppercase flex items-center gap-4 transition-all ${isStepComplete ? 'bg-cyan-600 text-white' : 'bg-white/5 text-slate-800 opacity-20 cursor-not-allowed'}`}
+                           className={`px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] uppercase flex items-center gap-4 transition-all duration-500 ${isStepComplete ? 'bg-fuchsia-600 text-white shadow-[0_0_30px_rgba(217,70,239,0.5)] hover:bg-fuchsia-500 hover:scale-105' : 'bg-white/5 text-slate-700 opacity-30 cursor-not-allowed'}`}
                          >
-                            {currentStep < maxStep ? 'NEXT PHASE' : 'FINAL UPLINK'} <ChevronRight size={18} />
+                            {currentStep < maxStep ? 'NEXT PHASE' : 'FINAL UPLINK'} <ChevronRight size={18} className={isStepComplete ? 'animate-pulse' : ''} />
                          </button>
                       </div>
                    </div>
