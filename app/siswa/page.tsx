@@ -382,6 +382,33 @@ const nexusItem: any = {
   }
 };
 
+
+const CyberContinuousDecryption = ({ text }: { text: string }) => {
+  const [displayText, setDisplayText] = useState(text);
+  const chars = "ABC0123456789$#@&*";
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      let iteration = 0;
+      const decryptInterval = setInterval(() => {
+        setDisplayText(prev =>
+          prev.split("").map((letter, index) => {
+            if (index < iteration) return text[index];
+            return chars[Math.floor(Math.random() * chars.length)];
+          }).join("")
+        );
+
+        if (iteration >= text.length) clearInterval(decryptInterval);
+        iteration += 1 / 3;
+      }, 30);
+    }, 5000); // Melakukan dekripsi ulang setiap 5 detik
+
+    return () => clearInterval(interval);
+  }, [text]);
+
+  return <span className="font-mono tracking-tighter">{displayText}</span>;
+};
+
 export default function StudentPortal() {
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -750,106 +777,93 @@ export default function StudentPortal() {
       <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
       <AnimatePresence mode="wait">
             
-{/* --- VIEW DASHBOARD: THE ULTIMATE COMMAND CENTER (EXHIBITION EDITION) --- */}
-{view === 'dashboard' && (
+      {view === 'dashboard' && (
   <motion.div 
-    key="dash-nexus" 
+    key="dash-exhibition" 
     variants={nexusContainer} 
     initial="hidden" animate="show" exit={{ opacity: 0, y: -20 }}
-    className="max-w-[1350px] mx-auto space-y-12 pb-20"
+    className="max-w-[1300px] mx-auto space-y-12 pb-20"
   >
-    {/* --- 1. THE ARCHITECT WELCOME BANNER (THE MAIN SHOWPIECE) --- */}
+    {/* --- THE SUPREME TACTICAL BANNER (REFINED SIZE & CONTINUOUS ANIMATION) --- */}
     <motion.div 
       variants={nexusItem}
-      className="relative p-10 lg:p-16 rounded-[4rem] bg-[#020308]/90 backdrop-blur-3xl border border-white/5 overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,1)] group"
+      className="relative p-10 lg:p-14 rounded-[3.5rem] bg-[#020308]/90 backdrop-blur-3xl border border-cyan-500/20 overflow-hidden shadow-[0_0_100px_rgba(0,0,0,1)] group"
     >
-       {/* High-Tech Layers */}
-       <div className="absolute inset-0 bg-hud-grid opacity-[0.04] pointer-events-none" />
+       <div className="absolute inset-0 bg-hud-grid opacity-[0.03] pointer-events-none" />
        
-       {/* Efek Scanning Laser Horizontal */}
+       {/* Scanner Beam yang Terus Menyapu */}
        <motion.div 
          animate={{ top: ['-100%', '200%'] }}
          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-         className="absolute left-0 w-full h-[120px] bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent pointer-events-none z-10"
+         className="absolute left-0 w-full h-[100px] bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent pointer-events-none z-10"
        />
 
-       {/* Globe Decoration di Latar Belakang */}
-       <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-15 transition-opacity duration-1000 rotate-12">
-          <Globe size={400} className="text-white" />
-       </div>
-
-       <div className="relative z-20 space-y-12 text-left">
-          {/* Header Identitas & Badge Build */}
+       <div className="relative z-20 space-y-10 text-left">
+          {/* Badge & Telemetry Header */}
           <div className="flex flex-wrap gap-5 items-center">
-             <div className="inline-flex items-center gap-4 px-6 py-2.5 rounded-xl bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.5em] uppercase shadow-[0_0_20px_rgba(34,211,238,0.1)]">
-                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
+             <div className="inline-flex items-center gap-4 px-5 py-2 rounded-xl bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[9px] font-black tracking-[0.5em] uppercase shadow-[0_0_20px_rgba(34,211,238,0.1)]">
+                <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
                 Neural Uplink Synchronized
              </div>
-             <div className="px-5 py-2.5 bg-white/5 border border-white/10 rounded-xl">
-                <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest font-bold">Build v2.0.4 - Secure Layer</span>
+             <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg">
+                <span className="text-[8px] font-mono text-slate-600 uppercase tracking-widest">Build v2.0.4 - Secured</span>
              </div>
           </div>
           
-          {/*Identity Section (Text Reveal) */}
-          <div className="space-y-6 relative group">
-            <div className="h-10 lg:h-12 overflow-hidden">
+          {/* IDENTITY SECTION (CONTINUOUS GLOW & DECRYPTION) */}
+          <div className="space-y-4 relative group">
+            <div className="h-8 lg:h-10 overflow-hidden">
               <CyberLetterReveal 
                 text="WELCOME OPERATIVE," 
-                className="text-2xl lg:text-4xl font-black text-white uppercase tracking-[0.5em] opacity-20" 
+                className="text-xl lg:text-3xl font-black text-white uppercase tracking-[0.6em] opacity-20" 
               />
             </div>
 
             <div className="relative inline-block">
-              <h2 className="text-5xl lg:text-9xl font-black uppercase tracking-tighter leading-none relative z-10">
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_0_30px_rgba(34,211,238,0.4)]">
-                  <CyberLetterReveal text={user.username} className="" />
+              {/* Ukuran Huruf Diperkecil ke text-7xl agar Elegant */}
+              <h2 className="text-4xl lg:text-7xl font-black uppercase tracking-tighter leading-none relative z-10 text-white">
+                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+                  <CyberContinuousDecryption text={user.username} />
                 </span>
               </h2>
 
-              {/* Efek Aura Bernapas (Breathing Aura) */}
+              {/* Breathing Aura Background */}
               <motion.div 
-                animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.05, 1] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inset-0 z-0 blur-[60px] pointer-events-none rounded-full"
+                animate={{ opacity: [0.1, 0.4, 0.1], scale: [1, 1.05, 1] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 z-0 blur-[50px] pointer-events-none rounded-full"
                 style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.2) 0%, rgba(217,70,239,0.1) 100%)' }}
-              />
-
-              {/* Kilatan Cahaya Menyapu (Sweep Shine) */}
-              <motion.div 
-                animate={{ left: ["-100%", "200%"] }}
-                transition={{ duration: 4, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
-                className="absolute top-0 bottom-0 w-48 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] z-20 pointer-events-none"
               />
             </div>
           </div>
           
-          {/* Tactical Info Bar */}
+          {/* INFO BAR - Sektor satu baris & Data Taktis */}
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-14 pt-6">
-             <div className="flex items-center gap-6 border-l-[8px] border-fuchsia-600 pl-8 h-16 transition-all group-hover:border-cyan-400">
-                <div className="space-y-1.5">
-                   <p className="text-white text-[14px] lg:text-[16px] font-black tracking-[0.5em] uppercase leading-none">
+             <div className="flex items-center gap-6 border-l-[8px] border-fuchsia-600 pl-8 h-14">
+                <div className="space-y-1">
+                   <p className="text-white text-[13px] lg:text-[15px] font-black tracking-[0.4em] uppercase leading-none">
                       Integrated Readiness Interface
                    </p>
-                   <p className="text-slate-500 text-[9px] font-mono tracking-[0.3em] uppercase opacity-60">
-                      Central Control Node - Laguboti SVR 01
+                   <p className="text-slate-500 text-[8px] font-mono tracking-[0.3em] uppercase">
+                      Central Control Node - LAGUBOTI SVR 01
                    </p>
                 </div>
              </div>
              
-             {/* Live Telemetry Data */}
-             <div className="flex gap-16 px-12 border-l border-white/10">
-                <div className="flex flex-col gap-2.5">
-                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Network Ping</span>
+             <div className="flex gap-14 px-10 border-l border-white/10">
+                <div className="flex flex-col gap-1.5">
+                   <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.4em]">Network Ping</span>
                    <div className="flex items-center gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping shadow-[0_0_12px_#10b981]" />
-                      <span className="text-[15px] font-black text-emerald-400 font-mono tracking-widest">0.0002 MS</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping shadow-[0_0_10px_#10b981]" />
+                      <span className="text-[14px] font-black text-emerald-400 font-mono tracking-widest">0.0002 MS</span>
                    </div>
                 </div>
-                <div className="flex flex-col gap-2.5 text-left">
-                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Operational Sector</span>
+                <div className="flex flex-col gap-1.5">
+                   <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.4em]">Operational Sector</span>
                    <div className="flex items-center gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_12px_#22d3ee]" />
-                      <span className="text-[15px] font-black text-cyan-400 font-mono tracking-widest uppercase whitespace-nowrap">
+                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]" />
+                      {/* FIX: Teks kelas dipaksa satu baris */}
+                      <span className="text-[14px] font-black text-cyan-400 font-mono tracking-widest uppercase whitespace-nowrap">
                          {user.class_name || "CENTRAL SECTOR"}
                       </span>
                    </div>
@@ -858,11 +872,11 @@ export default function StudentPortal() {
           </div>
        </div>
 
-       {/* Tactical Corner HUD (Enhanced Thickness) */}
-       <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-l-4 border-white/10 rounded-tl-[4rem] group-hover:border-cyan-500/50 transition-all duration-700" />
-       <div className="absolute top-0 right-0 w-20 h-20 border-t-4 border-r-4 border-white/10 rounded-tr-[4rem] group-hover:border-cyan-500/50 transition-all duration-700" />
-       <div className="absolute bottom-0 left-0 w-20 h-20 border-b-4 border-l-4 border-white/10 rounded-bl-[4rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
-       <div className="absolute bottom-0 right-0 w-20 h-20 border-b-4 border-r-4 border-white/10 rounded-br-[4rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
+       {/* Symmetrical Tactical Corner HUD */}
+       <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-white/10 rounded-tl-[3.5rem] group-hover:border-cyan-500/50 transition-all duration-700" />
+       <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-white/10 rounded-tr-[3.5rem] group-hover:border-cyan-500/50 transition-all duration-700" />
+       <div className="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-white/10 rounded-bl-[3.5rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
+       <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-white/10 rounded-br-[3.5rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
     </motion.div>
 
     {/* --- 2. DATA CLUSTERS (WIDGETS WITH HOVER GLOW) --- */}
