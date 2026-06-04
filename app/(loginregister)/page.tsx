@@ -1162,7 +1162,7 @@ export default function CyberLandingDark() {
         </div>
 
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="h-20 lg:h-24 bg-black/40 backdrop-blur-2xl border-x border-b border-white/5 rounded-b-[2.5rem] px-8 flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+        <div className="h-20 lg:h-24 bg-black/40 backdrop-blur-2xl border-x border-b border-white/5 rounded-b-[2.5rem] px-8 flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
             
             {/* Ambient Glow di dalam Header */}
             <div className="absolute top-0 left-1/4 w-32 h-32 bg-cyan-500/5 blur-[40px] rounded-full pointer-events-none" />
