@@ -421,7 +421,33 @@ export default function StudentPortal() {
   const [appFeedbackForm, setAppFeedbackForm] = useState({ category: 'AI ENHANCEMENT', message: '' });
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
-  
+  // --- TARUH INI DI DALAM StudentPortal, DI ATAS RETURN ---
+const radarData = useMemo(() => {
+  // Daftar sektor yang akan ditampilkan di grafik radar (Tampilan Premium)
+  const sectors = [
+    { key: "Social", label: "SOCIAL" },
+    { key: "Malware", label: "MALWARE" },
+    { key: "Phishing", label: "PHISHING" },
+    { key: "Network", label: "NETWORK" },
+    { key: "Threat", label: "THREAT" },
+    { key: "Access", label: "ACCESS" }
+  ];
+
+  return sectors.map(s => {
+    // Mencari skor terakhir dari history untuk tiap sektor
+    // history dicheck apakah ada isinya agar tidak error (fallback ke 0)
+    const entry = (history || []).find((h: any) => 
+      String(h.domain_id || "").toLowerCase().includes(s.key.toLowerCase())
+    );
+    
+    return { 
+      subject: s.label, 
+      A: entry ? entry.score : 0, 
+      fullMark: 100 
+    };
+  });
+}, [history]);
+
   // Greeting Logic
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -442,19 +468,18 @@ export default function StudentPortal() {
   }, []);
 
   useEffect(() => {
-    const saved = localStorage.getItem('user');
-    if (saved) {
-      const parsed = JSON.parse(saved); setUser(parsed); setIsAuthorized(true); fetchScores(parsed.username);
-    } else { router.push('/'); }
-    const interval = setInterval(() => setBgIdx(p => (p + 1) % CYBER_ASSETS.length), 10000);
-    return () => clearInterval(interval);
-  }, [router, fetchScores]);
-
-  useEffect(() => {
     if (isAuthorized) {
-      fetch('https://cyber-backend-delta.vercel.app/questions').then(r => r.json()).then(d => {
-        setAllQs(d.map((q: any) => ({ ...q, options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options })));
-      });
+      fetch('https://cyber-backend-delta.vercel.app/questions')
+        .then(res => res.json())
+        .then((data: any[]) => { // Beri tipe : any[] agar 'q' tidak merah
+          const cleanData = data.map((q: any) => ({
+            ...q,
+            // Pastikan parsing JSON aman
+            options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
+          }));
+          setAllQs(cleanData);
+        })
+        .catch(err => console.error("Uplink Error:", err));
     }
   }, [isAuthorized]);
 
@@ -526,21 +551,27 @@ export default function StudentPortal() {
     finally { setIsSendingFeedback(false); }
   };
 
-  const currentStepQs = useMemo(() => {
-    return allQs.filter(q => q.main_domain.toLowerCase().trim() === selectedDomain.toLowerCase().trim() && q.type === `step${currentStep}`);
-  }, [allQs, currentStep, selectedDomain]);
+// --- TARUH DI DALAM StudentPortal, DI ATAS RETURN ---
+const currentStepQs = useMemo(() => {
+  // 1. Cek apakah data sudah ditarik dari database
+  if (!allQs || allQs.length === 0) return [];
 
-  const maxStep = useMemo(() => {
-    const domainQs = allQs.filter(q => q.main_domain.toLowerCase().trim() === selectedDomain.toLowerCase().trim());
-    return domainQs.length === 0 ? 0 : Math.max(...domainQs.map(q => parseInt(q.type.replace('step', ''))));
-  }, [allQs, selectedDomain]);
+  // 2. Normalisasi input agar tidak sensitif spasi/huruf besar-kecil
+  const domainTarget = selectedDomain.toLowerCase().trim();
+  const stepTarget = `step${currentStep}`.toLowerCase().trim();
 
-  const isStepComplete = useMemo(() => currentStepQs.length > 0 && currentStepQs.every(q => ans[q.id] !== undefined), [currentStepQs, ans]);
+  // 3. Filter dengan sangat teliti
+  const filtered = allQs.filter(q => {
+    const dbDomain = (q.main_domain || "").toLowerCase().trim();
+    const dbType = (q.type || "").toLowerCase().trim();
+    
+    // Bandingkan: Domain harus sama DAN step (Phase) harus sama
+    return dbDomain === domainTarget && dbType === stepTarget;
+  });
 
-  const radarData = useMemo(() => ["Social", "Malware", "Phishing", "Network", "Threat", "Access"].map(d => {
-    const entry = history.find(h => String(h.domain_id).toLowerCase().includes(d.toLowerCase()));
-    return { subject: d.toUpperCase(), A: entry ? entry.score : 0, fullMark: 100 };
-  }), [history]);
+  console.log("DEBUG: Soal ditemukan ->", filtered.length); // Cek di F12 browser
+  return filtered;
+}, [allQs, currentStep, selectedDomain]);
 
   if (!isAuthorized) return null;
 
@@ -1173,6 +1204,58 @@ export default function StudentPortal() {
              </tbody>
           </table>
        </div>
+    </div>
+  </motion.div>
+)}
+
+{view === 'mission' && (
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto space-y-12 pb-44">
+    
+    {/* HEADER PHASE */}
+    <div className="border-b border-white/10 pb-8 space-y-2">
+       <h2 className="text-5xl font-black text-white uppercase tracking-tighter">PHASE 0{currentStep}</h2>
+       <p className="text-fuchsia-500 font-black tracking-widest text-[10px] uppercase">OPERATIONAL DOMAIN: {selectedDomain}</p>
+    </div>
+
+    {/* LOOPING SOAL: INI YANG BIKIN SOAL MUNCUL */}
+    <div className="space-y-10">
+      {currentStepQs.length > 0 ? (
+        currentStepQs.map((q) => (
+          <div key={q.id} className="p-10 rounded-[3rem] bg-black/60 border border-white/10 shadow-2xl relative overflow-hidden transition-all hover:border-fuchsia-500/40">
+             <div className="absolute top-0 left-0 w-2 h-full bg-fuchsia-600 shadow-[0_0_20px_#d946ef]" />
+             
+             {/* Teks Pertanyaan */}
+             <h4 className="text-2xl font-bold text-white leading-snug mb-10">
+                {q.text}
+             </h4>
+
+             {/* Temukan bagian ini di dalam view === 'mission' */}
+<div className="grid grid-cols-1 gap-5">
+  {((q.options as any[]) || []).map((opt: any, i: number) => (
+    <button 
+      key={i} 
+      onClick={() => setAns({...ans, [q.id]: {score: opt.score, text: opt.text}})}
+      className={`group/opt p-8 rounded-[2.5rem] text-left transition-all border-2 text-[12px] font-black tracking-[0.1em] uppercase flex items-center justify-between gap-6 ${ans[q.id]?.text === opt.text ? 'bg-fuchsia-600/20 border-fuchsia-500 text-white shadow-[0_0_30px_rgba(217,70,239,0.2)]' : 'bg-white/5 border-white/5 text-slate-400 hover:border-white/20'}`}
+    >
+       <div className="flex items-center gap-8">
+          <div className={`w-6 h-6 rounded-full border-[3px] flex items-center justify-center shrink-0 transition-all ${ans[q.id]?.text === opt.text ? 'border-fuchsia-400 scale-110 shadow-[0_0_15px_#d946ef]' : 'border-slate-800'}`}>
+             {ans[q.id]?.text === opt.text && <div className="w-2.5 h-2.5 bg-fuchsia-400 rounded-full animate-pulse" />}
+          </div>
+          <span className="leading-relaxed">{opt.text}</span>
+       </div>
+       <ChevronRight size={18} className={`opacity-0 group-hover/opt:opacity-100 group-hover/opt:translate-x-2 transition-all ${ans[q.id]?.text === opt.text ? 'opacity-100 text-fuchsia-400' : ''}`} />
+    </button>
+  ))}
+</div>
+          </div>
+        ))
+      ) : (
+        // JIKA SOAL TIDAK DITEMUKAN / SEDANG LOADING
+        <div className="text-center py-20">
+           <div className="w-12 h-12 border-4 border-fuchsia-500 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
+           <p className="text-slate-500 font-black text-[10px] tracking-widest uppercase animate-pulse">Syncing Tactical Data Questions...</p>
+        </div>
+      )}
     </div>
   </motion.div>
 )}
