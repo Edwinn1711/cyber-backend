@@ -105,24 +105,6 @@ const RobotFace = ({ size = 24, ringSize = "w-40 h-40", coreSize = "w-24 h-24" }
     </div>
   );
 };
-const NeonCursor = () => {
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  useEffect(() => {
-    const move = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
-  }, []);
-
-  return (
-    <motion.div
-      animate={{ x: pos.x - 12, y: pos.y - 12 }}
-      transition={{ type: "spring", damping: 30, stiffness: 400, mass: 0.5 }}
-      className="fixed top-0 left-0 w-6 h-6 border border-cyan-400 rounded-full z-[99999] pointer-events-none flex items-center justify-center"
-    >
-      <div className="w-1 h-1 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" />
-    </motion.div>
-  );
-};
 
 
 // --- ANIMATION VARIANTS ---
@@ -412,6 +394,103 @@ const CyberContinuousDecryption = ({ text }: { text: string }) => {
   return <span className="font-mono tracking-tighter">{displayText}</span>;
 };
 
+const NeonCursor = () => {
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const move = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, []);
+  return (
+    <motion.div
+      animate={{ x: pos.x - 12, y: pos.y - 12 }}
+      transition={{ type: "spring", damping: 30, stiffness: 400, mass: 0.5 }}
+      className="fixed top-0 left-0 w-6 h-6 border border-cyan-400 rounded-full z-[99999] pointer-events-none flex items-center justify-center"
+    >
+      <div className="w-1 h-1 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" />
+    </motion.div>
+  );
+};
+
+const CRTOverlay = () => (
+  <div className="pointer-events-none fixed inset-0 z-[99998] opacity-[0.03]">
+    <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]" />
+  </div>
+);
+
+// TEMPELKAN INI DI ATAS BARIS 422 (DI LUAR StudentPortal)
+const CyberSentinel = ({ username = "OPERATIVE" }) => {
+  const [message, setMessage] = useState("");
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const headX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), { stiffness: 150, damping: 25 });
+  const headY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-8, 8]), { stiffness: 150, damping: 25 });
+  const bodyX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-5, 5]), { stiffness: 100, damping: 30 });
+
+  useEffect(() => {
+    const messages = [
+      `READY OPERATIVE ${username.toUpperCase()}`,
+      "SCANNING DATABASE NODES",
+      "QUANTUM ENCRYPTION ACTIVE",
+      "ALL SYSTEMS OPTIMAL",
+      "NEURAL LINK ESTABLISHED"
+    ];
+    let msgIdx = 0;
+    const cycleMessages = () => {
+      const target = messages[msgIdx];
+      let iteration = 0;
+      const interval = setInterval(() => {
+        setMessage(target.split("").map((l, i) => i < iteration ? target[i] : "01"[Math.floor(Math.random() * 2)]).join(""));
+        if (iteration >= target.length) clearInterval(interval);
+        iteration += 1 / 2;
+      }, 40);
+      msgIdx = (msgIdx + 1) % messages.length;
+    };
+    const mainInterval = setInterval(cycleMessages, 5000);
+    cycleMessages();
+    return () => clearInterval(mainInterval);
+  }, [username]);
+
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      mouseX.set((e.clientX / window.innerWidth) - 0.5);
+      mouseY.set((e.clientY / window.innerHeight) - 0.5);
+    };
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, [mouseX, mouseY]);
+
+  return (
+    <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="relative flex flex-col items-center justify-center h-[380px] w-full select-none" style={{ perspective: '1200px' }}>
+      <motion.div className="absolute top-2 z-50 bg-[#020308]/80 backdrop-blur-3xl border border-cyan-400/30 px-6 py-2.5 rounded-2xl shadow-[0_0_40px_rgba(34,211,238,0.2)] flex flex-col items-center">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]" />
+          <span className="text-[10px] font-black tracking-[0.3em] text-cyan-400 uppercase font-mono">{message}</span>
+        </div>
+      </motion.div>
+      <motion.div style={{ x: bodyX }} className="relative flex flex-col items-center mt-12">
+        <motion.div style={{ x: headX, y: headY }} className="relative w-14 h-16 bg-[#080a12] border-2 border-cyan-400/60 rounded-t-[2.2rem] rounded-b-xl flex flex-col items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.3)] z-30">
+          <div className="flex gap-3">
+            {[0, 1].map(i => (
+              <div key={i} className="relative w-2.5 h-2.5">
+                <motion.div animate={{ scaleY: [1, 1, 0.1, 1] }} transition={{ duration: 4, repeat: Infinity, times: [0, 0.9, 0.92, 1] }} className="w-full h-full bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
+              </div>
+            ))}
+          </div>
+        </motion.div>
+        <div className="relative w-24 h-32 bg-[#080a12] border-2 border-cyan-400/50 rounded-[2.8rem] flex flex-col items-center p-4 z-20 mt-1">
+           <Zap size={22} className="text-cyan-400 mt-4 animate-pulse" />
+        </div>
+        <div className="flex gap-10 -mt-4 relative z-10">
+          {[0, 1].map((i) => (
+            <motion.div key={i} animate={{ height: [10, 45, 10], opacity: [0.5, 1, 0.5] }} transition={{ duration: 0.12, repeat: Infinity }} className="w-4 bg-cyan-400 blur-md rounded-full mt-1" />
+          ))}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 export default function StudentPortal() {
   const router = useRouter();
@@ -443,416 +522,171 @@ export default function StudentPortal() {
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
 
-// 2. Semua useCallbac
-const fetchScores = useCallback(async (username: string) => {
-  try {
-    const res = await fetch(`https://cyber-backend-delta.vercel.app/siswa/scores/${username}`);
-    const data = await res.json();
-    if (Array.isArray(data) && data.length > 0) {
-      // Menghitung rata-rata skor secara real-time
-      const total = data.reduce((acc, curr: any) => acc + curr.score, 0);
-      setScore(Math.round(total / data.length));
-      setHistory(data);
-    }
-  } catch (e) { 
-    console.error("Gagal sinkronisasi skor:", e); 
-  }
-}, []);
-
-
-
-// --- 2. EFFECT UTAMA: OTENTIKASI & MOUNTED ---
-useEffect(() => {
-  // Menghilangkan layar putih
-  setMounted(true); 
-
-  const saved = localStorage.getItem('user');
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
-      setUser(parsed);
-      setIsAuthorized(true);
-      // Memanggil fetchScores yang sudah didefinisikan di atas
-      if (parsed.username) fetchScores(parsed.username);
-    } catch (e) {
-      console.error("Data sesi korup");
-      router.push('/');
-    }
-  } else {
-    router.push('/');
-  }
-}, [router, fetchScores]);
-
-// --- 3. EFFECT AMBIL SOAL (SAAT SUDAH LOGGED IN) ---
-useEffect(() => {
-  if (isAuthorized) {
-    fetch('https://cyber-backend-delta.vercel.app/questions')
-      .then(res => res.json())
-      .then((data: any[]) => {
-        const cleanData = data.map((q: any) => ({
-          ...q,
-          // Parsing pilihan jawaban secara aman
-          options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
-        }));
-        setAllQs(cleanData);
-      })
-      .catch(err => console.error("Uplink Error:", err));
-  }
-}, [isAuthorized]);
-
-// --- 4. DATA RADAR (VISUALISASI DEWA LEVEL) ---
-const radarData = useMemo(() => {
-  // Label yang sangat keren dan profesional untuk pameran
-  const sectors = [
-    { key: "Social", label: "PSYCHOLOGICAL" },
-    { key: "Malware", label: "NEURAL VIRUS" },
-    { key: "Phishing", label: "CREDENTIAL" },
-    { key: "Network", label: "INFRASTRUCTURE" },
-    { key: "Threat", label: "INTEL" },
-    { key: "Access", label: "PERIMETER" }
-  ];
-
-  return sectors.map(s => {
-    const entry = (history || []).find((h: any) => 
-      String(h.domain_id || "").toLowerCase().includes(s.key.toLowerCase())
-    );
-    return { 
-      subject: s.label, 
-      A: entry ? entry.score : 0, 
-      fullMark: 100 
-    };
-  });
-}, [history]);
-
-// --- 5. GREETING LOGIC ---
-const getGreeting = () => {
-  const hour = new Date().getHours();
-  if (hour < 12) return "SELAMAT PAGI";
-  if (hour < 17) return "SELAMAT SIANG";
-  return "SELAMAT MALAM";
-};
-
-  const handleStartMissionClick = () => {
-    if (!user.class_name || user.class_name === "UNASSIGNED") {
-      setShowClassSelector(true);
-    } else {
-      setView('assessment');
-    }
-  };
-
-  const assignClassAndStartMission = (className: string) => {
-    const updatedUser = { ...user, class_name: className };
-    setUser(updatedUser); localStorage.setItem('user', JSON.stringify(updatedUser)); 
-    setShowClassSelector(false); setView('mission'); setCurrentStep(1);
-  };
-
-  const executeUplink = async () => {
-    setLoading(true);
-    
-    // 1. Hitung skor (Contoh logika: rata-rata jawaban)
-    const totalQuestions = Object.keys(ans).length;
-    const totalScore = Object.values(ans).reduce((acc, curr) => acc + curr.score, 0);
-    const finalCalculatedScore = Math.round((totalScore / (totalQuestions * 10)) * 100);
-    
-    setScore(finalCalculatedScore);
-
-    // 2. TRIGGER LAYAR PERHITUNGAN DEWA
-    setIsCalculating(true); 
-
-    try {
-      // Kirim ke database di background
-      await fetch('https://cyber-backend-delta.vercel.app/siswa/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: user.username,
-          class_name: user.class_name,
-          domain_id: selectedDomain,
-          score: finalCalculatedScore,
-          answers: Object.keys(ans).map(id => ({
-            id: parseInt(id),
-            value: ans[parseInt(id) as any].score.toString(),
-            text: ans[parseInt(id) as any].text
-          }))
-        })
-      });
-    } catch (e) {
-      console.error("Uplink Failed", e);
-    }
-  };
-
-  const submitAppFeedback = async () => {
-    if(!appFeedbackForm.message.trim()) { alert("Please input content."); return; }
-    setIsSendingFeedback(true);
-    try {
-      const response = await fetch("https://formsubmit.co/ajax/devinedwinsiahaan171105@gmail.com", {
-        method: "POST", headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-           _subject: `MEGAH FEEDBACK: ${appFeedbackForm.category}`,
-           _captcha: "false",
-           Operative: user.username,
-           Category: appFeedbackForm.category,
-           Message: appFeedbackForm.message
-        })
-      });
-      if (response.ok) { alert(`Sent! Check Gmail.`); setAppFeedbackModal(false); setAppFeedbackForm({ category: 'AI ENHANCEMENT', message: '' }); } 
-    } catch (e) { alert("Error."); } 
-    finally { setIsSendingFeedback(false); }
-  };
-
-// --- TARUH DI DALAM StudentPortal, DI ATAS RETURN ---
-const currentStepQs = useMemo(() => {
-  // 1. Cek apakah data sudah ditarik dari database
-  if (!allQs || allQs.length === 0) return [];
-
-  // 2. Normalisasi input agar tidak sensitif spasi/huruf besar-kecil
-  const domainTarget = selectedDomain.toLowerCase().trim();
-  const stepTarget = `step${currentStep}`.toLowerCase().trim();
-
-  // 3. Filter dengan sangat teliti
-  const filtered = allQs.filter(q => {
-    const dbDomain = (q.main_domain || "").toLowerCase().trim();
-    const dbType = (q.type || "").toLowerCase().trim();
-    
-    // Bandingkan: Domain harus sama DAN step (Phase) harus sama
-    return dbDomain === domainTarget && dbType === stepTarget;
-  });
-
-  console.log("DEBUG: Soal ditemukan ->", filtered.length); // Cek di F12 browser
-  return filtered;
-}, [allQs, currentStep, selectedDomain]);
-
-  if (!isAuthorized) return null;
-
-
-  const isStepComplete = useMemo(() => {
-    // Mengecek apakah semua soal di fase (step) saat ini sudah dijawab
-    return currentStepQs.length > 0 && currentStepQs.every(q => ans[q.id] !== undefined);
-  }, [currentStepQs, ans]);
-
-  // --- TARUH INI DI DALAM StudentPortal, DI ATAS RETURN ---
-const maxStep = useMemo(() => {
-  // 1. Jika data soal belum ada, anggap step maksimal adalah 0
-  if (!allQs || allQs.length === 0 || !selectedDomain) return 0;
-
-  // 2. Ambil soal yang hanya untuk domain yang sedang dikerjakan
-  const domainQs = allQs.filter(q => 
-    q.main_domain?.toLowerCase().trim() === selectedDomain.toLowerCase().trim()
-  );
-
-  if (domainQs.length === 0) return 0;
-
-  // 3. Cari angka paling tinggi dari properti 'type' (contoh: 'step3' -> ambil angka 3)
-  const steps = domainQs.map(q => {
-    const num = parseInt((q.type || "").replace(/\D/g, ''));
-    return isNaN(num) ? 0 : num;
-  });
-
-  // 4. Kembalikan angka tertinggi sebagai maxStep
-  return Math.max(...steps);
-}, [allQs, selectedDomain]);
-
-  const CyberSentinel = ({ username = "OPERATIVE" }) => {
-    const [message, setMessage] = useState("");
-    const [fullMessage, setFullMessage] = useState("INITIALIZING...");
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
+  export default function StudentPortal() {
+    const router = useRouter();
   
-    // Fisika Pergerakan: Sangat smooth (Elite Tracking)
-    const headX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), { stiffness: 150, damping: 25 });
-    const headY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-8, 8]), { stiffness: 150, damping: 25 });
-    const bodyX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-5, 5]), { stiffness: 100, damping: 30 });
+    // --- 1. SEMUA STATE (Urutan Tidak Boleh Berubah) ---
+    const [mounted, setMounted] = useState(false);
+    const [bootDone, setBootDone] = useState(false);
+    const [isCalculating, setIsCalculating] = useState(false);
+    const [theme, setTheme] = useState('dark');
+    const [view, setView] = useState('dashboard'); 
+    const [currentStep, setCurrentStep] = useState(1); 
+    const [selectedDomain, setSelectedDomain] = useState("SOCIAL ENGINEERING");
+    const [allQs, setAllQs] = useState<any[]>([]);
+    const [ans, setAns] = useState<Record<number, {score: number, text: string}>>({});
+    const [score, setScore] = useState(0);
+    const [history, setHistory] = useState<any[]>([]);
+    const [user, setUser] = useState({ username: 'STUDENT', class_name: '', tanggal_lahir: '' });
+    const [loading, setLoading] = useState(false);
+    const [bgIdx, setBgIdx] = useState(0);
+    const [isAuthorized, setIsAuthorized] = useState(false);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState('SUBMIT ASSESSMENT');
+    const [detailModal, setDetailModal] = useState<any>(null);
+    const [showClassSelector, setShowClassSelector] = useState(false);
+    const [appFeedbackModal, setAppFeedbackModal] = useState(false);
+    const [appFeedbackForm, setAppFeedbackForm] = useState({ category: 'AI ENHANCEMENT', message: '' });
+    const [isSendingFeedback, setIsSendingFeedback] = useState(false);
+    const scrollRef = useRef<HTMLDivElement>(null);
   
-    // Efek Dekripsi Pesan (Teks berubah-ubah sebelum fix)
-    useEffect(() => {
-      const messages = [
-        `READY OPERATIVE ${username.toUpperCase()}`,
-        "SCANNING DATABASE NODES",
-        "QUANTUM ENCRYPTION ACTIVE",
-        "ALL SYSTEMS OPTIMAL",
-        "NEURAL LINK ESTABLISHED"
-      ];
-      let msgIdx = 0;
-  
-      const cycleMessages = () => {
-        const target = messages[msgIdx];
-        let iteration = 0;
-        const interval = setInterval(() => {
-          setMessage(
-            target.split("").map((l, i) => {
-              if (i < iteration) return target[i];
-              return "01"[Math.floor(Math.random() * 2)];
-            }).join("")
-          );
-          if (iteration >= target.length) clearInterval(interval);
-          iteration += 1 / 2;
-        }, 40);
-        msgIdx = (msgIdx + 1) % messages.length;
-      };
-  
-      const mainInterval = setInterval(cycleMessages, 5000);
-      cycleMessages();
-      return () => clearInterval(mainInterval);
-    }, [username]);
-  
-    useEffect(() => {
-      const handleMove = (e: MouseEvent) => {
-        mouseX.set((e.clientX / window.innerWidth) - 0.5);
-        mouseY.set((e.clientY / window.innerHeight) - 0.5);
-      };
-      window.addEventListener("mousemove", handleMove);
-      return () => window.removeEventListener("mousemove", handleMove);
+    // --- 2. SEMUA CALLBACK & MEMO ---
+    const fetchScores = useCallback(async (username: string) => {
+      try {
+        const res = await fetch(`https://cyber-backend-delta.vercel.app/siswa/scores/${username}`);
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          const total = data.reduce((acc, curr: any) => acc + curr.score, 0);
+          setScore(Math.round(total / data.length));
+          setHistory(data);
+        }
+      } catch (e) { console.error("Gagal sinkronisasi skor:", e); }
     }, []);
   
+    const radarData = useMemo(() => {
+      const sectors = [
+        { key: "Social", label: "PSYCHOLOGICAL" },
+        { key: "Malware", label: "NEURAL VIRUS" },
+        { key: "Phishing", label: "CREDENTIAL" },
+        { key: "Network", label: "INFRASTRUCTURE" },
+        { key: "Threat", label: "INTEL" },
+        { key: "Access", label: "PERIMETER" }
+      ];
+      return sectors.map(s => {
+        const entry = (history || []).find((h: any) => String(h.domain_id || "").toLowerCase().includes(s.key.toLowerCase()));
+        return { subject: s.label, A: entry ? entry.score : 0, fullMark: 100 };
+      });
+    }, [history]);
+  
+    const currentStepQs = useMemo(() => {
+      if (!allQs || allQs.length === 0) return [];
+      const domainTarget = selectedDomain.toLowerCase().trim();
+      const stepTarget = `step${currentStep}`.toLowerCase().trim();
+      return allQs.filter(q => (q.main_domain || "").toLowerCase().trim() === domainTarget && (q.type || "").toLowerCase().trim() === stepTarget);
+    }, [allQs, currentStep, selectedDomain]);
+  
+    const maxStep = useMemo(() => {
+      if (!allQs || allQs.length === 0 || !selectedDomain) return 1;
+      const domainQs = allQs.filter(q => q.main_domain?.toLowerCase().trim() === selectedDomain.toLowerCase().trim());
+      if (domainQs.length === 0) return 1;
+      const steps = domainQs.map(q => {
+        const num = parseInt((q.type || "").replace(/\D/g, ''));
+        return isNaN(num) ? 1 : num;
+      });
+      return Math.max(...steps, 1);
+    }, [allQs, selectedDomain]);
+  
+    const isStepComplete = useMemo(() => {
+      return currentStepQs.length > 0 && currentStepQs.every(q => ans[q.id] !== undefined);
+    }, [currentStepQs, ans]);
+  
+    // --- 3. SEMUA EFFECT ---
+    useEffect(() => {
+      setMounted(true);
+      const saved = localStorage.getItem('user');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setUser(parsed);
+          setIsAuthorized(true);
+          if (parsed.username) fetchScores(parsed.username);
+        } catch (e) { router.push('/'); }
+      } else { router.push('/'); }
+    }, [router, fetchScores]);
+  
+    useEffect(() => {
+      if (isAuthorized) {
+        fetch('https://cyber-backend-delta.vercel.app/questions')
+          .then(res => res.json())
+          .then((data: any[]) => {
+            const cleanData = data.map((q: any) => ({
+              ...q,
+              options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
+            }));
+            setAllQs(cleanData);
+          }).catch(err => console.error("Uplink Error:", err));
+      }
+    }, [isAuthorized]);
+  
+    // --- 4. LOGIKA PENDUKUNG (Fungsi Handler) ---
+    const handleStartMissionClick = () => {
+      if (!user.class_name || user.class_name === "UNASSIGNED") { setShowClassSelector(true); } 
+      else { setView('assessment'); }
+    };
+  
+    const assignClassAndStartMission = (className: string) => {
+      const updatedUser = { ...user, class_name: className };
+      setUser(updatedUser); 
+      localStorage.setItem('user', JSON.stringify(updatedUser)); 
+      setShowClassSelector(false); setView('mission'); setCurrentStep(1);
+    };
+  
+    const executeUplink = async () => {
+      setLoading(true);
+      const totalQuestions = Object.keys(ans).length;
+      const totalScore = Object.values(ans).reduce((acc, curr) => acc + curr.score, 0);
+      const finalCalculatedScore = Math.round((totalScore / (totalQuestions * 10)) * 100);
+      setScore(finalCalculatedScore);
+      setIsCalculating(true); 
+      try {
+        await fetch('https://cyber-backend-delta.vercel.app/siswa/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: user.username, class_name: user.class_name, domain_id: selectedDomain, score: finalCalculatedScore,
+            answers: Object.keys(ans).map(id => ({ id: parseInt(id), value: ans[parseInt(id) as any].score.toString(), text: ans[parseInt(id) as any].text }))
+          })
+        });
+      } catch (e) { console.error("Uplink Failed", e); }
+      finally { setLoading(false); }
+    };
+  
+    const submitAppFeedback = async () => {
+      if(!appFeedbackForm.message.trim()) { alert("Please input content."); return; }
+      setIsSendingFeedback(true);
+      try {
+        const response = await fetch("https://formsubmit.co/ajax/devinedwinsiahaan171105@gmail.com", {
+          method: "POST", headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ _subject: `MEGAH FEEDBACK: ${appFeedbackForm.category}`, _captcha: "false", Operative: user.username, Category: appFeedbackForm.category, Message: appFeedbackForm.message })
+        });
+        if (response.ok) { alert(`Sent! Check Gmail.`); setAppFeedbackModal(false); setAppFeedbackForm({ category: 'AI ENHANCEMENT', message: '' }); } 
+      } catch (e) { alert("Error."); } 
+      finally { setIsSendingFeedback(false); }
+    };
+  
+    // --- 5. EARLY RETURNS (Sangat penting ditaruh SETELAH Hook di atas) ---
+    if (!mounted) return <div className="bg-black h-screen w-full" />;
+    if (!isAuthorized) return null;
+    if (!bootDone) {
+      return <AnimatePresence><CyberBootSequence onComplete={() => setBootDone(true)} /></AnimatePresence>;
+    }
+  
+    // --- 6. RENDER UTAMA ---
     return (
-      <motion.div 
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="relative flex flex-col items-center justify-center h-[380px] w-full select-none" 
-        style={{ perspective: '1200px' }}
-      >
-        
-        {/* --- 1. TACTICAL HOLOGRAPHIC INTERFACE (PESAN) --- */}
-        <motion.div 
-          className="absolute top-2 z-50 bg-[#020308]/80 backdrop-blur-3xl border border-cyan-400/30 px-6 py-2.5 rounded-2xl shadow-[0_0_40px_rgba(34,211,238,0.2)] flex flex-col items-center"
-        >
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]" />
-            <span className="text-[10px] font-black tracking-[0.3em] text-cyan-400 uppercase font-mono">
-              {message}
-            </span>
-          </div>
-          <div className="w-full h-[1px] bg-white/5 relative overflow-hidden">
-             <motion.div 
-               animate={{ x: ["-100%", "100%"] }} 
-               transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-               className="w-1/2 h-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent" 
-             />
-          </div>
-        </motion.div>
-  
-        {/* --- 2. THE QUANTUM BOT ASSEMBLY --- */}
-        <motion.div style={{ x: bodyX }} className="relative flex flex-col items-center mt-12">
-          
-          {/* KEPALA (Elite Detailing) */}
-          <motion.div 
-            style={{ x: headX, y: headY }}
-            className="relative w-14 h-16 bg-[#080a12] border-2 border-cyan-400/60 rounded-t-[2.2rem] rounded-b-xl flex flex-col items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.3)] z-30 group"
-          >
-            {/* MATA (Blinking Quantum Eyes) */}
-            <div className="flex gap-3">
-              {[0, 1].map(i => (
-                <div key={i} className="relative w-2.5 h-2.5">
-                  <motion.div 
-                    animate={{ scaleY: [1, 1, 0.1, 1] }} 
-                    transition={{ duration: 4, repeat: Infinity, times: [0, 0.9, 0.92, 1] }}
-                    className="w-full h-full bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" 
-                  />
-                  <div className="absolute inset-0 bg-cyan-400/20 blur-md rounded-full animate-pulse" />
-                </div>
-              ))}
-            </div>
-            {/* Antena Pulse */}
-            <div className="absolute -top-3 w-0.5 h-3 bg-cyan-500/40">
-               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-cyan-400 rounded-full animate-ping" />
-            </div>
-          </motion.div>
-  
-          {/* TUBUH (Core Reactor) */}
-          <div className="relative w-26 h-34 bg-[#080a12] border-2 border-cyan-400/50 rounded-[2.8rem] flex flex-col items-center p-4 shadow-3xl z-20 overflow-hidden mt-1">
-             {/* REAKTOR NUKLIR BIRU (THE "WAH" CENTER) */}
-             <div className="relative w-14 h-14 rounded-full border-2 border-white/5 flex items-center justify-center mt-2 group-hover:scale-110 transition-transform">
-                <div className="absolute inset-0 rounded-full border-2 border-dashed border-cyan-400/40 animate-[spin_10s_linear_infinite]" />
-                <motion.div 
-                  animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.8, 0.3] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="absolute w-10 h-10 bg-cyan-400/20 rounded-full blur-xl" 
-                />
-                <Zap size={22} className="text-cyan-400 relative z-10 drop-shadow-[0_0_15px_#22d3ee] fill-cyan-400/20" />
-             </div>
-             
-             {/* Mechanical Details */}
-             <div className="mt-8 space-y-2 w-full px-5 opacity-10">
-                {[1,2,3].map(i => <div key={i} className="h-0.5 w-full bg-cyan-400 rounded-full" />)}
-             </div>
-          </div>
-  
-          {/* TANGAN (Mechanical Floating Arms) */}
-          <div className="absolute top-22 w-[150px] flex justify-between px-1">
-             <motion.div animate={{ rotate: [-2, 2, -2], y: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity }} className="w-5 h-22 bg-[#080a12] border-2 border-cyan-500/30 rounded-full shadow-2xl origin-top" />
-             <motion.div animate={{ rotate: [2, -2, 2], y: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity }} className="w-5 h-22 bg-[#080a12] border-2 border-cyan-500/30 rounded-full shadow-2xl origin-top" />
-          </div>
-  
-          {/* KAKI (Dual Blue Thrusters) */}
-          <div className="flex gap-10 -mt-4 relative z-10">
-            {[0, 1].map((i) => (
-              <div key={i} className="flex flex-col items-center">
-                <div className="w-6 h-18 bg-[#080a12] border-2 border-cyan-500/30 rounded-b-[2rem] shadow-2xl" />
-                {/* API PLASMA SANGAT DINAMIS */}
-                <motion.div 
-                  animate={{ 
-                    height: [10, 45, 10],
-                    opacity: [0.5, 1, 0.5],
-                    scaleX: [1, 1.4, 1]
-                  }}
-                  transition={{ duration: 0.12, repeat: Infinity }}
-                  className="w-4 bg-gradient-to-b from-cyan-400 via-blue-600/60 to-transparent blur-md rounded-full mt-1 shadow-[0_0_20px_#22d3ee]"
-                />
-              </div>
-            ))}
-          </div>
-        </motion.div>
-  
-        {/* --- 3. THE SUPREME HUD DECORATION --- */}
-        {/* Cincin Utama (Sangat Mewah) */}
-        <div className="absolute w-[300px] h-[300px] border border-cyan-500/10 rounded-full animate-[spin_30s_linear_infinite]" />
-        <div className="absolute w-[380px] h-[380px] border-2 border-dotted border-white/5 rounded-full animate-[spin_50s_linear_infinite_reverse]" />
-        
-        {/* Scanning Laser Beam */}
-        <motion.div 
-          animate={{ top: ["20%", "80%", "20%"] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-          className="absolute w-[400px] h-px bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent z-0"
-        />
-  
-        {/* Floating Data Nodes (Titik-titik Pendar) */}
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            animate={{ 
-              x: [Math.random() * 200 - 100, Math.random() * 200 - 100], 
-              y: [Math.random() * 200 - 100, Math.random() * 200 - 100],
-              opacity: [0, 0.6, 0]
-            }}
-            transition={{ duration: Math.random() * 5 + 3, repeat: Infinity }}
-            className="absolute w-1 h-1 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"
-          />
-        ))}
-  
-      </motion.div>
-    );
-  };
-
-
- // --- BAGIAN INI UNTUK MENGGANTI BARIS SEKITAR 506 ---
-  
-  // 1. Fix Hydration Error (Menghindari Error #310)
-  if (!mounted) return <div className="bg-black h-screen w-full" />;
-
-  // 2. Tampilkan Boot Sequence dulu sebelum masuk Dashboard
-  if (!bootDone) {
-    return (
-      <AnimatePresence>
-        <CyberBootSequence onComplete={() => setBootDone(true)} />
-      </AnimatePresence>
-    );
-  }
-
-  // 3. Jika sudah boot, tampilkan Dashboard Utama
-  return (
-    <div className="flex h-screen w-full bg-[#020105] text-slate-100 overflow-hidden font-sans relative">
-      <NeonCursor /> {/* Kursor Cyber Baru */}
-      
+      <div className="flex h-screen w-full bg-[#020105] text-slate-100 overflow-hidden font-sans relative selection:bg-cyan-500/30">
+        <NeonCursor />
+        <CRTOverlay />
+        {/* Lanjutkan ke kode <PersistentUniverse /> kamu di sini ... */}
       <PersistentUniverse bgIdx={bgIdx} />
       <ParticleBurstClickEffect />
       
