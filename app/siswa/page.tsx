@@ -888,147 +888,209 @@ export default function StudentPortal() {
        <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-white/10 rounded-br-[3.5rem] group-hover:border-fuchsia-500/50 transition-all duration-700" />
     </motion.div>
 
-    {/* --- 2. DATA CLUSTERS (WIDGETS WITH HOVER GLOW) --- */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-       {/* Identity Widget */}
-       <motion.div variants={nexusItem} className="group relative p-10 rounded-[3.5rem] bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/5 flex flex-col items-center text-center shadow-2xl transition-all duration-500 hover:border-cyan-500/30 overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500 shadow-[0_0_20px_#22d3ee] opacity-0 group-hover:opacity-100 group-hover:animate-scanner" />
-          <div className="w-24 h-24 bg-slate-900 border border-white/10 rounded-[2.5rem] flex items-center justify-center text-white mb-10 shadow-[0_0_40px_rgba(0,0,0,0.5)] group-hover:scale-110 transition-transform duration-500">
-             <Fingerprint size={48} className="text-cyan-400 drop-shadow-[0_0_10px_#22d3ee]" />
+{/* --- VIEW DASHBOARD: THE TRINITY COMMAND CENTER (EXHIBITION MASTERPIECE) --- */}
+{view === 'dashboard' && (
+  <motion.div 
+    key="dash-nexus" 
+    variants={nexusContainer} 
+    initial="hidden" animate="show" exit={{ opacity: 0, y: -20 }}
+    className="max-w-[1350px] mx-auto space-y-12 pb-20"
+  >
+    {/* --- 1. BANNER UTAMA (VERSI BAHASA MUDAH & KEREN) --- */}
+    <motion.div 
+      variants={nexusItem}
+      className="relative p-10 lg:p-14 rounded-[3.5rem] bg-[#020308]/90 backdrop-blur-3xl border border-cyan-500/20 overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,1)] group"
+    >
+       <div className="absolute inset-0 bg-hud-grid opacity-[0.04] pointer-events-none" />
+       <motion.div animate={{ top: ['-100%', '200%'] }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="absolute left-0 w-full h-[100px] bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent pointer-events-none z-10" />
+
+       <div className="relative z-20 space-y-10 text-left">
+          <div className="flex flex-wrap gap-5 items-center">
+             <div className="inline-flex items-center gap-4 px-6 py-2.5 rounded-xl bg-cyan-500/5 border border-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-[0.5em] uppercase shadow-[0_0_20px_rgba(34,211,238,0.1)]">
+                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"/> 
+                Akses Sistem Berhasil
+             </div>
+             <div className="px-5 py-2.5 bg-white/5 border border-white/10 rounded-xl">
+                <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest font-bold">Node Terverifikasi</span>
+             </div>
           </div>
-          <div className="space-y-3">
+          
+          <div className="space-y-6 relative group">
+            <div className="h-10 lg:h-12 overflow-hidden">
+              <CyberLetterReveal text="SELAMAT DATANG," className="text-2xl lg:text-4xl font-black text-white uppercase tracking-[0.5em] opacity-20" />
+            </div>
+            <div className="relative inline-block">
+              <h2 className="text-5xl lg:text-8xl font-black uppercase tracking-tighter leading-none relative z-10 text-white">
+                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-600 bg-clip-text text-transparent animate-gradient-x drop-shadow-[0_0_30px_rgba(34,211,238,0.4)]">
+                  <CyberContinuousDecryption text={user.username} />
+                </span>
+              </h2>
+              <motion.div animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.05, 1] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute inset-0 z-0 blur-[60px] pointer-events-none rounded-full" style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.2) 0%, rgba(217,70,239,0.1) 100%)' }} />
+            </div>
+          </div>
+          
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-14 pt-6">
+             <div className="flex items-center gap-6 border-l-[8px] border-fuchsia-600 pl-8 h-14">
+                <div className="space-y-1">
+                   <p className="text-white text-[14px] lg:text-[16px] font-black tracking-[0.5em] uppercase leading-none">Cyber Readiness Index</p>
+                   <p className="text-slate-500 text-[9px] font-black tracking-[0.3em] uppercase">Pusat Kendali - Laguboti, Indonesia</p>
+                </div>
+             </div>
+             <div className="flex gap-16 px-12 border-l border-white/10">
+                <div className="flex flex-col gap-2.5">
+                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Node Operasional</span>
+                   <div className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_12px_#22d3ee]" />
+                      <span className="text-[15px] font-black text-cyan-400 font-mono tracking-widest uppercase whitespace-nowrap">LAGUBOTI {user.tanggal_lahir ? `· ${user.tanggal_lahir}` : "· AKTIF"}</span>
+                   </div>
+                </div>
+                <div className="flex flex-col gap-2.5">
+                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Sektor Pengguna</span>
+                   <div className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping shadow-[0_0_12px_#10b981]" />
+                      <span className="text-[15px] font-black text-emerald-400 font-mono tracking-widest uppercase whitespace-nowrap">{user.class_name || "UMUM"}</span>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </motion.div>
+
+    {/* --- 2. DATA CLUSTERS (WIDGETS MEWAH & JUJUR) --- */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+       
+       {/* Widget 1: Identity (Jujur - Tanpa Sidik Jari) */}
+       <motion.div variants={nexusItem} className="group relative p-10 rounded-[3rem] bg-[#0a0c14]/90 backdrop-blur-3xl border border-white/5 flex flex-col items-center text-center shadow-2xl transition-all duration-500 hover:border-cyan-500/40 overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500 shadow-[0_0_20px_#22d3ee] opacity-0 group-hover:opacity-100 group-hover:animate-scanner" />
+          <div className="w-24 h-24 bg-slate-900 border border-white/10 rounded-[2.5rem] flex items-center justify-center text-white mb-10 shadow-3xl group-hover:scale-110 transition-transform duration-500">
+             <ShieldCheck size={48} className="text-cyan-400 drop-shadow-[0_0_15px_#22d3ee]" />
+          </div>
+          <div className="space-y-4">
              <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.5em]">Identity Status</span>
-             <h4 className="text-3xl font-black text-white tracking-widest uppercase">{user.username}</h4>
-             <div className="mt-6 px-6 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full inline-block">
-                <span className="text-[9px] font-black text-emerald-400 tracking-[0.4em] uppercase">Verified Account</span>
+             <h4 className="text-3xl font-black text-white tracking-widest uppercase leading-none drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">{user.username}</h4>
+             <div className="mt-8 flex items-center gap-3 px-6 py-2 bg-emerald-500/5 border border-emerald-500/20 rounded-full">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
+                <span className="text-[9px] font-black text-emerald-400 tracking-[0.4em] uppercase">Account Verified</span>
              </div>
           </div>
        </motion.div>
 
-       {/* Readiness Core (Radial Monitor) */}
-       <motion.div variants={nexusItem} className="group relative p-10 rounded-[3.5rem] bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/5 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-500 hover:border-fuchsia-500/30 overflow-hidden">
+       {/* Widget 2: Readiness Index Status (The Centerpiece) */}
+       <motion.div variants={nexusItem} className="group relative p-10 rounded-[3rem] bg-[#0a0c14]/90 backdrop-blur-3xl border border-white/10 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-500 hover:border-fuchsia-500/40 overflow-hidden">
+          <div className="absolute inset-0 bg-fuchsia-500/5 opacity-0 group-hover:opacity-100 transition-opacity blur-[80px]" />
           <div className="relative mb-8 transform group-hover:scale-110 transition-all duration-700">
-             <div className="absolute inset-0 bg-fuchsia-500/10 blur-3xl rounded-full" />
-             <svg className="w-48 h-48 transform -rotate-90 relative z-10">
-                <circle cx="96" cy="96" r="84" stroke="rgba(255,255,255,0.02)" strokeWidth="12" fill="none" />
-                <motion.circle 
-                   initial={{ strokeDasharray: "0 1000" }} 
-                   animate={{ strokeDasharray: `${(score/100)*527} 1000` }} 
-                   transition={{ duration: 3.5, ease: "circOut" }} 
-                   cx="96" cy="96" r="84" 
-                   stroke="#d946ef" strokeWidth="12" strokeLinecap="round" fill="none" 
-                   style={{ filter: 'drop-shadow(0 0 20px #d946ef)' }} 
-                />
+             <svg className="w-48 h-48 transform -rotate-90">
+                <circle cx="96" cy="96" r="84" stroke="rgba(255,255,255,0.03)" strokeWidth="12" fill="none" />
+                <motion.circle initial={{ strokeDasharray: "0 1000" }} animate={{ strokeDasharray: `${(score/100)*527} 1000` }} transition={{ duration: 3.5, ease: "circOut" }} cx="96" cy="96" r="84" stroke="#d946ef" strokeWidth="12" strokeLinecap="round" fill="none" style={{ filter: 'drop-shadow(0 0 20px #d946ef)' }} />
              </svg>
              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_15px_white]">{score}</span>
-                <span className="text-[10px] font-black text-slate-500 uppercase mt-1">Level</span>
+                <motion.span key={score} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} className="text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_20px_white]">{score}</motion.span>
+                <span className="text-[10px] font-black text-slate-500 uppercase mt-1 tracking-widest">Percent</span>
              </div>
           </div>
-          <p className="text-[11px] font-black text-slate-400 tracking-[0.6em] uppercase">Core Index Profile</p>
+          <div className="space-y-2">
+             <h3 className="text-[11px] font-black text-fuchsia-400 tracking-[0.4em] uppercase">Readiness Index Status</h3>
+             <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Global Security Metric</p>
+          </div>
        </motion.div>
 
-       {/* System Analytics (Matrix Monitor) */}
-       <motion.div 
-            variants={nexusItem} 
-            className="group relative p-12 rounded-[3.5rem] bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/5 flex flex-col justify-between shadow-2xl transition-all duration-500 hover:border-blue-500/30 overflow-hidden text-left"
-          >
-           <div className="space-y-10 relative z-10">
-              <div className="flex items-center justify-between">
+       {/* Widget 3: Live Analytical Matrix */}
+       <motion.div variants={nexusItem} className="group relative p-12 rounded-[3.5rem] bg-[#0a0c14]/90 backdrop-blur-3xl border border-white/5 flex flex-col justify-between shadow-2xl transition-all duration-500 hover:border-blue-500/30 overflow-hidden text-left">
+          <div className="space-y-10 relative z-10">
+             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <Activity size={18} className="text-blue-500 animate-pulse" />
-                  <h2 className="text-[11px] font-black text-slate-400 tracking-[0.5em] uppercase leading-none">
-                    Analytical Matrix
-                  </h2>
+                   <Activity size={18} className="text-blue-500 animate-pulse" />
+                   <h2 className="text-[11px] font-black text-slate-400 tracking-[0.5em] uppercase leading-none">Analytical Matrix</h2>
                 </div>
                 <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6] animate-pulse" />
-              </div>
-            </div>
-              <div className="space-y-8">
-              {[
-        { label: "Architecture", val: "Stable", col: "text-white", icon: Monitor },
-        { label: "Cyber Vault", val: "Active", col: "text-emerald-400", icon: Shield },
-        { label: "Latency Node", val: "Synced", col: "text-blue-400", icon: RefreshCw }
-      ].map((m, i) => (
-        <div key={i} className="flex justify-between items-center group/row">
-          <span className="text-slate-500 font-black text-[10px] tracking-[0.2em] uppercase">
-            {m.label}
-          </span>
-          <div className="flex items-center gap-4">
-            <span className={`text-[11px] font-black uppercase tracking-widest ${m.col} drop-shadow-[0_0_8px_currentColor]`}>
-              {m.val}
-            </span>
-            {/* Visualizer kecil: Memberikan kesan sistem sedang memproses data */}
-            <div className="flex gap-1 h-3 items-end opacity-40 group-hover/row:opacity-100 transition-opacity">
-               {[1, 2, 3].map(b => (
-                 <motion.div 
-                   key={b}
-                   animate={{ height: ["20%", "100%", "20%"] }}
-                   transition={{ duration: 0.5 + Math.random(), repeat: Infinity }}
-                   className={`w-0.5 rounded-full ${m.col.replace('text', 'bg')}`}
-                 />
-               ))}
-            </div>
+             </div>
+             <div className="space-y-8">
+                {[
+                  { label: "Architecture", val: "Stable", col: "text-white" },
+                  { label: "Cyber Vault", val: "Active", col: "text-emerald-400" },
+                  { label: "Latency Node", val: "Synced", col: "text-blue-400" }
+                ].map((m, i) => (
+                  <div key={i} className="flex justify-between items-center group/row">
+                     <span className="text-slate-500 font-black text-[10px] tracking-[0.2em] uppercase">{m.label}</span>
+                     <div className="flex items-center gap-4">
+                        <span className={`text-[11px] font-black uppercase tracking-widest ${m.col} drop-shadow-[0_0_8px_currentColor]`}>{m.val}</span>
+                        <div className="flex gap-1 h-3 items-end opacity-30">
+                           {[1, 2, 3].map(b => (
+                             <motion.div key={b} animate={{ height: ["20%", "100%", "20%"] }} transition={{ duration: 0.5 + Math.random(), repeat: Infinity }} className={`w-0.5 rounded-full ${m.col.replace('text', 'bg')}`} />
+                           ))}
+                        </div>
+                     </div>
+                  </div>
+                ))}
+             </div>
           </div>
-        </div>
-      ))}
+          <div className="mt-10 pt-6 border-t border-white/5 flex justify-between items-center opacity-20 group-hover:opacity-100 transition-all duration-700">
+             <span className="text-[7px] font-mono text-slate-500 tracking-[0.3em] uppercase">Auth Level Secure</span>
+             <Network size={12} className="text-blue-500" />
+          </div>
+       </motion.div>
     </div>
+
+    {/* --- 3. THE MISSION GATEWAY (COMPACT ELITE FINISHER) --- */}
+    <motion.div 
+      variants={nexusItem} 
+      className="p-8 lg:p-10 rounded-[3rem] bg-[#050505]/80 backdrop-blur-3xl border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden group"
+    >
+       <div className="absolute inset-0 bg-hud-grid opacity-[0.05] pointer-events-none" />
+       <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500/20 animate-scanner pointer-events-none" />
+       <div className="flex flex-col lg:flex-row items-center gap-8 z-10 text-center lg:text-left">
+          <div className="w-16 h-16 bg-black/80 rounded-2xl flex items-center justify-center border border-white/10 shadow-2xl group-hover:rotate-6 transition-all duration-500"><BellRing size={28} className="text-cyan-400 animate-pulse" /></div>
+          <div className="space-y-2">
+             <div className="flex items-center justify-center lg:justify-start gap-4"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-ping" /><span className="text-[9px] font-black tracking-[0.4em] text-emerald-400 uppercase">Operational Status Online</span></div>
+             <h3 className="text-xl lg:text-2xl font-black text-white uppercase tracking-tight">Mission Deployment Hub</h3>
+             <p className="text-[10px] font-bold text-slate-500 tracking-[0.3em] uppercase opacity-70 leading-relaxed max-w-xl">Validasi integritas pertahanan digital melalui protokol keamanan resmi.</p>
+          </div>
+       </div>
+       <button onClick={handleStartMissionClick} className="relative overflow-hidden px-12 py-5 bg-white text-slate-950 rounded-2xl font-black text-[11px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-500 uppercase flex items-center justify-center gap-5 shadow-xl active:scale-95 group/btn">
+          <span className="relative z-10">INITIALIZE</span>
+          <Zap size={18} className="relative z-10 group-hover/btn:rotate-12 transition-transform" />
+          <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:left-[100%] transition-all duration-1000" />
+       </button>
     </motion.div>
-  </div>
+  </motion.div>
+)}
 
-{/* --- 3. THE MISSION GATEWAY: COMPACT ELITE VERSION (FINAL SHOWPIECE) --- */}
-<motion.div 
-  variants={nexusItem} 
-  className="p-8 lg:p-10 rounded-[3rem] bg-[#050505]/80 backdrop-blur-3xl border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden group"
->
-   {/* BACKGROUND HUD DETAILS (INI YANG BIKIN WAH) */}
-   <div className="absolute inset-0 bg-hud-grid opacity-[0.05] pointer-events-none" />
-   <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500/20 animate-scanner pointer-events-none" />
-   
-   <div className="flex flex-col lg:flex-row items-center gap-8 z-10 text-center lg:text-left">
-      {/* Icon Container yang Lebih Proporsional */}
-      <div className="relative">
-         <div className="absolute inset-0 bg-cyan-500/10 blur-xl rounded-full" />
-         <div className="w-16 h-16 bg-black/80 rounded-2xl flex items-center justify-center border border-white/10 shadow-2xl group-hover:rotate-6 transition-all duration-500">
-            <BellRing size={28} className="text-cyan-400 animate-pulse" />
-         </div>
-      </div>
+    {/* --- 3. THE MISSION GATEWAY (REFINED ELITE VERSION) --- */}
+    <motion.div 
+      variants={nexusItem} 
+      className="p-8 lg:p-10 rounded-[3rem] bg-[#050505]/80 backdrop-blur-3xl border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden group"
+    >
+       <div className="absolute inset-0 bg-hud-grid opacity-[0.05] pointer-events-none" />
+       <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500/20 animate-scanner pointer-events-none" />
+       
+       <div className="flex flex-col lg:flex-row items-center gap-8 z-10 text-center lg:text-left">
+          <div className="relative">
+             <div className="absolute inset-0 bg-cyan-500/10 blur-xl rounded-full" />
+             <div className="w-16 h-16 bg-black/80 rounded-2xl flex items-center justify-center border border-white/10 shadow-2xl group-hover:rotate-6 transition-all duration-500">
+                <BellRing size={28} className="text-cyan-400 animate-pulse" />
+             </div>
+          </div>
+          <div className="space-y-2">
+             <div className="flex items-center justify-center lg:justify-start gap-4">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-ping" />
+                <span className="text-[9px] font-black tracking-[0.4em] text-emerald-400 uppercase">Operational Status Online</span>
+             </div>
+             <h3 className="text-xl lg:text-2xl font-black text-white uppercase tracking-tight">Mission Deployment Hub</h3>
+             <p className="text-[10px] font-bold text-slate-500 tracking-[0.3em] uppercase opacity-70 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                Validasi integritas pertahanan digital dan profil operasional Anda melalui protokol keamanan resmi.
+             </p>
+          </div>
+       </div>
 
-      <div className="space-y-2">
-         {/* Status Tag Bersih Tanpa Underscore */}
-         <div className="flex items-center justify-center lg:justify-start gap-4">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-ping" />
-            <span className="text-[9px] font-black tracking-[0.5em] text-emerald-400 uppercase">Operational Status: Online</span>
-         </div>
-         
-         {/* Judul: Ukuran Dikalibrasi Menjadi Sangat Nyaman (text-2xl) */}
-         <h3 className="text-xl lg:text-2xl font-black text-white uppercase tracking-tight leading-none drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]">
-            Mission Deployment Hub
-         </h3>
-         
-         {/* Deskripsi: Ukuran Kecil Namun Padat (Tampilan Pro) */}
-         <p className="text-[10px] lg:text-[11px] font-bold text-slate-500 tracking-[0.3em] uppercase opacity-70 leading-relaxed max-w-xl mx-auto lg:mx-0">
-            Eksekusi protokol keamanan siber untuk memvalidasi integritas pertahanan digital dan profil operasional Anda sekarang.
-         </p>
-      </div>
-   </div>
-
-   {/* Tombol Taktis yang Lebih Sleek & Mewah */}
-   <button 
-     onClick={handleStartMissionClick} 
-     className="relative overflow-hidden px-12 py-5 bg-white text-slate-950 rounded-2xl font-black text-[11px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-500 uppercase flex items-center justify-center gap-5 shadow-[0_20px_50px_rgba(255,255,255,0.1)] active:scale-95 group/btn"
-   >
-      <span className="relative z-10">INITIALIZE</span>
-      <Zap size={18} className="relative z-10 group-hover/btn:rotate-12 transition-transform" />
-      
-      {/* Efek Kilat Flare saat Hover */}
-      <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/btn:left-[100%] transition-all duration-1000 ease-in-out" />
-   </button>
-
-   {/* TACITCAL HUD CORNERS (Detail Siku Digital di Pojok Banner) */}
-   <div className="absolute top-4 left-4 w-6 h-6 border-t border-l border-white/10 rounded-tl-lg pointer-events-none" />
-   <div className="absolute bottom-4 right-4 w-6 h-6 border-b border-r border-white/10 rounded-br-lg pointer-events-none" />
-</motion.div>
+       <button 
+         onClick={handleStartMissionClick} 
+         className="relative overflow-hidden px-12 py-5 bg-white text-slate-950 rounded-2xl font-black text-[11px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-500 uppercase flex items-center justify-center gap-5 shadow-xl active:scale-95 group/btn"
+       >
+          <span className="relative z-10">INITIALIZE</span>
+          <Zap size={18} className="relative z-10 group-hover/btn:rotate-12 transition-transform" />
+          <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/btn:left-[100%] transition-all duration-1000" />
+       </button>
+    </motion.div>
   </motion.div>
 )}
 
