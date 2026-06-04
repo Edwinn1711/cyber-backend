@@ -318,21 +318,41 @@ const SmoothAnimatedText = ({ text }: { text: string }) => {
 
 const CyberLetterReveal = ({ text, className }: { text: string, className: string }) => {
   const letters = Array.from(text);
-  const container = {
+
+  // Tambahkan ': any' agar TypeScript tidak cerewet saat build di Vercel
+  const container: any = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
       transition: { staggerChildren: 0.03, delayChildren: 0.05 * i },
     }),
   };
-  const child = {
-    visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { type: "spring", damping: 12, stiffness: 200 } },
-    hidden: { opacity: 0, y: 15, filter: "blur(8px)" },
+
+  // Tambahkan ': any' di sini juga untuk memperbaiki error 'AnimationGeneratorType'
+  const child: any = {
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      filter: "blur(0px)", 
+      transition: { 
+        type: "spring", 
+        damping: 12, 
+        stiffness: 200 
+      } 
+    },
+    hidden: { 
+      opacity: 0, 
+      y: 15, 
+      filter: "blur(8px)" 
+    },
   };
+
   return (
     <motion.div variants={container} initial="hidden" animate="visible" className={`flex flex-wrap ${className}`}>
       {letters.map((letter, index) => (
-        <motion.span variants={child} key={index}>{letter === " " ? "\u00A0" : letter}</motion.span>
+        <motion.span variants={child} key={index}>
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
       ))}
     </motion.div>
   );
