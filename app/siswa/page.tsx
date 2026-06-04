@@ -546,27 +546,27 @@ export default function StudentPortal() {
 
 
   const CyberSentinel = ({ username = "OPERATIVE" }) => {
-    const [message, setMessage] = useState("SYSTEM_ONLINE");
+    const [message, setMessage] = useState("SYSTEM ONLINE");
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
   
-    // Fisika halus untuk kepala mengikuti mouse (seperti robot melihat kita)
-    const headX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 100, damping: 20 });
-    const headY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-10, 10]), { stiffness: 100, damping: 20 });
+    // Fisika Kepala: Lebih responsif namun tetap smooth (Sleek Tracking)
+    const headX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), { stiffness: 200, damping: 25 });
+    const headY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-6, 6]), { stiffness: 200, damping: 25 });
   
     useEffect(() => {
       const messages = [
-        `READY, ${username.toUpperCase()}`,
-        "SCANNING NODES...",
-        "DATABASE SECURED",
-        "ALL SYSTEMS GO",
-        "LINK ESTABLISHED"
+        `READY OPERATIVE ${username.toUpperCase()}`,
+        "SCANNING QUANTUM NODES",
+        "CORE DATABASE SECURED",
+        "ALL SYSTEMS OPTIMAL",
+        "NEURAL LINK ACTIVE"
       ];
       let i = 0;
       const interval = setInterval(() => {
         setMessage(messages[i]);
         i = (i + 1) % messages.length;
-      }, 4500);
+      }, 5000);
   
       const handleMove = (e: MouseEvent) => {
         mouseX.set((e.clientX / window.innerWidth) - 0.5);
@@ -577,89 +577,103 @@ export default function StudentPortal() {
     }, [username]);
   
     return (
-      <div className="relative flex flex-col items-center justify-center h-[500px] w-full select-none" style={{ perspective: '1000px' }}>
+      <div className="relative flex flex-col items-center justify-center h-[380px] w-full select-none" style={{ perspective: '1200px' }}>
         
-        {/* --- 1. HOLOGRAPHIC CHAT BUBBLE --- */}
+        {/* --- 1. HOLOGRAPHIC QUANTUM CHAT --- */}
         <motion.div 
-          animate={{ y: [0, -5, 0] }}
-          transition={{ duration: 3, repeat: Infinity }}
-          className="absolute top-0 z-50 bg-cyan-500/10 backdrop-blur-xl border border-cyan-400/40 px-6 py-2.5 rounded-2xl shadow-[0_0_25px_rgba(34,211,238,0.2)] flex items-center gap-3"
+          animate={{ y: [0, -8, 0], scale: [1, 1.02, 1] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-4 z-50 bg-[#0a0c14]/60 backdrop-blur-2xl border border-cyan-400/40 px-6 py-2.5 rounded-2xl shadow-[0_0_30px_rgba(34,211,238,0.2)] flex flex-col items-center gap-1"
         >
-          <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-          <span className="text-[10px] font-mono text-cyan-400 font-black tracking-widest uppercase">{message}</span>
+          <div className="flex items-center gap-3">
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+            <span className="text-[10px] font-black tracking-[0.3em] text-cyan-400 uppercase drop-shadow-[0_0_8px_#22d3ee]">
+              {message}
+            </span>
+          </div>
+          {/* Progress Bar Mini di bawah Pesan */}
+          <div className="w-full h-[1px] bg-white/5 overflow-hidden mt-1">
+             <motion.div 
+               animate={{ x: ["-100%", "100%"] }} 
+               transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+               className="w-1/2 h-full bg-cyan-400 opacity-40" 
+             />
+          </div>
         </motion.div>
   
-        {/* --- 2. THE HUMANOID ASSEMBLY --- */}
-        <div className="relative flex flex-col items-center mt-10">
+        {/* --- 2. THE COMPACT HUMANOID SENTINEL --- */}
+        <div className="relative flex flex-col items-center mt-12">
           
-          {/* KEPALA (HEAD) - Mengikuti Mouse secara Smooth */}
+          {/* KEPALA (Lebih Kecil & Tajam) */}
           <motion.div 
             style={{ x: headX, y: headY }}
-            className="relative w-20 h-24 bg-[#080a12] border-2 border-cyan-400/50 rounded-t-[2.5rem] rounded-b-xl flex flex-col items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.2)] z-30"
+            className="relative w-14 h-16 bg-[#05060b] border-2 border-cyan-400/60 rounded-t-[2rem] rounded-b-xl flex flex-col items-center justify-center shadow-[0_0_25px_rgba(34,211,238,0.3)] z-30"
           >
-            <div className="flex gap-4 mb-2">
-              <motion.div animate={{ scaleY: [1, 1, 0, 1, 1] }} transition={{ duration: 4, repeat: Infinity, times: [0, 0.8, 0.82, 0.9, 1] }} className="w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
-              <motion.div animate={{ scaleY: [1, 1, 0, 1, 1] }} transition={{ duration: 4, repeat: Infinity, times: [0, 0.8, 0.82, 0.9, 1] }} className="w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
+            <div className="flex gap-3">
+              <motion.div animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 0.1, repeat: Infinity, repeatDelay: 4 }} className="w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_12px_#22d3ee]" />
+              <motion.div animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 0.1, repeat: Infinity, repeatDelay: 4 }} className="w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_12px_#22d3ee]" />
             </div>
-            <div className="w-10 h-0.5 bg-cyan-500/30 rounded-full mt-4" />
-            {/* Antena Top */}
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-0.5 h-4 bg-cyan-400/50" />
+            {/* Detail Micro-Chip di dahi */}
+            <div className="absolute top-2 w-4 h-0.5 bg-cyan-400/20 rounded-full" />
           </motion.div>
   
-          {/* LEHER (NECK) */}
-          <div className="w-5 h-4 bg-slate-900 border-x-2 border-cyan-500/30 z-20" />
-  
-          {/* TUBUH (TORSO) - Inti Mesin */}
-          <div className="relative w-36 h-44 bg-[#080a12] border-2 border-cyan-400/50 rounded-[3rem] flex flex-col items-center p-6 shadow-2xl z-20 overflow-hidden">
-             {/* REAKTOR DADA (POWER CORE) */}
-             <div className="relative w-16 h-16 rounded-full border-2 border-cyan-500/20 flex items-center justify-center mt-2">
-                <div className="absolute inset-0 rounded-full border border-dashed border-cyan-400/40 animate-[spin_10s_linear_infinite]" />
+          {/* TUBUH (Sleek Power Core) */}
+          <div className="relative w-24 h-32 bg-[#05060b] border-2 border-cyan-400/50 rounded-[2.5rem] flex flex-col items-center p-4 shadow-3xl z-20 overflow-hidden mt-1">
+             {/* REAKTOR DADA (QUANTUM CORE) */}
+             <div className="relative w-12 h-12 rounded-full border border-cyan-500/20 flex items-center justify-center mt-2">
+                <div className="absolute inset-0 rounded-full border-2 border-dotted border-cyan-400/30 animate-[spin_8s_linear_infinite]" />
                 <motion.div 
-                  animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.8, 0.3] }}
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.7, 0.2] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="w-8 h-8 bg-cyan-400/20 rounded-full blur-md" 
+                  className="absolute w-8 h-8 bg-cyan-400/30 rounded-full blur-lg" 
                 />
-                <Zap size={24} className="text-cyan-400 fill-current relative z-10 drop-shadow-[0_0_10px_#22d3ee]" />
+                <Zap size={18} className="text-cyan-400 relative z-10 drop-shadow-[0_0_12px_#22d3ee] fill-cyan-400/20" />
              </div>
-             {/* Detail Dekorasi Tulang Rusuk Digital */}
-             <div className="mt-8 space-y-2 w-full px-2 opacity-20">
+             {/* Rib Detail (Mechanical Look) */}
+             <div className="mt-6 space-y-1.5 w-full px-4 opacity-10">
+                <div className="h-0.5 w-full bg-cyan-400" />
                 <div className="h-0.5 w-full bg-cyan-400" />
                 <div className="h-0.5 w-full bg-cyan-400" />
              </div>
           </div>
   
-          {/* TANGAN (ARMS) - Terkunci pada Bahu */}
-          <div className="absolute top-28 w-[180px] flex justify-between px-2">
-             {/* Tangan Kiri */}
-             <motion.div animate={{ rotate: [-2, 2, -2] }} transition={{ duration: 4, repeat: Infinity }} className="w-8 h-24 bg-[#080a12] border-2 border-cyan-500/30 rounded-full shadow-lg origin-top" />
-             {/* Tangan Kanan */}
-             <motion.div animate={{ rotate: [2, -2, 2] }} transition={{ duration: 4, repeat: Infinity }} className="w-8 h-24 bg-[#080a12] border-2 border-cyan-500/30 rounded-full shadow-lg origin-top" />
+          {/* TANGAN (Sleek Mechanical Arms) */}
+          <div className="absolute top-20 w-[140px] flex justify-between px-1">
+             <motion.div animate={{ rotate: [-1, 1, -1] }} transition={{ duration: 4, repeat: Infinity }} className="w-5 h-20 bg-[#080a12] border-2 border-cyan-500/30 rounded-full shadow-lg origin-top" />
+             <motion.div animate={{ rotate: [1, -1, 1] }} transition={{ duration: 4, repeat: Infinity }} className="w-5 h-20 bg-[#080a12] border-2 border-cyan-400/30 rounded-full shadow-lg origin-top" />
           </div>
   
-          {/* KAKI (LEGS) - Kokoh dengan Pendorong Api */}
-          <div className="flex gap-10 -mt-4 relative z-10">
+          {/* KAKI (Plasma Thrusters) */}
+          <div className="flex gap-8 -mt-3 relative z-10">
             {[0, 1].map((i) => (
               <div key={i} className="flex flex-col items-center">
-                {/* Paha ke Betis */}
-                <div className="w-8 h-24 bg-[#080a12] border-2 border-cyan-500/30 rounded-b-[2rem] shadow-xl" />
-                {/* API PLASMA (THRUSTER STABIL) */}
+                <div className="w-5 h-16 bg-[#080a12] border-2 border-cyan-500/30 rounded-b-2xl shadow-xl" />
+                {/* API PLASMA (BLUE JET) */}
                 <motion.div 
-                  animate={{ 
-                    height: [15, 45, 15],
-                    opacity: [0.4, 0.9, 0.4],
-                    scaleX: [1, 1.3, 1]
-                  }}
-                  transition={{ duration: 0.15, repeat: Infinity }}
-                  className="w-5 bg-gradient-to-b from-cyan-400 via-blue-600/50 to-transparent blur-md rounded-full mt-1"
+                  animate={{ height: [8, 35, 8], opacity: [0.4, 1, 0.4], scaleX: [1, 1.2, 1] }}
+                  transition={{ duration: 0.1, repeat: Infinity }}
+                  className="w-3 bg-gradient-to-b from-cyan-400 via-blue-600/60 to-transparent blur-md rounded-full mt-0.5"
                 />
               </div>
             ))}
           </div>
         </div>
   
-        {/* --- HUD RINGS DECORATION --- */}
-        <div className="absolute w-[450px] h-[450px] border border-cyan-500/5 rounded-full animate-[spin_40s_linear_infinite] pointer-events-none" />
-        <div className="absolute w-[550px] h-[550px] border border-dashed border-white/5 rounded-full animate-[spin_60s_linear_infinite_reverse] pointer-events-none" />
+        {/* --- 3. ADVANCED HUD DECORATION --- */}
+        {/* Inner Scanner Circle */}
+        <div className="absolute w-[280px] h-[280px] border border-cyan-500/10 rounded-full animate-[spin_20s_linear_infinite]" />
+        
+        {/* Data Scanning Ring (Rotating Text simulated with border segments) */}
+        <div className="absolute w-[340px] h-[340px] border-2 border-dashed border-white/5 rounded-full animate-[spin_40s_linear_infinite_reverse] opacity-40" />
+        
+        {/* Hexagon Grid Background (Subtle) */}
+        <div className="absolute w-[450px] h-[450px] opacity-5 pointer-events-none bg-[radial-gradient(circle,rgba(34,211,238,0.2)_1px,transparent_1px)] bg-[size:20px_20px] rounded-full" />
+        
+        {/* Outer Floating Accents */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
+           <div className="w-full h-full border-[40px] border-transparent border-t-cyan-500/5 rounded-full animate-pulse" />
+        </div>
+  
       </div>
     );
   };
@@ -1146,7 +1160,7 @@ export default function StudentPortal() {
                 <Hexagon size={12} className="text-fuchsia-500"/> Select Report Category
              </label>
              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-                {['UI_UX', 'SECURITY', 'PERFORMANCE', 'AI_LOGIC', 'BUG_REPORT'].map((cat) => (
+                {['UI/UX', 'SECURITY', 'PERFORMANCE', 'AI LOGIC', 'BUG REPORT'].map((cat) => (
                   <button 
                     key={cat}
                     onClick={() => setAppFeedbackForm({...appFeedbackForm, category: cat})}
@@ -1291,34 +1305,92 @@ export default function StudentPortal() {
   </motion.div>
 )}
 
+{/* --- VIEW BRIEFING: TACTICAL NEXUS SEQUENCE (ELITE EXHIBITION) --- */}
 {view === 'briefing' && (
   <motion.div 
-    key="briefing" 
-    initial={{ opacity: 0, scale: 0.95 }} 
+    key="briefing-nexus" 
+    initial={{ opacity: 0, scale: 0.98 }} 
     animate={{ opacity: 1, scale: 1 }} 
-    className="w-full max-w-5xl mx-auto flex flex-col items-center justify-center min-h-[85vh] py-10"
+    exit={{ opacity: 0, scale: 1.02 }}
+    className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[85vh] py-12 relative"
   >
-     {/* PANGGIL ROBOT SENTINEL DEWA */}
-     <div className="w-full mb-6">
+     {/* 1. HUD BACKGROUND TELEMETRY (Detail yang bikin terpukau) */}
+     <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
+        <div className="absolute top-0 left-0 text-[7px] font-mono text-cyan-500/40 p-4 space-y-1">
+           <p>PKT_RECV: 102.4KB</p>
+           <p>SYNC_STATUS: ACTIVE</p>
+           <p>ENCR_MODE: AES_256</p>
+        </div>
+        <div className="absolute top-0 right-0 text-[7px] font-mono text-fuchsia-500/40 p-4 text-right space-y-1">
+           <p>LATENCY: 0.0002MS</p>
+           <p>BUFFER_INDEX: STABLE</p>
+           <p>AUTH_TOKEN: VERIFIED</p>
+        </div>
+     </div>
+
+     {/* 2. COMPACT CYBER SENTINEL */}
+     <div className="w-full mb-2 relative z-10">
         <CyberSentinel username={user.username} />
      </div>
 
-     {/* TEXT CONTENT */}
-     <div className="flex flex-col items-center text-center space-y-8 relative z-10">
-        <div className="px-6 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-400 text-[10px] font-black tracking-[0.5em] uppercase animate-pulse shadow-[0_0_20px_rgba(16,185,129,0.2)]">Uplink Confirmed</div>
-        <h2 className="text-5xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none">TRANSMISSION RECEIVED</h2>
-        <p className="text-[13px] font-bold text-white leading-relaxed tracking-[0.2em] uppercase max-w-2xl opacity-90 mx-auto">
-           Sistem siap melakukan validasi pada domain <span className="text-fuchsia-400 font-black">{selectedDomain}</span>. Lanjutkan prosedur, Operative?
-        </p>
+     {/* 3. CENTER CONTENT SECTION */}
+     <div className="flex flex-col items-center text-center space-y-6 relative z-10 -mt-6">
+        {/* Status Badge Sleek */}
+        <div className="px-5 py-1.5 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-emerald-400 text-[8px] font-black tracking-[0.5em] uppercase shadow-[0_0_15px_rgba(16,185,129,0.1)] animate-pulse">
+           Uplink Sequence Verified
+        </div>
+
+        <div className="space-y-4">
+           {/* JUDUL: Ukuran dikalibrasi ke 5xl agar elegan & menggunakan animasi reveal */}
+           <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-none drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+              <CyberLetterReveal text="TRANSMISSION RECEIVED" className="justify-center" />
+           </h2>
+           
+           {/* Deskripsi: Tanpa underscore, tanpa miring, spasi bersih */}
+           <p className="text-[11px] lg:text-[13px] font-bold text-slate-300 leading-relaxed tracking-[0.2em] uppercase max-w-2xl mx-auto opacity-90">
+              Sistem siap melakukan validasi pertahanan pada domain <span className="text-fuchsia-400 font-black drop-shadow-[0_0_8px_rgba(217,70,239,0.4)]">{selectedDomain}</span>. 
+              Mulai prosedur sekarang, Operative?
+           </p>
+        </div>
+
+        {/* Visualizer Bar HUD */}
+        <div className="flex gap-1.5 h-4 items-center opacity-30">
+           {[...Array(12)].map((_, i) => (
+             <motion.div 
+               key={i} 
+               animate={{ scaleY: [1, 2.5, 1], opacity: [0.3, 1, 0.3] }} 
+               transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.05 }}
+               className="w-1 h-full bg-cyan-400 rounded-full" 
+             />
+           ))}
+        </div>
      </div>
 
-     {/* BUTTONS */}
-     <div className="flex flex-col sm:flex-row gap-8 mt-16 w-full lg:w-auto px-10">
-        <button onClick={() => setView('assessment')} className="w-full lg:w-auto px-14 py-5 border-2 border-white/10 text-slate-500 rounded-full font-black text-[10px] tracking-[0.4em] uppercase hover:text-white transition-all">ABORT MISSION</button>
-        <button onClick={handleStartMissionClick} className="w-full lg:w-auto px-16 py-5 bg-white text-black rounded-full font-black text-[10px] tracking-[0.4em] shadow-[0_20px_50px_rgba(255,255,255,0.2)] hover:bg-cyan-400 hover:text-white transition-all uppercase flex items-center justify-center gap-4 group">
-           EXECUTE PROTOCOL <Zap size={16} className="group-hover:rotate-12 transition-transform" />
+     {/* 4. TACTICAL ACTION BUTTONS (Mewah & Kompak) */}
+     <div className="flex flex-col sm:flex-row gap-6 mt-16 w-full lg:w-auto px-10 relative z-10">
+        <button 
+           onClick={() => setView('assessment')} 
+           className="px-12 py-4 border-2 border-white/5 text-slate-500 rounded-2xl font-black text-[9px] tracking-[0.4em] uppercase hover:text-white hover:bg-white/5 transition-all duration-300"
+        >
+           Abort Session
+        </button>
+        
+        <button 
+           onClick={handleStartMissionClick} 
+           className="relative overflow-hidden px-14 py-4 bg-white text-slate-950 rounded-2xl font-black text-[10px] tracking-[0.4em] uppercase hover:bg-cyan-500 hover:text-white transition-all duration-500 shadow-[0_20px_50px_rgba(255,255,255,0.1)] flex items-center justify-center gap-4 active:scale-95 group"
+        >
+           <span className="relative z-10">EXECUTE MISSION</span>
+           <Zap size={16} className="relative z-10 group-hover:rotate-12 transition-transform" />
+           {/* Flare Animation */}
+           <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:left-[100%] transition-all duration-1000" />
         </button>
      </div>
+
+     {/* 5. TACTICAL HUD CORNERS (Pojok Layar Briefing) */}
+     <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-white/10 rounded-tl-3xl pointer-events-none" />
+     <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-white/10 rounded-tr-3xl pointer-events-none" />
+     <div className="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-white/10 rounded-bl-3xl pointer-events-none" />
+     <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-white/10 rounded-br-3xl pointer-events-none" />
   </motion.div>
 )}
 
