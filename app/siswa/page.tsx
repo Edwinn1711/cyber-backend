@@ -9,11 +9,11 @@ import {
   Radar as RadarIcon, Terminal, Database, Server, Search, Radio, Bug, MailWarning, 
   Sparkles, AlertTriangle, Eye, CheckCircle2, XCircle, X, User, Info, 
   ShieldQuestion, LayoutGrid, Check, BellRing, Bot, ScanLine, Laptop, Workflow, 
-  FileText, TrendingUp, Lightbulb, Hexagon, Send, MessageSquare 
+  FileText, TrendingUp, Lightbulb, Hexagon, Send, MessageSquare,
 } from 'lucide-react'
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid,
-  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell as RechartsCell, CartesianGrid,
+  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
 } from 'recharts'
 
 // --- CONFIG & ASSETS ---
@@ -281,6 +281,32 @@ const CyberCalculationFinale = ({ score, onFinish }: { score: number, onFinish: 
     </motion.div>
   );
 };
+
+const SmoothAnimatedText = ({ text }: { text: string }) => {
+  const letters = Array.from(text);
+
+  return (
+    <div className="flex flex-wrap">
+      {letters.map((letter, index) => (
+        <motion.span
+          key={index}
+          initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{
+            duration: 0.8,
+            // INI KUNCI "WAH"-NYA: Delay dihitung berdasarkan urutan huruf (index)
+            delay: index * 0.05, 
+            ease: [0.2, 0.65, 0.3, 0.9], // Kurva animasi super smooth
+          }}
+          className="inline-block"
+        >
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
+    </div>
+  );
+};
+
 
 export default function StudentPortal() {
   const router = useRouter();
@@ -823,130 +849,96 @@ export default function StudentPortal() {
 )}
 
 
+{/* --- VIEW ASSESSMENT: TACTICAL MISSION SELECTION (DOWNSIZED & ULTRA WAH) --- */}
 {view === 'assessment' && (
-              <motion.div 
-                key="assess-hub" 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }} 
-                exit={{ opacity: 0 }} 
-                className="max-w-[1600px] mx-auto space-y-20 py-12"
-              >
-                
-                {/* Header Page */}
-                <div className="text-center space-y-6 relative">
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-cyan-500/5 blur-[120px] pointer-events-none" />
-                  <motion.div 
-                    initial={{ y: -20, opacity: 0 }} 
-                    animate={{ y: 0, opacity: 1 }} 
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="inline-flex items-center gap-4 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-[10px] font-black tracking-[0.5em] uppercase backdrop-blur-xl"
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#22d3ee]" />
-                    Tactical Deployment Hub
-                  </motion.div>
-                  <h2 className="text-5xl lg:text-8xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-2xl">
-                    TARGET <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 animate-gradient-x">DOMAINS.</span>
-                  </h2>
-                </div>
-
-                {/* Grid 3 Kartu Dewa */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14 pb-32">
-                  {TACTICAL_DOMAINS.map((domain, i) => (
-                    <motion.div 
-                      key={i}
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 30, delay: i * 0.1 }}
-                      whileHover={{ y: -20, scale: 1.02 }}
-                      onClick={() => { setSelectedDomain(domain.id); setView('briefing'); }}
-                      className="group relative bg-[#050811]/40 backdrop-blur-3xl border border-white/5 p-12 rounded-[4rem] cursor-pointer overflow-hidden transition-all duration-700 shadow-2xl hover:border-cyan-500/40"
-                    >
-                      {/* --- HOLOGRAPHIC LAYERS --- */}
-                      <div className="absolute inset-0 bg-grid-static opacity-[0.02] group-hover:opacity-[0.06] transition-opacity duration-500" />
-                      
-                      {/* Laser Beam Scanner */}
-                      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent opacity-0 group-hover:opacity-100 animate-scanner z-20" />
-
-                      {/* Content HUD */}
-                      <div className="relative z-10 flex flex-col h-full">
-                        <div className="flex justify-between items-start mb-16">
-                           <div className="space-y-2 text-left">
-                              <p className="text-[10px] font-mono text-slate-500 tracking-[0.4em] uppercase">{domain.label}</p>
-                              <div className="flex items-center gap-2">
-                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
-                                 <span className="text-[8px] font-black text-emerald-400 tracking-[0.5em] uppercase">SYSTEM ONLINE</span>
-                              </div>
-                           </div>
-                           <div className="w-16 h-16 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-700 group-hover:bg-black group-hover:rotate-12 group-hover:scale-110 shadow-inner">
-                              <domain.icon size={32} style={{ color: domain.color }} className="drop-shadow-[0_0_12px_currentColor]" />
-                           </div>
-                        </div>
-
-                        <div className="space-y-6 text-left flex-1">
-                           {/* PENYELESAIAN OVERFLOW: text-2xl lg:text-3xl & leading-tight */}
-                           <h3 className="text-2xl lg:text-3xl font-black text-white leading-tight tracking-tighter uppercase group-hover:text-cyan-400 transition-colors duration-500">
-                             {domain.title.split(' ')[0]} <br/> 
-                             <span className="opacity-40">{domain.title.split(' ').slice(1).join(' ')}</span>
-                           </h3>
-                           <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.3em] leading-relaxed max-w-[90%]">
-                             {domain.desc}
-                           </p>
-                        </div>
-
-                        {/* Footer Card - Rapi & Tanpa Underscore */}
-                        <div className="mt-20 pt-10 border-t border-white/5 flex items-end justify-between">
-                           <div className="flex flex-col text-left space-y-1">
-                              <span className="text-[8px] font-mono text-slate-700 tracking-[0.5em] uppercase">Access Level</span>
-                              <span className="text-[10px] font-black text-white tracking-[0.3em] uppercase">ENCRYPTED</span>
-                           </div>
-                           <div className="flex items-center gap-5 text-cyan-400 group-hover:text-white transition-all duration-300">
-                              <span className="text-[11px] font-black tracking-[0.5em] uppercase">Initialize</span>
-                              <div className="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center bg-white/[0.03] group-hover:bg-cyan-500 group-hover:text-black transition-all duration-300 shadow-xl">
-                                 <ArrowRight size={18} />
-                              </div>
-                           </div>
-                        </div>
-                      </div>
-
-                      {/* Hover Aura Background */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none" style={{ background: `radial-gradient(circle at 70% 30%, ${domain.color}, transparent 70%)` }} />
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-            {/* VIEW MISSION */}
-            {view === 'mission' && (
-              <motion.div key="mission" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto space-y-12 pb-44 text-center lg:text-left">
-                <header className="h-20 flex items-center justify-between px-10 border-b border-white/10 bg-black/50 backdrop-blur-xl z-[1000]">
-    <div className="flex items-center gap-6">
-        {/* Status Sistem */}
-        <div className="flex items-center gap-3 px-5 py-2 bg-white/5 border border-white/10 rounded-full shadow-inner">
-            <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_12px_#34d399] animate-pulse" />
-            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-200">System Gateway Active</span>
-        </div>
-        
-        {/* Detail Versi / Build - Menambah kesan 'Proyek Serius' */}
-        <div className="hidden md:block px-4 py-1.5 border-l border-white/10">
-           <span className="text-[8px] font-mono text-slate-500 uppercase tracking-widest leading-none">Secure Build: v2.0.4-Stable</span>
-        </div>
+  <motion.div 
+    key="assess-hub" 
+    initial={{ opacity: 0, y: 20 }} 
+    animate={{ opacity: 1, y: 0 }} 
+    exit={{ opacity: 0 }} 
+    className="max-w-[1200px] mx-auto space-y-12 py-8"
+  >
+    
+    {/* 1. COMPACT HEADER SECTION */}
+    <div className="text-center space-y-4 relative">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-cyan-500/5 blur-[100px] pointer-events-none" />
+      <motion.div 
+        initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+        className="inline-flex items-center gap-3 px-5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-cyan-400 text-[8px] font-black tracking-[0.5em] uppercase backdrop-blur-xl"
+      >
+        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+        Tactical Deployment Hub
+      </motion.div>
+      <h2 className="text-4xl lg:text-6xl font-black text-white tracking-tighter uppercase leading-none">
+        TARGET <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 animate-gradient-x">DOMAINS</span>
+      </h2>
     </div>
 
-    {/* Profil User (Sisi Kanan) */}
-    <div className="flex items-center gap-6 text-right">
-        <div className="hidden sm:block">
-            <p className="text-[11px] font-black tracking-widest uppercase text-white leading-none">{user.username}</p>
-            <p className="text-[9px] font-black text-fuchsia-500 uppercase tracking-widest mt-1.5">Intelligence Operative</p>
-        </div>
-        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 via-fuchsia-600 to-indigo-700 rounded-full flex items-center justify-center border border-white/20 shadow-lg shadow-fuchsia-500/20">
-            <User size={18} className="text-white" />
-        </div>
+    {/* 2. GRID MISSIONS (SMALLER, DENSER, MORE WAH) */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pb-20 px-4">
+      {TACTICAL_DOMAINS.map((domain, i) => (
+        <motion.div 
+          key={i}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.1 }}
+          whileHover={{ y: -10, scale: 1.02 }}
+          onClick={() => { setSelectedDomain(domain.id); setView('briefing'); }}
+          className="group relative bg-[#050811]/40 backdrop-blur-3xl border border-white/5 p-8 rounded-[2.5rem] cursor-pointer overflow-hidden transition-all duration-500 shadow-2xl hover:border-cyan-500/40"
+        >
+          {/* --- HOLOGRAPHIC TECH LAYERS --- */}
+          <div className="absolute inset-0 bg-hud-grid opacity-[0.03] group-hover:opacity-[0.08] transition-opacity" />
+          
+          {/* Laser Scanner Line (Horizontal) */}
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400/40 opacity-0 group-hover:opacity-100 group-hover:animate-scanner z-20" />
+
+          {/* Crosshair Corners (Siku-siku Taktis) */}
+          <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-white/20 group-hover:border-cyan-500/50 transition-colors" />
+          <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-white/20 group-hover:border-cyan-500/50 transition-colors" />
+
+          {/* Content */}
+          <div className="relative z-10 flex flex-col h-full">
+            <div className="flex justify-between items-start mb-10">
+               <div className="space-y-1">
+                  <p className="text-[8px] font-black text-slate-500 tracking-[0.3em] uppercase">{domain.label}</p>
+                  <div className="flex items-center gap-2">
+                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
+                     <span className="text-[7px] font-black text-emerald-400 tracking-[0.3em] uppercase">LINK ACTIVE</span>
+                  </div>
+               </div>
+               <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-cyan-500 group-hover:text-black shadow-inner">
+                  <domain.icon size={22} className="group-hover:drop-shadow-[0_0_8px_white]" />
+               </div>
+            </div>
+
+            <div className="space-y-4 flex-1">
+               <h3 className="text-xl lg:text-2xl font-black text-white leading-tight tracking-tighter uppercase group-hover:text-cyan-400 transition-colors">
+                 {domain.title}
+               </h3>
+               <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] leading-relaxed opacity-80">
+                 {domain.desc}
+               </p>
+            </div>
+
+            {/* Micro-Data Readout (Detail Wah) */}
+            <div className="mt-10 pt-6 border-t border-white/5 flex items-center justify-between">
+               <div className="flex flex-col gap-1">
+                  <span className="text-[6px] font-black text-slate-600 uppercase tracking-widest">Protocol Index</span>
+                  <span className="text-[9px] font-black text-white font-mono uppercase">SEC ALPHA 01</span>
+               </div>
+               <div className="flex items-center gap-3">
+                  <span className="text-[9px] font-black text-cyan-400 tracking-widest uppercase">Select</span>
+                  <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:bg-cyan-500 group-hover:text-black transition-all shadow-lg">
+                     <ArrowRight size={14} />
+                  </div>
+               </div>
+            </div>
+          </div>
+        </motion.div>
+      ))}
     </div>
-</header>
-                <div className="space-y-10">{currentStepQs.map((q) => (<div key={q.id} className="p-10 lg:p-12 rounded-[3rem] bg-black/80 border border-white/10 space-y-12 shadow-2xl relative overflow-hidden transition-all hover:border-fuchsia-500/40"><div className="absolute top-0 left-0 w-2 h-full bg-fuchsia-600 shadow-[0_0_20px_#d946ef]" /><h4 className="text-2xl lg:text-3xl font-medium text-white leading-snug tracking-tight">"{q.text}"</h4><div className="grid grid-cols-1 gap-5">{q.options.slice(0, 4).map((opt: any, i: number) => (<button key={i} onClick={() => setAns({...ans, [q.id]: {score: opt.score, text: opt.text}})} className={`p-8 rounded-[2rem] text-left transition-all border-2 text-[11px] lg:text-[12px] font-black tracking-[0.1em] uppercase flex items-center gap-8 ${ans[q.id]?.text === opt.text ? 'bg-fuchsia-600/20 border-fuchsia-500 text-white shadow-2xl' : 'bg-white/5 border-white/5 text-slate-400 hover:border-white/20'}`}><div className={`w-5 h-5 rounded-full border-[3px] flex items-center justify-center shrink-0 ${ans[q.id]?.text === opt.text ? 'border-fuchsia-400 shadow-[0_0_10px_#d946ef]' : 'border-slate-700'}`}>{ans[q.id]?.text === opt.text && <div className="w-2 h-2 bg-fuchsia-400 rounded-full shadow-[0_0_15px_#d946ef]" />}</div><span>{opt.text}</span></button>))}</div></div>))}</div>
-                <div className="flex gap-6 pt-12">{currentStep > 1 && <button onClick={() => setCurrentStep(p => p - 1)} className="px-12 py-6 bg-black border border-white/10 text-slate-400 rounded-full font-black text-[11px] uppercase tracking-widest hover:bg-white/5 transition-all">PREVIOUS</button>}{currentStep < maxStep ? <button disabled={!isStepComplete} onClick={() => setCurrentStep(p => p + 1)} className={`flex-1 py-6 rounded-full font-black text-[11px] tracking-widest transition-all uppercase ${isStepComplete ? 'bg-fuchsia-600 text-white shadow-2xl' : 'bg-white/5 text-slate-800 cursor-not-allowed'}`}>CONTINUE</button> : <button disabled={!isStepComplete || loading} onClick={executeUplink} className={`flex-1 py-6 rounded-full font-black text-[11px] tracking-widest transition-all uppercase flex items-center justify-center gap-6 ${isStepComplete ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-2xl' : 'bg-white/5 text-slate-800 cursor-not-allowed'}`}>{submitStatus} <Zap size={20}/></button>}</div>
-              </motion.div>
-            )}
+  </motion.div>
+)}
 
 {view === 'briefing' && (
   <motion.div 
