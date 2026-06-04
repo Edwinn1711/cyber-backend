@@ -546,135 +546,183 @@ export default function StudentPortal() {
 
 
   const CyberSentinel = ({ username = "OPERATIVE" }) => {
-    const [message, setMessage] = useState("SYSTEM ONLINE");
+    const [message, setMessage] = useState("");
+    const [fullMessage, setFullMessage] = useState("INITIALIZING...");
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
   
-    // Fisika Kepala: Lebih responsif namun tetap smooth (Sleek Tracking)
-    const headX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), { stiffness: 200, damping: 25 });
-    const headY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-6, 6]), { stiffness: 200, damping: 25 });
+    // Fisika Pergerakan: Sangat smooth (Elite Tracking)
+    const headX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), { stiffness: 150, damping: 25 });
+    const headY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-8, 8]), { stiffness: 150, damping: 25 });
+    const bodyX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-5, 5]), { stiffness: 100, damping: 30 });
   
+    // Efek Dekripsi Pesan (Teks berubah-ubah sebelum fix)
     useEffect(() => {
       const messages = [
         `READY OPERATIVE ${username.toUpperCase()}`,
-        "SCANNING QUANTUM NODES",
-        "CORE DATABASE SECURED",
+        "SCANNING DATABASE NODES",
+        "QUANTUM ENCRYPTION ACTIVE",
         "ALL SYSTEMS OPTIMAL",
-        "NEURAL LINK ACTIVE"
+        "NEURAL LINK ESTABLISHED"
       ];
-      let i = 0;
-      const interval = setInterval(() => {
-        setMessage(messages[i]);
-        i = (i + 1) % messages.length;
-      }, 5000);
+      let msgIdx = 0;
   
+      const cycleMessages = () => {
+        const target = messages[msgIdx];
+        let iteration = 0;
+        const interval = setInterval(() => {
+          setMessage(
+            target.split("").map((l, i) => {
+              if (i < iteration) return target[i];
+              return "01"[Math.floor(Math.random() * 2)];
+            }).join("")
+          );
+          if (iteration >= target.length) clearInterval(interval);
+          iteration += 1 / 2;
+        }, 40);
+        msgIdx = (msgIdx + 1) % messages.length;
+      };
+  
+      const mainInterval = setInterval(cycleMessages, 5000);
+      cycleMessages();
+      return () => clearInterval(mainInterval);
+    }, [username]);
+  
+    useEffect(() => {
       const handleMove = (e: MouseEvent) => {
         mouseX.set((e.clientX / window.innerWidth) - 0.5);
         mouseY.set((e.clientY / window.innerHeight) - 0.5);
       };
       window.addEventListener("mousemove", handleMove);
-      return () => { clearInterval(interval); window.removeEventListener("mousemove", handleMove); };
-    }, [username]);
+      return () => window.removeEventListener("mousemove", handleMove);
+    }, []);
   
     return (
-      <div className="relative flex flex-col items-center justify-center h-[380px] w-full select-none" style={{ perspective: '1200px' }}>
+      <motion.div 
+        animate={{ y: [0, -10, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="relative flex flex-col items-center justify-center h-[380px] w-full select-none" 
+        style={{ perspective: '1200px' }}
+      >
         
-        {/* --- 1. HOLOGRAPHIC QUANTUM CHAT --- */}
+        {/* --- 1. TACTICAL HOLOGRAPHIC INTERFACE (PESAN) --- */}
         <motion.div 
-          animate={{ y: [0, -8, 0], scale: [1, 1.02, 1] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-4 z-50 bg-[#0a0c14]/60 backdrop-blur-2xl border border-cyan-400/40 px-6 py-2.5 rounded-2xl shadow-[0_0_30px_rgba(34,211,238,0.2)] flex flex-col items-center gap-1"
+          className="absolute top-2 z-50 bg-[#020308]/80 backdrop-blur-3xl border border-cyan-400/30 px-6 py-2.5 rounded-2xl shadow-[0_0_40px_rgba(34,211,238,0.2)] flex flex-col items-center"
         >
-          <div className="flex items-center gap-3">
-            <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-            <span className="text-[10px] font-black tracking-[0.3em] text-cyan-400 uppercase drop-shadow-[0_0_8px_#22d3ee]">
+          <div className="flex items-center gap-3 mb-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]" />
+            <span className="text-[10px] font-black tracking-[0.3em] text-cyan-400 uppercase font-mono">
               {message}
             </span>
           </div>
-          {/* Progress Bar Mini di bawah Pesan */}
-          <div className="w-full h-[1px] bg-white/5 overflow-hidden mt-1">
+          <div className="w-full h-[1px] bg-white/5 relative overflow-hidden">
              <motion.div 
                animate={{ x: ["-100%", "100%"] }} 
                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-               className="w-1/2 h-full bg-cyan-400 opacity-40" 
+               className="w-1/2 h-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent" 
              />
           </div>
         </motion.div>
   
-        {/* --- 2. THE COMPACT HUMANOID SENTINEL --- */}
-        <div className="relative flex flex-col items-center mt-12">
+        {/* --- 2. THE QUANTUM BOT ASSEMBLY --- */}
+        <motion.div style={{ x: bodyX }} className="relative flex flex-col items-center mt-12">
           
-          {/* KEPALA (Lebih Kecil & Tajam) */}
+          {/* KEPALA (Elite Detailing) */}
           <motion.div 
             style={{ x: headX, y: headY }}
-            className="relative w-14 h-16 bg-[#05060b] border-2 border-cyan-400/60 rounded-t-[2rem] rounded-b-xl flex flex-col items-center justify-center shadow-[0_0_25px_rgba(34,211,238,0.3)] z-30"
+            className="relative w-14 h-16 bg-[#080a12] border-2 border-cyan-400/60 rounded-t-[2.2rem] rounded-b-xl flex flex-col items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.3)] z-30 group"
           >
+            {/* MATA (Blinking Quantum Eyes) */}
             <div className="flex gap-3">
-              <motion.div animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 0.1, repeat: Infinity, repeatDelay: 4 }} className="w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_12px_#22d3ee]" />
-              <motion.div animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 0.1, repeat: Infinity, repeatDelay: 4 }} className="w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_12px_#22d3ee]" />
+              {[0, 1].map(i => (
+                <div key={i} className="relative w-2.5 h-2.5">
+                  <motion.div 
+                    animate={{ scaleY: [1, 1, 0.1, 1] }} 
+                    transition={{ duration: 4, repeat: Infinity, times: [0, 0.9, 0.92, 1] }}
+                    className="w-full h-full bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" 
+                  />
+                  <div className="absolute inset-0 bg-cyan-400/20 blur-md rounded-full animate-pulse" />
+                </div>
+              ))}
             </div>
-            {/* Detail Micro-Chip di dahi */}
-            <div className="absolute top-2 w-4 h-0.5 bg-cyan-400/20 rounded-full" />
+            {/* Antena Pulse */}
+            <div className="absolute -top-3 w-0.5 h-3 bg-cyan-500/40">
+               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-cyan-400 rounded-full animate-ping" />
+            </div>
           </motion.div>
   
-          {/* TUBUH (Sleek Power Core) */}
-          <div className="relative w-24 h-32 bg-[#05060b] border-2 border-cyan-400/50 rounded-[2.5rem] flex flex-col items-center p-4 shadow-3xl z-20 overflow-hidden mt-1">
-             {/* REAKTOR DADA (QUANTUM CORE) */}
-             <div className="relative w-12 h-12 rounded-full border border-cyan-500/20 flex items-center justify-center mt-2">
-                <div className="absolute inset-0 rounded-full border-2 border-dotted border-cyan-400/30 animate-[spin_8s_linear_infinite]" />
+          {/* TUBUH (Core Reactor) */}
+          <div className="relative w-26 h-34 bg-[#080a12] border-2 border-cyan-400/50 rounded-[2.8rem] flex flex-col items-center p-4 shadow-3xl z-20 overflow-hidden mt-1">
+             {/* REAKTOR NUKLIR BIRU (THE "WAH" CENTER) */}
+             <div className="relative w-14 h-14 rounded-full border-2 border-white/5 flex items-center justify-center mt-2 group-hover:scale-110 transition-transform">
+                <div className="absolute inset-0 rounded-full border-2 border-dashed border-cyan-400/40 animate-[spin_10s_linear_infinite]" />
                 <motion.div 
-                  animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.7, 0.2] }}
+                  animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.8, 0.3] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="absolute w-8 h-8 bg-cyan-400/30 rounded-full blur-lg" 
+                  className="absolute w-10 h-10 bg-cyan-400/20 rounded-full blur-xl" 
                 />
-                <Zap size={18} className="text-cyan-400 relative z-10 drop-shadow-[0_0_12px_#22d3ee] fill-cyan-400/20" />
+                <Zap size={22} className="text-cyan-400 relative z-10 drop-shadow-[0_0_15px_#22d3ee] fill-cyan-400/20" />
              </div>
-             {/* Rib Detail (Mechanical Look) */}
-             <div className="mt-6 space-y-1.5 w-full px-4 opacity-10">
-                <div className="h-0.5 w-full bg-cyan-400" />
-                <div className="h-0.5 w-full bg-cyan-400" />
-                <div className="h-0.5 w-full bg-cyan-400" />
+             
+             {/* Mechanical Details */}
+             <div className="mt-8 space-y-2 w-full px-5 opacity-10">
+                {[1,2,3].map(i => <div key={i} className="h-0.5 w-full bg-cyan-400 rounded-full" />)}
              </div>
           </div>
   
-          {/* TANGAN (Sleek Mechanical Arms) */}
-          <div className="absolute top-20 w-[140px] flex justify-between px-1">
-             <motion.div animate={{ rotate: [-1, 1, -1] }} transition={{ duration: 4, repeat: Infinity }} className="w-5 h-20 bg-[#080a12] border-2 border-cyan-500/30 rounded-full shadow-lg origin-top" />
-             <motion.div animate={{ rotate: [1, -1, 1] }} transition={{ duration: 4, repeat: Infinity }} className="w-5 h-20 bg-[#080a12] border-2 border-cyan-400/30 rounded-full shadow-lg origin-top" />
+          {/* TANGAN (Mechanical Floating Arms) */}
+          <div className="absolute top-22 w-[150px] flex justify-between px-1">
+             <motion.div animate={{ rotate: [-2, 2, -2], y: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity }} className="w-5 h-22 bg-[#080a12] border-2 border-cyan-500/30 rounded-full shadow-2xl origin-top" />
+             <motion.div animate={{ rotate: [2, -2, 2], y: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity }} className="w-5 h-22 bg-[#080a12] border-2 border-cyan-500/30 rounded-full shadow-2xl origin-top" />
           </div>
   
-          {/* KAKI (Plasma Thrusters) */}
-          <div className="flex gap-8 -mt-3 relative z-10">
+          {/* KAKI (Dual Blue Thrusters) */}
+          <div className="flex gap-10 -mt-4 relative z-10">
             {[0, 1].map((i) => (
               <div key={i} className="flex flex-col items-center">
-                <div className="w-5 h-16 bg-[#080a12] border-2 border-cyan-500/30 rounded-b-2xl shadow-xl" />
-                {/* API PLASMA (BLUE JET) */}
+                <div className="w-6 h-18 bg-[#080a12] border-2 border-cyan-500/30 rounded-b-[2rem] shadow-2xl" />
+                {/* API PLASMA SANGAT DINAMIS */}
                 <motion.div 
-                  animate={{ height: [8, 35, 8], opacity: [0.4, 1, 0.4], scaleX: [1, 1.2, 1] }}
-                  transition={{ duration: 0.1, repeat: Infinity }}
-                  className="w-3 bg-gradient-to-b from-cyan-400 via-blue-600/60 to-transparent blur-md rounded-full mt-0.5"
+                  animate={{ 
+                    height: [10, 45, 10],
+                    opacity: [0.5, 1, 0.5],
+                    scaleX: [1, 1.4, 1]
+                  }}
+                  transition={{ duration: 0.12, repeat: Infinity }}
+                  className="w-4 bg-gradient-to-b from-cyan-400 via-blue-600/60 to-transparent blur-md rounded-full mt-1 shadow-[0_0_20px_#22d3ee]"
                 />
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
   
-        {/* --- 3. ADVANCED HUD DECORATION --- */}
-        {/* Inner Scanner Circle */}
-        <div className="absolute w-[280px] h-[280px] border border-cyan-500/10 rounded-full animate-[spin_20s_linear_infinite]" />
+        {/* --- 3. THE SUPREME HUD DECORATION --- */}
+        {/* Cincin Utama (Sangat Mewah) */}
+        <div className="absolute w-[300px] h-[300px] border border-cyan-500/10 rounded-full animate-[spin_30s_linear_infinite]" />
+        <div className="absolute w-[380px] h-[380px] border-2 border-dotted border-white/5 rounded-full animate-[spin_50s_linear_infinite_reverse]" />
         
-        {/* Data Scanning Ring (Rotating Text simulated with border segments) */}
-        <div className="absolute w-[340px] h-[340px] border-2 border-dashed border-white/5 rounded-full animate-[spin_40s_linear_infinite_reverse] opacity-40" />
-        
-        {/* Hexagon Grid Background (Subtle) */}
-        <div className="absolute w-[450px] h-[450px] opacity-5 pointer-events-none bg-[radial-gradient(circle,rgba(34,211,238,0.2)_1px,transparent_1px)] bg-[size:20px_20px] rounded-full" />
-        
-        {/* Outer Floating Accents */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
-           <div className="w-full h-full border-[40px] border-transparent border-t-cyan-500/5 rounded-full animate-pulse" />
-        </div>
+        {/* Scanning Laser Beam */}
+        <motion.div 
+          animate={{ top: ["20%", "80%", "20%"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+          className="absolute w-[400px] h-px bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent z-0"
+        />
   
-      </div>
+        {/* Floating Data Nodes (Titik-titik Pendar) */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            animate={{ 
+              x: [Math.random() * 200 - 100, Math.random() * 200 - 100], 
+              y: [Math.random() * 200 - 100, Math.random() * 200 - 100],
+              opacity: [0, 0.6, 0]
+            }}
+            transition={{ duration: Math.random() * 5 + 3, repeat: Infinity }}
+            className="absolute w-1 h-1 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"
+          />
+        ))}
+  
+      </motion.div>
     );
   };
 
@@ -1366,8 +1414,8 @@ export default function StudentPortal() {
         </div>
      </div>
 
-     {/* 4. TACTICAL ACTION BUTTONS (Mewah & Kompak) */}
-     <div className="flex flex-col sm:flex-row gap-6 mt-16 w-full lg:w-auto px-10 relative z-10">
+{/* 4. TACTICAL ACTION BUTTONS (FIXED NAVIGATION) */}
+<div className="flex flex-col sm:flex-row gap-6 mt-16 w-full lg:w-auto px-10 relative z-10">
         <button 
            onClick={() => setView('assessment')} 
            className="px-12 py-4 border-2 border-white/5 text-slate-500 rounded-2xl font-black text-[9px] tracking-[0.4em] uppercase hover:text-white hover:bg-white/5 transition-all duration-300"
@@ -1375,13 +1423,17 @@ export default function StudentPortal() {
            Abort Session
         </button>
         
+        {/* PERBAIKAN DI SINI: Langsung set view ke 'mission' agar soal muncul */}
         <button 
-           onClick={handleStartMissionClick} 
+           onClick={() => {
+              setView('mission');
+              setCurrentStep(1);
+           }} 
            className="relative overflow-hidden px-14 py-4 bg-white text-slate-950 rounded-2xl font-black text-[10px] tracking-[0.4em] uppercase hover:bg-cyan-500 hover:text-white transition-all duration-500 shadow-[0_20px_50px_rgba(255,255,255,0.1)] flex items-center justify-center gap-4 active:scale-95 group"
         >
-           <span className="relative z-10">EXECUTE MISSION</span>
+           <span className="relative z-10">INITIATE ASSESSMENT</span>
            <Zap size={16} className="relative z-10 group-hover:rotate-12 transition-transform" />
-           {/* Flare Animation */}
+           {/* Flare Animation (The "Wah" Effect) */}
            <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:left-[100%] transition-all duration-1000" />
         </button>
      </div>
