@@ -567,117 +567,88 @@ export default function StudentPortal() {
         )}
       </AnimatePresence>
 
-      {/* --- SIDEBAR --- */}
-      <motion.aside initial={false} animate={{ width: isSidebarCollapsed ? 80 : 250 }} className="h-screen bg-black/95 backdrop-blur-3xl border-r border-white/10 flex flex-col z-[100] transition-all duration-500 shadow-2xl">
-        <div className="h-20 px-6 flex items-center justify-between border-b border-white/10">
-          {!isSidebarCollapsed && <div className="flex flex-col"><span className="font-black text-white uppercase text-[11px] tracking-widest leading-none">CYBER READINESS</span><span className="font-bold text-fuchsia-500 text-[9px] tracking-widest mt-0.5 uppercase">INDEX</span></div>}
-          <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-2 text-slate-400 hover:text-fuchsia-400 border border-white/5 rounded-lg transition-all">{isSidebarCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}</button>
-        </div>
-        <nav className="flex-1 px-4 py-10 space-y-2 relative">
-          {[
-            { id: 'dashboard', label: 'DASHBOARD', icon: LayoutGrid },
-            { id: 'assessment', label: 'ASSESSMENT', icon: Target },
-            { id: 'reports', label: 'REPORT', icon: FileText },
-            { id: 'feedback', label: 'FEEDBACK', icon: Lightbulb }
-          ].map((item) => {
-            const isActive = view === item.id;
-            
-            return (
-              <button 
-                key={item.id} 
-                onClick={() => setView(item.id)}
-                className={`w-full flex items-center p-4 rounded-2xl transition-colors duration-500 relative group outline-none`}
-              >
-                {/* 1. KAPSUL CAHAYA BERJALAN (INI KUNCI SMOOTH NYA) */}
-                {isActive && (
-                  <motion.div 
-                    layoutId="sidebar-active-pill"
-                    className="absolute inset-0 bg-gradient-to-r from-fuchsia-600/20 to-transparent border-l-4 border-fuchsia-500 rounded-2xl z-0"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
+      <motion.aside 
+      initial={false} 
+      animate={{ width: isSidebarCollapsed ? 80 : 260 }} 
+      className={`h-screen border-r transition-all duration-700 flex flex-col z-[100] relative shadow-2xl ${theme === 'dark' ? 'bg-black/95 border-white/10' : 'bg-white border-slate-200'}`}
+    >
+      <div className={`h-20 px-6 flex items-center justify-between border-b ${theme === 'dark' ? 'border-white/10' : 'border-slate-100'}`}>
+        {!isSidebarCollapsed && (
+          <div className="flex flex-col text-left">
+            <span className={`font-black text-[11px] tracking-[0.2em] uppercase leading-none ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>CYBER READINESS</span>
+            <span className="font-black text-fuchsia-500 text-[9px] tracking-[0.4em] mt-1 uppercase">INDEX</span>
+          </div>
+        )}
+        <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="p-2 text-slate-400 hover:text-fuchsia-500 transition-all">
+          {isSidebarCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+        </button>
+      </div>
 
-                {/* 2. KONTEN MENU (DI ATAS KAPSUL) */}
-                <div className="relative z-10 flex items-center gap-4 w-full">
-                  <item.icon 
-                    size={20} 
-                    className={`transition-all duration-500 ${isActive ? 'text-fuchsia-400 scale-110 drop-shadow-[0_0_8px_#d946ef]' : 'text-slate-500 group-hover:text-slate-300'}`} 
-                  />
-                  
-                  {!isSidebarCollapsed && (
-                    <span className={`font-black text-[10px] tracking-[0.3em] uppercase transition-all duration-500 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-300'}`}>
-                      {item.label}
-                    </span>
-                  )}
+      {/* Navigasi Sidebar */}
+      <nav className="flex-1 px-4 py-10 space-y-3">
+        {[
+          { id: 'dashboard', label: 'DASHBOARD', icon: LayoutGrid },
+          { id: 'assessment', label: 'ASSESSMENT', icon: Target },
+          { id: 'reports', label: 'REPORT', icon: FileText },
+          { id: 'feedback', label: 'FEEDBACK', icon: Lightbulb }
+        ].map((item) => {
+          const isActive = view === item.id;
+          return (
+            <button 
+              key={item.id} 
+              onClick={() => setView(item.id)}
+              className="w-full flex items-center p-4 rounded-2xl transition-all relative group outline-none"
+            >
+              {isActive && (
+                <motion.div layoutId="sidebar-active" className={`absolute inset-0 rounded-2xl z-0 ${theme === 'dark' ? 'bg-fuchsia-600/20 border-l-4 border-fuchsia-500' : 'bg-blue-600/10 border-l-4 border-blue-600'}`} />
+              )}
+              <div className="relative z-10 flex items-center gap-4">
+                <item.icon size={20} className={`${isActive ? (theme === 'dark' ? 'text-fuchsia-400' : 'text-blue-600') : 'text-slate-500'}`} />
+                {!isSidebarCollapsed && <span className={`font-black text-[10px] tracking-widest uppercase ${isActive ? (theme === 'dark' ? 'text-white' : 'text-slate-900') : 'text-slate-500'}`}>{item.label}</span>}
+              </div>
+            </button>
+          );
+        })}
+      </nav>
 
-                  {/* Indikator titik kecil di ujung kanan jika aktif */}
-                  {isActive && !isSidebarCollapsed && (
-                    <motion.div 
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="ml-auto w-1.5 h-1.5 rounded-full bg-fuchsia-500 shadow-[0_0_10px_#d946ef]"
-                    />
-                  )}
-                </div>
-              </button>
-            );
-          })}
-        </nav>
+      <div className={`p-6 border-t ${theme === 'dark' ? 'border-white/10' : 'border-slate-100'}`}>
+        <button onClick={() => { localStorage.removeItem('user'); router.push('/'); }} className="w-full flex items-center p-4 text-red-500 hover:bg-red-500/10 rounded-2xl gap-4 font-black text-[10px] tracking-widest uppercase">
+          <Power size={18} /> {!isSidebarCollapsed && "LOGOUT"}
+        </button>
+      </div>
+    </motion.aside>
 
-        {/* --- AREA LOGOUT (REVISI: TANPA SHUTDOWN) --- */}
-        <div className="p-6 border-t border-white/5">
+    <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
+    <header className={`h-20 flex items-center justify-between px-10 border-b transition-all duration-700 ${theme === 'dark' ? 'bg-black/50 border-white/10 backdrop-blur-xl' : 'bg-white/80 border-slate-200 backdrop-blur-xl'}`}>
+        <div className="flex items-center gap-6">
+          <div className={`flex items-center gap-3 px-5 py-2 border rounded-full ${theme === 'dark' ? 'bg-white/5 border-white/20 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-900'}`}>
+            <div className={`w-2 h-2 rounded-full animate-pulse ${theme === 'dark' ? 'bg-emerald-400' : 'bg-emerald-600'}`} />
+            <span className="text-[9px] font-black uppercase tracking-widest text-left">GATEWAY ACTIVE</span>
+          </div>
+
+          {/* TOMBOL GANTI TEMA (WAH VERSION) */}
           <button 
-            onClick={() => {
-              localStorage.removeItem('user'); // Menghapus data login
-              router.push('/'); // Kembali ke landing page
-            }} 
-            className="w-full flex items-center p-4 text-red-500 hover:bg-red-500/10 rounded-2xl gap-4 font-black text-[10px] tracking-[0.3em] transition-all uppercase group"
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className={`px-6 py-2 rounded-xl border font-black text-[9px] tracking-[0.4em] transition-all duration-500 flex items-center gap-3 shadow-xl active:scale-95 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white hover:border-cyan-400' : 'bg-white border-slate-200 text-slate-900 hover:border-blue-600'}`}
           >
-            <Power size={18} className="group-hover:scale-110 group-hover:rotate-12 transition-transform" /> 
-            {!isSidebarCollapsed && "LOGOUT SESSION"}
+             <div className={`w-2 h-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400 shadow-[0_0_10px_#22d3ee]' : 'bg-blue-600 shadow-[0_0_10px_#2563eb]'}`} />
+             {theme === 'dark' ? 'DARK_PROTOCOL' : 'LIGHT_PROTOCOL'}
           </button>
         </div>
 
-      </motion.aside>
-
-      <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
-      <header className={`h-20 flex items-center justify-between px-10 border-b transition-all duration-700 ${theme === 'dark' ? 'bg-black/50 border-white/10 backdrop-blur-xl' : 'bg-white/80 border-slate-200 backdrop-blur-xl'}`}>
-    
-    <div className="flex items-center gap-6">
-        {/* Badge Status */}
-        <div className={`flex h-screen w-full transition-all duration-1000 overflow-hidden font-sans selection:bg-fuchsia-500/30 ${theme === 'dark' ? 'bg-black text-slate-100' : 'bg-[#f8fafc] text-slate-900'}`}>
-        <div className={`fixed inset-0 z-0 transition-opacity duration-1000 ${theme === 'dark' ? 'opacity-100' : 'opacity-20'}`}>
-      <PersistentUniverse bgIdx={bgIdx} />
-    </div>
-            <span className={`text-[9px] font-black uppercase tracking-widest ${theme === 'dark' ? 'text-slate-200' : 'text-slate-900'}`}>
-              GATEWAY ACTIVE
-            </span>
-        </div>
-
-        {/* --- INI TOMBOL TOGGLE THEME NYA (SANGAT WAH) --- */}
-        <button 
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className={`px-6 py-2 rounded-xl border font-black text-[9px] tracking-[0.4em] transition-all duration-500 flex items-center gap-3 shadow-xl active:scale-95 ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white hover:border-cyan-400' : 'bg-white border-slate-200 text-slate-900 hover:border-blue-600'}`}
-        >
-           <div className={`w-2 h-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400 shadow-[0_0_10px_#22d3ee]' : 'bg-blue-600 shadow-[0_0_10px_#2563eb]'}`} />
-           {theme === 'dark' ? 'DARK_PROTOCOL' : 'LIGHT_PROTOCOL'}
-        </button>
-    </div>
-
-    {/* Profil User (Sisi Kanan) */}
-    <div className="flex items-center gap-6 text-right">
-        <div className="hidden sm:block">
+        <div className="flex items-center gap-6 text-right text-left">
+          <div className="hidden sm:block">
             <p className={`text-[11px] font-black tracking-widest uppercase ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{user.username}</p>
             <p className="text-[9px] font-black text-fuchsia-500 uppercase tracking-widest mt-1">OPERATIVE MODE</p>
+          </div>
+          <div className="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center border border-white/20 shadow-lg text-white">
+            <User size={18} />
+          </div>
         </div>
-        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-fuchsia-600 rounded-full flex items-center justify-center border border-white/20 shadow-lg">
-            <User size={18} className="text-white" />
-        </div>
-    </div>
-</header>
+      </header>
 
-        <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
-          <AnimatePresence mode="wait">
+      <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
+      <AnimatePresence mode="wait">
             
           {view === 'dashboard' && (
   <motion.div 
@@ -1082,6 +1053,12 @@ export default function StudentPortal() {
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(217, 70, 239, 0.5); border-radius: 20px; }
         ::-webkit-scrollbar { width: 0px; }
         ::selection { background: #d946ef; color: white; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        * { border-bottom-style: none !important; text-decoration: none !important; font-style: normal !important; }
+        .bg-hud-grid { 
+        background-image: linear-gradient(to right, rgba(34, 211, 238, 0.1) 1px, transparent 1px), 
+                          linear-gradient(to bottom, rgba(34, 211, 238, 0.1) 1px, transparent 1px); 
+        background-size: 50px 50px; 
       `}} />
     </div>
   );
