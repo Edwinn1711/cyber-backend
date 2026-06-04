@@ -176,11 +176,10 @@ const CyberBootSequence = ({ onComplete }: { onScroll?: any, onComplete: () => v
 
 const CyberCalculationFinale = ({ score, onFinish }: { score: number, onFinish: () => void }) => {
   const [count, setCount] = useState(0);
-  const [status, setStatus] = useState("EXTRACTING_DATA_PACKETS");
+  const [status, setStatus] = useState("MENGEKSTRAK RESPONS TAKTIS...");
 
   useEffect(() => {
-    // 1. Animasi angka menghitung (Count Up)
-    const duration = 3000; // 3 detik
+    const duration = 3500; 
     const start = 0;
     const end = score;
     let startTime: number;
@@ -191,97 +190,81 @@ const CyberCalculationFinale = ({ score, onFinish }: { score: number, onFinish: 
       setCount(Math.floor(progress * (end - start) + start));
       if (progress < 1) requestAnimationFrame(animateCount);
     };
-
     requestAnimationFrame(animateCount);
 
-    // 2. Simulasi Teks Log Intelijen
     const sequence = [
-      { t: 0, msg: "ANALYZING_TACTICAL_RESPONSES..." },
-      { t: 800, msg: "DECRYPTING_VULNERABILITY_INDEX..." },
-      { t: 1600, msg: "SYNCING_WITH_CENTRAL_COMMAND..." },
-      { t: 2400, msg: "GENERATING_INTELLIGENCE_REPORT..." },
-      { t: 3000, msg: "CALCULATION_COMPLETE" }
+      { t: 0, msg: "MENGANALISIS POLA PERTAHANAN..." },
+      { t: 1000, msg: "MENGKALIBRASI INDEKS KERENTANAN..." },
+      { t: 2000, msg: "MENYINKRONKAN DENGAN PUSAT DATA..." },
+      { t: 3000, msg: "MENYUSUN LAPORAN INTELIJEN..." },
+      { t: 3500, msg: "ANALISIS SELESAI" }
     ];
 
     sequence.forEach(step => {
       setTimeout(() => setStatus(step.msg), step.t);
     });
 
-    // Selesai dan pindah ke Report
     setTimeout(onFinish, 4500);
   }, [score, onFinish]);
 
   return (
     <motion.div 
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[40000] bg-[#020108] flex flex-col items-center justify-center font-mono overflow-hidden"
+      className="fixed inset-0 z-[50000] bg-[#020108] flex flex-col items-center justify-center font-black overflow-hidden"
     >
-      {/* Efek Garis Saraf (Neural Lines) */}
-      <div className="absolute inset-0 opacity-20">
-         {[...Array(10)].map((_, i) => (
+      {/* Efek Latar Belakang Laser */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+         {[...Array(15)].map((_, i) => (
            <motion.div 
              key={i}
-             animate={{ 
-               x: [-100, 100], 
-               opacity: [0, 1, 0],
-               scaleY: [1, 2, 1] 
-             }}
-             transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }}
-             className="absolute w-full h-px bg-cyan-500"
-             style={{ top: `${i * 10}%` }}
+             animate={{ x: [-200, 200], opacity: [0, 1, 0] }}
+             transition={{ duration: 1, repeat: Infinity, delay: i * 0.1 }}
+             className="absolute w-full h-[2px] bg-cyan-500 shadow-[0_0_15px_#22d3ee]"
+             style={{ top: `${i * 7}%` }}
            />
          ))}
       </div>
 
-      <div className="relative z-10 flex flex-col items-center space-y-12">
-        {/* Ring Pemuat Raksasa */}
-        <div className="relative w-64 h-64 flex items-center justify-center">
+      <div className="relative z-10 flex flex-col items-center space-y-10">
+        <div className="relative w-72 h-72 flex items-center justify-center">
            <svg className="w-full h-full rotate-[-90deg]">
-              <circle cx="128" cy="128" r="120" stroke="rgba(34, 211, 238, 0.05)" strokeWidth="4" fill="transparent" />
+              <circle cx="144" cy="144" r="130" stroke="rgba(34,211,238,0.05)" strokeWidth="4" fill="none" />
               <motion.circle 
                 initial={{ strokeDasharray: "0 1000" }}
-                animate={{ strokeDasharray: "754 1000" }}
-                transition={{ duration: 3, ease: "easeInOut" }}
-                cx="128" cy="128" r="120" stroke="#22d3ee" strokeWidth="8" strokeLinecap="round" fill="transparent"
-                style={{ filter: 'drop-shadow(0 0 20px #22d3ee)' }}
+                animate={{ strokeDasharray: "816 1000" }}
+                transition={{ duration: 3.5, ease: "easeInOut" }}
+                cx="144" cy="144" r="130" stroke="#22d3ee" strokeWidth="12" strokeLinecap="round" fill="none"
+                style={{ filter: 'drop-shadow(0 0 25px #22d3ee)' }}
               />
            </svg>
            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <motion.span 
-                key={count}
-                initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                className="text-8xl font-black text-white tracking-tighter"
-              >
+              <motion.span key={count} className="text-9xl font-black text-white tracking-tighter">
                 {count}
               </motion.span>
-              <span className="text-[10px] font-black text-cyan-400 tracking-[0.5em] mt-2">READINESS_LEVEL</span>
+              <span className="text-[10px] font-black text-cyan-400 tracking-[0.5em] mt-4 uppercase">Level Kesiapan</span>
            </div>
         </div>
 
-        {/* Teks Status Terminal */}
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-6">
            <div className="flex items-center justify-center gap-4">
               <div className="w-2 h-2 rounded-full bg-fuchsia-500 animate-ping" />
-              <p className="text-sm font-bold text-fuchsia-500 tracking-[0.3em] uppercase">{status}</p>
+              <p className="text-lg font-black text-fuchsia-500 tracking-[0.3em] uppercase">{status}</p>
            </div>
-           <div className="flex gap-1 justify-center">
-              {[...Array(20)].map((_, i) => (
+           <div className="flex gap-2 justify-center">
+              {[...Array(12)].map((_, i) => (
                 <motion.div 
-                  key={i} 
-                  animate={{ opacity: [0.1, 1, 0.1] }} 
-                  transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.05 }}
-                  className="w-1 h-3 bg-cyan-500/30" 
+                  key={i} animate={{ scaleY: [1, 2, 1], opacity: [0.3, 1, 0.3] }} 
+                  transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.05 }}
+                  className="w-1.5 h-6 bg-cyan-500/40 rounded-full" 
                 />
               ))}
            </div>
         </div>
       </div>
-
-      {/* Overlay Scanline Glitch */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(34,211,238,0.05)_0%,transparent_70%)]" />
     </motion.div>
   );
 };
+
 
 const SmoothAnimatedText = ({ text }: { text: string }) => {
   const letters = Array.from(text);
@@ -409,6 +392,7 @@ const CyberContinuousDecryption = ({ text }: { text: string }) => {
 
   return <span className="font-mono tracking-tighter">{displayText}</span>;
 };
+
 
 export default function StudentPortal() {
   const router = useRouter();
@@ -1014,6 +998,120 @@ export default function StudentPortal() {
           <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:left-[100%] transition-all duration-1000" />
        </button>
     </motion.div>
+  </motion.div>
+)}
+
+{view === 'reports' && (
+       <motion.div 
+         key="reports-exhibition"
+         initial={{ opacity: 0, x: 50 }} 
+         animate={{ opacity: 1, x: 0 }}
+         exit={{ opacity: 0, x: -50 }}
+         className="max-w-[1400px] mx-auto space-y-12 pb-20 pt-6"
+       >
+        {/* Header Laporan */}
+    <div className="text-center space-y-4">
+       <div className="inline-flex items-center gap-4 px-6 py-2 rounded-xl bg-white/5 border border-white/10 text-fuchsia-400 text-[10px] font-black tracking-[0.6em] uppercase">
+          <TrendingUp size={16} /> Arsip Intelijen Operasional
+       </div>
+       <h2 className="text-5xl lg:text-7xl font-black text-white tracking-tighter uppercase drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+          PERFORMANCE <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500">ANALYTICS.</span>
+       </h2>
+    </div>
+
+    {/* Row Atas: Grafik Radar & Badge Skor Global */}
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+       {/* Widget Radar Chart */}
+       <div className="lg:col-span-8 bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/10 rounded-[3.5rem] p-10 flex flex-col md:flex-row items-center gap-10 shadow-2xl relative overflow-hidden group">
+          <div className="absolute inset-0 bg-hud-grid opacity-[0.03] pointer-events-none" />
+          <div className="flex-1 space-y-8 text-left">
+             <div className="flex items-center gap-4">
+                <RadarIcon size={20} className="text-cyan-400 animate-pulse" />
+                <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Keseimbangan Pertahanan</span>
+             </div>
+             <div className="grid grid-cols-2 gap-4">
+                <div className="p-6 rounded-3xl bg-white/5 border border-white/5">
+                   <p className="text-[8px] font-black text-slate-600 uppercase mb-2">Total Misi</p>
+                   <p className="text-4xl font-black text-white font-mono">{history.length}</p>
+                </div>
+                <div className="p-6 rounded-3xl bg-white/5 border border-white/5">
+                   <p className="text-[8px] font-black text-slate-600 uppercase mb-2">Skor Global</p>
+                   <p className="text-4xl font-black text-cyan-400 font-mono">{score}%</p>
+                </div>
+             </div>
+          </div>
+          
+          <div className="w-full md:w-[350px] h-[350px] relative">
+             <ResponsiveContainer width="100%" height="100%">
+                <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                   <PolarGrid stroke="rgba(255,255,255,0.05)" />
+                   <PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: '900' }} />
+                   <Radar name="Score" dataKey="A" stroke="#d946ef" fill="#d946ef" fillOpacity={0.5} />
+                   <Tooltip contentStyle={{ backgroundColor: '#000', borderRadius: '15px', border: '1px solid #333' }} />
+                </RadarChart>
+             </ResponsiveContainer>
+          </div>
+       </div>
+
+       {/* Widget Klasifikasi Keamanan */}
+       <div className="lg:col-span-4 bg-[#0a0c14]/80 backdrop-blur-3xl border border-white/10 rounded-[3.5rem] p-10 flex flex-col items-center justify-center text-center shadow-2xl relative group overflow-hidden">
+          <div className={`p-10 rounded-[3rem] mb-8 border-2 shadow-[0_0_50px_rgba(0,0,0,0.5)] transform group-hover:scale-110 transition-all duration-700`} 
+               style={{ borderColor: `${getReadinessData(score).color}40`, backgroundColor: `${getReadinessData(score).color}10` }}>
+             <ShieldAlert size={80} style={{ color: getReadinessData(score).color }} className="drop-shadow-[0_0_15px_currentColor]" />
+          </div>
+          <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Klasifikasi Operasional</span>
+          <h3 className={`text-5xl font-black uppercase tracking-tighter leading-none ${getReadinessData(score).text}`}>
+             {getReadinessData(score).label}
+          </h3>
+       </div>
+    </div>
+
+    {/* Tabel Riwayat Sesi: The Glass Table */}
+    <div className="bg-[#05060f]/60 backdrop-blur-3xl border border-white/10 rounded-[3.5rem] p-10 shadow-2xl overflow-hidden relative">
+       <div className="mb-8 flex items-center justify-between">
+          <p className="text-[11px] font-black text-white tracking-[0.4em] uppercase">Log Aktivitas Sektor</p>
+          <div className="flex gap-2">
+             {[...Array(3)].map((_,i) => <div key={i} className="w-1.5 h-1.5 rounded-full bg-cyan-500/20" />)}
+          </div>
+       </div>
+
+       <div className="overflow-x-auto">
+          <table className="w-full text-left">
+             <thead>
+                <tr className="border-b border-white/10 text-[9px] font-black text-slate-500 tracking-[0.5em] uppercase">
+                   <th className="pb-6 px-4">Sesi</th>
+                   <th className="pb-6 px-4">Sektor Operasi</th>
+                   <th className="pb-6 px-4">Akurasi data</th>
+                   <th className="pb-6 px-4 text-center">Analisis</th>
+                </tr>
+             </thead>
+             <tbody className="text-white">
+                {history.map((h, i) => (
+                  <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02] transition-all group">
+                     <td className="py-8 px-4 font-mono text-cyan-500/60 font-black">#0{history.length - i}</td>
+                     <td className="py-8 px-4 font-black uppercase tracking-widest text-[12px]">{h.domain_id}</td>
+                     <td className="py-8 px-4">
+                        <div className="flex items-center gap-5">
+                           <span className="text-2xl font-black font-mono">{h.score}%</span>
+                           <div className="w-32 h-1.5 bg-black rounded-full overflow-hidden border border-white/5">
+                              <motion.div 
+                                 initial={{ width: 0 }} animate={{ width: `${h.score}%` }}
+                                 className={`h-full ${getReadinessData(h.score).bg} shadow-[0_0_10px_currentColor]`} 
+                              />
+                           </div>
+                        </div>
+                     </td>
+                     <td className="py-8 px-4 text-center">
+                        <button onClick={() => setDetailModal(h.details || [])} className="px-6 py-2.5 bg-white/5 border border-white/10 hover:border-cyan-500/50 rounded-xl text-[9px] font-black tracking-widest uppercase transition-all shadow-xl">
+                           Analisis Detail
+                        </button>
+                     </td>
+                  </tr>
+                ))}
+             </tbody>
+          </table>
+       </div>
+    </div>
   </motion.div>
 )}
 
