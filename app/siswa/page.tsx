@@ -552,7 +552,7 @@ const CRTOverlay = () => (
     const currentStepQs = useMemo(() => {
       if (!allQs || allQs.length === 0) return [];
       
-      // Normalisasi: hilangkan spasi dan buat huruf kecil semua
+      // Normalisasi teks agar pencarian cocok meskipun ada perbedaan spasi/huruf besar
       const targetDomain = selectedDomain.toLowerCase().trim().replace(/\s/g, '');
       const targetStep = `step${currentStep}`.toLowerCase().trim();
     
@@ -1398,148 +1398,110 @@ const CRTOverlay = () => (
 
 {/* --- VIEW MISSION: MODUL PENGERJAAN SOAL (FIXED STRUCTURE) --- */}
 <AnimatePresence mode="wait">
-  {view === 'mission' && (
+  {/* --- VIEW MISSION: MODUL SOAL & NAVIGASI (UTUH) --- */}
+{view === 'mission' && (
+  <motion.div 
+    key="mission-root"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    className="relative w-full"
+  >
+    {/* A. DAFTAR SOAL STUDI KASUS */}
     <motion.div 
-      key="mission-root-container"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="relative w-full"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="max-w-3xl mx-auto space-y-12 pb-48 pt-4"
     >
-      {/* 1. KONTEN SOAL UTAMA */}
-      <motion.div 
-        key="mission-portal" 
-        initial={{ opacity: 0, x: 40 }} 
-        animate={{ opacity: 1, x: 0 }} 
-        exit={{ opacity: 0, x: -40 }}
-        className="max-w-3xl mx-auto space-y-12 pb-48 pt-4"
-      >
-        {/* Header Status Phase */}
-        <div className="flex items-center justify-between border-l-4 border-cyan-500 pl-8 py-4 bg-white/[0.03] rounded-r-[2rem] shadow-2xl relative overflow-hidden">
-           <div className="absolute inset-0 bg-hud-grid opacity-10" />
-           <div className="relative z-10 space-y-1 text-left">
-              <h2 className="text-4xl font-black text-white uppercase tracking-tighter leading-none">PHASE 0{currentStep}</h2>
-              <p className="text-[10px] font-black text-cyan-400 tracking-[0.5em] uppercase opacity-70">
-                Target Sector: {selectedDomain}
-              </p>
-           </div>
-           <div className="relative z-10 hidden sm:flex items-center gap-4 pr-6">
-              <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-                 <Activity size={20} className="text-cyan-400 animate-pulse" />
-              </div>
-           </div>
-        </div>
+      <div className="flex items-center justify-between border-l-4 border-cyan-500 pl-8 py-4 bg-white/[0.03] rounded-r-[2rem] shadow-2xl relative overflow-hidden">
+         <div className="absolute inset-0 bg-hud-grid opacity-10" />
+         <div className="relative z-10 space-y-1 text-left">
+            <h2 className="text-4xl font-black text-white uppercase tracking-tighter leading-none">PHASE 0{currentStep}</h2>
+            <p className="text-[10px] font-black text-cyan-400 tracking-[0.5em] uppercase opacity-70">Sector: {selectedDomain}</p>
+         </div>
+      </div>
 
-        {/* Container List Soal */}
-        <div className="space-y-10">
-          {currentStepQs.length > 0 ? (
-            currentStepQs.map((q, idx) => (
-              <motion.div 
-                key={q.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                className="p-10 rounded-[3.5rem] bg-[#05060b]/80 backdrop-blur-3xl border border-white/5 shadow-2xl relative group overflow-hidden"
-              >
-                <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500/10 group-hover:bg-cyan-500 transition-all duration-500" />
-                <div className="relative z-10 text-left">
-                  <span className="text-[9px] font-black text-cyan-500/40 uppercase tracking-[0.4em] block mb-6">Question Node Alpha-{idx + 1}</span>
-                  <p className="text-xl lg:text-2xl font-bold text-white leading-relaxed mb-10 tracking-tight text-left">
-                    {q.question}
-                  </p>
-                  
-                  {/* Opsi Jawaban */}
-                  <div className="grid grid-cols-1 gap-4">
-                    {q.options && q.options.map((opt: any, i: number) => (
-                      <button
-                        key={i}
-                        onClick={() => setAns({ ...ans, [q.id]: { score: opt.score, text: opt.text } })}
-                        className={`relative p-6 rounded-[2.2rem] border text-left text-[13px] font-bold transition-all duration-500 flex items-center justify-between group/opt ${
-                          ans[q.id]?.text === opt.text 
-                            ? 'bg-cyan-600 border-cyan-400 text-white shadow-[0_0_30px_rgba(34,211,238,0.3)] scale-[1.01]' 
-                            : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10 hover:border-white/20'
-                        }`}
-                      >
-                        <span className="relative z-10 pr-10">{opt.text}</span>
-                        {ans[q.id]?.text === opt.text && (
-                          <div className="relative z-10 w-6 h-6 rounded-full bg-white flex items-center justify-center text-cyan-600">
-                            <Check size={14} />
-                          </div>
-                        )}
-                      </button>
-                    ))}
-                  </div>
+      <div className="space-y-10">
+        {currentStepQs.length > 0 ? (
+          currentStepQs.map((q, idx) => (
+            <motion.div 
+              key={q.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              className="p-10 rounded-[3.5rem] bg-[#05060b]/80 backdrop-blur-3xl border border-white/5 shadow-2xl relative group overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500/10 group-hover:bg-cyan-500 transition-all duration-500" />
+              <div className="relative z-10 text-left">
+                <span className="text-[9px] font-black text-cyan-500/40 uppercase tracking-[0.4em] block mb-6">Question Node Alpha-{idx + 1}</span>
+                <p className="text-xl lg:text-2xl font-bold text-white leading-relaxed mb-10 tracking-tight">
+                  {q.question}
+                </p>
+                <div className="grid grid-cols-1 gap-4">
+                  {q.options && q.options.map((opt: any, i: number) => (
+                    <button
+                      key={i}
+                      onClick={() => setAns({ ...ans, [q.id]: { score: opt.score, text: opt.text } })}
+                      className={`relative p-6 rounded-[2.2rem] border text-left text-[13px] font-bold transition-all duration-500 flex items-center justify-between group/opt ${
+                        ans[q.id]?.text === opt.text 
+                          ? 'bg-cyan-600 border-cyan-400 text-white shadow-[0_0_30px_rgba(34,211,238,0.3)]' 
+                          : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'
+                      }`}
+                    >
+                      <span className="relative z-10 pr-10">{opt.text}</span>
+                      {ans[q.id]?.text === opt.text && <Check size={16} className="relative z-10" />}
+                    </button>
+                  ))}
                 </div>
-              </motion.div>
-            ))
-          ) : (
-            <div className="py-24 text-center border-2 border-dashed border-white/5 rounded-[3.5rem] opacity-30">
-               <p className="text-slate-500 font-mono text-[11px] uppercase tracking-[0.5em] animate-pulse">Syncing Neural Data... Sector Is Empty.</p>
-            </div>
-          )}
-        </div>
-      </motion.div>
-
-      {/* 2. TACTICAL BOTTOM DOCK (NAVIGASI) */}
-      <div className="fixed bottom-0 left-0 lg:left-[260px] right-0 z-[5000] p-6 lg:p-10 pointer-events-none">
-         <motion.div 
-           initial={{ y: 100, opacity: 0 }}
-           animate={{ y: 0, opacity: 1 }}
-           className="max-w-4xl mx-auto bg-[#050508]/95 backdrop-blur-3xl border border-white/10 p-6 rounded-[2.8rem] shadow-[0_-30px_100px_rgba(0,0,0,0.9)] flex items-center justify-between gap-8 pointer-events-auto relative overflow-hidden"
-         >
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent animate-pulse" />
-
-            <div className="hidden md:flex items-center gap-8 pl-6 border-r border-white/10 pr-12">
-               <div className="flex flex-col gap-2 text-left">
-                  <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.5em] leading-none">Mission Progress</span>
-                  <div className="flex items-center gap-4">
-                     <span className="text-2xl font-black text-white font-mono leading-none">0{currentStep}</span>
-                     <div className="w-32 h-2 bg-white/5 rounded-full overflow-hidden border border-white/5">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          animate={{ width: `${(currentStep / maxStep) * 100}%` }}
-                          className="h-full bg-cyan-500 shadow-[0_0_15px_#22d3ee]" 
-                        />
-                     </div>
-                     <span className="text-[10px] font-black text-slate-700 font-mono leading-none">0{maxStep}</span>
-                  </div>
-               </div>
-            </div>
-
-            <div className="flex items-center gap-5 flex-1 justify-end">
-               {currentStep > 1 && (
-                 <button 
-                   onClick={() => { setCurrentStep(p => p - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                   className="px-10 py-5 bg-white/5 border border-white/10 text-slate-500 rounded-2xl font-black text-[10px] tracking-widest uppercase hover:text-white transition-all flex items-center gap-3 active:scale-95"
-                 >
-                    <ChevronLeft size={16} /> BACK
-                 </button>
-               )}
-
-               {currentStep < maxStep ? (
-                 <button 
-                   disabled={!isStepComplete} 
-                   onClick={() => { setCurrentStep(p => p + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
-                   className={`group/next relative overflow-hidden px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-cyan-600 text-white shadow-xl' : 'bg-white/5 text-slate-800 opacity-20 cursor-not-allowed'}`}
-                 >
-                    <span>NEXT PHASE</span>
-                    <ChevronRight size={18} />
-                 </button>
-               ) : (
-                 <button 
-                   disabled={!isStepComplete || loading} 
-                   onClick={executeUplink} 
-                   className={`group/submit relative overflow-hidden px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-gradient-to-r from-cyan-600 to-blue-700 text-white shadow-xl' : 'bg-white/5 text-slate-800 opacity-20'}`}
-                 >
-                    <span>{loading ? "SYNCING..." : "FINAL UPLINK"}</span>
-                    <Zap size={20} className={loading ? 'animate-spin' : ''} />
-                 </button>
-               )}
-            </div>
-         </motion.div>
+              </div>
+            </motion.div>
+          ))
+        ) : (
+          <div className="py-24 text-center border-2 border-dashed border-white/5 rounded-[3.5rem] opacity-30 font-mono text-[11px] tracking-widest uppercase">
+             Syncing Neural Data... No Questions Found.
+          </div>
+        )}
       </div>
     </motion.div>
-  )}
+
+    {/* B. TACTICAL BOTTOM DOCK (NAVIGASI - TERKUNCI HANYA DI MISSION) */}
+    <div className="fixed bottom-0 left-0 lg:left-[260px] right-0 z-[5000] p-6 lg:p-10 pointer-events-none">
+       <motion.div 
+         initial={{ y: 100, opacity: 0 }}
+         animate={{ y: 0, opacity: 1 }}
+         className="max-w-4xl mx-auto bg-[#050508]/95 backdrop-blur-3xl border border-white/10 p-6 rounded-[2.8rem] shadow-[0_-30px_100px_rgba(0,0,0,0.9)] flex items-center justify-between gap-8 pointer-events-auto relative overflow-hidden"
+       >
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent animate-pulse" />
+          
+          <div className="hidden md:flex items-center gap-8 pl-6 border-r border-white/10 pr-12">
+             <div className="flex flex-col gap-2 text-left">
+                <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.5em] leading-none">Mission Progress</span>
+                <div className="flex items-center gap-4">
+                   <span className="text-2xl font-black text-white font-mono leading-none">0{currentStep}</span>
+                   <div className="w-32 h-2 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                      <motion.div animate={{ width: `${(currentStep / maxStep) * 100}%` }} className="h-full bg-cyan-500 shadow-[0_0_15px_#22d3ee]" />
+                   </div>
+                   <span className="text-[10px] font-black text-slate-700 font-mono leading-none">0{maxStep}</span>
+                </div>
+             </div>
+          </div>
+
+          <div className="flex items-center gap-5 flex-1 justify-end">
+             {currentStep > 1 && (
+               <button onClick={() => { setCurrentStep(p => p - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-10 py-5 bg-white/5 border border-white/10 text-slate-500 rounded-2xl font-black text-[10px] tracking-widest uppercase hover:text-white transition-all">BACK</button>
+             )}
+             <button 
+               disabled={!isStepComplete} 
+               onClick={() => currentStep < maxStep ? setCurrentStep(p => p + 1) : executeUplink()} 
+               className={`px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-cyan-600 text-white shadow-xl' : 'bg-white/5 text-slate-800 opacity-20'}`}
+             >
+                {currentStep < maxStep ? 'NEXT PHASE' : 'FINAL UPLINK'} <ChevronRight size={18} />
+             </button>
+          </div>
+       </motion.div>
+    </div>
+  </motion.div>
+)}
 </AnimatePresence>
 
 {/* --- VIEW BRIEFING: TACTICAL NEXUS SEQUENCE (ELITE EXHIBITION) --- */}
