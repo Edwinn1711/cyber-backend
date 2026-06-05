@@ -1081,25 +1081,44 @@ const CRTOverlay = () => (
 </div>
 
     {/* --- 3. FINAL MISSION GATEWAY (THE FINISHER) --- */}
-    <motion.div 
-      variants={nexusItem} 
-      className="p-10 rounded-[2.5rem] bg-[#020308]/90 backdrop-blur-3xl border border-cyan-500/20 shadow-[0_30px_80px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-10">
-       <div className="absolute inset-0 bg-hud-grid opacity-[0.05] pointer-events-none" />
-       <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500/20 animate-scanner pointer-events-none" />
-       <div className="flex flex-col lg:flex-row items-center gap-8 z-10 text-center lg:text-left">
-          <div className="w-16 h-16 bg-black/80 rounded-2xl flex items-center justify-center border border-white/10 shadow-2xl group-hover:rotate-6 transition-all duration-500">
-             <BellRing size={28} className="text-cyan-400 animate-pulse" />
-          </div>
-          <div className="space-y-2">
-             <div className="flex items-center justify-center lg:justify-start gap-4"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-ping" /><span className="text-[9px] font-black tracking-[0.4em] text-emerald-400 uppercase">Operational Status Online</span></div>
-             <h2 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter text-white">SELAMAT DATANG, <br/><span className="text-cyan-400">{user.username}</span></h2>
-             <p className="text-[10px] font-bold text-slate-500 tracking-[0.3em] uppercase opacity-70 leading-relaxed max-w-xl">Validasi integritas pertahanan digital melalui protokol keamanan resmi.</p>
-          </div>
-       </div>
-       <button onClick={handleStartMissionClick} className="px-12 py-5 bg-white text-black rounded-2xl font-black text-[11px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all uppercase flex items-center gap-5 shadow-xl">
-              INITIALIZE <Zap size={18} />
-            </button>
-    </motion.div>
+    {/* --- 3. FINAL MISSION GATEWAY (CLEAN VERSION) --- */}
+<motion.div 
+  variants={nexusItem} 
+  className="p-8 lg:p-12 rounded-[2.5rem] bg-gradient-to-br from-[#05060b] to-[#0a0c14] backdrop-blur-3xl border border-fuchsia-500/20 shadow-[0_30px_80px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-10"
+>
+  {/* Background Decor */}
+  <div className="absolute inset-0 bg-hud-grid opacity-[0.05] pointer-events-none" />
+  <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-fuchsia-500/50 to-transparent animate-pulse" />
+
+  <div className="flex flex-col lg:flex-row items-center gap-8 z-10 text-center lg:text-left">
+    <div className="w-16 h-16 bg-fuchsia-500/10 rounded-2xl flex items-center justify-center border border-fuchsia-500/30 shadow-[0_0_20px_rgba(217,70,239,0.2)] group-hover:scale-110 transition-transform duration-500">
+      <Target size={32} className="text-fuchsia-400 animate-pulse" />
+    </div>
+    <div className="space-y-2">
+      <div className="flex items-center justify-center lg:justify-start gap-3">
+        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-ping" />
+        <span className="text-[9px] font-black tracking-[0.4em] text-emerald-400 uppercase">System Status: Ready</span>
+      </div>
+      {/* Teks diganti agar tidak double dengan banner atas */}
+      <h2 className="text-3xl lg:text-5xl font-black uppercase tracking-tighter text-white leading-none">
+        SIAP UNTUK <span className="text-fuchsia-500">DEPLOIMEN?</span>
+      </h2>
+      <p className="text-[10px] font-bold text-slate-500 tracking-[0.2em] uppercase opacity-70 leading-relaxed max-w-md">
+        Mulai sesi penilaian untuk memverifikasi integritas keamanan cyber anda sekarang.
+      </p>
+    </div>
+  </div>
+
+  <button 
+    onClick={handleStartMissionClick} 
+    className="relative group/btn px-12 py-5 bg-white text-black rounded-2xl font-black text-[11px] tracking-[0.6em] hover:bg-fuchsia-600 hover:text-white transition-all duration-500 uppercase flex items-center gap-5 shadow-2xl active:scale-95 overflow-hidden"
+  >
+    <span className="relative z-10">INITIALIZE</span>
+    <Zap size={18} className="relative z-10 group-hover/btn:rotate-12 transition-transform" />
+    {/* Efek kilatan saat hover */}
+    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
+  </button>
+</motion.div>
   </motion.div>
 )}
 
