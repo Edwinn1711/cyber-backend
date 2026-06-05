@@ -1137,11 +1137,13 @@ const [gender, setGender] = useState('MALE'); // Jenis Kelamin
       const data = await res.json();
       
       if (res.ok) {
-        localStorage.setItem('user', JSON.stringify(data));
+        // Simpan hasil respon dari server (yang berisi data lengkap) ke localStorage
+        localStorage.setItem('user', JSON.stringify(data)); 
+        
         setStatus('success');
         const role = data.role || 'siswa';
         setTimeout(() => router.push(role === 'guru' || role === 'admin' ? '/guru' : '/siswa'), 1500);
-      } else {
+      }else {
         setErrorMessage(data.detail || "Otentikasi gagal.");
         setStatus('error');
         setTimeout(() => setStatus('idle'), 3000);

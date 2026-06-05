@@ -552,7 +552,15 @@ const CRTOverlay = () => (
     const [ans, setAns] = useState<Record<number, {score: number, text: string}>>({});
     const [score, setScore] = useState(0);
     const [history, setHistory] = useState<any[]>([]);
-    const [user, setUser] = useState({ username: 'STUDENT', class_name: '', tanggal_lahir: '' });
+    // Cari baris ini dan ganti menjadi:
+    const [user, setUser] = useState<any>({ 
+      username: 'STUDENT', 
+      class_name: '', 
+      tanggal_lahir: '',
+      full_name: '',           // Tambahkan ini agar tidak merah
+      place_of_birth: '',      // Tambahkan ini agar tidak merah
+      gender: ''               // Tambahkan ini agar tidak merah
+    });
     const [loading, setLoading] = useState(false);
     const [bgIdx, setBgIdx] = useState(0);
     const [isAuthorized, setIsAuthorized] = useState(false);
@@ -1805,22 +1813,23 @@ const CRTOverlay = () => (
           <h2 className="text-xl font-black text-white tracking-[0.3em] uppercase mb-1">Personnel Dossier</h2>
           <p className="text-[9px] font-black text-fuchsia-500 tracking-[0.5em] uppercase mb-10">Classification: Level 01</p>
 
-          {/* Data List */}
           <div className="w-full space-y-3">
-            {[
-              { label: "Operative ID", val: user.username },
-              { label: "Assigned Sector", val: user.class_name || "UNASSIGNED" },
-              { label: "Chronology Data", val: user.tanggal_lahir || "NOT SET" },
-              { label: "System Status", val: "AUTHORIZED", color: "text-emerald-400" }
-            ].map((item, idx) => (
-              <div key={idx} className="group p-4 bg-white/5 border border-white/5 rounded-2xl flex justify-between items-center hover:border-fuchsia-500/20 transition-all">
-                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">{item.label}</span>
-                <span className={`text-[11px] font-black tracking-widest uppercase ${item.color || 'text-white'}`}>
-                  {item.val}
-                </span>
-              </div>
-            ))}
-          </div>
+  {[
+    { label: "Operative ID", val: user.username },
+    { label: "Full Name", val: user.full_name || "NOT REGISTERED" }, // Cek variabel full_name
+    { label: "Place of Birth", val: user.place_of_birth || "NOT SET" }, 
+    { label: "Chronology Data", val: user.tanggal_lahir || "NOT SET" },
+    { label: "Gender", val: user.gender || "NOT SET", color: user.gender === 'FEMALE' ? 'text-fuchsia-400' : 'text-cyan-400' },
+    { label: "System Status", val: "AUTHORIZED", color: "text-emerald-400" }
+  ].map((item, idx) => (
+    <div key={idx} className="group p-4 bg-white/5 border border-white/5 rounded-2xl flex justify-between items-center hover:border-fuchsia-500/20 transition-all">
+      <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">{item.label}</span>
+      <span className={`text-[11px] font-black tracking-widest uppercase ${item.color || 'text-white'}`}>
+        {item.val}
+      </span>
+    </div>
+  ))}
+</div>
 
           <button 
             onClick={() => setShowProfileModal(false)}
