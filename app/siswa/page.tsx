@@ -621,22 +621,53 @@ const CRTOverlay = () => (
   
     const executeUplink = async () => {
       setLoading(true);
+      
+      // 1. Hitung Score
       const totalQuestions = Object.keys(ans).length;
+      if (totalQuestions === 0) {
+        alert("Data jawaban kosong.");
+        setLoading(false);
+        return;
+      }
+    
       const totalScore = Object.values(ans).reduce((acc, curr) => acc + curr.score, 0);
       const finalCalculatedScore = Math.round((totalScore / (totalQuestions * 10)) * 100);
+      
       setScore(finalCalculatedScore);
       setIsCalculating(true); 
+    
       try {
-        await fetch('https://cyber-backend-delta.vercel.app/siswa/submit', {
+        // 2. Kirim Data ke Backend
+        const response = await fetch('https://cyber-backend-delta.vercel.app/siswa/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            username: user.username, class_name: user.class_name, domain_id: selectedDomain, score: finalCalculatedScore,
-            answers: Object.keys(ans).map(id => ({ id: parseInt(id), value: ans[parseInt(id) as any].score.toString(), text: ans[parseInt(id) as any].text }))
+            username: user.username, 
+            class_name: user.class_name, 
+            domain_id: selectedDomain, // Pastikan ini terisi (SOCIAL ENGINEERING, dll)
+            score: finalCalculatedScore,
+            answers: Object.keys(ans).map(id => ({ 
+              id: parseInt(id), 
+              value: ans[parseInt(id) as any].score.toString(), 
+              text: ans[parseInt(id) as any].text 
+            }))
           })
         });
-      } catch (e) { console.error("Uplink Failed", e); }
-      finally { setLoading(false); }
+    
+        if (response.ok) {
+          console.log("Uplink Berhasil!");
+          // 3. KRUSIAL: Tarik data terbaru segera setelah submit berhasil
+          await fetchScores(user.username); 
+        } else {
+          console.error("Server menolak data uplink.");
+        }
+      } catch (e) { 
+        console.error("Uplink Failed (Network/Server Error)", e); 
+      } finally { 
+        setLoading(false); 
+        // Reset jawaban agar pengerjaan berikutnya bersih
+        setAns({}); 
+      }
     };
   
     const submitAppFeedback = async () => {
