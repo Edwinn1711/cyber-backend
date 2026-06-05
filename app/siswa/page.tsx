@@ -1343,10 +1343,22 @@ const CRTOverlay = () => (
                 </span>
                 
                 {/* --- SMART RENDERER: MENCARI TEKS SOAL DI DATABASE --- */}
-                <p className="text-xl lg:text-3xl font-black text-white leading-tight mb-10 tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-                   {/* Mencoba membaca kolom question, studi_kasus, atau deskripsi */}
-                   {q.question || q.studi_kasus || q.studi_kasus_teks || q.description || q.deskripsi || "STUDI KASUS TIDAK DITEMUKAN"}
-                </p>
+                {/* --- PERBAIKAN MASTER: PENCARIAN TEKS SOAL OTOMATIS --- */}
+                  <p className="text-xl lg:text-3xl font-black text-white leading-tight mb-10 tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                    {
+                      // 1. Coba cari di nama kolom standar
+                      q.question || 
+                      q.studi_kasus || 
+                      q.soal || 
+                      q.question_text || 
+                      q.content || 
+                      q.description ||
+                      // 2. LOGIKA PINTAR: Jika semua di atas gagal, cari kolom mana pun yang isinya teks panjang (>20 karakter)
+                      Object.values(q).find(val => typeof val === 'string' && val.length > 20 && !val.includes('{')) || 
+                      // 3. Jika benar-benar kosong
+                      "DATA TEKS SOAL TIDAK DITEMUKAN DI DATABASE"
+                    }
+                  </p>
 
                 <div className="grid grid-cols-1 gap-4">
                   {q.options && q.options.map((opt: any, i: number) => (
