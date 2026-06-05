@@ -112,7 +112,7 @@ const containerVariants = { hidden: { opacity: 0 }, show: { opacity: 1, transiti
 const itemVariants = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } } } as any;
 const portalTransition = { initial: { opacity: 0, scale: 0.98, y: 15 }, animate: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, type: "spring" } }, exit: { opacity: 0, scale: 1.02 } } as any;
 
-const CyberBootSequence = ({ onComplete }: { onComplete: () => void }) => {
+const CyberBootSequence = ({ onComplete, username }: { onComplete: () => void, username: string }) => {
   const [logs, setLogs] = useState<string[]>([]);
   
   const bootTasks = [
@@ -211,7 +211,7 @@ const CyberBootSequence = ({ onComplete }: { onComplete: () => void }) => {
            {/* --- FOOTER: SEKARANG BERSIH TOTAL TANPA SIMBOL --- */}
             <div className="mt-8 flex justify-center gap-10 opacity-30">
               <span className="text-[6px] font-mono text-slate-500 tracking-[0.5em] uppercase">BIOMETRIC VERIFIED</span>
-              <span className="text-[6px] font-mono text-slate-500 tracking-[0.5em] uppercase">NODE {user.username.toUpperCase()} TERMINAL 01</span>
+              <span className="text-[6px] font-mono text-slate-500 tracking-[0.5em] uppercase">NODE {(username || "OPERATIVE").toUpperCase()} TERMINAL 01</span>
             </div>
         </div>
       </div>
@@ -735,7 +735,11 @@ const CRTOverlay = () => (
     if (!bootDone) {
       return (
         <AnimatePresence>
-          <CyberBootSequence onComplete={() => setBootDone(true)} />
+          {/* Kirim data user.username ke sini */}
+          <CyberBootSequence 
+            onComplete={() => setBootDone(true)} 
+            username={user.username} 
+          />
         </AnimatePresence>
       );
     }
