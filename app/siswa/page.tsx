@@ -700,19 +700,44 @@ const CRTOverlay = () => (
 
 
         <nav className="flex-1 px-4 py-10 space-y-3">
-          {[{ id: 'dashboard', label: 'DASHBOARD', icon: LayoutGrid }, { id: 'assessment', label: 'ASSESSMENT', icon: Target }, { id: 'reports', label: 'REPORT', icon: FileText }, { id: 'feedback', label: 'FEEDBACK', icon: Lightbulb }].map((item) => {
-            const isActive = view === item.id;
-            return (
-              <button key={item.id} onClick={() => setView(item.id)} className="w-full flex items-center p-4 rounded-2xl transition-all relative group outline-none">
-                {isActive && <motion.div layoutId="sidebar-active" className="absolute inset-0 rounded-2xl z-0 bg-cyan-600/20 border-l-4 border-cyan-500" />}
-                <div className="relative z-10 flex items-center gap-4">
-                  <item.icon size={20} className={isActive ? 'text-cyan-400' : 'text-slate-500'} />
-                  {!isSidebarCollapsed && <span className={`font-black text-[10px] tracking-widest uppercase ${isActive ? 'text-white' : 'text-slate-500'}`}>{item.label}</span>}
-                </div>
-              </button>
-            );
-          })}
-      </nav>
+  {[
+    { id: 'dashboard', label: 'DASHBOARD', icon: LayoutGrid }, 
+    { id: 'assessment', label: 'ASSESSMENT', icon: Target }, 
+    { id: 'reports', label: 'REPORT', icon: FileText }, 
+    { id: 'feedback', label: 'FEEDBACK', icon: Lightbulb }
+  ].map((item) => {
+    const isActive = view === item.id;
+    return (
+      <button 
+        key={item.id} 
+        onClick={() => setView(item.id)} 
+        className="w-full flex items-center p-4 rounded-2xl transition-all relative group outline-none"
+      >
+        {/* --- BACKGROUND GLOW: GANTI CYAN KE FUCHSIA --- */}
+        {isActive && (
+          <motion.div 
+            layoutId="sidebar-active" 
+            className="absolute inset-0 rounded-2xl z-0 bg-fuchsia-600/20 border-l-4 border-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.1)]" 
+          />
+        )}
+        
+        <div className="relative z-10 flex items-center gap-4">
+          {/* --- ICON: GANTI TEXT-CYAN KE TEXT-FUCHSIA --- */}
+          <item.icon 
+            size={20} 
+            className={isActive ? 'text-fuchsia-400 drop-shadow-[0_0_8px_#d946ef]' : 'text-slate-500'} 
+          />
+          
+          {!isSidebarCollapsed && (
+            <span className={`font-black text-[10px] tracking-widest uppercase ${isActive ? 'text-white' : 'text-slate-500'}`}>
+              {item.label}
+            </span>
+          )}
+        </div>
+      </button>
+    );
+  })}
+</nav>
 
       <div className={`p-6 border-t ${theme === 'dark' ? 'border-white/10' : 'border-slate-100'}`}>
           <button onClick={() => { localStorage.removeItem('user'); router.push('/'); }} className="w-full flex items-center p-4 text-red-500 hover:bg-red-500/10 rounded-2xl gap-4 font-black text-[10px] tracking-widest uppercase">
