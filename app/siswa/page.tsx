@@ -112,16 +112,17 @@ const containerVariants = { hidden: { opacity: 0 }, show: { opacity: 1, transiti
 const itemVariants = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } } } as any;
 const portalTransition = { initial: { opacity: 0, scale: 0.98, y: 15 }, animate: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, type: "spring" } }, exit: { opacity: 0, scale: 1.02 } } as any;
 
-const CyberBootSequence = ({ onComplete }: { onScroll?: any, onComplete: () => void }) => {
+const CyberBootSequence = ({ onComplete }: { onComplete: () => void }) => {
   const [logs, setLogs] = useState<string[]>([]);
+  // Menghapus garis bawah (underscore) agar teks terlihat bersih dan elegan
   const bootTasks = [
-    "INITIALIZING_CORE_SYSTEM...",
-    "LOADING_ENCRYPTION_LAYER_AES256...",
-    "ESTABLISHING_NEURAL_UPLINK...",
-    "SCANNING_LOCAL_NETWORK_INFRASTRUCTURE...",
-    "AUTHORIZING_PERSONNEL_ACCESS...",
-    "ACCESS_GRANTED_BY_COMMAND_CENTRE",
-    "SYSTEM_READY_OPERATIVE_DEVIN"
+    "INITIALIZING CORE SYSTEM",
+    "LOADING ENCRYPTION LAYER AES256",
+    "ESTABLISHING NEURAL UPLINK",
+    "SCANNING LOCAL NETWORK INFRASTRUCTURE",
+    "AUTHORIZING PERSONNEL ACCESS",
+    "ACCESS GRANTED BY COMMAND CENTRE",
+    "SYSTEM READY OPERATIVE DEVIN"
   ];
 
   useEffect(() => {
@@ -132,42 +133,91 @@ const CyberBootSequence = ({ onComplete }: { onScroll?: any, onComplete: () => v
         currentTask++;
       } else {
         clearInterval(interval);
-        setTimeout(onComplete, 1000);
+        setTimeout(onComplete, 1200); // Memberi waktu jeda sedikit sebelum masuk ke dashboard
       }
-    }, 400);
+    }, 350); // Kecepatan log sedikit lebih dinamis
     return () => clearInterval(interval);
   }, []);
 
   return (
     <motion.div 
-      exit={{ opacity: 0, scale: 1.1 }}
-      className="fixed inset-0 z-[20000] bg-black flex flex-col items-center justify-center p-6 font-mono"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)" }}
+      className="fixed inset-0 z-[100000] bg-[#020105] flex flex-col items-center justify-center p-6 overflow-hidden"
     >
-      <div className="w-full max-w-md space-y-4">
-        <div className="flex items-center gap-4 mb-8">
-          <ShieldCheck size={40} className="text-cyan-400 animate-pulse" />
-          <div className="h-px flex-1 bg-cyan-500/20" />
+      {/* 1. EFEK LATAR BELAKANG HUD (Aura Ungu) */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-fuchsia-600/10 rounded-full blur-[150px]" />
+         <div className="absolute inset-0 bg-hud-grid opacity-20" />
+      </div>
+
+      <div className="relative z-10 w-full max-w-lg space-y-10">
+        
+        {/* 2. ICON UTAMA DENGAN PULSE GLOW */}
+        <div className="flex flex-col items-center gap-6 mb-12">
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.1, 1],
+              rotate: [0, 5, -5, 0],
+              filter: ["drop-shadow(0 0 10px #d946ef)", "drop-shadow(0 0 30px #d946ef)", "drop-shadow(0 0 10px #d946ef)"]
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-24 h-24 bg-fuchsia-600/10 rounded-3xl border-2 border-fuchsia-500 flex items-center justify-center shadow-[inset_0_0_20px_rgba(217,70,239,0.3)]"
+          >
+            <ShieldCheck size={48} className="text-fuchsia-400" />
+          </motion.div>
+          
+          <div className="text-center space-y-1">
+             <h2 className="text-[10px] font-black text-fuchsia-500 tracking-[0.8em] uppercase">Security Protocol</h2>
+             <h1 className="text-white text-2xl font-black tracking-tighter uppercase">NEXUS INITIALIZATION</h1>
+          </div>
         </div>
-        <div className="space-y-2">
+
+        {/* 3. LOGS ANIMATION (Tanpa Underline) */}
+        <div className="space-y-3 font-mono min-h-[160px]">
           {logs.map((log, i) => (
-            <motion.p 
+            <motion.div 
               key={i} 
-              initial={{ opacity: 0, x: -10 }} 
-              animate={{ opacity: 1, x: 0 }} 
-              className={`text-xs tracking-[0.2em] ${i === logs.length - 1 ? 'text-cyan-400' : 'text-slate-600'}`}
+              initial={{ opacity: 0, x: -20, filter: "blur(5px)" }} 
+              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} 
+              className={`text-[10px] lg:text-[11px] font-bold tracking-[0.3em] flex items-center gap-3 ${
+                i === logs.length - 1 ? 'text-fuchsia-400' : 'text-slate-600'
+              }`}
             >
+              <div className={`w-1 h-1 rounded-full ${i === logs.length - 1 ? 'bg-fuchsia-400 animate-ping' : 'bg-slate-800'}`} />
               {log}
-            </motion.p>
+            </motion.div>
           ))}
         </div>
-        <div className="pt-10">
-           <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+
+        {/* 4. PROGRESS BAR ULTRA GLOW */}
+        <div className="relative pt-10">
+           <div className="flex justify-between items-center mb-3">
+              <span className="text-[8px] font-black text-fuchsia-500 tracking-widest uppercase">System Integrity</span>
+              <span className="text-[8px] font-black text-white tracking-widest">LOADING...</span>
+           </div>
+           
+           <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/10 p-0.5">
               <motion.div 
                 initial={{ width: "0%" }} 
                 animate={{ width: "100%" }} 
-                transition={{ duration: 3 }}
-                className="h-full bg-cyan-500 shadow-[0_0_15px_#22d3ee]" 
-              />
+                transition={{ duration: 3, ease: "easeInOut" }}
+                className="h-full bg-fuchsia-500 rounded-full relative shadow-[0_0_20px_#d946ef]" 
+              >
+                {/* Efek Kilatan (Shine) yang lari di bar */}
+                <motion.div 
+                  animate={{ left: ["-100%", "200%"] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                  className="absolute top-0 bottom-0 w-20 bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-[-20deg]"
+                />
+              </motion.div>
+           </div>
+
+           {/* Metadata Footer */}
+           <div className="mt-8 flex justify-center gap-10 opacity-30">
+              <span className="text-[6px] font-mono text-slate-500 tracking-[0.5em] uppercase">Auth: Biometric_Verified</span>
+              <span className="text-[6px] font-mono text-slate-500 tracking-[0.5em] uppercase">Node: Central_Laguboti</span>
            </div>
         </div>
       </div>
