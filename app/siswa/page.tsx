@@ -1,346 +1,262 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
-  Shield, Zap, Lightbulb, Activity, Users, CheckCircle2, 
-  ArrowRight, Globe, Lock, Mail, UserPlus, LogIn, ChevronDown, 
-  Cpu, Leaf, ShieldCheck, Database
+  Shield, Zap, CheckCircle, ArrowRight, Lock, 
+  Mail, User, Globe, Cpu, BookOpen, Activity, 
+  Lightbulb, ShieldCheck, Headphones
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 
-const LandingPage = () => {
+const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [scrolled, setScrolled] = useState(false);
-
-  // Efek scroll untuk header transparan ke solid
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Varian animasi Framer Motion
-  const fadeIn = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6 }
-  };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-900">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-white font-sans text-slate-900">
       
-      {/* 1. HEADER (Navigation) */}
-      <header className={`fixed top-0 w-full z-[100] transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'}`}>
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-200">
-              <Shield className="text-white w-6 h-6" />
-            </div>
-            <span className="font-bold text-xl tracking-tight bg-gradient-to-r from-blue-700 to-indigo-600 bg-clip-text text-transparent">
-              CYBER-GREEN
-            </span>
-          </div>
-          
-          <nav className="hidden lg:flex items-center gap-8">
-            {['Tentang Kami', 'Layanan', 'Energi Hibrida', 'Keamanan Siber', 'Infrastruktur', 'Manfaat'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors">
-                {item}
-              </a>
-            ))}
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-md transition-all active:scale-95">
-              Portal Akses
-            </button>
-          </nav>
-        </div>
-      </header>
-
-      <main className="flex flex-col lg:flex-row">
+      {/* --- SISI KIRI: LANDING CONTENT (SCROLLABLE) --- */}
+      <div className="lg:w-3/5 w-full bg-white order-2 lg:order-1 overflow-y-auto">
         
-        {/* SISI KIRI: CONTENT SHOWCASE (Long Scroll) */}
-        <div className="lg:w-[60%] w-full bg-white relative">
+        {/* HEADER NAVIGATION (Di dalam scroll area) */}
+        <header className="px-8 lg:px-16 py-8 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-10">
+          <div className="flex items-center gap-2">
+            <div className="bg-blue-600 p-1.5 rounded-lg">
+              <Shield className="text-white w-5 h-5" />
+            </div>
+            <span className="font-bold text-xl tracking-tight text-slate-800">CyberSchool Hub</span>
+          </div>
+          <nav className="hidden md:flex gap-6 text-sm font-semibold text-slate-500">
+            <a href="#about" className="hover:text-blue-600 transition">Tentang Kami</a>
+            <a href="#layanan" className="hover:text-blue-600 transition">Layanan</a>
+            <a href="#energy" className="hover:text-blue-600 transition">Infrastruktur</a>
+          </nav>
+        </header>
+
+        {/* 7 SECTIONS CONTENT */}
+        <div className="px-8 lg:px-16 pb-20 space-y-32">
           
-          {/* SECTION 1: HERO */}
-          <section id="hero" className="min-h-screen flex flex-col justify-center px-12 lg:px-24 bg-[radial-gradient(circle_at_top_left,_#f0f7ff_0%,_#ffffff_50%)]">
-            <motion.div {...fadeIn}>
-              <span className="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-widest text-blue-700 uppercase bg-blue-100 rounded-full">
-                The Future of School Infrastructure
-              </span>
-              <h1 className="text-6xl font-black leading-[1.1] mb-8 text-slate-800">
-                Mengkaji Ketahanan <span className="text-blue-600">Siber</span> & Energi <span className="text-green-500">Hibrida</span>
-              </h1>
-              <p className="text-xl text-slate-500 leading-relaxed max-w-xl mb-10">
-                Platform terintegrasi untuk memantau keamanan digital sekolah sekaligus mengoptimalkan sistem energi terbarukan untuk masa depan pendidikan yang berkelanjutan.
+          {/* Section 1: Hero */}
+          <section className="pt-12 min-h-[60vh] flex flex-col justify-center">
+            <span className="inline-block px-4 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-widest mb-6">
+              Platform Ketahanan Siber Sekolah
+            </span>
+            <h1 className="text-5xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-8">
+              Membangun Keamanan Digital <span className="text-blue-600">Masa Depan.</span>
+            </h1>
+            <p className="text-xl text-slate-500 leading-relaxed max-w-2xl mb-10">
+              Integrasi kajian ketahanan siber sekolah dengan sistem monitoring energi hibrida terbarukan untuk ekosistem pendidikan yang tangguh.
+            </p>
+            <div className="flex gap-4">
+              <a href="#layanan" className="bg-slate-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-black transition flex items-center gap-2">
+                Eksplorasi Layanan <ArrowRight size={18} />
+              </a>
+            </div>
+          </section>
+
+          {/* Section 2: About Us (Tentang Kita) */}
+          <section id="about" className="scroll-mt-24">
+            <h2 className="text-3xl font-extrabold mb-6">Misi Kita</h2>
+            <div className="grid md:grid-cols-2 gap-10">
+              <p className="text-slate-600 leading-relaxed">
+                Kami berkomitmen menciptakan lingkungan sekolah yang aman dari ancaman digital. Melalui penyediaan infrastruktur digital yang modern, kami mengkaji tingkat ketahanan siber siswa dan staf sekolah.
               </p>
-              <div className="flex gap-4">
-                <div className="flex -space-x-3">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-10 h-10 border-2 border-white rounded-full bg-slate-200" />
-                  ))}
-                </div>
-                <div className="text-sm">
-                  <p className="font-bold">500+ Siswa & Guru</p>
-                  <p className="text-slate-400">Telah bergabung dalam ekosistem ini</p>
-                </div>
-              </div>
-            </motion.div>
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-                <ChevronDown className="text-slate-300" />
+              <p className="text-slate-600 leading-relaxed">
+                Selain keamanan, kami juga mengintegrasikan sistem catu daya hibrida untuk memastikan operasional sekolah seperti mesin tetas dan pencahayaan otomatis tetap berjalan optimal.
+              </p>
             </div>
           </section>
 
-          {/* SECTION 2: ABOUT US (Tentang Kami) */}
-          <section id="tentang-kami" className="py-24 px-12 lg:px-24 border-t border-slate-100">
-            <h2 className="text-3xl font-bold mb-12">Visi & Misi Kami</h2>
-            <div className="grid md:grid-cols-2 gap-12">
-              <div className="space-y-4 text-slate-600 leading-relaxed">
-                <p>Kami percaya bahwa infrastruktur digital sekolah tidak hanya soal internet cepat, tetapi juga ketahanan terhadap ancaman siber dan kemandirian energi.</p>
-                <p>Melalui riset mendalam, kami menghadirkan solusi yang menggabungkan audit keamanan siber dengan sistem catu daya pintar.</p>
-              </div>
-              <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
-                <div className="flex items-center gap-4 mb-4">
-                  <Globe className="text-blue-600" />
-                  <h4 className="font-bold">Dampak Digital</h4>
-                </div>
-                <p className="text-sm text-slate-500 italic">"Membangun kesadaran siber sejak dini di lingkungan pendidikan adalah investasi keamanan nasional."</p>
-              </div>
-            </div>
-          </section>
-
-          {/* SECTION 3: CORE SERVICES (Layanan) */}
-          <section id="layanan" className="py-24 px-12 lg:px-24 bg-slate-50">
+          {/* Section 3: Layanan Kami */}
+          <section id="layanan" className="scroll-mt-24">
+            <h2 className="text-3xl font-extrabold mb-12">Layanan Utama</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {[
-                { title: 'Asesmen Siber', desc: 'Pengujian kerentanan melalui simulasi phishing dan malware.', icon: <ShieldCheck className="text-blue-600" /> },
-                { title: 'Monitoring Energi', desc: 'Pantau status panel surya dan baterai secara real-time.', icon: <Activity className="text-green-600" /> },
-                { title: 'Otomasi ATS', desc: 'Perpindahan daya otomatis tanpa jeda untuk mesin tetas.', icon: <Zap className="text-orange-600" /> },
-                { title: 'Data Analytics', desc: 'Analisis nilai ketahanan siber siswa secara komprehensif.', icon: <Database className="text-indigo-600" /> }
-              ].map((s, idx) => (
-                <div key={idx} className="p-8 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition">
-                  <div className="mb-4">{s.icon}</div>
-                  <h3 className="font-bold mb-2">{s.title}</h3>
-                  <p className="text-sm text-slate-500">{s.desc}</p>
+                { title: 'Asesmen Siber', desc: 'Simulasi serangan malware, phishing, dan social engineering.', icon: <ShieldCheck className="text-blue-600"/> },
+                { title: 'Monitoring Energi', desc: 'Pantau status panel surya dan baterai cadangan secara real-time.', icon: <Activity className="text-emerald-600"/> },
+                { title: 'Otomasi ATS', desc: 'Sistem otomatisasi perpindahan daya untuk fasilitas sekolah.', icon: <Zap className="text-orange-600"/> },
+                { title: 'Edukasi Digital', desc: 'Modul pembelajaran keamanan siber tingkat SMA/SMK.', icon: <BookOpen className="text-indigo-600"/> },
+              ].map((item, i) => (
+                <div key={i} className="p-8 rounded-3xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-xl hover:shadow-slate-100 transition duration-300">
+                  <div className="mb-4">{item.icon}</div>
+                  <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
           </section>
 
-          {/* SECTION 4: HYBRID ENERGY (Sistem Energi) */}
-          <section id="energi-hibrida" className="py-24 px-12 lg:px-24">
-            <div className="bg-slate-900 rounded-[3rem] p-12 text-white overflow-hidden relative">
-              <div className="relative z-10">
-                <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-                  <Leaf className="text-green-400" /> Energi Terbarukan
-                </h2>
-                <p className="text-slate-400 mb-8 max-w-md">Sistem Catu Daya Hibrida kami dilengkapi ATS (Automatic Transfer Switch) untuk menjamin kestabilan daya Mesin Tetas dan Pencahayaan Otomatis.</p>
-                <ul className="space-y-4">
-                  <li className="flex items-center gap-3"><CheckCircle2 className="text-green-400 w-5 h-5" /> Efisiensi Daya Hingga 40%</li>
-                  <li className="flex items-center gap-3"><CheckCircle2 className="text-green-400 w-5 h-5" /> Monitoring Baterai Real-time</li>
-                  <li className="flex items-center gap-3"><CheckCircle2 className="text-green-400 w-5 h-5" /> Kontrol Lampu Berbasis LDR</li>
-                </ul>
-              </div>
-              <Zap className="absolute right-[-20px] bottom-[-20px] w-64 h-64 text-white/5" />
-            </div>
-          </section>
-
-          {/* SECTION 5: CYBER FRAMEWORK */}
-          <section id="keamanan-siber" className="py-24 px-12 lg:px-24">
-            <h2 className="text-3xl font-bold mb-4 italic text-slate-400">Core Security Domains</h2>
-            <h3 className="text-5xl font-black mb-12">Tiga Pilar <span className="text-blue-600 underline">Asesmen.</span></h3>
-            <div className="space-y-8">
-              {[
-                { label: 'Social Engineering', color: 'bg-red-500', text: 'Menguji ketahanan terhadap manipulasi psikologis.' },
-                { label: 'Malware Awareness', color: 'bg-orange-500', text: 'Deteksi dini serangan perangkat lunak berbahaya.' },
-                { label: 'Anti-Phishing', color: 'bg-blue-500', text: 'Identifikasi situs dan komunikasi palsu.' }
-              ].map((domain, idx) => (
-                <div key={idx} className="flex gap-6 items-start group">
-                  <div className={`w-2 h-12 rounded-full ${domain.color} group-hover:scale-y-125 transition`}></div>
-                  <div>
-                    <h4 className="font-bold text-xl">{domain.label}</h4>
-                    <p className="text-slate-500">{domain.text}</p>
+          {/* Section 4: Sistem Catu Daya Hibrida */}
+          <section id="energy">
+            <div className="bg-blue-600 rounded-[2.5rem] p-10 lg:p-16 text-white overflow-hidden relative">
+              <div className="relative z-10 max-w-lg">
+                <h2 className="text-3xl font-bold mb-6">Sistem Catu Daya Terintegrasi</h2>
+                <p className="text-blue-100 mb-8 leading-relaxed">
+                  Implementasi Sistem Catu Daya Hibrida Energi Terbarukan dengan ATS (Automatic Transfer Switch) untuk Mesin Tetas dan Pencahayaan Otomatis sekolah.
+                </p>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle size={20} className="text-blue-200" />
+                    <span>Efisiensi Energi Terjamin</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle size={20} className="text-blue-200" />
+                    <span>Otomasi Pencahayaan LDR</span>
                   </div>
                 </div>
-              ))}
+              </div>
+              <Cpu className="absolute right-[-20px] bottom-[-20px] w-64 h-64 text-blue-500 opacity-20" />
             </div>
           </section>
 
-          {/* SECTION 6: INFRASTRUCTURE (Infrastruktur) */}
-          <section id="infrastruktur" className="py-24 px-12 lg:px-24 bg-blue-600 text-white">
-            <h2 className="text-4xl font-bold mb-8 leading-tight">Infrastruktur Digital yang Tangguh.</h2>
-            <div className="grid grid-cols-2 gap-8">
+          {/* Section 5: Ketahanan Siber Sekolah */}
+          <section>
+             <h2 className="text-3xl font-extrabold mb-12">Ketahanan Siber</h2>
+             <div className="space-y-12">
+                <div className="flex gap-6">
+                  <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center shrink-0"><Globe className="text-slate-600"/></div>
+                  <div>
+                    <h4 className="font-bold text-lg mb-1">Infrastruktur Digital Aman</h4>
+                    <p className="text-slate-500 text-sm">Penyediaan infrastruktur digital yang telah diaudit secara berkala untuk menghadapi ancaman modern.</p>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center shrink-0"><Lock className="text-slate-600"/></div>
+                  <div>
+                    <h4 className="font-bold text-lg mb-1">Perlindungan Data Siswa</h4>
+                    <p className="text-slate-500 text-sm">Enkripsi tingkat tinggi untuk seluruh data hasil asesmen dan profil personal akademik.</p>
+                  </div>
+                </div>
+             </div>
+          </section>
+
+          {/* Section 6: Kenapa Harus Kami? */}
+          <section>
+            <h2 className="text-3xl font-extrabold text-center mb-16">Mengapa Memilih Platform Kami?</h2>
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-8 text-center">
               <div>
-                <h4 className="text-6xl font-black mb-2 italic">99.9%</h4>
-                <p className="text-blue-100 font-medium">Uptime Sistem ATS</p>
+                <h5 className="text-4xl font-black text-blue-600 mb-2 italic">100%</h5>
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Real-time Monitoring</p>
               </div>
               <div>
-                <h4 className="text-6xl font-black mb-2 italic">ZERO</h4>
-                <p className="text-blue-100 font-medium">Data Breach</p>
+                <h5 className="text-4xl font-black text-blue-600 mb-2 italic">24/7</h5>
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">System Resilience</p>
+              </div>
+              <div>
+                <h5 className="text-4xl font-black text-blue-600 mb-2 italic">Safe</h5>
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Data Encryption</p>
               </div>
             </div>
           </section>
 
-          {/* SECTION 7: MANFAAT (Impact) */}
-          <section id="manfaat" className="py-24 px-12 lg:px-24">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold mb-4">Kenapa Sekolah Anda Membutuhkan Ini?</h2>
-              <div className="w-20 h-1.5 bg-blue-600 mx-auto rounded-full"></div>
-            </div>
-            <div className="grid grid-cols-3 gap-8">
-               <div className="text-center">
-                  <Users className="mx-auto mb-4 text-blue-600" size={40} />
-                  <h5 className="font-bold">Siswa Cerdas</h5>
-                  <p className="text-xs text-slate-400 mt-2">Membentuk generasi sadar keamanan digital.</p>
-               </div>
-               <div className="text-center">
-                  <Cpu className="mx-auto mb-4 text-green-600" size={40} />
-                  <h5 className="font-bold">Teknologi IOT</h5>
-                  <p className="text-xs text-slate-400 mt-2">Implementasi teknologi terbaru di sekolah.</p>
-               </div>
-               <div className="text-center">
-                  <Lightbulb className="mx-auto mb-4 text-orange-600" size={40} />
-                  <h5 className="font-bold">Eco-School</h5>
-                  <p className="text-xs text-slate-400 mt-2">Menuju sekolah ramah lingkungan.</p>
-               </div>
+          {/* Section 7: Dukungan Teknis */}
+          <section className="text-center">
+            <div className="bg-slate-50 rounded-[3rem] p-12 border border-slate-100">
+              <Headphones className="mx-auto mb-6 text-slate-400" size={48} />
+              <h2 className="text-2xl font-bold mb-4">Butuh Bantuan?</h2>
+              <p className="text-slate-500 mb-8 max-w-md mx-auto">Tim teknis IT kami siap membantu integrasi sistem di sekolah Anda kapan saja.</p>
+              <button className="text-blue-600 font-bold hover:underline">Hubungi Helpdesk Sekolah</button>
             </div>
           </section>
 
           {/* 8. FOOTER */}
-          <footer className="bg-slate-50 border-t border-slate-200 py-16 px-12 lg:px-24">
-            <div className="grid md:grid-cols-3 gap-12 mb-12 text-sm">
-              <div>
-                <div className="flex items-center gap-2 mb-6">
+          <footer className="pt-20 border-t border-slate-100">
+            <div className="flex flex-col md:flex-row justify-between gap-10 text-sm">
+              <div className="max-w-xs">
+                <div className="flex items-center gap-2 mb-4">
                   <Shield className="text-blue-600 w-5 h-5" />
-                  <span className="font-bold text-lg">CYBER-GREEN</span>
+                  <span className="font-bold text-lg">CyberSchool</span>
                 </div>
-                <p className="text-slate-500 leading-relaxed">Platform Pengkajian Ketahanan Siber dan Sistem Energi Hibrida Lingkungan Sekolah.</p>
+                <p className="text-slate-500 leading-relaxed italic">Mengkaji Ketahanan Siber & Infrastruktur Digital Lingkungan Sekolah.</p>
               </div>
-              <div>
-                <h5 className="font-bold mb-6">Navigasi Cepat</h5>
-                <ul className="space-y-3 text-slate-500">
-                  <li><a href="#hero">Beranda</a></li>
-                  <li><a href="#layanan">Layanan Kami</a></li>
-                  <li><a href="#keamanan-siber">Materi Siber</a></li>
-                </ul>
-              </div>
-              <div>
-                <h5 className="font-bold mb-6">Kontak & Dukungan</h5>
-                <ul className="space-y-3 text-slate-500">
-                  <li>lab-it@sekolah.id</li>
-                  <li>Gedung Lab Teknologi, Jakarta</li>
-                  <li>(021) 8888-9999</li>
-                </ul>
-              </div>
-            </div>
-            <div className="pt-8 border-t border-slate-200 flex justify-between text-xs font-medium text-slate-400">
-              <p>© 2024 Cyber-Green Infrastructure. All Rights Reserved.</p>
-              <div className="flex gap-6 italic">
-                <span>Privacy Policy</span>
-                <span>Terms of Digital Service</span>
+              <div className="flex gap-16">
+                <div className="space-y-4">
+                  <h5 className="font-bold">Legal</h5>
+                  <ul className="text-slate-500 space-y-2">
+                    <li>Privacy Policy</li>
+                    <li>Terms of Use</li>
+                  </ul>
+                </div>
+                <div className="space-y-4">
+                  <h5 className="font-bold">Media</h5>
+                  <ul className="text-slate-500 space-y-2">
+                    <li>Instagram</li>
+                    <li>LinkedIn</li>
+                  </ul>
+                </div>
               </div>
             </div>
+            <p className="mt-20 text-slate-400 text-xs">© 2024 Platform Ketahanan Siber Sekolah. All Rights Reserved.</p>
           </footer>
+
         </div>
+      </div>
 
-        {/* SISI KANAN: AUTH PORTAL (Sticky & Fixed) */}
-        <div className="lg:w-[40%] w-full h-screen sticky top-0 flex items-center justify-center p-8 lg:p-12 bg-slate-50 overflow-hidden">
+      {/* --- SISI KANAN: AUTH PORTAL (FIXED) --- */}
+      <div className="lg:w-2/5 w-full bg-slate-50 lg:h-screen lg:sticky lg:top-0 flex items-center justify-center p-8 border-l border-slate-200 order-1 lg:order-2">
+        <div className="w-full max-w-md">
           
-          {/* Elemen Dekoratif di Background Kanan */}
-          <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-blue-100 rounded-full blur-[120px] opacity-60"></div>
-          <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-green-100 rounded-full blur-[120px] opacity-60"></div>
-
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-md bg-white/70 backdrop-blur-2xl rounded-[2.5rem] p-10 shadow-[0_32px_64px_-15px_rgba(0,0,0,0.1)] border border-white relative z-10"
-          >
-            {/* Toggle Login/Register */}
-            <div className="flex bg-slate-100/50 p-1.5 rounded-2xl mb-10 border border-slate-200">
+          <div className="bg-white p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-slate-200">
+            {/* TOGGLE TAB */}
+            <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-10">
               <button 
                 onClick={() => setIsLogin(true)}
-                className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all ${isLogin ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}
+                className={`flex-1 py-3 rounded-xl text-sm font-bold transition ${isLogin ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
               >
                 Masuk
               </button>
               <button 
                 onClick={() => setIsLogin(false)}
-                className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all ${!isLogin ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}
+                className={`flex-1 py-3 rounded-xl text-sm font-bold transition ${!isLogin ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
               >
                 Daftar
               </button>
             </div>
 
-            <AnimatePresence mode='wait'>
-              {isLogin ? (
-                <motion.div
-                  key="login"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  className="space-y-6"
-                >
-                  <div>
-                    <h2 className="text-3xl font-black text-slate-800">Selamat Datang.</h2>
-                    <p className="text-slate-500 mt-2 text-sm font-medium">Silahkan masuk ke sistem ketahanan siber Anda.</p>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div className="group">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 block ml-4">Email Address</label>
-                      <div className="relative">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition" size={18} />
-                        <input className="w-full bg-slate-50 border-none rounded-2xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-blue-600/20 transition outline-none text-sm font-medium" placeholder="admin@sekolah.id" />
-                      </div>
-                    </div>
+            <div className="mb-8">
+              <h2 className="text-2xl font-black text-slate-800">{isLogin ? 'Selamat Datang' : 'Buat Akun Baru'}</h2>
+              <p className="text-slate-500 text-sm mt-1">{isLogin ? 'Masukkan kredensial Anda untuk akses.' : 'Lengkapi data diri untuk pendaftaran.'}</p>
+            </div>
 
-                    <div className="group">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 block ml-4">Password Key</label>
-                      <div className="relative">
-                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition" size={18} />
-                        <input type="password" className="w-full bg-slate-50 border-none rounded-2xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-blue-600/20 transition outline-none text-sm font-medium" placeholder="••••••••" />
-                      </div>
-                    </div>
+            <form className="space-y-4">
+              {!isLogin && (
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Nama Lengkap</label>
+                  <div className="relative">
+                    <User className="absolute left-4 top-3.5 text-slate-300" size={18} />
+                    <input className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3.5 pl-12 pr-4 focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition outline-none text-sm" placeholder="Ahmad Edwin" />
                   </div>
-
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold shadow-xl shadow-blue-200 flex items-center justify-center gap-2 transition group active:scale-[0.98]">
-                    <span>Akses Dashboard</span>
-                    <LogIn size={18} className="group-hover:translate-x-1 transition" />
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="register"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-6"
-                >
-                  <div>
-                    <h2 className="text-3xl font-black text-slate-800">Buat Akun Baru.</h2>
-                    <p className="text-slate-500 mt-2 text-sm font-medium">Bergabung dalam ekosistem riset digital sekolah.</p>
-                  </div>
-
-                  <div className="space-y-4">
-                    <input className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-blue-600/20 transition outline-none text-sm font-medium" placeholder="Nama Lengkap" />
-                    <input className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-blue-600/20 transition outline-none text-sm font-medium" placeholder="Nomor Induk Siswa/Guru" />
-                    <input className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-blue-600/20 transition outline-none text-sm font-medium" placeholder="Email Sekolah" />
-                    <input type="password" className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-blue-600/20 transition outline-none text-sm font-medium" placeholder="Buat Password" />
-                  </div>
-
-                  <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-bold shadow-xl shadow-indigo-200 flex items-center justify-center gap-2 transition group active:scale-[0.98]">
-                    <span>Daftar Akun</span>
-                    <UserPlus size={18} className="group-hover:scale-110 transition" />
-                  </button>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email Sekolah</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-3.5 text-slate-300" size={18} />
+                  <input className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3.5 pl-12 pr-4 focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition outline-none text-sm" placeholder="name@school.id" />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-3.5 text-slate-300" size={18} />
+                  <input type="password" className="w-full bg-slate-50 border border-slate-100 rounded-xl py-3.5 pl-12 pr-4 focus:ring-2 focus:ring-blue-600/10 focus:border-blue-600 transition outline-none text-sm" placeholder="••••••••" />
+                </div>
+              </div>
+
+              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold transition shadow-lg shadow-blue-100 mt-6 active:scale-[0.98]">
+                {isLogin ? 'Masuk Sekarang' : 'Daftar Sekarang'}
+              </button>
+            </form>
 
             <div className="mt-8 text-center">
-              <p className="text-xs text-slate-400 font-medium">Butuh bantuan teknis? <span className="text-blue-600 cursor-pointer hover:underline">Hubungi Admin Lab IT</span></p>
+               <p className="text-xs text-slate-400 italic">Penyediaan Infrastruktur Digital Sekolah yang Aman & Terpercaya.</p>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </main>
+      </div>
+
     </div>
   );
 };
 
-export default LandingPage;
+export default LoginRegister;
