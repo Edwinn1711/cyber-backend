@@ -1301,8 +1301,7 @@ const CRTOverlay = () => (
 )}
 {/* --- VIEW MISSION: MODUL PENGERJAAN SOAL (FIXED STRUCTURE) --- */}
 <AnimatePresence mode="wait">
-  {/* --- VIEW MISSION: MODUL SOAL & NAVIGASI (UTUH) --- */}
-{/* --- VIEW MISSION: MODUL PENGERJAAN SOAL (UTUH & AMAN) --- */}
+{/* --- VIEW MISSION: MODUL PENGERJAAN SOAL (PURPLE NEON EDITION) --- */}
 {view === 'mission' && (
   <motion.div 
     key="mission-root"
@@ -1319,11 +1318,11 @@ const CRTOverlay = () => (
       animate={{ opacity: 1, y: 0 }}
       className="max-w-3xl mx-auto space-y-12 pb-48 pt-4"
     >
-      <div className="flex items-center justify-between border-l-4 border-cyan-500 pl-8 py-4 bg-white/[0.03] rounded-r-[2rem] shadow-2xl relative overflow-hidden">
+      <div className="flex items-center justify-between border-l-4 border-fuchsia-600 pl-8 py-4 bg-fuchsia-500/5 rounded-r-[2rem] shadow-2xl relative overflow-hidden">
          <div className="absolute inset-0 bg-hud-grid opacity-10" />
          <div className="relative z-10 space-y-1 text-left">
             <h2 className="text-4xl font-black text-white uppercase tracking-tighter leading-none">PHASE 0{currentStep}</h2>
-            <p className="text-[10px] font-black text-cyan-400 tracking-[0.5em] uppercase opacity-70">Sector: {selectedDomain}</p>
+            <p className="text-[10px] font-black text-fuchsia-400 tracking-[0.5em] uppercase opacity-70">Sector: {selectedDomain}</p>
          </div>
       </div>
 
@@ -1337,17 +1336,18 @@ const CRTOverlay = () => (
               transition={{ delay: idx * 0.1 }}
               className="p-10 rounded-[3.5rem] bg-[#05060b]/80 backdrop-blur-3xl border border-white/5 shadow-2xl relative group overflow-hidden"
             >
-              <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500/10 group-hover:bg-cyan-500 transition-all duration-500" />
+              <div className="absolute top-0 left-0 w-2 h-full bg-fuchsia-500/20 group-hover:bg-fuchsia-500 transition-all duration-500" />
               <div className="relative z-10 text-left">
                 
                 {/* --- JUDUL SOAL DINAMIS SESUAI DOMAIN --- */}
-                <span className="text-[9px] font-black text-cyan-500/80 uppercase tracking-[0.4em] block mb-6">
+                <span className="text-[9px] font-black text-fuchsia-500/80 uppercase tracking-[0.4em] block mb-6">
                   QUESTION {selectedDomain} {idx + 1}
                 </span>
                 
                 {/* --- TEKS STUDI KASUS (DIJAMIN MUNCUL) --- */}
-                <p className="text-xl lg:text-2xl font-bold text-white leading-relaxed mb-10 tracking-tight">
-                  {q.question}
+                <p className="text-xl lg:text-2xl font-bold text-white leading-relaxed mb-10 tracking-tight block">
+                   {/* Fallback jika field bernama studi_kasus atau question */}
+                   {q.question || q.studi_kasus || "MENUNGGU DATA DARI SERVER..."}
                 </p>
 
                 <div className="grid grid-cols-1 gap-4">
@@ -1357,7 +1357,7 @@ const CRTOverlay = () => (
                       onClick={() => setAns({ ...ans, [q.id]: { score: opt.score, text: opt.text } })}
                       className={`relative p-6 rounded-[2.2rem] border text-left text-[13px] font-bold transition-all duration-500 flex items-center justify-between group/opt ${
                         ans[q.id]?.text === opt.text 
-                          ? 'bg-cyan-600 border-cyan-400 text-white shadow-[0_0_30px_rgba(34,211,238,0.3)]' 
+                          ? 'bg-fuchsia-600 border-fuchsia-400 text-white shadow-[0_0_30px_rgba(217,70,239,0.3)]' 
                           : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'
                       }`}
                     >
@@ -1370,8 +1370,8 @@ const CRTOverlay = () => (
             </motion.div>
           ))
         ) : (
-          <div className="py-24 text-center border-2 border-dashed border-white/5 rounded-[3.5rem] opacity-30 font-mono text-[11px] tracking-widest uppercase">
-             Syncing Neural Data... No Questions Found.
+          <div className="py-24 text-center border-2 border-dashed border-fuchsia-500/10 rounded-[3.5rem] opacity-30 font-mono text-[11px] tracking-widest uppercase text-fuchsia-300">
+             SYNCING NEURAL DATA... RELOAD IF NOT APPEARING.
           </div>
         )}
       </div>
@@ -1386,7 +1386,7 @@ const CRTOverlay = () => (
          animate={{ y: 0, opacity: 1 }}
          className="max-w-4xl mx-auto bg-[#050508]/95 backdrop-blur-3xl border border-white/10 p-6 rounded-[2.8rem] shadow-[0_-30px_100px_rgba(0,0,0,0.9)] flex items-center justify-between gap-8 pointer-events-auto relative overflow-hidden"
        >
-          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent animate-pulse" />
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-fuchsia-500/40 to-transparent animate-pulse" />
           
           <div className="hidden md:flex items-center gap-8 pl-6 border-r border-white/10 pr-12">
              <div className="flex flex-col gap-2 text-left">
@@ -1394,7 +1394,11 @@ const CRTOverlay = () => (
                 <div className="flex items-center gap-4">
                    <span className="text-2xl font-black text-white font-mono leading-none">0{currentStep}</span>
                    <div className="w-32 h-2 bg-white/5 rounded-full overflow-hidden border border-white/5">
-                      <motion.div animate={{ width: `${(currentStep / maxStep) * 100}%` }} className="h-full bg-cyan-500 shadow-[0_0_15px_#22d3ee]" />
+                      {/* Progress Bar Ganti Ungu */}
+                      <motion.div 
+                        animate={{ width: `${(currentStep / maxStep) * 100}%` }} 
+                        className="h-full bg-fuchsia-600 shadow-[0_0_15px_#d946ef]" 
+                      />
                    </div>
                    <span className="text-[10px] font-black text-slate-700 font-mono leading-none">0{maxStep}</span>
                 </div>
@@ -1410,7 +1414,7 @@ const CRTOverlay = () => (
                <button 
                  disabled={!isStepComplete} 
                  onClick={() => { setCurrentStep(p => p + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
-                 className={`px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-cyan-600 text-white shadow-xl' : 'bg-white/5 text-slate-800 opacity-20 cursor-not-allowed'}`}
+                 className={`px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-fuchsia-600 text-white shadow-[0_0_20px_rgba(217,70,239,0.3)]' : 'bg-white/5 text-slate-800 opacity-20 cursor-not-allowed'}`}
                >
                   NEXT PHASE <ChevronRight size={18} />
                </button>
@@ -1418,7 +1422,7 @@ const CRTOverlay = () => (
                <button 
                  disabled={!isStepComplete || loading} 
                  onClick={executeUplink} 
-                 className={`px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-gradient-to-r from-cyan-600 to-blue-700 text-white shadow-xl' : 'bg-white/5 text-slate-800 opacity-20'}`}
+                 className={`px-14 py-5 rounded-2xl font-black text-[11px] tracking-[0.5em] transition-all uppercase flex items-center justify-center gap-4 ${isStepComplete ? 'bg-gradient-to-r from-fuchsia-600 to-indigo-700 text-white shadow-xl' : 'bg-white/5 text-slate-800 opacity-20'}`}
                >
                   {loading ? "ENCRYPTING..." : "FINAL UPLINK"} <Zap size={20} className={loading ? 'animate-spin' : ''} />
                </button>
