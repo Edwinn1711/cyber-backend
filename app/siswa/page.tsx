@@ -563,6 +563,8 @@ const CRTOverlay = () => (
     const [appFeedbackModal, setAppFeedbackModal] = useState(false);
     const [appFeedbackForm, setAppFeedbackForm] = useState({ category: 'AI ENHANCEMENT', message: '' });
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
+    const [showProfileModal, setShowProfileModal] = useState(false); // State untuk modal data diri
+
     const scrollRef = useRef<HTMLDivElement>(null);
   
     // --- 2. SEMUA CALLBACK & MEMO ---
@@ -830,15 +832,28 @@ const CRTOverlay = () => (
     </div>
   </div>
   <div className="flex items-center gap-6 text-right">
-    <div className="hidden sm:block">
-      <p className="text-[11px] font-black tracking-widest uppercase text-white">{user.username}</p>
-      <p className="text-[9px] font-black text-fuchsia-500 uppercase tracking-widest mt-1">OPERATIVE MODE</p>
+    {/* --- BAGIAN YANG DIUBAH: CLICKABLE USERNAME --- */}
+    <div 
+      className="hidden sm:block cursor-pointer group transition-all" 
+      onClick={() => setShowProfileModal(true)}
+    >
+      <p className="text-[11px] font-black tracking-[0.2em] uppercase text-white group-hover:text-fuchsia-400 transition-colors">
+        {user.username}
+      </p>
+      <p className="text-[9px] font-black text-fuchsia-500 uppercase tracking-[0.3em] mt-1 group-hover:drop-shadow-[0_0_5px_#d946ef]">
+        OPERATIVE MODE
+      </p>
     </div>
-    <div className="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center border border-fuchsia-500/30 shadow-lg text-white">
+    {/* ------------------------------------------- */}
+    <div 
+      onClick={() => setShowProfileModal(true)}
+      className="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center border border-fuchsia-500/30 shadow-lg text-white cursor-pointer hover:border-fuchsia-500 transition-all"
+    >
       <User size={18} />
     </div>
   </div>
 </header>
+
       <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
           <AnimatePresence mode="wait">
             
@@ -1753,6 +1768,72 @@ const CRTOverlay = () => (
           </motion.div>
         )}
       </AnimatePresence>
+
+{/* --- MODAL PERSONNEL DOSSIER (DATA DIRI) --- */}
+<AnimatePresence>
+  {showProfileModal && (
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }} 
+      className="fixed inset-0 z-[100000] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl"
+    >
+      {/* Glow Effect Background */}
+      <div className="absolute w-[500px] h-[500px] bg-fuchsia-600/5 rounded-full blur-[120px] pointer-events-none" />
+      
+      <motion.div 
+        initial={{ scale: 0.9, y: 20, opacity: 0 }} 
+        animate={{ scale: 1, y: 0, opacity: 1 }} 
+        exit={{ scale: 0.9, opacity: 0 }}
+        className="relative w-full max-w-md bg-[#05060b]/80 border border-fuchsia-500/30 rounded-[3rem] p-10 shadow-[0_0_80px_rgba(217,70,239,0.15)] overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-hud-grid opacity-10 pointer-events-none" />
+        
+        <div className="relative z-10 flex flex-col items-center text-center">
+          {/* Hexagon/Circle Avatar Frame */}
+          <div className="relative mb-8">
+            <div className="absolute inset-0 bg-fuchsia-500/20 blur-2xl rounded-full" />
+            <div className="relative w-20 h-20 bg-black border-2 border-fuchsia-500 rounded-2xl flex items-center justify-center shadow-[inset_0_0_15px_rgba(217,70,239,0.4)]">
+              <User size={40} className="text-fuchsia-400 drop-shadow-[0_0_10px_#d946ef]" />
+            </div>
+          </div>
+
+          <h2 className="text-xl font-black text-white tracking-[0.3em] uppercase mb-1">Personnel Dossier</h2>
+          <p className="text-[9px] font-black text-fuchsia-500 tracking-[0.5em] uppercase mb-10">Classification: Level 01</p>
+
+          {/* Data List */}
+          <div className="w-full space-y-3">
+            {[
+              { label: "Operative ID", val: user.username },
+              { label: "Assigned Sector", val: user.class_name || "UNASSIGNED" },
+              { label: "Chronology Data", val: user.tanggal_lahir || "NOT SET" },
+              { label: "System Status", val: "AUTHORIZED", color: "text-emerald-400" }
+            ].map((item, idx) => (
+              <div key={idx} className="group p-4 bg-white/5 border border-white/5 rounded-2xl flex justify-between items-center hover:border-fuchsia-500/20 transition-all">
+                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">{item.label}</span>
+                <span className={`text-[11px] font-black tracking-widest uppercase ${item.color || 'text-white'}`}>
+                  {item.val}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <button 
+            onClick={() => setShowProfileModal(false)}
+            className="mt-10 w-full py-4 bg-fuchsia-600 text-white rounded-2xl font-black text-[10px] tracking-[0.6em] uppercase hover:bg-white hover:text-black transition-all shadow-xl active:scale-95"
+          >
+            Close Access
+          </button>
+        </div>
+
+        {/* Tactical Corners */}
+        <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-fuchsia-500/20 rounded-tl-[3rem]" />
+        <div className="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-fuchsia-500/20 rounded-br-[3rem]" />
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
+
 
 {/* --- LAYER CSS FINAL: ANTI-JELEK & ULTRA-CLEAN (FULL NEON PURPLE) --- */}
 <style dangerouslySetInnerHTML={{ __html: `
