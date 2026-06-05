@@ -460,7 +460,7 @@ const CyberSentinel = ({ username = "OPERATIVE" }) => {
       <motion.div className="absolute top-2 z-50 bg-[#020308]/80 backdrop-blur-3xl border border-cyan-400/30 px-6 py-2.5 rounded-2xl shadow-[0_0_40px_rgba(34,211,238,0.2)] flex flex-col items-center">
         <div className="flex items-center gap-3 mb-1">
           <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]" />
-          <span className="text-[10px] font-black tracking-[0.3em] text-cyan-400 uppercase font-mono">{message}</span>
+          <span className="text-[10px] font-black tracking-[0.3em] text-fuchsia-400 uppercase font-mono">{message}</span>
         </div>
       </motion.div>
       <motion.div style={{ x: bodyX }} className="relative flex flex-col items-center mt-12">
@@ -468,13 +468,13 @@ const CyberSentinel = ({ username = "OPERATIVE" }) => {
           <div className="flex gap-3">
             {[0, 1].map(i => (
               <div key={i} className="relative w-2.5 h-2.5">
-                <motion.div animate={{ scaleY: [1, 1, 0.1, 1] }} transition={{ duration: 4, repeat: Infinity, times: [0, 0.9, 0.92, 1] }} className="w-full h-full bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
+                <motion.div animate={{ scaleY: [1, 1, 0.1, 1] }} transition={{ duration: 4, repeat: Infinity, times: [0, 0.9, 0.92, 1] }} className="w-full h-full bg-fuchsia-400 rounded-full shadow-[0_0_15px_#d946ef]" />
               </div>
             ))}
           </div>
         </motion.div>
         <div className="relative w-24 h-32 bg-[#080a12] border-2 border-cyan-400/50 rounded-[2.8rem] flex flex-col items-center p-4 z-20 mt-1">
-           <Zap size={22} className="text-cyan-400 mt-4 animate-pulse" />
+        <Zap size={22} className="text-fuchsia-400 mt-4 animate-pulse" />
         </div>
         <div className="flex gap-10 -mt-4 relative z-10">
           {[0, 1].map((i) => (
@@ -722,34 +722,29 @@ const CRTOverlay = () => (
       </motion.aside>
 
       <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
-        <header className="h-20 flex items-center justify-between px-10 border-b bg-black/50 border-white/10 backdrop-blur-xl">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3 px-5 py-2 border rounded-full bg-white/5 border-white/20 text-slate-300">
-              <div className="w-2 h-2 rounded-full animate-pulse bg-emerald-400" />
-              <span className="text-[9px] font-black uppercase tracking-widest">GATEWAY ACTIVE</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-6 text-right text-left">
-            <div className="hidden sm:block">
-              <p className="text-[11px] font-black tracking-widest uppercase text-white">{user.username}</p>
-              <p className="text-[9px] font-black text-cyan-500 uppercase tracking-widest mt-1">OPERATIVE MODE</p>
-            </div>
-            <div className="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center border border-white/20 shadow-lg text-white">
-              <User size={18} />
-            </div>
-          </div>
-        </header>
+      <header className="h-20 flex items-center justify-between px-10 border-b bg-black/50 border-white/10 backdrop-blur-xl">
+  <div className="flex items-center gap-6">
+    <div className="flex items-center gap-3 px-5 py-2 border rounded-full bg-white/5 border-fuchsia-500/20 text-slate-300">
+      <div className="w-2 h-2 rounded-full animate-pulse bg-fuchsia-500 shadow-[0_0_10px_#d946ef]" />
+      <span className="text-[9px] font-black uppercase tracking-widest text-fuchsia-400">GATEWAY ACTIVE</span>
+    </div>
+  </div>
+  <div className="flex items-center gap-6 text-right">
+    <div className="hidden sm:block">
+      <p className="text-[11px] font-black tracking-widest uppercase text-white">{user.username}</p>
+      <p className="text-[9px] font-black text-fuchsia-500 uppercase tracking-widest mt-1">OPERATIVE MODE</p>
+    </div>
+    <div className="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center border border-fuchsia-500/30 shadow-lg text-white">
+      <User size={18} />
+    </div>
+  </div>
+</header>
       <main className="flex-1 overflow-y-auto no-scrollbar px-6 lg:px-14 py-10" ref={scrollRef}>
           <AnimatePresence mode="wait">
             
-{/* --- HANYA GUNAKAN SATU BLOK INI DI DALAM <main> UNTUK DASHBOARD --- */}
+{/* --- 1. DASHBOARD --- */}
 {view === 'dashboard' && (
-  <motion.div 
-    key="dash-final-exhibition" 
-    variants={nexusContainer} 
-    initial="hidden" animate="show" exit={{ opacity: 0, y: -20 }}
-    className="max-w-[1350px] mx-auto space-y-12 pb-20"
-  >
+      <motion.div key="dash" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="max-w-[1350px] mx-auto space-y-12 pb-20">
     {/* --- 1. THE REFINED ELITE COMMAND BANNER (SMALLER & MORE DETAILED) --- */}
 <motion.div 
   variants={nexusItem}
@@ -956,8 +951,7 @@ const CRTOverlay = () => (
     {/* --- 3. FINAL MISSION GATEWAY (THE FINISHER) --- */}
     <motion.div 
       variants={nexusItem} 
-      className="p-8 lg:p-10 rounded-[3rem] bg-[#050505]/80 backdrop-blur-3xl border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden group"
-    >
+      className="p-10 rounded-[2.5rem] bg-[#020308]/90 backdrop-blur-3xl border border-cyan-500/20 shadow-[0_30px_80px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-10">
        <div className="absolute inset-0 bg-hud-grid opacity-[0.05] pointer-events-none" />
        <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500/20 animate-scanner pointer-events-none" />
        <div className="flex flex-col lg:flex-row items-center gap-8 z-10 text-center lg:text-left">
@@ -966,15 +960,13 @@ const CRTOverlay = () => (
           </div>
           <div className="space-y-2">
              <div className="flex items-center justify-center lg:justify-start gap-4"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-ping" /><span className="text-[9px] font-black tracking-[0.4em] text-emerald-400 uppercase">Operational Status Online</span></div>
-             <h3 className="text-xl lg:text-2xl font-black text-white uppercase tracking-tight">Mission Deployment Hub</h3>
+             <h2 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter text-white">SELAMAT DATANG, <br/><span className="text-cyan-400">{user.username}</span></h2>
              <p className="text-[10px] font-bold text-slate-500 tracking-[0.3em] uppercase opacity-70 leading-relaxed max-w-xl">Validasi integritas pertahanan digital melalui protokol keamanan resmi.</p>
           </div>
        </div>
-       <button onClick={handleStartMissionClick} className="relative overflow-hidden px-12 py-5 bg-white text-slate-950 rounded-2xl font-black text-[11px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all duration-500 uppercase flex items-center justify-center gap-5 shadow-xl active:scale-95 group/btn">
-          <span className="relative z-10">INITIALIZE</span>
-          <Zap size={18} className="relative z-10 group-hover/btn:rotate-12 transition-transform" />
-          <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:left-[100%] transition-all duration-1000" />
-       </button>
+       <button onClick={handleStartMissionClick} className="px-12 py-5 bg-white text-black rounded-2xl font-black text-[11px] tracking-[0.6em] hover:bg-cyan-500 hover:text-white transition-all uppercase flex items-center gap-5 shadow-xl">
+              INITIALIZE <Zap size={18} />
+            </button>
     </motion.div>
   </motion.div>
 )}
@@ -1179,98 +1171,95 @@ const CRTOverlay = () => (
   </motion.div>
 )}
 
-{/* --- VIEW ASSESSMENT: TACTICAL MISSION HUB (COMPACT ELITE VERSION) --- */}
+{/* --- VIEW ASSESSMENT: TACTICAL MISSION HUB (COMPACT ELITE VERSION - NEON PURPLE) --- */}
 {view === 'assessment' && (
-  <motion.div 
-    key="assess-hub" 
-    initial={{ opacity: 0, y: 20 }} 
-    animate={{ opacity: 1, y: 0 }} 
-    exit={{ opacity: 0, scale: 0.95 }} 
-    className="max-w-[1100px] mx-auto space-y-10 py-6"
-  >
+   <motion.div 
+     key="assess-hub" 
+     initial={{ opacity: 0, y: 20 }} 
+     animate={{ opacity: 1, y: 0 }} 
+     exit={{ opacity: 0, scale: 0.95 }} 
+     className="max-w-[1100px] mx-auto space-y-10 py-6"
+   >
     
-    {/* 1. COMPACT TACTICAL HEADER */}
+    {/* 1. COMPACT TACTICAL HEADER (GLOWING NEON PURPLE) */}
     <div className="text-center space-y-3 relative">
-      {/* Glow Ambient di belakang Judul */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-32 bg-cyan-500/10 blur-[80px] pointer-events-none" />
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-32 bg-fuchsia-500/10 blur-[80px] pointer-events-none" />
       
-      <motion.div 
-        initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-        className="inline-flex items-center gap-3 px-4 py-1.5 rounded-lg bg-[#0a0c14] border border-white/10 text-cyan-400 text-[8px] font-black tracking-[0.5em] uppercase shadow-2xl"
-      >
-        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-ping shadow-[0_0_8px_#22d3ee]" />
-        Mission Deployment Sector
-      </motion.div>
+    <motion.div 
+    initial={{ y: -10, opacity: 0 }} 
+    animate={{ y: 0, opacity: 1 }}
+    className="inline-flex items-center gap-3 px-4 py-1.5 rounded-lg bg-[#0a0c14] border border-fuchsia-500/30 text-fuchsia-400 text-[8px] font-black tracking-[0.5em] uppercase shadow-2xl"
+  >
+        <div className="w-1.5 h-1.5 rounded-full bg-fuchsia-500 animate-ping shadow-[0_0_8px_#d946ef]" />
+    MISSION DEPLOYMENT SECTOR
+  </motion.div>
 
-      <h2 className="text-3xl lg:text-5xl font-black text-white tracking-tighter uppercase leading-none drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
-        TARGET <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 animate-gradient-x">DOMAINS</span>
-      </h2>
-    </div>
+  <h2 className="text-3xl lg:text-5xl font-black text-white text-center uppercase tracking-tighter">
+    TARGET <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 via-purple-600 to-fuchsia-400">DOMAINS</span>
+  </h2>
+</div>
 
-    {/* 2. GRID MISSIONS (SLEEK & DENSE) */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pb-20 px-6">
+    {/* 2. GRID MISSIONS (SLEEK, DENSE, & NEON GLOW) */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-20">
       {TACTICAL_DOMAINS.map((domain, i) => (
         <motion.div 
-          key={i}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.1, type: "spring", stiffness: 300, damping: 25 }}
+          key={i} 
+          onClick={() => { setSelectedDomain(domain.title); setView('briefing'); }} 
           whileHover={{ y: -8, scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => { setSelectedDomain(domain.id); setView('briefing'); }}
-          className="group relative bg-[#05060b]/80 backdrop-blur-3xl border border-white/5 p-7 rounded-[2.5rem] cursor-pointer overflow-hidden transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-cyan-500/40 hover:shadow-[0_0_40px_rgba(34,211,238,0.15)]"
+          className="group relative bg-[#05060b]/80 border border-white/5 p-8 rounded-[2.5rem] cursor-pointer overflow-hidden transition-all duration-500 hover:border-fuchsia-500/40 hover:shadow-[0_0_40px_rgba(217,70,239,0.15)]"
         >
           {/* --- HOLOGRAPHIC LAYERS --- */}
           <div className="absolute inset-0 bg-hud-grid opacity-[0.03] group-hover:opacity-[0.1] transition-opacity duration-700" />
           
-          {/* Garis Scanner Tipis yang Terus Berjalan */}
-          <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400 shadow-[0_0_15px_#22d3ee] animate-scanner opacity-0 group-hover:opacity-100 z-20" />
+          {/* Garis Scanner Tipis Neon Fuchsia */}
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-fuchsia-400 shadow-[0_0_15px_#d946ef] animate-scanner opacity-0 group-hover:opacity-100 z-20" />
 
           {/* Siku-siku Digital di Pojok Kartu */}
-          <div className="absolute top-5 left-5 w-4 h-4 border-t-2 border-l-2 border-white/10 group-hover:border-cyan-500/50 transition-all duration-500" />
-          <div className="absolute bottom-5 right-5 w-4 h-4 border-b-2 border-r-2 border-white/10 group-hover:border-cyan-500/50 transition-all duration-500" />
+          <div className="absolute top-5 left-5 w-4 h-4 border-t-2 border-l-2 border-white/10 group-hover:border-fuchsia-500/50 transition-all duration-500" />
+          <div className="absolute bottom-5 right-5 w-4 h-4 border-b-2 border-r-2 border-white/10 group-hover:border-fuchsia-500/50 transition-all duration-500" />
 
-          {/* Isi Konten (Kompak) */}
+          {/* Isi Konten */}
           <div className="relative z-10 flex flex-col h-full space-y-8">
             <div className="flex justify-between items-start">
-               <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
-                     <span className="text-[7px] font-black text-emerald-400 tracking-[0.4em] uppercase">LINK_SYNCED</span>
-                  </div>
+               <div className="space-y-1 text-left">
+               <div className="flex items-center gap-2">
+               <div className="w-1.5 h-1.5 rounded-full bg-fuchsia-500 animate-pulse shadow-[0_0_10px_#d946ef]" />
+                  <span className="text-[7px] font-black text-fuchsia-400 tracking-[0.4em] uppercase">LINK SYNCED</span>
+                </div>
                   <p className="text-[8px] font-black text-slate-600 tracking-[0.3em] uppercase">{domain.label}</p>
                </div>
-               {/* Icon dengan Pendaran */}
+               
+               {/* Icon dengan Pendaran Neon Fuchsia */}
                <div className="relative">
-                  <div className="absolute inset-0 bg-white/5 blur-xl rounded-full scale-150 group-hover:bg-cyan-500/10 transition-colors" />
+                  <div className="absolute inset-0 bg-white/5 blur-xl rounded-full scale-150 group-hover:bg-fuchsia-500/10 transition-colors" />
                   <div className="relative w-11 h-11 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-black group-hover:scale-110 shadow-inner">
-                     <domain.icon size={20} className="group-hover:text-cyan-400 transition-colors" />
+                     <domain.icon size={20} className="text-slate-400 group-hover:text-fuchsia-400 transition-colors" />
                   </div>
                </div>
             </div>
 
-            <div className="space-y-3">
-               <h3 className="text-lg lg:text-xl font-black text-white leading-none tracking-tighter uppercase group-hover:text-cyan-400 transition-colors duration-500">
+            <div className="space-y-3 text-left">
+               <h3 className="text-lg lg:text-xl font-black text-white leading-none tracking-tighter uppercase group-hover:text-fuchsia-400 transition-colors duration-500">
                  {domain.title}
                </h3>
-               {/* Deskripsi - Ukuran diperkecil agar elegan */}
                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.15em] leading-relaxed opacity-70 group-hover:opacity-100 transition-opacity">
                  {domain.desc}
                </p>
             </div>
 
-{/* GANTI bagian footer kartu domain kamu dengan ini */}
-<div className="pt-6 border-t border-white/5 flex items-center justify-between">
-   <div className="flex flex-col">
-      <span className="text-[9px] font-black text-cyan-400 tracking-[0.4em] uppercase">SYSTEM READY</span>
-   </div>
-   <div className="flex items-center gap-3">
-      <span className="text-[9px] font-black tracking-[0.5em] uppercase text-white/40">START</span>
-      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-black transition-all">
-         <ArrowRight size={14} />
-      </div>
-   </div>
-</div>
+            {/* Bagian Footer Kartu Domain (Mewah Neon) */}
+            <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+               <div className="flex flex-col text-left">
+                  <span className="text-[9px] font-black text-fuchsia-400 tracking-[0.4em] uppercase drop-shadow-[0_0_5px_rgba(217,70,239,0.3)]">SYSTEM READY</span>
+               </div>
+               <div className="flex items-center gap-3">
+                  <span className="text-[9px] font-black tracking-[0.5em] uppercase text-white/40">START</span>
+                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-fuchsia-500 group-hover:text-black transition-all">
+                     <ArrowRight size={14} />
+              </div>
+               </div>
+            </div>
           </div>
 
           {/* Efek Flare yang bergerak saat di-hover */}
@@ -1279,13 +1268,12 @@ const CRTOverlay = () => (
       ))}
     </div>
 
-    {/* Metadata Footer Hub (Kecil di bawah) */}
+    {/* Metadata Footer Hub */}
     <div className="flex justify-center items-center gap-10 opacity-20 pointer-events-none">
        <span className="text-[7px] font-mono text-slate-500 tracking-[1em] uppercase">Secure Deployment Channel Enabled</span>
     </div>
   </motion.div>
 )}
-
 {/* --- VIEW MISSION: MODUL PENGERJAAN SOAL (FIXED STRUCTURE) --- */}
 <AnimatePresence mode="wait">
   {/* --- VIEW MISSION: MODUL SOAL & NAVIGASI (UTUH) --- */}
@@ -1426,9 +1414,9 @@ const CRTOverlay = () => (
     exit={{ opacity: 0, scale: 1.02 }}
     className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[85vh] py-12 relative"
   >
-     {/* 1. HUD BACKGROUND TELEMETRY (Detail yang bikin terpukau) */}
+     {/* 1. HUD BACKGROUND TELEMETRY (Warna diganti ke Fuchsia/Ungu) */}
      <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
-        <div className="absolute top-0 left-0 text-[7px] font-mono text-cyan-500/40 p-4 space-y-1">
+        <div className="absolute top-0 left-0 text-[7px] font-mono text-fuchsia-500/40 p-4 space-y-1">
            <p>PKT_RECV: 102.4KB</p>
            <p>SYNC_STATUS: ACTIVE</p>
            <p>ENCR_MODE: AES_256</p>
@@ -1447,66 +1435,65 @@ const CRTOverlay = () => (
 
      {/* 3. CENTER CONTENT SECTION */}
      <div className="flex flex-col items-center text-center space-y-6 relative z-10 -mt-6">
-        {/* Status Badge Sleek */}
-        <div className="px-5 py-1.5 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-emerald-400 text-[8px] font-black tracking-[0.5em] uppercase shadow-[0_0_15px_rgba(16,185,129,0.1)] animate-pulse">
+        {/* Status Badge Sleek (Emerald ganti ke Fuchsia) */}
+        <div className="px-5 py-1.5 rounded-lg bg-fuchsia-500/5 border border-fuchsia-500/20 text-fuchsia-400 text-[8px] font-black tracking-[0.5em] uppercase shadow-[0_0_15px_rgba(217,70,239,0.15)] animate-pulse">
            Uplink Sequence Verified
         </div>
 
         <div className="space-y-4">
-           {/* JUDUL: Ukuran dikalibrasi ke 5xl agar elegan & menggunakan animasi reveal */}
+           {/* JUDUL: Reveal Animation */}
            <h2 className="text-3xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-none drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">
               <CyberLetterReveal text="TRANSMISSION RECEIVED" className="justify-center" />
            </h2>
            
-           {/* Deskripsi: Tanpa underscore, tanpa miring, spasi bersih */}
            <p className="text-[11px] lg:text-[13px] font-bold text-slate-300 leading-relaxed tracking-[0.2em] uppercase max-w-2xl mx-auto opacity-90">
               Sistem siap melakukan validasi pertahanan pada domain <span className="text-fuchsia-400 font-black drop-shadow-[0_0_8px_rgba(217,70,239,0.4)]">{selectedDomain}</span>. 
               Mulai prosedur sekarang, Operative?
            </p>
         </div>
 
-        {/* Visualizer Bar HUD */}
+        {/* Visualizer Bar HUD (Cyan ganti ke Fuchsia) */}
         <div className="flex gap-1.5 h-4 items-center opacity-30">
            {[...Array(12)].map((_, i) => (
              <motion.div 
                key={i} 
                animate={{ scaleY: [1, 2.5, 1], opacity: [0.3, 1, 0.3] }} 
                transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.05 }}
-               className="w-1 h-full bg-cyan-400 rounded-full" 
+               className="w-1 h-full bg-fuchsia-400 rounded-full shadow-[0_0_8px_#d946ef]" 
              />
            ))}
         </div>
      </div>
 
-{/* 4. TACTICAL ACTION BUTTONS (FIXED NAVIGATION) */}
-<div className="flex flex-col sm:flex-row gap-6 mt-16 w-full lg:w-auto px-10 relative z-10">
+     {/* 4. TACTICAL ACTION BUTTONS */}
+     <div className="flex flex-col sm:flex-row gap-6 mt-16 w-full lg:w-auto px-10 relative z-10">
         <button 
            onClick={() => setView('assessment')} 
-           className="px-12 py-4 border-2 border-white/5 text-slate-500 rounded-2xl font-black text-[9px] tracking-[0.4em] uppercase hover:text-white hover:bg-white/5 transition-all duration-300"
+           className="px-12 py-4 border-2 border-white/5 text-slate-500 rounded-2xl font-black text-[9px] tracking-[0.4em] uppercase hover:text-fuchsia-400 hover:border-fuchsia-500/30 hover:bg-fuchsia-500/5 transition-all duration-300"
         >
            Abort Session
         </button>
         
-        {/* PERBAIKAN DI SINI: Langsung set view ke 'mission' agar soal muncul */}
+        {/* Tombol Utama (Cyan ganti ke Fuchsia) */}
         <button 
            onClick={() => {
               setView('mission');
               setCurrentStep(1);
            }} 
-           className="relative overflow-hidden px-14 py-4 bg-white text-slate-950 rounded-2xl font-black text-[10px] tracking-[0.4em] uppercase hover:bg-cyan-500 hover:text-white transition-all duration-500 shadow-[0_20px_50px_rgba(255,255,255,0.1)] flex items-center justify-center gap-4 active:scale-95 group"
+           className="relative overflow-hidden px-14 py-4 bg-white text-slate-950 rounded-2xl font-black text-[10px] tracking-[0.4em] uppercase hover:bg-fuchsia-600 hover:text-white transition-all duration-500 shadow-[0_20px_50px_rgba(217,70,239,0.2)] flex items-center justify-center gap-4 active:scale-95 group"
         >
            <span className="relative z-10">INITIATE ASSESSMENT</span>
            <Zap size={16} className="relative z-10 group-hover:rotate-12 transition-transform" />
-           {/* Flare Animation (The "Wah" Effect) */}
-           <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:left-[100%] transition-all duration-1000" />
+           {/* Flare Animation Fuchsia */}
+           <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-fuchsia-400/40 to-transparent group-hover:left-[100%] transition-all duration-1000" />
         </button>
      </div>
 
-     {/* 5. TACTICAL HUD CORNERS (Pojok Layar Briefing) */}
-     <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-white/10 rounded-tl-3xl pointer-events-none" />
-     <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-white/10 rounded-tr-3xl pointer-events-none" />
-     <div className="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-white/10 rounded-bl-3xl pointer-events-none" />
-     <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-white/10 rounded-br-3xl pointer-events-none" />
+     {/* 5. TACTICAL HUD CORNERS */}
+     <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-fuchsia-500/20 rounded-tl-3xl pointer-events-none" />
+     <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-fuchsia-500/20 rounded-tr-3xl pointer-events-none" />
+     <div className="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-fuchsia-500/20 rounded-bl-3xl pointer-events-none" />
+     <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-fuchsia-500/20 rounded-br-3xl pointer-events-none" />
   </motion.div>
 )}
 
@@ -1661,7 +1648,7 @@ const CRTOverlay = () => (
         )}
       </AnimatePresence>
 
-{/* --- LAYER CSS FINAL: ANTI-JELEK & ULTRA-CLEAN --- */}
+{/* --- LAYER CSS FINAL: ANTI-JELEK & ULTRA-CLEAN (FULL NEON PURPLE) --- */}
 <style dangerouslySetInnerHTML={{ __html: `
         /* 1. RESET GLOBAL: MENGHAPUS SEMUA UNDERLINE & ITALIC */
         * { 
@@ -1677,32 +1664,55 @@ const CRTOverlay = () => (
           font-style: normal !important;
         }
 
-        /* 2. HUD GRID & ANIMASI SCANNER */
+        /* 2. HUD GRID (SUDAH DIGANTI KE FUCHSIA 217, 70, 239) */
         .bg-hud-grid { 
           background-image: 
-            linear-gradient(to right, rgba(34, 211, 238, 0.05) 1px, transparent 1px), 
-            linear-gradient(to bottom, rgba(34, 211, 238, 0.05) 1px, transparent 1px); 
-          background-size: 50px 50px; 
+            linear-gradient(to right, rgba(217, 70, 239, 0.05) 1px, transparent 1px), 
+            linear-gradient(to bottom, rgba(217, 70, 239, 0.05) 1px, transparent 1px); 
+          background-size: 40px 40px; 
         }
 
-        @keyframes scan { 0% { top: 0%; } 50% { top: 100%; } 100% { top: 0%; } }
-        .animate-scan { animation: scan 6s linear infinite; position: absolute; z-index: 10; }
+        @keyframes scan { 
+          0% { top: 0%; opacity: 0; } 
+          50% { opacity: 0.5; }
+          100% { top: 100%; opacity: 0; } 
+        }
+        .animate-scan { 
+          animation: scan 6s linear infinite; 
+          position: absolute; 
+          z-index: 10;
+          background: linear-gradient(to bottom, transparent, rgba(217, 70, 239, 0.2), transparent);
+          height: 100px;
+          width: 100%;
+        }
 
         @keyframes scanner { 
           0% { top: -10%; opacity: 0; } 
-          50% { opacity: 1; }
+          50% { 
+            opacity: 1; 
+            box-shadow: 0 0 20px rgba(217, 70, 239, 0.5); 
+          }
           100% { top: 110%; opacity: 0; } 
         }
-        .animate-scanner { animation: scanner 3s ease-in-out infinite; }
+        .animate-scanner { 
+          animation: scanner 4s ease-in-out infinite; 
+          border-bottom: 1px solid rgba(217, 70, 239, 0.4);
+        }
 
-        /* 3. SCROLLBAR MINIMALIS (HIDDEN) */
+        /* 3. SCROLLBAR MINIMALIS (FUCHSIA THEME) */
         ::-webkit-scrollbar { width: 0px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(217, 70, 239, 0.5); border-radius: 20px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+          background: rgba(217, 70, 239, 0.3); 
+          border-radius: 20px; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(217, 70, 239, 0.6);
+        }
 
         /* 4. SELECTION & TEXT EFFECTS */
-        ::selection { background: rgba(217, 70, 239, 0.3); color: white; }
+        ::selection { background: rgba(217, 70, 239, 0.4); color: white; }
         
         .bg-clip-text {
           -webkit-background-clip: text;
@@ -1723,7 +1733,14 @@ const CRTOverlay = () => (
         input[type="date"] {
           color-scheme: ${theme === 'dark' ? 'dark' : 'light'};
         }
+
+        /* Extra: Smooth Font Rendering */
+        /* ... kode css lainnya ... */
+        body {
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
       `}} />
-    </div> // Penutup div flex h-screen
-  ); // Penutup return
-} // Penutup fungsi StudentPortal
+    </div> 
+  ); 
+}
