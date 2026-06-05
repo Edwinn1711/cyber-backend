@@ -1070,6 +1070,8 @@ export default function CyberLandingDark() {
   const [errorMessage, setErrorMessage] = useState('');
   const [inspectedArchitect, setInspectedArchitect] = useState<string | null>(null);
   const [user, setUser] = useState({ username: 'OPERATIVE' });
+  const [fullName, setFullName] = useState(''); // Nama Lengkap
+const [gender, setGender] = useState('MALE'); // Jenis Kelamin
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -1115,7 +1117,16 @@ export default function CyberLandingDark() {
       const endpoint = activeTab === 'LOGIN' ? 'https://cyber-backend-delta.vercel.app/login' : 'https://cyber-backend-delta.vercel.app/register';
       const bodyData = activeTab === 'LOGIN' 
         ? { username: uname, password } 
-        : { username: uname, password, role: 'siswa', class_name: className, asal: asal, tanggal_lahir: tanggalLahir };
+        : { 
+            username: uname, 
+            password, 
+            role: 'siswa', 
+            class_name: className, 
+            asal: asal, 
+            tanggal_lahir: tanggalLahir,
+            full_name: fullName, // <-- TAMBAHKAN INI
+            gender: gender       // <-- TAMBAHKAN INI
+          };
 
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -1701,7 +1712,7 @@ export default function CyberLandingDark() {
                   </div>
                 </div>
 
-                {/* ANIMASI PEMUNCULAN FIELD REGISTER (SANGAT SMOOTH) */}
+                {/* ANIMASI PEMUNCULAN FIELD REGISTER */}
                 <AnimatePresence initial={false}>
                   {activeTab === 'REGISTER' && (
                     <motion.div 
@@ -1713,12 +1724,20 @@ export default function CyberLandingDark() {
                       className="overflow-hidden space-y-4"
                     >
                       <div className="relative group">
+                        <User size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-cyan-400 transition-colors" />
+                        <input type="text" placeholder="NAMA LENGKAP" value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-[10px] text-white outline-none focus:border-cyan-500/30" />
+                      </div>
+                      <div className="relative group">
                         <MapPin size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-cyan-400 transition-colors" />
                         <input type="text" placeholder="ASAL / KOTA" value={asal} onChange={(e) => setAsal(e.target.value)} className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-[10px] text-white outline-none focus:border-cyan-500/30" />
                       </div>
                       <div className="relative group">
                         <Calendar size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-cyan-400 transition-colors" />
                         <input type="date" value={tanggalLahir} onChange={(e) => setTanggalLahir(e.target.value)} style={{ colorScheme: 'dark' }} className="w-full bg-black/40 border border-white/5 rounded-2xl py-4 pl-14 pr-4 text-[10px] text-white outline-none focus:border-cyan-500/30" />
+                      </div>
+                      <div className="flex gap-3 pt-1">
+                        <button type="button" onClick={() => setGender('MALE')} className={`flex-1 py-3 rounded-xl font-black text-[9px] border transition-all ${gender === 'MALE' ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400' : 'bg-white/5 border-white/5 text-slate-600'}`}>MALE</button>
+                        <button type="button" onClick={() => setGender('FEMALE')} className={`flex-1 py-3 rounded-xl font-black text-[9px] border transition-all ${gender === 'FEMALE' ? 'bg-fuchsia-500/20 border-fuchsia-400 text-fuchsia-400' : 'bg-white/5 border-white/5 text-slate-600'}`}>FEMALE</button>
                       </div>
                     </motion.div>
                   )}
@@ -1733,7 +1752,7 @@ export default function CyberLandingDark() {
                 <button 
                   type="submit" 
                   disabled={status === 'loading'}
-                  className={`w-full py-4 rounded-2xl font-black text-[11px] tracking-[0.3em] uppercase shadow-lg transition-all active:scale-95 flex items-center justify-center gap-3 ${status === 'success' ? 'bg-emerald-500 shadow-emerald-500/20' : 'bg-fuchsia-600 hover:bg-fuchsia-500 shadow-fuchsia-500/20'}`}
+                  className={`w-full py-4 rounded-2xl font-black text-[11px] tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-3 ${status === 'success' ? 'bg-emerald-500' : 'bg-fuchsia-600 hover:bg-fuchsia-500'}`}
                 >
                    {status === 'loading' ? 'MENYINKRONKAN...' : status === 'success' ? 'BERHASIL' : 'OTENTIKASI SISTEM'} 
                    <Zap size={14} className={status === 'loading' ? 'animate-spin' : ''} />
@@ -1744,6 +1763,48 @@ export default function CyberLandingDark() {
         )}
       </AnimatePresence>
 
+      {/* --- MODAL LAYANAN (DIPISAH AGAR TIDAK ERROR) --- */}
+      <AnimatePresence>
+        {selectedService && (
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setSelectedService(null)}
+              className="absolute inset-0 bg-black/90 backdrop-blur-2xl"
+            />
+            <motion.div
+              initial={{ scale: 0.7, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="relative w-full max-w-2xl bg-[#050811]/95 border-2 border-cyan-500/30 rounded-[3rem] p-8 lg:p-12 overflow-hidden shadow-[0_0_100px_rgba(34,211,238,0.3)]"
+            >
+              <div className="absolute top-0 left-0 w-full h-1 bg-cyan-400 shadow-[0_0_20px_#22d3ee] animate-scanner z-50" />
+              
+              <button onClick={() => setSelectedService(null)} className="absolute top-10 right-10 p-2 bg-white/5 text-slate-400 hover:text-white rounded-full z-50">
+                <X size={20} />
+              </button>
+
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="relative mb-8">
+                  <div className={`absolute inset-0 blur-3xl opacity-30 ${selectedService.col.replace('text', 'bg')}`} />
+                  <motion.div animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 4, repeat: Infinity }} className={`w-24 h-24 lg:w-32 lg:h-32 bg-black border-2 border-white/10 rounded-[2rem] flex items-center justify-center ${selectedService.col}`}>
+                    <selectedService.i size={50} />
+                  </motion.div>
+                </div>
+
+                <h3 className="text-3xl lg:text-5xl font-black text-white uppercase mb-4">{selectedService.t}</h3>
+                <p className="text-slate-300 text-sm lg:text-lg font-bold mb-10 uppercase">{selectedService.longDesc}</p>
+
+                <button onClick={() => setSelectedService(null)} className="w-full py-5 bg-cyan-500 text-black rounded-2xl font-black text-xs tracking-[0.5em] uppercase transition-all">
+                  KONFIRMASI AKSES
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+                
       <AnimatePresence>
   {selectedService && (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
