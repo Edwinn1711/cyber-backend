@@ -114,7 +114,7 @@ const portalTransition = { initial: { opacity: 0, scale: 0.98, y: 15 }, animate:
 
 const CyberBootSequence = ({ onComplete }: { onComplete: () => void }) => {
   const [logs, setLogs] = useState<string[]>([]);
-  // Menghapus garis bawah (underscore) agar teks terlihat bersih dan elegan
+  
   const bootTasks = [
     "INITIALIZING CORE SYSTEM",
     "LOADING ENCRYPTION LAYER AES256",
@@ -133,9 +133,9 @@ const CyberBootSequence = ({ onComplete }: { onComplete: () => void }) => {
         currentTask++;
       } else {
         clearInterval(interval);
-        setTimeout(onComplete, 1200); // Memberi waktu jeda sedikit sebelum masuk ke dashboard
+        setTimeout(onComplete, 1200);
       }
-    }, 350); // Kecepatan log sedikit lebih dinamis
+    }, 350);
     return () => clearInterval(interval);
   }, []);
 
@@ -146,15 +146,12 @@ const CyberBootSequence = ({ onComplete }: { onComplete: () => void }) => {
       exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)" }}
       className="fixed inset-0 z-[100000] bg-[#020105] flex flex-col items-center justify-center p-6 overflow-hidden"
     >
-      {/* 1. EFEK LATAR BELAKANG HUD (Aura Ungu) */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-fuchsia-600/10 rounded-full blur-[150px]" />
          <div className="absolute inset-0 bg-hud-grid opacity-20" />
       </div>
 
       <div className="relative z-10 w-full max-w-lg space-y-10">
-        
-        {/* 2. ICON UTAMA DENGAN PULSE GLOW */}
         <div className="flex flex-col items-center gap-6 mb-12">
           <motion.div 
             animate={{ 
@@ -174,7 +171,6 @@ const CyberBootSequence = ({ onComplete }: { onComplete: () => void }) => {
           </div>
         </div>
 
-        {/* 3. LOGS ANIMATION (Tanpa Underline) */}
         <div className="space-y-3 font-mono min-h-[160px]">
           {logs.map((log, i) => (
             <motion.div 
@@ -191,7 +187,6 @@ const CyberBootSequence = ({ onComplete }: { onComplete: () => void }) => {
           ))}
         </div>
 
-        {/* 4. PROGRESS BAR ULTRA GLOW */}
         <div className="relative pt-10">
            <div className="flex justify-between items-center mb-3">
               <span className="text-[8px] font-black text-fuchsia-500 tracking-widest uppercase">System Integrity</span>
@@ -205,7 +200,6 @@ const CyberBootSequence = ({ onComplete }: { onComplete: () => void }) => {
                 transition={{ duration: 3, ease: "easeInOut" }}
                 className="h-full bg-fuchsia-500 rounded-full relative shadow-[0_0_20px_#d946ef]" 
               >
-                {/* Efek Kilatan (Shine) yang lari di bar */}
                 <motion.div 
                   animate={{ left: ["-100%", "200%"] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
@@ -214,11 +208,11 @@ const CyberBootSequence = ({ onComplete }: { onComplete: () => void }) => {
               </motion.div>
            </div>
 
-           {/* Metadata Footer */}
-           <div className="mt-8 flex justify-center gap-10 opacity-30">
-              <span className="text-[6px] font-mono text-slate-500 tracking-[0.5em] uppercase">Auth: Biometric_Verified</span>
-              <span className="text-[6px] font-mono text-slate-500 tracking-[0.5em] uppercase">Node: Central_Laguboti</span>
-           </div>
+           {/* --- FOOTER: SEKARANG BERSIH TOTAL TANPA SIMBOL --- */}
+            <div className="mt-8 flex justify-center gap-10 opacity-30">
+              <span className="text-[6px] font-mono text-slate-500 tracking-[0.5em] uppercase">BIOMETRIC VERIFIED</span>
+              <span className="text-[6px] font-mono text-slate-500 tracking-[0.5em] uppercase">NODE {user.username.toUpperCase()} TERMINAL 01</span>
+            </div>
         </div>
       </div>
     </motion.div>
@@ -904,12 +898,17 @@ const CRTOverlay = () => (
       
       {/* Tactical Info Bar (Sektor Tetap Satu Baris) */}
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-10 pt-4 border-t border-white/5">
-         <div className="flex items-center gap-4 border-l-[4px] border-fuchsia-600 pl-6 h-10">
-            <div className="space-y-0.5">
-               <p className="text-white text-[10px] lg:text-[12px] font-black tracking-[0.4em] uppercase leading-none">Cyber Readiness Index</p>
-               <p className="text-slate-500 text-[7px] font-black tracking-[0.2em] uppercase">Pusat Kendali - Laguboti, Indonesia</p>
-            </div>
-         </div>
+      <div className="flex items-center gap-4 border-l-[4px] border-fuchsia-600 pl-6 h-10">
+   <div className="space-y-0.5">
+      <p className="text-white text-[10px] lg:text-[12px] font-black tracking-[0.4em] uppercase leading-none">
+         Cyber Readiness Index
+      </p>
+      {/* Tanda titik dua (:) dihapus, teks dibuat menyala (glow) */}
+      <p className="text-fuchsia-500 text-[7px] font-black tracking-[0.2em] uppercase drop-shadow-[0_0_8px_rgba(217,70,239,0.6)]">
+         OPERATIONAL SECTOR {user.class_name ? user.class_name.replace(/_/g, ' ') : "GLOBAL NODE"}
+      </p>
+   </div>
+</div>
          
          <div className="flex gap-12 px-8 border-l border-white/10">
             {/* Latency Stream */}
@@ -1269,11 +1268,16 @@ const CRTOverlay = () => (
     </div>
 
     {/* Metadata Footer */}
-    <div className="mt-8 flex justify-center items-center gap-6 opacity-30 text-[7px] font-mono text-slate-500 tracking-[0.5em] uppercase">
-       <span>Secure Uplink Established</span>
-       <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-       <span>Laguboti SVR Node 01</span>
-    </div>
+    <div className="mt-8 flex justify-center items-center gap-6 opacity-40 text-[7px] font-mono text-slate-500 tracking-[0.5em] uppercase">
+   {/* Teks dibuat lebih tegas dan bersih */}
+   <span className="drop-shadow-[0_0_5px_rgba(217,70,239,0.2)]">SECURE UPLINK ESTABLISHED</span>
+   
+   {/* Titik indikator ganti dari Hijau ke Neon Ungu */}
+   <div className="w-1 h-1 rounded-full bg-fuchsia-500 animate-pulse shadow-[0_0_8px_#d946ef]" />
+   
+   {/* Nama lokasi dihapus, diganti teks server yang keren dan bersih */}
+   <span className="text-fuchsia-500/80 drop-shadow-[0_0_5px_rgba(217,70,239,0.3)]">ENCRYPTED SERVER NODE 01</span>
+</div>
   </motion.div>
 )}
 
